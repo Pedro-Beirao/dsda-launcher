@@ -455,7 +455,7 @@ border-color: rgb(220, 220, 220);</string>
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -613,7 +613,7 @@ border-radius:3px</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/pngs/plus.png);
+       <string notr="true">border-image: url(:/pngs/pngs/plus.png);
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
@@ -630,7 +630,7 @@ color: rgb(255, 255, 255);</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/pngs/minus.png);
+       <string notr="true">border-image: url(:/pngs/pngs/minus.png);
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
