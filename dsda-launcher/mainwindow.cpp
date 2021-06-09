@@ -36,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(fo, SIGNAL(triggered()), this, SLOT(foo()));
     this->addAction(fo);
 
+    ui->pushButton_2->hide();
+    ui->pushButton_3->hide();
+    ui->demoPlayOptions->hide();
+
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
         QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
@@ -385,7 +389,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_plus_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),"",tr("WAD files (*.wad *.deh)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),tr("WAD files (*.wad *.deh)"));
     ui->wadsOnFolder->addItems(fileNames);
 }
 
@@ -493,11 +497,13 @@ void MainWindow::on_tabs_currentChanged(int index)
     {
         ui->pushButton_2->show();
         ui->pushButton_3->show();
+        ui->demoPlayOptions->show();
     }
     else
     {
         ui->pushButton_2->hide();
         ui->pushButton_3->hide();
+        ui->demoPlayOptions->hide();
     }
 
 }
@@ -505,14 +511,14 @@ void MainWindow::on_tabs_currentChanged(int index)
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
     ui->recordDemo->setText(demoName);
 }
 
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
     ui->recordDemo_2->setText(demoName);
 }
 
