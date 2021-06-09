@@ -440,3 +440,16 @@ void MainWindow::on_soloNetCheck_toggled(bool checked)
     }
 }
 
+
+void MainWindow::on_tabs_currentChanged(int index)
+{
+    if(index==0)
+    {
+        ui->comboBox->show();
+    }
+    else
+    {
+        ui->comboBox->hide();
+    }
+}
+

@@ -34,5 +34,6 @@ private slots:
     void on_noCheck_4_toggled(bool checked);
     void on_noCheck_3_toggled(bool checked);
     void on_soloNetCheck_toggled(bool checked);
+    void on_tabs_currentChanged(int index);
 };
 #endif // MAINWINDOW_H
