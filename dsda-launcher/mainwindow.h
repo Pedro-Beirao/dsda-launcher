@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <bootstrap.h>
+#include "bootstrap.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,5 +37,8 @@ private slots:
     void on_noCheck_3_toggled(bool checked);
     void on_soloNetCheck_toggled(bool checked);
     void on_tabs_currentChanged(int index);
+    void foo();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
 };
 #endif // MAINWINDOW_H

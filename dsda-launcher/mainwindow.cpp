@@ -4,6 +4,9 @@
 #include <QFileDialog>
 #include <QListWidgetItem>
 #include <QStandardPaths>
+#include <QShortcut>
+#include <bootstrap.h>
+#include "bootstrap.h"
 
 std::string getOsName()
 {
@@ -27,112 +30,122 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
 
+    QAction *fo = new QAction(this);
+    fo->setShortcut(Qt::Key_A);
+
+    connect(fo, SIGNAL(triggered()), this, SLOT(foo()));
+    this->addAction(fo);
+
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
         QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
-        images = directory.entryList(QStringList() << "*.wad",QDir::Files);
+        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+
+        ui->pushButton_2->setStyleSheet("color: rgb(255, 255, 255);");
     }
     else
     {
         QDir directory = QDir::currentPath();
-        images = directory.entryList(QStringList() << "*.wad",QDir::Files);
+        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+
+        ui->pushButton_2->setStyleSheet("color: rgb(50, 50, 50);");
     }
 
     foreach(QString filename, images) {
-        if(filename=="doom.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="doom" || filename=="DOOM")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="doom1.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="doom1" || filename=="DOOM1")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="doomu.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="doomu"|| filename=="DOOMU")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="doom2.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="doom2"|| filename=="DOOM2")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="doom2f.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="doom2f"|| filename=="DOOM2f"|| filename=="DOOM2F")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="tnt.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="tnt"|| filename=="TNT")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="plutonia.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="plutonia"|| filename=="PLUTONIA"|| filename=="Plutonia")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="freedoom1.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="freedoom1"|| filename=="FREEDOOM1"|| filename=="freedoom"|| filename=="FreeDoom1"|| filename=="FreeDoom"|| filename=="Freedoom1"|| filename=="Freedoom")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="freedoom2.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="freedoom2"|| filename=="FREEDOOM2"|| filename=="FreeDoom2"|| filename=="Freedoom2")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="heretic.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="heretic"|| filename=="HERETIC"|| filename=="Heretic")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="bfgdoom1.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="bfgdoom1"|| filename=="BFGDOOM1"|| filename=="bfgDOOM1"|| filename=="BfgDoom1"|| filename=="BFGdoom1")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="bfgdoom2.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="bfgdoom2"|| filename=="BFGDOOM2"|| filename=="bfgDOOM2"|| filename=="BfgDoom2"|| filename=="BFGdoom2")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="chex.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="chex"||filename=="CHEX"||filename=="Chex")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
     foreach(QString filename, images) {
-        if(filename=="hacx.wad")
+        filename.resize (filename.size () - 4);
+        if(filename=="hacx"||filename=="HACX"||filename=="Hacx")
         {
-            filename.resize (filename.size () - 4);
             ui->iwadSelect->addItems({filename});
         }
     }
@@ -152,6 +165,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::foo()
+{
+    ui->wadsOnFolder->addItems({"lol"});
 }
 
 void MainWindow::addWads(QStringList fileNames)
@@ -281,7 +299,14 @@ void MainWindow::on_LaunchGameButton_clicked()
 
     if(ui->comboBox_2->currentIndex()==0)
     {
-        arguments += " -w ";
+        if(isFulscreen=="w")
+        {
+            arguments += " -window ";
+        }
+        else
+        {
+            arguments += " -fs ";
+        }
     }
     else
     {
@@ -290,6 +315,14 @@ void MainWindow::on_LaunchGameButton_clicked()
     if(isSoloNet)
     {
         arguments += " -solo-net";
+    }
+    if(ui->recordDemo->text().size()>5)
+    {
+        arguments += " -record "+ui->recordDemo->text().toStdString();
+    }
+    if(ui->recordDemo_2->text().size()>5)
+    {
+        arguments += " -playdemo "+ui->recordDemo_2->text().toStdString();
     }
 
 
@@ -303,10 +336,12 @@ void MainWindow::on_LaunchGameButton_clicked()
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system((execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        arguments=" ";
     }
     else
     {
         system(("dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> LogFile.txt").c_str());
+        arguments=" ";
     }
 
 
@@ -317,7 +352,7 @@ void MainWindow::on_LaunchGameButton_clicked()
 void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 {
     QString sel = ui->iwadSelect->currentText();
-    if(sel=="doom"||sel=="doomu"||sel=="doom1"||sel=="freedoom1"||sel=="bfgdoom1"||sel=="heretic")
+    if(sel=="doom"||sel=="DOOM"||sel=="doomu"||sel=="DOOMU"||sel=="doom1"||sel=="DOOM1"||sel=="freedoom1"||sel=="bfgdoom1"||sel=="heretic"||sel=="HERETIC")
     {
         ui->levelBox->show();
         ui->levelText->show();
@@ -446,10 +481,38 @@ void MainWindow::on_tabs_currentChanged(int index)
     if(index==0)
     {
         ui->comboBox->show();
+        ui->comboBox_2->show();
     }
     else
     {
         ui->comboBox->hide();
+        ui->comboBox_2->hide();
     }
+
+    if(index==2)
+    {
+        ui->pushButton_2->show();
+        ui->pushButton_3->show();
+    }
+    else
+    {
+        ui->pushButton_2->hide();
+        ui->pushButton_3->hide();
+    }
+
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    ui->recordDemo->setText(demoName);
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    ui->recordDemo_2->setText(demoName);
 }
 
