@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
     #endif
     #endif
 
+
+
     if(os=="Linux" || os=="Windows")
     {
         QApplication::setStyle("Fusion");
@@ -24,6 +26,9 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
+
+
+
 
     MainWindow w;
     //QFile file("/users/pedro/desktop/style.qss");

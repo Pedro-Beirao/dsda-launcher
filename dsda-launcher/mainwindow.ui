@@ -58,9 +58,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>363</y>
+      <y>357</y>
       <width>291</width>
-      <height>41</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="acceptDrops">
@@ -74,7 +74,7 @@
     </property>
     <property name="styleSheet">
      <string notr="true">border: 1px solid rgb(180, 180, 180);
-padding-left: 6px;
+
 color: #000;
 height: 20px;
 background-color:rgb(255, 255, 255);
@@ -213,19 +213,6 @@ border-radius:3px</string>
      <string>CompLevel</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>345</y>
-      <width>251</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#424242;&quot;&gt;Additional Parameters&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="episodeText">
     <property name="geometry">
      <rect>
@@ -350,7 +337,7 @@ border-radius:3px</string>
      <string>Level</string>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -360,11 +347,8 @@ border-radius:3px</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(230, 230, 230);
-border-radius: 7px;
-border-width: 1px;
-border-style: solid;
-border-color: rgb(220, 220, 220);</string>
+     <string notr="true">alternate-background-color: rgb(37, 37, 37);
+</string>
     </property>
     <widget class="QToolButton" name="toolButton">
      <property name="geometry">
@@ -391,7 +375,7 @@ border-color: rgb(220, 220, 220);</string>
      </property>
     </widget>
    </widget>
-   <widget class="QFrame" name="frame_4">
+   <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -401,12 +385,24 @@ border-color: rgb(220, 220, 220);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(230, 230, 230);
-border-radius: 7px;
-border-width: 1px;
-border-style: solid;
-border-color: rgb(220, 220, 220);</string>
+     <string notr="true"/>
     </property>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>5</y>
+       <width>251</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Additional Arguments&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
@@ -451,14 +447,14 @@ border-color: rgb(220, 220, 220);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgb(230, 230, 230)
+     <string notr="true">
 </string>
     </property>
     <property name="tabShape">
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -546,6 +542,9 @@ border-color: rgb(220, 220, 220);</string>
        <font>
         <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Graphics Mode&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -656,7 +655,7 @@ color: rgb(255, 255, 255);</string>
     </widget>
     <widget class="QWidget" name="demoTab">
      <attribute name="title">
-      <string>Demo</string>
+      <string>Demos</string>
      </attribute>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
@@ -723,7 +722,7 @@ border-radius:3px</string>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Page</string>
+      <string>DSDA</string>
      </attribute>
     </widget>
    </widget>
@@ -930,7 +929,7 @@ p, li { white-space: pre-wrap; }
 </string>
     </property>
     <property name="text">
-     <string>Find</string>
+     <string>Choose</string>
     </property>
     <property name="default">
      <bool>true</bool>
@@ -939,11 +938,14 @@ p, li { white-space: pre-wrap; }
    <widget class="QComboBox" name="demoPlayOptions">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>292</y>
+      <x>35</x>
+      <y>295</y>
       <width>121</width>
-      <height>32</height>
+      <height>20</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">height:10px</string>
     </property>
     <item>
      <property name="text">
@@ -952,24 +954,23 @@ p, li { white-space: pre-wrap; }
     </item>
     <item>
      <property name="text">
-      <string>Fast Demo</string>
+      <string>Time Demo</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Time Demo</string>
+      <string>Fast Demo</string>
      </property>
     </item>
    </widget>
-   <zorder>frame_4</zorder>
-   <zorder>frame</zorder>
+   <zorder>groupBox_4</zorder>
+   <zorder>groupBox</zorder>
    <zorder>LaunchGameButton</zorder>
    <zorder>argumentText</zorder>
    <zorder>compLevelSelect</zorder>
    <zorder>label</zorder>
    <zorder>iwadSelect</zorder>
    <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
    <zorder>episodeText</zorder>
    <zorder>label_5</zorder>
    <zorder>diffBox</zorder>

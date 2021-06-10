@@ -14,6 +14,10 @@ macx
     APP_FILES.files = ./dsda-doom
     APP_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_FILES
+    lightmode {
+        QMAKE_INFO_PLIST = ./Info.plist
+        message("Light mode enforced")
+    }
 }
 
 DEFINES += "APP_NAME=dsda-launcher"

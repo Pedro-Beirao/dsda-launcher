@@ -30,11 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
 
-    QAction *fo = new QAction(this);
-    fo->setShortcut(Qt::Key_A);
 
-    connect(fo, SIGNAL(triggered()), this, SLOT(foo()));
-    this->addAction(fo);
+
+
+    QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
+    shortcut->setAutoRepeat(false);
 
     ui->pushButton_2->hide();
     ui->pushButton_3->hide();
@@ -42,10 +42,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
+        system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+
         QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
 
-        ui->pushButton_2->setStyleSheet("color: rgb(255, 255, 255);");
     }
     else
     {
@@ -173,7 +175,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::foo()
 {
-    ui->wadsOnFolder->addItems({"lol"});
+    if(getOsName()=="MacOS"|| getOsName()=="Linux")
+    {
+        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+    }
+    else
+    {
+        system(("open "+QCoreApplication::applicationDirPath().toStdString()).c_str());
+    }
 }
 
 void MainWindow::addWads(QStringList fileNames)
@@ -276,7 +285,9 @@ void MainWindow::on_LaunchGameButton_clicked()
         arguments += " -warp "+ui->episodeBox->text().toStdString();
     }
 
-    for(int item=0; item++;item < ui->wadsOnFolder->count())
+    qDebug() <<  ui->wadsOnFolder->count();
+
+    for(int item=0;item < ui->wadsOnFolder->count(); item++)
     {
         if(ui->wadsOnFolder->item(item)->text().toStdString().back()=='h')
         {
@@ -287,6 +298,7 @@ void MainWindow::on_LaunchGameButton_clicked()
             arguments += " -file '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
         }
     }
+
 
     if(isFast)
     {
@@ -326,7 +338,18 @@ void MainWindow::on_LaunchGameButton_clicked()
     }
     if(ui->recordDemo_2->text().size()>5)
     {
-        arguments += " -playdemo "+ui->recordDemo_2->text().toStdString();
+        if(ui->demoPlayOptions->currentIndex()==0)
+        {
+            arguments += " -playdemo "+ui->recordDemo_2->text().toStdString();
+        }
+        else if(ui->demoPlayOptions->currentIndex()==1)
+        {
+            arguments += " -timedemo "+ui->recordDemo_2->text().toStdString();
+        }
+        else if(ui->demoPlayOptions->currentIndex()==2)
+        {
+            arguments += " -fastdemo "+ui->recordDemo_2->text().toStdString();
+        }
     }
 
 
@@ -339,6 +362,7 @@ void MainWindow::on_LaunchGameButton_clicked()
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+        system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
         system((execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
         arguments=" ";
     }
