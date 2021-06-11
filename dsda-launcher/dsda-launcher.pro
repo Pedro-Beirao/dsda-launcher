@@ -12,12 +12,13 @@ macx
     CONFIG += c++11 appbundle
     ICON = doom-launcher.icns
     APP_FILES.files = ./dsda-doom
+    deploy {
+        APP_FILES.files += ./lib
+        APP_FILES.files += ./dsda-doom.wad
+        message("ready for deploy")
+    }
     APP_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_FILES
-    lightmode {
-        QMAKE_INFO_PLIST = ./Info.plist
-        message("Light mode enforced")
-    }
 }
 
 DEFINES += "APP_NAME=dsda-launcher"

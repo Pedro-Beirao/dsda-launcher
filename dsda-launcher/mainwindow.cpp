@@ -42,8 +42,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
-        system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        try {
+            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+
+        }  catch (...) { }
 
         QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
@@ -203,7 +206,11 @@ void MainWindow::on_LaunchGameButton_clicked()
 {
 
     int complevelIndex = ui->compLevelSelect->currentIndex();
-    if(complevelIndex==1)
+    if(complevelIndex==0)
+    {
+        arguments+=" -complevel -1 ";
+    }
+    else if(complevelIndex==1)
     {
         arguments+=" -complevel 0 ";
     }
@@ -297,6 +304,11 @@ void MainWindow::on_LaunchGameButton_clicked()
         {
             arguments += " -file '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
         }
+    }
+
+    if(ui->comboBox->currentIndex()==3)
+    {
+        arguments += " -vidmode gl";
     }
 
 
