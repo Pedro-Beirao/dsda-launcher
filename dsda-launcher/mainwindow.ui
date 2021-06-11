@@ -453,7 +453,7 @@ border-radius:3px</string>
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -576,19 +576,6 @@ border-radius:3px</string>
       </property>
       <property name="text">
        <string> Solo Net</string>
-      </property>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>-71</y>
-        <width>221</width>
-        <height>151</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>GroupBox</string>
       </property>
      </widget>
     </widget>

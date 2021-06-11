@@ -188,6 +188,7 @@ void MainWindow::dropEvent(QDropEvent *e)
         QString fileName = url.toLocalFile();
         if(fileName.toStdString().back()=='p')
         {
+            ui->tabs->setCurrentIndex(2);
             ui->recordDemo_2->setText(fileName);
             std::ifstream file;
                 file.open(fileName.toStdString());
@@ -220,11 +221,19 @@ void MainWindow::dropEvent(QDropEvent *e)
                         qDebug()<<iwadFile.c_str();
                         for(int item=0;item < ui->iwadSelect->count(); item++)
                         {
+                            for(unsigned letterIndex=0;letterIndex<iwadFile.length();letterIndex++)
+                            {
+                                if(isupper(iwadFile[letterIndex]))
+                                {
+                                    iwadFile[letterIndex] = tolower(iwadFile[letterIndex]);
+                                }
+                            }
                             if(ui->iwadSelect->itemText(item).toStdString()+".wad"==iwadFile)
                             {
                                 ui->iwadSelect->setCurrentIndex(item);
                             }
                         }
+                        qDebug()<<iwadFile.c_str();
                     }
 
                 }
