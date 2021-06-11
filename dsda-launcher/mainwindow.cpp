@@ -310,6 +310,14 @@ void MainWindow::on_LaunchGameButton_clicked()
     {
         arguments += " -vidmode gl";
     }
+    else if(ui->comboBox->currentIndex()==2)
+    {
+        arguments += " -vidmode 32";
+    }
+    else if(ui->comboBox->currentIndex()==1)
+    {
+        arguments += " -vidmode 8";
+    }
 
 
     if(isFast)

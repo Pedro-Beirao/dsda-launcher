@@ -447,8 +447,7 @@ border-radius:3px</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-</string>
+     <string notr="true"/>
     </property>
     <property name="tabShape">
      <enum>QTabWidget::Rounded</enum>
@@ -992,7 +991,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>350</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
