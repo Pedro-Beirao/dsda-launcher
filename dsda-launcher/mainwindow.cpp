@@ -7,6 +7,12 @@
 #include <QShortcut>
 #include <bootstrap.h>
 #include "bootstrap.h"
+#include <fstream>
+#include <iostream>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDebug>
+#include <vector>
 
 std::string getOsName()
 {
@@ -29,9 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
-
-
+    setAcceptDrops(true);
 
     QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
     shortcut->setAutoRepeat(false);
@@ -170,6 +174,64 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls()) {
+        e->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *e)
+{
+    foreach (const QUrl &url, e->mimeData()->urls()) {
+        QString fileName = url.toLocalFile();
+        if(fileName.toStdString().back()=='p')
+        {
+            ui->recordDemo_2->setText(fileName);
+            std::ifstream file;
+                file.open(fileName.toStdString());
+                // Make sure the file opened properly
+
+                std::list<std::string> list;
+                std::string buffer;
+                while (std::getline(file, buffer)) {
+                    list.push_front(buffer);
+                }
+
+                file.close();
+
+                foreach(std::string line, list)
+                {
+                    std::string iwadText = "-iwad";
+                    if(line.substr(0,5)=="-iwad")
+                    {
+                        qDebug()<<line.c_str();
+                        std::vector< int > aspas;
+                        for(unsigned charIndex =0;charIndex<=line.length();charIndex++)
+                        {
+                            if(line[charIndex]=='"')
+                            {
+                                aspas.push_back(charIndex);
+                            }
+                        }
+                        qDebug()<<aspas;
+                        std::string iwadFile = line.substr(aspas[0]+1,aspas[1]-aspas[0]-1);
+                        qDebug()<<iwadFile.c_str();
+                        for(int item=0;item < ui->iwadSelect->count(); item++)
+                        {
+                            if(ui->iwadSelect->itemText(item).toStdString()+".wad"==iwadFile)
+                            {
+                                ui->iwadSelect->setCurrentIndex(item);
+                            }
+                        }
+                    }
+
+                }
+
+        }
+    }
+}
 
 MainWindow::~MainWindow()
 {

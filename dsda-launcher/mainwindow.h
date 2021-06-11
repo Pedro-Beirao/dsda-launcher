@@ -40,5 +40,7 @@ private slots:
     void foo();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent *e);
 };
 #endif // MAINWINDOW_H
