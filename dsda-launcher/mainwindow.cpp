@@ -13,6 +13,7 @@
 #include <QMimeData>
 #include <QDebug>
 #include <vector>
+#include <QSettings>
 
 std::string getOsName()
 {
@@ -29,6 +30,8 @@ std::string getOsName()
 
 QStringList images;
 
+QSettings settings("pedrobeirao","dsda-launcher");
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -36,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     setAcceptDrops(true);
+
+
 
     QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
     shortcut->setAutoRepeat(false);
@@ -172,6 +177,36 @@ MainWindow::MainWindow(QWidget *parent)
         ui->toolTip->hide();
     }
 
+
+    ui->compLevelSelect->setCurrentIndex(settings.value("complevel").toInt());
+    ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
+    ui->episodeBox->setText(settings.value("warp1").toString());
+    ui->levelBox->setText(settings.value("warp2").toString());
+    try {
+        ui->wadsOnFolder->addItem(settings.value("pwad1").toString());
+        ui->wadsOnFolder->addItem(settings.value("pwad2").toString());
+        ui->wadsOnFolder->addItem(settings.value("pwad3").toString());
+    }  catch (...) {
+
+    }
+    for(int itemIndex = ui->wadsOnFolder->count()-1; itemIndex>=0; itemIndex--)
+    {
+        if(ui->wadsOnFolder->item(itemIndex)->text().toStdString().length()<5)
+        {
+            ui->wadsOnFolder->takeItem(itemIndex);
+        }
+    }
+    ui->fastCheck->setChecked(settings.value("fast").toBool());
+    ui->noCheck->setChecked(settings.value("nomo").toBool());
+    ui->noCheck_4->setChecked(settings.value("respawn").toBool());
+    ui->comboBox->setCurrentIndex(settings.value("vidmode").toInt());
+    ui->noCheck_3->setChecked(settings.value("fullscreen").toBool());
+    ui->comboBox_2->setCurrentIndex(settings.value("geom").toInt());
+    if(ui->iwadSelect->count()>=settings.value("iwad").toInt())
+    {
+        ui->iwadSelect->setCurrentIndex(settings.value("iwad").toInt());
+    }
+    ui->soloNetCheck->setChecked(settings.value("solonet").toBool());
 }
 
 
@@ -277,6 +312,7 @@ void MainWindow::on_LaunchGameButton_clicked()
 {
 
     int complevelIndex = ui->compLevelSelect->currentIndex();
+    settings.setValue("complevel",complevelIndex);
     if(complevelIndex==0)
     {
         arguments+=" -complevel -1 ";
@@ -331,6 +367,7 @@ void MainWindow::on_LaunchGameButton_clicked()
     }
 
     int diffIndex = ui->diffBox->currentIndex();
+    settings.setValue("skill",diffIndex);
     if(diffIndex==1)
     {
         arguments+=" -skill 1 ";
@@ -357,13 +394,60 @@ void MainWindow::on_LaunchGameButton_clicked()
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
     {
         arguments += " -warp "+ui->episodeBox->text().toStdString()+" "+ui->levelBox->text().toStdString();
+        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
+        settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
     }
     else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
     {
         arguments += " -warp "+ui->episodeBox->text().toStdString();
+        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
+        settings.remove("warp2");
+    }
+
+    if(ui->episodeBox->text().toStdString()=="")
+    {
+        settings.remove("warp1");
+    }
+    if(ui->levelBox->text().toStdString()=="")
+    {
+        settings.remove("warp2");
     }
 
     qDebug() <<  ui->wadsOnFolder->count();
+
+    try {
+        settings.setValue("pwad1","");
+        settings.setValue("pwad2","");
+        settings.setValue("pwad3","");
+
+        if(ui->wadsOnFolder->count()>=3)
+        {
+            settings.setValue("pwad3",ui->wadsOnFolder->item(2)->text());
+            settings.setValue("pwad2",ui->wadsOnFolder->item(1)->text());
+            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
+        }
+        else if(ui->wadsOnFolder->count()==2)
+        {
+            settings.setValue("pwad3","");
+            settings.setValue("pwad2",ui->wadsOnFolder->item(1)->text());
+            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
+        }
+        else if(ui->wadsOnFolder->count()==1)
+        {
+            settings.setValue("pwad3","");
+            settings.setValue("pwad2","");
+            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
+        }
+        else
+        {
+            settings.setValue("pwad3","");
+            settings.setValue("pwad2","");
+            settings.setValue("pwad1","");
+        }
+
+    }  catch (...) {
+
+    }
 
     for(int item=0;item < ui->wadsOnFolder->count(); item++)
     {
@@ -377,33 +461,49 @@ void MainWindow::on_LaunchGameButton_clicked()
         }
     }
 
+    settings.setValue("vidmode",0);
     if(ui->comboBox->currentIndex()==3)
     {
-        arguments += " -vidmode gl";
+        arguments += " -vidmode gl ";
+        settings.setValue("vidmode",3);
     }
     else if(ui->comboBox->currentIndex()==2)
     {
-        arguments += " -vidmode 32";
+        arguments += " -vidmode 32 ";
+        settings.setValue("vidmode",2);
     }
     else if(ui->comboBox->currentIndex()==1)
     {
-        arguments += " -vidmode 8";
+        arguments += " -vidmode 8 ";
+        settings.setValue("vidmode",1);
     }
 
 
+    settings.setValue("fast",false);
+    settings.setValue("nomo",false);
+    settings.setValue("respawn",false);
     if(isFast)
     {
         arguments += " -fast ";
+        settings.setValue("fast",true);
     }
     if(noMo)
     {
         arguments += " -nomonsters ";
+        settings.setValue("nomo",true);
     }
     if(isRespawn)
     {
         arguments += " -respawn ";
+        settings.setValue("respawn",true);
     }
 
+    settings.setValue("fullscreen",false);
+    settings.setValue("geom",ui->comboBox_2->currentIndex());
+    if(isFulscreen!="w")
+    {
+        settings.setValue("fullscreen",true);
+    }
     if(ui->comboBox_2->currentIndex()==0)
     {
         if(isFulscreen=="w")
@@ -419,9 +519,11 @@ void MainWindow::on_LaunchGameButton_clicked()
     {
         arguments += " -geom "+ ui->comboBox_2->currentText().toStdString()+isFulscreen;
     }
+    settings.setValue("solonet",false);
     if(isSoloNet)
     {
         arguments += " -solo-net";
+        settings.setValue("solonet",true);
     }
     if(ui->recordDemo->text().size()>5)
     {
@@ -448,6 +550,7 @@ void MainWindow::on_LaunchGameButton_clicked()
     arguments += " " + ui->argumentText->toPlainText().toStdString();
     std::replace(arguments.begin(), arguments.end(), '\n', ' ');
 
+    settings.setValue("iwad",ui->iwadSelect->currentIndex());
 
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
