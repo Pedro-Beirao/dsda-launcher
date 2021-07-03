@@ -25,7 +25,8 @@ This comes installed with Qt, no need to do anything
 
 ## make
 ```
-I don't think that Qt comes with "make" installed, if you have then you can start compiling, if not, try to install it using chocolatry:
+I don't think that Qt comes with "make" installed, if you have then you can start compiling,
+if not, try to install it using chocolatry:
 ```
 ___
 ## Compiling
