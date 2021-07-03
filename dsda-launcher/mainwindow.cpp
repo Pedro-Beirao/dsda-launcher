@@ -449,17 +449,21 @@ void MainWindow::on_LaunchGameButton_clicked()
 
     }
 
+    std::string dehFiles = "";
+    std::string files = "";
+
     for(int item=0;item < ui->wadsOnFolder->count(); item++)
     {
         if(ui->wadsOnFolder->item(item)->text().toStdString().back()=='h')
         {
-            arguments += " -deh '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
+            dehFiles += " '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
         }
         else
         {
-            arguments += " -file '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
+            files += " '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
         }
     }
+    arguments += " -deh "+ dehFiles +" -file "+ files;
 
     settings.setValue("vidmode",0);
     if(ui->comboBox->currentIndex()==3)
@@ -552,11 +556,13 @@ void MainWindow::on_LaunchGameButton_clicked()
 
     settings.setValue("iwad",ui->iwadSelect->currentIndex());
 
+
     if(getOsName()=="MacOS" || getOsName()=="Linux")
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        qDebug() << (execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str();
         system((execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
         arguments=" ";
     }
