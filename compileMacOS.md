@@ -34,8 +34,13 @@ ___
 ## Compiling
 
 1. Download the .zip file from this repository
+
 2. Extract it & open the folder
-3. Put the **dsda-doom** (not included in this repo) inside the dsda-launcher folder
+ 
+3. Put the **dsda-doom** executable and **dsda-doom.wad** (not included in this repo) inside the dsda-launcher folder
+
+      ^^^ Very important
+
 4. Create a "build" folder
 ```
 mkdir build & cd build
