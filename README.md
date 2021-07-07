@@ -3,6 +3,8 @@ This is a launcher for the dsda-doom source port
 
 The binaries for an experimental macOS version are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
 
+___
+
 Doomworld thread: https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/
 
 Github repo: https://github.com/Pedro-Beirao/dsda-launcher/
