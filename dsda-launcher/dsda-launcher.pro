@@ -12,9 +12,9 @@ macx
     CONFIG += c++11 appbundle
     ICON = doom-launcher.icns
     APP_FILES.files = ./dsda-doom
+    APP_FILES.files += ./dsda-doom.wad
     deploy {
         APP_FILES.files += ./lib
-        APP_FILES.files += ./dsda-doom.wad
         message("ready for deploy")
     }
     APP_FILES.path = Contents/Resources
