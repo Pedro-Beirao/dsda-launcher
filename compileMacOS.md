@@ -45,7 +45,13 @@ ___
 ```
 mkdir build & cd build
 ```
-5. Run qmake from the build folder
+
+Your dsda-launcher folder should look like this: 
+
+![Screenshot 2021-07-07 at 10 22 17](https://user-images.githubusercontent.com/82064173/124734657-40395480-df0d-11eb-81c1-fd19231c5035.jpg)
+
+
+5. Run qmake from inside of the build folder
 ```
 qmake ..
 
