@@ -14,6 +14,12 @@
 #include <QDebug>
 #include <vector>
 #include <QSettings>
+#include "documentation.h"
+#include <QNetworkAccessManager>
+#include <QtNetwork>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <iostream>
 
 std::string getOsName()
 {
@@ -31,6 +37,8 @@ std::string getOsName()
 QStringList images;
 
 QSettings settings("pedrobeirao","dsda-launcher");
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -199,7 +207,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->fastCheck->setChecked(settings.value("fast").toBool());
     ui->noCheck->setChecked(settings.value("nomo").toBool());
     ui->noCheck_4->setChecked(settings.value("respawn").toBool());
-    ui->comboBox->setCurrentIndex(settings.value("vidmode").toInt());
     ui->noCheck_3->setChecked(settings.value("fullscreen").toBool());
     ui->comboBox_2->setCurrentIndex(settings.value("geom").toInt());
     if(ui->iwadSelect->count()>=settings.value("iwad").toInt())
@@ -465,22 +472,6 @@ void MainWindow::on_LaunchGameButton_clicked()
     }
     arguments += " -deh "+ dehFiles +" -file "+ files;
 
-    settings.setValue("vidmode",0);
-    if(ui->comboBox->currentIndex()==3)
-    {
-        arguments += " -vidmode gl ";
-        settings.setValue("vidmode",3);
-    }
-    else if(ui->comboBox->currentIndex()==2)
-    {
-        arguments += " -vidmode 32 ";
-        settings.setValue("vidmode",2);
-    }
-    else if(ui->comboBox->currentIndex()==1)
-    {
-        arguments += " -vidmode 8 ";
-        settings.setValue("vidmode",1);
-    }
 
 
     settings.setValue("fast",false);
@@ -512,11 +503,11 @@ void MainWindow::on_LaunchGameButton_clicked()
     {
         if(isFulscreen=="w")
         {
-            arguments += " -window ";
+            arguments += " -nofullscreen ";
         }
         else
         {
-            arguments += " -fs ";
+            arguments += " -fullscreen ";
         }
     }
     else
@@ -551,24 +542,36 @@ void MainWindow::on_LaunchGameButton_clicked()
 
 
 
-    arguments += " " + ui->argumentText->toPlainText().toStdString();
+    arguments += " " + ui->argumentText->toPlainText().toStdString() + " ";
     std::replace(arguments.begin(), arguments.end(), '\n', ' ');
 
     settings.setValue("iwad",ui->iwadSelect->currentIndex());
 
 
-    if(getOsName()=="MacOS" || getOsName()=="Linux")
+    if(getOsName()=="MacOS")
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        qDebug() << system("ls");
+        qDebug() << system("pwd");
         qDebug() << (execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str();
-        system((execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        arguments=" ";
+    }
+    else if(getOsName()=="Linux")
+    {
+        std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
+        std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+        system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+
+        system((execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
         arguments=" ";
     }
     else
     {
-        system(("dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> LogFile.txt").c_str());
+        std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+        system((execPath+ "\dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> LogFile.txt").c_str());
         arguments=" ";
     }
 
@@ -579,8 +582,12 @@ void MainWindow::on_LaunchGameButton_clicked()
 
 void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 {
-    QString sel = ui->iwadSelect->currentText();
-    if(sel=="doom"||sel=="DOOM"||sel=="doomu"||sel=="DOOMU"||sel=="doom1"||sel=="DOOM1"||sel=="freedoom1"||sel=="bfgdoom1"||sel=="heretic"||sel=="HERETIC")
+    std::string sel = (ui->iwadSelect->currentText()).toStdString();
+    for (int i = 0; i < sel.length(); i++)
+        {
+            sel[i] = tolower(sel[i]);
+        }
+    if(sel=="doom"||sel=="DOOM"||sel=="doomu"||sel=="DOOMU"||sel=="doom1"||sel=="DOOM1"||sel=="freedoom1"||sel=="freedoom"||sel=="bfgdoom1"||sel=="bfgdoom"||sel=="heretic"||sel=="HERETIC"||sel=="chex"||sel=="hacx")
     {
         ui->levelBox->show();
         ui->levelText->show();
@@ -708,12 +715,10 @@ void MainWindow::on_tabs_currentChanged(int index)
 {
     if(index==0)
     {
-        ui->comboBox->show();
         ui->comboBox_2->show();
     }
     else
     {
-        ui->comboBox->hide();
         ui->comboBox_2->hide();
     }
 
@@ -745,4 +750,167 @@ void MainWindow::on_pushButton_3_clicked()
     QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
     ui->recordDemo_2->setText(demoName);
 }
+
+
+void MainWindow::on_toolButton_3_clicked()
+{
+    documentation *wdg = new documentation;
+    wdg->show();
+}
+
+
+void MainWindow::get_leaderboards(std::string wad, std::string level, std::string category)
+{
+    QString player;
+    QString time;
+    QString engine;
+    QString date;
+    QString demoFile;
+
+    QNetworkRequest req(QUrl(QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str())));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    qDebug() << QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str());
+
+    QJsonObject json;
+    json.insert("player", "value1");
+
+    QNetworkAccessManager nam;
+
+    QNetworkReply *reply = nam.get(req);
+
+    while (!reply->isFinished())
+    {
+        qApp->processEvents();
+    }
+
+    QByteArray response_data = reply->readAll();
+
+    QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
+
+    QJsonObject jsonobj = jsondoc.object();
+        foreach(const QString& key, jsonobj.keys()) {
+            QJsonValue value = jsonobj.value(key);
+            qDebug() << "Key = " << key << ", Value = " << value.toString();
+            if(key=="player")
+            {
+                player=value.toString();
+            }
+            else if(key=="time")
+            {
+                time=value.toString();
+            }
+            else if(key=="engine")
+            {
+                engine=value.toString();
+            }
+            else if(key=="date")
+            {
+                date=value.toString();
+            }
+            else if(key=="file")
+            {
+                demoFile=value.toString();
+            }
+        }
+
+
+    reply->deleteLater();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    if(index==0)
+    {
+        return;
+    }
+
+    std::string arg1 = ui->comboBox->itemText(index).toStdString();
+    std::string category;
+
+    if(arg1=="UV Speed")
+    {
+        category = "UV%20Speed";
+    }
+    else if(arg1=="UV Max")
+    {
+        category = "UV%20Max";
+    }
+    else if(arg1=="UV Fast")
+    {
+        category = "UV%20Fast";
+    }
+    else if(arg1=="UV Respawn")
+    {
+        category = "UV%20Respawn";
+    }
+    else if(arg1=="NM Speed")
+    {
+        category = "NM%20Speed";
+    }
+    else if(arg1=="NM 100S")
+    {
+        category = "NM%20100S";
+    }
+
+    std::string wad;
+    std::string level;
+
+
+    if(ui->wadsOnFolder->count()<1)
+    {
+        wad = ui->iwadSelect->currentText().toStdString();
+        for (int i = 0; i < wad.length(); i++)
+            {
+                wad[i] = tolower(wad[i]);
+            }
+        if(wad=="doomu"||wad=="doom1")
+        {
+            wad="doom";
+        }
+    }
+
+    if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
+    {
+        level = "E"+ui->episodeBox->text().toStdString()+"M"+ui->episodeBox->text().toStdString();
+    }
+    else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
+    {
+        if(ui->episodeBox->text().toStdString().length()==1)
+        {
+            level = "Map%200"+ui->episodeBox->text().toStdString();
+        }
+        else
+        {
+            level = "Map%20"+ui->episodeBox->text().toStdString();
+        }
+
+    }
+    else if(!ui->levelBox->isHidden())
+    {
+        level = "E1M1";
+    }
+    else
+    {
+        level = "Map%2001";
+    }
+
+
+    qDebug() << (wad +" "+ level +" "+ category).c_str();
+
+    get_leaderboards(wad,level,category);
+
+}
+
 

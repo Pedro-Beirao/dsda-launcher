@@ -19,6 +19,7 @@ public:
 
 public slots:
     void addWads(QStringList fileNames);
+    void get_leaderboards(std::string wad, std::string level, std::string category);
 
 private:
     Ui::MainWindow *ui;
@@ -42,5 +43,7 @@ private slots:
     void on_pushButton_3_clicked();
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
+    void on_toolButton_3_clicked();
+    void on_comboBox_currentIndexChanged(int index);
 };
 #endif // MAINWINDOW_H

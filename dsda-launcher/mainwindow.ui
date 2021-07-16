@@ -403,6 +403,19 @@ border-radius:3px</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Additional Arguments&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
+    <widget class="QToolButton" name="toolButton_3">
+     <property name="geometry">
+      <rect>
+       <x>155</x>
+       <y>6</y>
+       <width>13</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>?</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
@@ -453,7 +466,7 @@ border-radius:3px</string>
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -466,7 +479,7 @@ border-radius:3px</string>
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>5</y>
+        <y>10</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -484,8 +497,8 @@ border-radius:3px</string>
      <widget class="QCheckBox" name="noCheck">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>55</y>
+        <x>170</x>
+        <y>40</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -500,7 +513,7 @@ border-radius:3px</string>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>30</x>
         <y>84</y>
         <width>101</width>
         <height>16</height>
@@ -519,7 +532,7 @@ border-radius:3px</string>
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>55</y>
+        <y>97</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -528,32 +541,11 @@ border-radius:3px</string>
        <string> Fullscreen</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>84</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Graphics Mode&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="noCheck_4">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>30</y>
+        <y>40</y>
         <width>141</width>
         <height>20</height>
        </rect>
@@ -569,13 +561,28 @@ border-radius:3px</string>
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>5</y>
+        <y>10</y>
         <width>121</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
        <string> Solo Net</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>73</y>
+        <width>281</width>
+        <height>1</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(200, 200, 200);
+background-color: rgb(78, 79, 80);
+</string>
       </property>
      </widget>
     </widget>
@@ -723,6 +730,133 @@ border-radius:3px</string>
      <attribute name="title">
       <string>DSDA</string>
      </attribute>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string> </string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>UV Speed</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>UV Max</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>UV Fast</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>UV Respawn</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NM Speed</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NM 100S</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tyson</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Pacifist</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Stroller</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NoMo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NoMo 100S</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Collector</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>45</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Wad:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Level:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="wadLName">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>45</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> </string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="levelL">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>70</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QTextBrowser" name="toolTip">
@@ -763,7 +897,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QComboBox" name="comboBox_2">
     <property name="geometry">
      <rect>
-      <x>185</x>
+      <x>40</x>
       <y>295</y>
       <width>131</width>
       <height>21</height>
@@ -858,42 +992,6 @@ p, li { white-space: pre-wrap; }
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>35</x>
-      <y>295</y>
-      <width>131</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="frame">
-     <bool>true</bool>
-    </property>
-    <item>
-     <property name="text">
-      <string/>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>8 Bit Software</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>32 Bit Software</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Open GL</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
@@ -980,7 +1078,6 @@ p, li { white-space: pre-wrap; }
    <zorder>tabs</zorder>
    <zorder>toolTip</zorder>
    <zorder>comboBox_2</zorder>
-   <zorder>comboBox</zorder>
    <zorder>pushButton_2</zorder>
    <zorder>pushButton_3</zorder>
    <zorder>demoPlayOptions</zorder>
