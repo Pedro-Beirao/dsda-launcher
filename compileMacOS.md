@@ -34,13 +34,24 @@ ___
 ## Compiling
 
 1. Download the .zip file from this repository
+
 2. Extract it & open the folder
-3. Put the **dsda-doom** (not included in this repo) inside the dsda-launcher folder
+ 
+3. Put the **dsda-doom** executable and **dsda-doom.wad** (not included in this repo) inside the dsda-launcher folder
+
+      ^^^ Very important
+
 4. Create a "build" folder
 ```
 mkdir build & cd build
 ```
-5. Run qmake from the build folder
+
+Your dsda-launcher folder should look like this: 
+
+![Screenshot 2021-07-07 at 10 22 17](https://user-images.githubusercontent.com/82064173/124734657-40395480-df0d-11eb-81c1-fd19231c5035.jpg)
+
+
+5. Run qmake from inside of the build folder
 ```
 qmake ..
 
