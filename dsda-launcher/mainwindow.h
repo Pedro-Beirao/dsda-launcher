@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <bootstrap.h>
-#include "bootstrap.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

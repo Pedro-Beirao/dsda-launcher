@@ -5,8 +5,6 @@
 #include <QListWidgetItem>
 #include <QStandardPaths>
 #include <QShortcut>
-#include <bootstrap.h>
-#include "bootstrap.h"
 #include <fstream>
 #include <iostream>
 #include <QDragEnterEvent>
