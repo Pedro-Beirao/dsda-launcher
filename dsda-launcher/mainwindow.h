@@ -45,5 +45,6 @@ private slots:
     void dropEvent(QDropEvent *e);
     void on_toolButton_3_clicked();
     void on_comboBox_currentIndexChanged(int index);
+    void on_toolButton_4_clicked();
 };
 #endif // MAINWINDOW_H

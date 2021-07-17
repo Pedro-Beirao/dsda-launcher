@@ -583,7 +583,7 @@ void MainWindow::on_LaunchGameButton_clicked()
 void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 {
     std::string sel = (ui->iwadSelect->currentText()).toStdString();
-    for (int i = 0; i < sel.length(); i++)
+    for (int i = 0; i < int(sel.length()); i++)
         {
             sel[i] = tolower(sel[i]);
         }
@@ -758,6 +758,7 @@ void MainWindow::on_toolButton_3_clicked()
     wdg->show();
 }
 
+QString demoFile;
 
 void MainWindow::get_leaderboards(std::string wad, std::string level, std::string category)
 {
@@ -765,7 +766,6 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
     QString time;
     QString engine;
     QString date;
-    QString demoFile;
 
     QNetworkRequest req(QUrl(QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str())));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -813,6 +813,10 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
             }
         }
 
+    ui->demoTime->setText(("Time: "+time));
+    ui->demoPlayer->setText(("Player: "+player));
+    ui->demoPort->setText((engine));
+
 
     reply->deleteLater();
 
@@ -831,10 +835,7 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    if(index==0)
-    {
-        return;
-    }
+
 
     std::string arg1 = ui->comboBox->itemText(index).toStdString();
     std::string category;
@@ -863,9 +864,34 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     {
         category = "NM%20100S";
     }
+    else if(arg1=="Tyson")
+    {
+        category = "Tyson";
+    }
+    else if(arg1=="Pacifist")
+    {
+        category = "Pacifist";
+    }
+    else if(arg1=="Stroller")
+    {
+        category = "Stroller";
+    }
+    else if(arg1=="NoMo")
+    {
+        category = "NoMo";
+    }
+    else if(arg1=="NoMo 100S")
+    {
+        category = "NoMo%20100S";
+    }
+    else if(arg1=="Collector")
+    {
+        category = "Collector";
+    }
 
     std::string wad;
     std::string level;
+
 
 
     if(ui->wadsOnFolder->count()<1)
@@ -883,17 +909,17 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
     {
-        level = "E"+ui->episodeBox->text().toStdString()+"M"+ui->episodeBox->text().toStdString();
+        level = "E"+ui->episodeBox->text().toStdString()+"M"+ui->levelBox->text().toStdString();
     }
     else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
     {
         if(ui->episodeBox->text().toStdString().length()==1)
         {
-            level = "Map%200"+ui->episodeBox->text().toStdString();
+            level = "Map 0"+ui->episodeBox->text().toStdString();
         }
         else
         {
-            level = "Map%20"+ui->episodeBox->text().toStdString();
+            level = "Map "+ui->episodeBox->text().toStdString();
         }
 
     }
@@ -903,14 +929,47 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     }
     else
     {
-        level = "Map%2001";
+        level = "Map 01";
     }
+
+    ui->wadLName->setText(wad.c_str());
+    ui->levelL->setText(level.c_str());
+
+    for (int i = 0; i < int(level.length()); i++)
+        {
+            if(level[i]==' ')
+            {
+                level.erase(i);
+                level.insert(i,"%20");
+                if(ui->episodeBox->text().toStdString().length()>1)
+                {
+                    level.append(ui->episodeBox->text().toStdString());
+                }
+                else if(ui->episodeBox->text().toStdString().length()==1)
+                {
+                    level.append("0" + ui->episodeBox->text().toStdString());
+                }
+                else
+                {
+                    level.append("01");
+                }
+            }
+        }
 
 
     qDebug() << (wad +" "+ level +" "+ category).c_str();
 
     get_leaderboards(wad,level,category);
 
+
+
 }
 
+#include <QDesktopServices>
+
+void MainWindow::on_toolButton_4_clicked()
+{
+    QString link = demoFile;
+    QDesktopServices::openUrl(QUrl(link));
+}
 
