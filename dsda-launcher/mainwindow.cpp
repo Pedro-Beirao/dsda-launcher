@@ -212,6 +212,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->iwadSelect->setCurrentIndex(settings.value("iwad").toInt());
     }
     ui->soloNetCheck->setChecked(settings.value("solonet").toBool());
+
+    ui->argumentText->appendPlainText(settings.value("argumentText").toString());
 }
 
 
@@ -538,6 +540,14 @@ void MainWindow::on_LaunchGameButton_clicked()
         }
     }
 
+    if(ui->argumentText->toPlainText().toStdString()!="")
+    {
+        settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
+    }
+    else
+    {
+        settings.remove("argumentText");
+    }
 
 
     arguments += " " + ui->argumentText->toPlainText().toStdString() + " ";
@@ -596,6 +606,11 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
         ui->levelBox->hide();
         ui->levelText->hide();
         ui->episodeText->setText("Level");
+    }
+
+    if(ui->tabs->currentIndex()==3)
+    {
+        reloadLeaderboard();
     }
 
 }
@@ -733,6 +748,11 @@ void MainWindow::on_tabs_currentChanged(int index)
         ui->demoPlayOptions->hide();
     }
 
+    if(index==3)
+    {
+        reloadLeaderboard();
+    }
+
 }
 
 
@@ -825,17 +845,20 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
 
 
-
-
-
-
-
-
 void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    reloadLeaderboard();
+}
+
+
+
+
+
+void MainWindow::reloadLeaderboard()
 {
 
 
-    std::string arg1 = ui->comboBox->itemText(index).toStdString();
+    std::string arg1 = ui->comboBox->currentText().toStdString();
     std::string category;
 
     if(arg1=="UV Speed")
@@ -904,6 +927,23 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
             wad="doom";
         }
     }
+    else
+    {
+        std::string wad1 = ui->wadsOnFolder->item(0)->text().toStdString();
+        for (int i = 0; i < wad1.length(); i++)
+            {
+                wad1[i] = tolower(wad1[i]);
+            }
+        wad=wad1;
+        for (int i = 0; i < wad1.length(); i++)
+        {
+            if(wad1[i]=='/')
+            {
+                wad = wad1.substr(i+1);
+                wad.resize(wad.length()-4);
+            }
+        }
+    }
 
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
     {
@@ -969,5 +1009,23 @@ void MainWindow::on_toolButton_4_clicked()
 {
     QString link = demoFile;
     QDesktopServices::openUrl(QUrl(link));
+}
+
+
+void MainWindow::on_episodeBox_textChanged(const QString &arg1)
+{
+    if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
+    {
+        reloadLeaderboard();
+    }
+}
+
+
+void MainWindow::on_levelBox_textChanged(const QString &arg1)
+{
+    if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
+    {
+        reloadLeaderboard();
+    }
 }
 

@@ -408,8 +408,8 @@ border-radius:3px</string>
       <rect>
        <x>155</x>
        <y>6</y>
-       <width>13</width>
-       <height>13</height>
+       <width>16</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
@@ -466,7 +466,7 @@ border-radius:3px</string>
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -514,14 +514,14 @@ border-radius:3px</string>
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>84</y>
+        <y>80</y>
         <width>101</width>
         <height>16</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>8</pointsize>
        </font>
       </property>
       <property name="text">
@@ -901,7 +901,7 @@ border-radius:3px</string>
        </rect>
       </property>
       <property name="text">
-       <string>Port:</string>
+       <string> </string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_4">
@@ -928,7 +928,7 @@ border-radius:3px</string>
       <x>10</x>
       <y>50</y>
       <width>201</width>
-      <height>61</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -1062,7 +1062,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);
+     <string notr="true">
 </string>
     </property>
     <property name="text">
