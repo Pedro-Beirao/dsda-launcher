@@ -10,10 +10,6 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
-      with:
-        version: ${{ env.QT_VERSION }}
-        arch:    ${{ env.MINGW_VERSION }}
-        extra:   --external 7z
 
     - uses: actions/checkout@v1
       
