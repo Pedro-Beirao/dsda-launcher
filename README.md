@@ -1,7 +1,7 @@
 # dsda-launcher
 This is a launcher for the dsda-doom source port
 
-The binaries for an experimental macOS version are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
+The binaries for an experimental macOS and windows version are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
 
 ^ This includes the dsda-doom executable. Just open the launcher and you are good to play
 
