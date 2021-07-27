@@ -1,20 +1,98 @@
 name: CI
 
-on: [push]
+env:
+  QT_VERSION:     "5.12.7"
+  MINGW_VERSION:  "win64_mingw73"
+  MINGW_PATH:     "mingw73_64"
+  
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-    - run: echo "{ACTIONS_ALLOW_UNSECURE_COMMANDS}={true}" >> $GITHUB_ENV
+    - name: Print working directory on runner
+      run: Get-Location
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2.5.3
+    - uses: actions/checkout@v2
 
-    - uses: actions/checkout@v1
+    - name: Check mingw g++ version
+      run: |
+        Write-Output (Get-Command g++.exe).Path
+        g++.exe --version        
       
-    - name: qmake
-      run: qmake dsda-launcher/dsda-launcher.pro
+    - name: Install correct version of mingw
+      run: |
+        choco uninstall mingw --force
+        choco uninstall strawberryperl --force
+        choco install mingw --version=7.3.0 
+        #choco install qt-sdk-windows-x86-mingw_opengl
         
-    - name: make
-      run: make
+    - name: Check mingw directory
+      run: |
+        ls C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2.6.2
+      with:
+        host: windows
+        version: ${{ env.QT_VERSION }}
+        arch: ${{ env.MINGW_VERSION }}
+        #modules: 'qtcore'
+        extra: --external 7z
+
+    - name: Set path and refresh
+      run: |
+        echo "::add-path::d:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin"
+        refreshenv
+        #Write-Output (Get-Command g++.exe).Path
+        #g++.exe --version
+        
+    - name: Check availability of libraries
+      working-directory: D:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/lib/
+      run: |
+        ls
+        ls D:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin/
+    - name: Check QMake and make
+      run: |
+        Write-Output (Get-Command qmake.exe).Path
+        qmake.exe -version
+        #Write-Output (Get-Command mingw32-make.exe).Path
+        #mingw32-make.exe -version
+    
+    - name: Prepend path
+      run: echo "::add-path::d:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/mingw73_32/bin"
+
+    - name: Check QMake and make after prepend path
+      run: |
+        Write-Output (Get-Command qmake.exe).Path
+        qmake.exe -version
+        #Write-Output (Get-Command mingw32-make.exe).Path
+        #mingw32-make.exe -version
+        
+    - name: Qmake and make
+      working-directory: d:/a/qt-github-console/qt-github-console
+      run: | 
+        qmake.exe dsda-launcher/dsda-launcher.pro -spec win32-g++ #"LIBS += D:\a\dsda-launcher\Qt\5.12.7\mingw73_32\lib\libQt5Cored.a"
+        mingw32-make.exe qmake_all
+        
+    - name: Check QMake and make, g++
+      run: |
+        Write-Output (Get-Command qmake.exe).Path
+        qmake.exe -version
+        Write-Output (Get-Command mingw32-make.exe).Path
+        mingw32-make.exe -version
+        Write-Output (Get-Command g++).Path
+        ls (Get-Command g++.exe).Path
+        g++.exe --version 
+        
+    - name: Make mingw32
+      working-directory: d:/a/qt-github-console/qt-github-console
+      run: |
+        mingw32-make.exe -j8
+        Get-Location
+        ls
