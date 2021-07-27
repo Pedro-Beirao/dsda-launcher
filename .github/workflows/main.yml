@@ -1,34 +1,36 @@
 name: CI
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+env:
+  QT_VERSION:     "5.12.7"
+  MINGW_VERSION:  "win32_mingw73"
+  MINGW_PATH:     "mingw73_32"
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on: [push]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: windows-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2.13.2
+    - name: Install correct version of mingw
+      run: |
+        choco uninstall mingw --force
+        choco uninstall strawberryperl --force
+    - uses: numworks/setup-msys2@v1
+      with:
+        msystem: MINGW32
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2.5.3
+      with:
+        version: ${{ env.QT_VERSION }}
+        arch:    ${{ env.MINGW_VERSION }}
+        extra:   --external 7z
+
+    - uses: actions/checkout@v1
+      
+    - name: qmake
+      run: qmake dsda-launcher/dsda-launcher.pro
         
-      - name: qmake
-        run: qmake dsda-launcher/dsda-launcher.pro
-        
-      - name: make
-        run: make
+    - name: make
+      run: make
