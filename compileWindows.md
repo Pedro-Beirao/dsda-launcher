@@ -1,6 +1,5 @@
 # Intructions for compiling dsda-launcher for Windows
 
-Not tested yet
 
 ___
 
