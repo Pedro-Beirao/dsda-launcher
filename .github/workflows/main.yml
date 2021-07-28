@@ -22,13 +22,6 @@ env:
   TILED_SNAPSHOT: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
-  version:
-    name: Determine Tiled version
-    runs-on: windows-latest
-    outputs:
-      version: ${{ steps.get-version.outputs.version }}
-      release: ${{ steps.get-version.outputs.release }}
-
   windows:
     name: Windows (${{ matrix.arch }}-bit)
     runs-on: windows-latest
