@@ -1,99 +1,174 @@
-name: CI
+name: Build Packages
 
-env:
-  QT_VERSION:     "5.12.7"
-  MINGW_VERSION:  "win64_mingw73"
-  MINGW_PATH:     "mingw73_64"
-  
-  
 on:
   push:
-    branches: [ master ]
+    paths-ignore:
+    - 'docs/**'
+    - '**.md'
+    - 'appveyor.yml'
+    - '.travis.yml'
   pull_request:
-    branches: [ master ]
+    paths-ignore:
+    - 'docs/**'
+    - '**.md'
+    - 'appveyor.yml'
+    - '.travis.yml'
+
+env:
+  QT_VERSION: 5.15.2
+  QTCREATOR_VERSION: 4.15.2
+  SENTRY_VERSION: 0.4.11
+  TILED_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+  TILED_SNAPSHOT: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
-  build:
+  version:
+    name: Determine Tiled version
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      release: ${{ steps.get-version.outputs.release }}
 
     steps:
-    - name: Print working directory on runner
-      run: Get-Location
+    - name: Get version
+      id: get-version
+      run: |
+        if [[ "$TILED_RELEASE" == 'true' ]]; then echo "::set-output name=version::${GITHUB_REF:11}" ; fi
+        if [[ "$TILED_RELEASE" != 'true' ]]; then echo "::set-output name=version::$(date "+%Y.%m.%d")" ; fi
+        echo "::set-output name=release::${TILED_RELEASE}"
+  
+  windows:
+    name: Windows (${{ matrix.arch }}-bit)
+    runs-on: windows-latest
+    needs: version
 
-    - uses: actions/checkout@v2
+    strategy:
+      matrix:
+        include:
+        - arch: 32
+          openssl_arch: x86
+        - arch: 64
+          openssl_arch: x64
 
-    - name: Check mingw g++ version
-      run: |
-        Write-Output (Get-Command g++.exe).Path
-        g++.exe --version        
-      
-    - name: Install correct version of mingw
-      run: |
-        choco uninstall mingw --force
-        choco uninstall strawberryperl --force
-        choco install mingw --version=7.3.0 
-        #choco install qt-sdk-windows-x86-mingw_opengl
-        
-    - name: Check mingw directory
-      run: |
-        ls C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
+    env:
+      TILED_VERSION: ${{ needs.version.outputs.version }}
+      QT_TOOLCHAIN: win${{ matrix.arch }}_mingw81
+      MINGW_VERSION: 8.1.0
+      MINGW_COMPONENT: win${{ matrix.arch }}_mingw810
+      OPENSSL_VERSION: 1.1.1
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2.6.2
+      run: |
+        echo "QT_PATH=$(./dist/install-qt.sh --version ${QT_VERSION} --toolchain ${QT_TOOLCHAIN} qtbase qtdeclarative qtscript qtsvg qtimageformats qttools qttranslations)" >> $GITHUB_ENV
+        echo "MINGW_PATH=$(./dist/install-qt.sh --version ${MINGW_VERSION} ${MINGW_COMPONENT})" >> $GITHUB_ENV
+        echo "OPENSSL_PATH=$(./dist/install-qt.sh --version ${OPENSSL_VERSION} openssl --arch ${{ matrix.openssl_arch }})" >> $GITHUB_ENV
+        ./dist/install-qt.sh --version ${QTCREATOR_VERSION} qtcreator >> $GITHUB_PATH
+    - name: Setup Qbs
+      run: |
+        qbs setup-toolchains ${MINGW_PATH}/*-w64-mingw32-gcc.exe mingw
+        qbs setup-qt ${QT_PATH}/qmake.exe qt
+        qbs config defaultProfile qt
+    - name: Build Zstandard
+      run: |
+        export PATH="${MINGW_PATH}:$PATH"
+        git clone --depth 1 -b master https://github.com/facebook/zstd.git
+        pushd zstd/lib
+        CC=gcc mingw32-make -j2 libzstd.a
+        popd
+    - name: Build Tiled
+      run: |
+        export TILED_MSI_VERSION=1.4.${GITHUB_RUN_NUMBER}
+        qbs build config:release projects.Tiled.windowsInstaller:true projects.Tiled.enableZstd:true
+        mv release/installer*/Tiled-*.msi .
+    - name: Upload Tiled installer
+      uses: actions/upload-artifact@v2
       with:
-        host: windows
-        version: ${{ env.QT_VERSION }}
-        arch: ${{ env.MINGW_VERSION }}
-        #modules: 'qtcore'
-        extra: --external 7z
+        name: Tiled-win${{ matrix.arch }}.msi
+        path: Tiled-*.msi
 
-    - name: Set path and refresh
-      run: |
-        echo "::add-path::d:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin"
-        refreshenv
-        #Write-Output (Get-Command g++.exe).Path
-        #g++.exe --version
-        
-    - name: Check availability of libraries
-      working-directory: D:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/lib/
-      run: |
-        ls
-        ls D:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin/
-    - name: Check QMake and make
-      run: |
-        Write-Output (Get-Command qmake.exe).Path
-        qmake.exe -version
-        #Write-Output (Get-Command mingw32-make.exe).Path
-        #mingw32-make.exe -version
-    
-    - name: Prepend path
-      run: echo "::add-path::d:/a/dsda-launcher/Qt/${{ env.QT_VERSION }}/mingw73_32/bin"
+    - name: Upload Tiled archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: Tiled-win${{ matrix.arch }}
+        path: release/install-root/*
 
-    - name: Check QMake and make after prepend path
-      run: |
-        Write-Output (Get-Command qmake.exe).Path
-        qmake.exe -version
-        #Write-Output (Get-Command mingw32-make.exe).Path
-        #mingw32-make.exe -version
-        
-    - name: Qmake and make
-      working-directory: d:/a/qt-github-console/qt-github-console
-      run: | 
-        qmake.exe dsda-launcher/dsda-launcher.pro -spec win32-g++ #"LIBS += D:\a\dsda-launcher\Qt\5.12.7\mingw73_32\lib\libQt5Cored.a"
-        mingw32-make.exe qmake_all
-        
-    - name: Check QMake and make, g++
-      run: |
-        Write-Output (Get-Command qmake.exe).Path
-        qmake.exe -version
-        Write-Output (Get-Command mingw32-make.exe).Path
-        mingw32-make.exe -version
-        Write-Output (Get-Command g++).Path
-        ls (Get-Command g++.exe).Path
-        g++.exe --version 
-        
-    - name: Make mingw32
-      working-directory: d:/a/qt-github-console/qt-github-console
-      run: |
-        mingw32-make.exe -j8
-        Get-Location
-        ls
+  github:
+    name: Upload to GitHub releases
+    runs-on: ubuntu-latest
+    needs: [version, windows]
+
+    if: github.repository == 'mapeditor/tiled' && github.event_name == 'push' && needs.version.outputs.release == 'true'
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Tiled ${{ needs.version.outputs.version }}
+          draft: true
+          prerelease: false
+
+      - name: Download Windows 64-bit installer
+        id: download-win64-installer
+        uses: actions/download-artifact@v2
+        with:
+          name: Tiled-win64.msi
+
+      - name: Download Windows 32-bit installer
+        id: download-win32-installer
+        uses: actions/download-artifact@v2
+        with:
+          name: Tiled-win32.msi
+
+      - name: Download Linux AppImage
+        id: download-appimage
+        uses: actions/download-artifact@v2
+        with:
+          name: Tiled-x86_64.AppImage
+
+      - name: Download macOS app
+        id: download-app
+        uses: actions/download-artifact@v2
+        with:
+          name: Tiled-macos.app
+
+      - name: Upload Windows 64-bit installer
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Tiled-${{ needs.version.outputs.version }}-win64.msi
+          asset_name: Tiled-${{ needs.version.outputs.version }}-win64.msi
+          asset_content_type: applictaion/x-msi
+
+      - name: Upload Windows 32-bit installer
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Tiled-${{ needs.version.outputs.version }}-win32.msi
+          asset_name: Tiled-${{ needs.version.outputs.version }}-win32.msi
+          asset_content_type: applictaion/x-msi
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: releases
+          version: ${{ needs.version.outputs.version }}
