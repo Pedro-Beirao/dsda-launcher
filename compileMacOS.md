@@ -56,6 +56,10 @@ Your dsda-launcher folder should look like this:
 qmake ..
 
 If you installed Qt with the online installer, careful with qmake not being in the path
+
+
+// qmake "CONFIG+=deploy" ..
+// ^ this will add a "lib" folder to the .app bunndle
 ```
 6. Run make
 ```
