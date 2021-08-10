@@ -20,6 +20,7 @@ public slots:
     void addWads(QStringList fileNames);
     void get_leaderboards(std::string wad, std::string level, std::string category);
     void reloadLeaderboard();
+    void changePrimaryPWADFolder(QString arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -39,6 +40,8 @@ private slots:
     void on_soloNetCheck_toggled(bool checked);
     void on_tabs_currentChanged(int index);
     void foo();
+    void foo2();
+    void foo3();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
     void dragEnterEvent(QDragEnterEvent *e);
@@ -48,5 +51,6 @@ private slots:
     void on_toolButton_4_clicked();
     void on_episodeBox_textChanged(const QString &arg1);
     void on_levelBox_textChanged(const QString &arg1);
+    void on_toolButton_2_clicked();
 };
 #endif // MAINWINDOW_H

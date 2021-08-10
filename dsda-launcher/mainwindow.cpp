@@ -13,11 +13,13 @@
 #include <vector>
 #include <QSettings>
 #include "documentation.h"
+#include "defaultfolders.h"
 #include <QNetworkAccessManager>
 #include <QtNetwork>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <iostream>
+#include <QRegularExpression>
 
 std::string getOsName()
 {
@@ -36,7 +38,8 @@ QStringList images;
 
 QSettings settings("pedrobeirao","dsda-launcher");
 
-
+documentation *docWindow;
+DefaultFolders *wadWindow;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -46,10 +49,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     setAcceptDrops(true);
 
+    docWindow = new documentation;
+    wadWindow = new DefaultFolders;
 
+    QRegularExpression rgx("[0-9]{2}");
+    QValidator *comValidator = new QRegularExpressionValidator (rgx, this);
+    ui->episodeBox->setValidator(comValidator);
+    ui->levelBox->setValidator(comValidator);
 
     QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
     shortcut->setAutoRepeat(false);
+
+    QShortcut * shortcut2 = new QShortcut(QKeySequence(Qt::Key_N | Qt::CTRL),this,SLOT(foo2()));
+    shortcut2->setAutoRepeat(false);
+
+    QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(foo3()));
+    shortcut3->setAutoRepeat(false);
 
     ui->pushButton_2->hide();
     ui->pushButton_3->hide();
@@ -301,6 +316,18 @@ void MainWindow::foo()
     }
 }
 
+void MainWindow::foo2()
+{
+    MainWindow *newMainWindow = new MainWindow;
+    newMainWindow->show();
+}
+
+void MainWindow::foo3()
+{
+    QWidget *currentWindow = QApplication::activeWindow();
+    currentWindow->close();
+}
+
 void MainWindow::addWads(QStringList fileNames)
 {
     ui->wadsOnFolder->addItems(fileNames);
@@ -318,82 +345,41 @@ bool isSoloNet = false;
 void MainWindow::on_LaunchGameButton_clicked()
 {
 
+    std::string complevelString = ui->compLevelSelect->currentText().toStdString();
     int complevelIndex = ui->compLevelSelect->currentIndex();
     settings.setValue("complevel",complevelIndex);
-    if(complevelIndex==0)
+    if(complevelString[0]!='D')
     {
-        arguments+=" -complevel -1 ";
-    }
-    else if(complevelIndex==1)
-    {
-        arguments+=" -complevel 0 ";
-    }
-    else if(complevelIndex==2)
-    {
-        arguments+=" -complevel 1 ";
-    }
-    else if(complevelIndex==3)
-    {
-        arguments+=" -complevel 2 ";
-    }
-    else if(complevelIndex==4)
-    {
-        arguments+=" -complevel 3 ";
-    }
-    else if(complevelIndex==5)
-    {
-        arguments+=" -complevel 4 ";
-    }
-    else if(complevelIndex==6)
-    {
-        arguments+=" -complevel 5 ";
-    }
-    else if(complevelIndex==7)
-    {
-        arguments+=" -complevel 6 ";
-    }
-    else if(complevelIndex==8)
-    {
-        arguments+=" -complevel 7 ";
-    }
-    else if(complevelIndex==9)
-    {
-        arguments+=" -complevel 10 ";
-    }
-    else if(complevelIndex==10)
-    {
-        arguments+=" -complevel 11 ";
-    }
-    else if(complevelIndex==11)
-    {
-        arguments+=" -complevel 16 ";
-    }
-    else if(complevelIndex==12)
-    {
-        arguments+=" -complevel 17 ";
+        std::string complevelText = " -complevel ";
+        complevelText.push_back(complevelString[0]);
+        complevelText.push_back(complevelString[1]);
+        arguments+=complevelText+" ";
     }
 
     int diffIndex = ui->diffBox->currentIndex();
     settings.setValue("skill",diffIndex);
-    if(diffIndex==1)
+    if(ui->episodeBox->text().length()>0)
     {
-        arguments+=" -skill 1 ";
-    }
-    if(diffIndex==2)
-    {
-        arguments+=" -skill 2 ";
-    }
-    if(diffIndex==3)
-    {
-        arguments+=" -skill 3 ";
-    }
-    if(diffIndex==4)
-    {
-        arguments+=" -skill 4 ";
-    }
-    if(diffIndex==5)
-    {
-        arguments+=" -skill 5 ";
+        if(diffIndex==1)
+        {
+            arguments+=" -skill 1 ";
+        }
+        else if(diffIndex==2)
+        {
+            arguments+=" -skill 2 ";
+        }
+        else if(diffIndex==3)
+        {
+            arguments+=" -skill 3 ";
+        }
+        else if(diffIndex==4)
+        {
+            arguments+=" -skill 4 ";
+        }
+        else if(diffIndex==5)
+        {
+            arguments+=" -skill 5 ";
+        }
     }
 
 
@@ -564,7 +550,7 @@ void MainWindow::on_LaunchGameButton_clicked()
         qDebug() << system("ls");
         qDebug() << system("pwd");
         qDebug() << (execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str();
-        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
     else if(getOsName()=="Linux")
@@ -573,13 +559,13 @@ void MainWindow::on_LaunchGameButton_clicked()
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
 
-        system((execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
+        system((execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
     else
     {
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
-        system((execPath+ "\dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> LogFile.txt").c_str());
+        system(("cmd /c "+execPath+ "\\dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> LogFile.txt &").c_str());
         arguments=" ";
     }
 
@@ -629,12 +615,14 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-
-
 void MainWindow::on_plus_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),tr("WAD files (*.wad *.deh)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex)"));
     ui->wadsOnFolder->addItems(fileNames);
+    if(fileNames.length()>0)
+    {
+        settings.setValue("primaryPWADFolder", fileNames[0]);
+    }
 }
 
 
@@ -772,8 +760,7 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_toolButton_3_clicked()
 {
-    documentation *wdg = new documentation;
-    wdg->show();
+    docWindow->show();
 }
 
 QString demoFile;
@@ -823,7 +810,10 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
             }
             else if(key=="date")
             {
-                date=value.toString();
+                std::string dateString = value.toString().toStdString();
+                dateString=dateString.substr(0,dateString.find("T"));
+                date=dateString.c_str();
+
             }
             else if(key=="file")
             {
@@ -833,7 +823,7 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
     ui->demoTime->setText(("Time: "+time));
     ui->demoPlayer->setText(("Player: "+player));
-    ui->demoPort->setText((engine));
+    ui->demoPort->setText((date));
 
 
     reply->deleteLater();
@@ -852,12 +842,12 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
 
 
-
+bool reloadingLeaderboards=false;
 
 void MainWindow::reloadLeaderboard()
 {
 
-
+    reloadingLeaderboards=true;
     std::string arg1 = ui->comboBox->currentText().toStdString();
     std::string category;
 
@@ -997,13 +987,13 @@ void MainWindow::reloadLeaderboard()
 
     qDebug() << (wad +" "+ level +" "+ category).c_str();
 
+    reloadingLeaderboards=false;
     get_leaderboards(wad,level,category);
-
-
 
 }
 
 #include <QDesktopServices>
+#include <QtConcurrent>
 
 void MainWindow::on_toolButton_4_clicked()
 {
@@ -1016,7 +1006,9 @@ void MainWindow::on_episodeBox_textChanged(const QString &arg1)
 {
     if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
     {
-        reloadLeaderboard();
+        QFuture<void> future = QtConcurrent::run([=]() {
+            reloadLeaderboard();
+        });
     }
 }
 
@@ -1025,7 +1017,18 @@ void MainWindow::on_levelBox_textChanged(const QString &arg1)
 {
     if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
     {
-        reloadLeaderboard();
+        QFuture<void> future = QtConcurrent::run([=]() {
+            reloadLeaderboard();
+        });
     }
 }
 
+void MainWindow::on_toolButton_2_clicked()
+{
+    wadWindow->show();
+}
+
+void MainWindow::changePrimaryPWADFolder(QString arg1)
+{
+    settings.setValue("primaryPWADFolder", arg1);
+}
