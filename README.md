@@ -17,4 +17,4 @@ This app is crossplatform thanks to the Qt framework
 
 **compileWindows.md** - Instructions for compiling for Windows
 
-**compileLinux.md** - Instructions for compiling for Linux (doesnt exist yet lol, but should be similar to MacOS)
+**compileLinux.md** - Instructions for compiling for Linux (doesnt exist yet, but should be similar to MacOS)
