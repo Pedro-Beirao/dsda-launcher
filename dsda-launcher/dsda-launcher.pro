@@ -13,6 +13,7 @@ macx
     ICON = doom-launcher.icns
     APP_FILES.files = ./dsda-doom
     APP_FILES.files += ./dsda-doom.wad
+    APP_FILES.files += ./launcher_config.txt
     deploy {
         APP_FILES.files += ./lib
         message("ready for deploy")
@@ -29,19 +30,13 @@ DEFINES += "APP_NAME=dsda-launcher"
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    defaultfolders.cpp \
-    documentation.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    defaultfolders.h \
-    documentation.h \
     mainwindow.h
 
 FORMS += \
-    defaultfolders.ui \
-    documentation.ui \
     mainwindow.ui
 
 # Default rules for deployment.

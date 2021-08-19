@@ -16,18 +16,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    Ui::MainWindow *ui;
+
 public slots:
     void addWads(QStringList fileNames);
     void get_leaderboards(std::string wad, std::string level, std::string category);
     void reloadLeaderboard();
-    void changePrimaryPWADFolder(QString arg1);
+    void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *object, QEvent *ev);
+    void delayLaunch();
+    void closeEvent(QCloseEvent *event);
 
-private:
-    Ui::MainWindow *ui;
-
-
-private slots:
-    void on_LaunchGameButton_clicked();
+    void on_LaunchGameButton_clicked(bool onExit);
     void on_iwadSelect_currentIndexChanged(int index);
     void on_pushButton_clicked();
     void on_plus_clicked();
@@ -51,6 +52,9 @@ private slots:
     void on_toolButton_4_clicked();
     void on_episodeBox_textChanged(const QString &arg1);
     void on_levelBox_textChanged(const QString &arg1);
-    void on_toolButton_2_clicked();
+    void on_editParameters_clicked();
+
+private slots:
+
 };
 #endif // MAINWINDOW_H

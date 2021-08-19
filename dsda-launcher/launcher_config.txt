@@ -1,0 +1,71 @@
+####################################################################
+# This is a comment						#
+#								#
+# For a complete guide on how to customize this launcher:		#
+# link								#
+#								#
+# Restart the launcher for the changes to take place		#
+#								#
+####################################################################
+
+
+####################################################################
+#								#
+# 	Customize up to 4 toggles					#
+# "text that appears in the launcher" "actual parameter"		#
+#								#
+####################################################################
+
+
+"Fast Monsters" "-fast"
+
+"No Monsters" "-nomonsters"
+
+"Respawn Monsters" "-respawn"
+
+"Solo Net" "-solo-net"
+
+####################################################################
+#								#
+# 	Change the preset for the bottom row			#
+# 	1 = Resolution + Fullscreen (Default)			#
+# 	2 = Customise 2 drop down menus				#
+#								#
+####################################################################
+
+
+2
+
+
+####################################################################
+#								#
+# (If you chose 1, ignore this)   				#
+#  If you chose 2, then you can customise the following		#
+# 								#
+#	+"Text on top of the drop down menus"			#
+#	"First option"   # Recommended to leave the first blank	#
+#	"Second option"						#
+#	"Third option"						#
+#	etc							#
+#								#
+#  If the last option is "both" or "all", then it will use every	#
+#  parameter in that drop down menu				#
+#  	ex: -levelstat -analysis					#
+#								#
+####################################################################
+
+
++"Time"
+" "
+"-time_use"
+"-time_keys"
+"-time_secrets"
+"-time_all"
+
+
++"Stats"
+" "
+"-levelstat"
+"-analysis"
+"both"
+
