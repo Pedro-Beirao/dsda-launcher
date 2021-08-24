@@ -65,7 +65,7 @@ std::string solonetParam;
 // 2 = Custom
 int bottomRow = 0;
 
-// Prevents launching the game twice if the button "Launch" is presse twice quickly
+// Prevents launching the game twice if the button "Launch" is pressed twice quickly
 bool canLaunch = true;
 
 // Lower case all letters of a string
@@ -128,9 +128,11 @@ MainWindow::MainWindow(QWidget *parent)
     // The 4 lines for the 4 parameter toggles
     int currentConfigLine = 0;
 
-    // The 2 "+" lines for the bottom row
+    // The 2 "+" lines for the bottom row texts
     int currentConfigBottomBox = 0;
 
+    // The x lines for the bottom row boxes
+    bool afterPlus = false;
 
     // launcher_config.txt file is where you can customise the launcher
     std::fstream newfile;
@@ -216,26 +218,27 @@ MainWindow::MainWindow(QWidget *parent)
                     {
                         if(tp[0]=='+') // "+" means that its the text at the top of the drop down menus
                         {
-                            int firstQuotesBottom=100;
-                            int secondQuotesBottom=100;
+                            afterPlus=true;
+                            int firstQuotesBottomText=100;
+                            int secondQuotesBottomText=100;
                             for(int i=0;i<tp.length();i++)
                             {
                                 if(tp[i]=='"')
                                 {
-                                    if(firstQuotesBottom==100)
+                                    if(firstQuotesBottomText==100)
                                     {
-                                        firstQuotesBottom=i;
+                                        firstQuotesBottomText=i;
                                     }
-                                    else if(secondQuotesBottom==100)
+                                    else if(secondQuotesBottomText==100)
                                     {
-                                        secondQuotesBottom=i;
+                                        secondQuotesBottomText=i;
                                     }
                                 }
                             }
 
                             if(currentConfigBottomBox==0)
                             {
-                                ui->label_6->setText(tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1).c_str());
+                                ui->label_6->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
 
                                 // Needed to make the font bigger because it looked odd
                                 int size = ui->label_6->font().pointSize()+4;
@@ -245,13 +248,49 @@ MainWindow::MainWindow(QWidget *parent)
                             }
                             else if(currentConfigBottomBox==1)
                             {
-                                ui->label_10->setText(tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1).c_str());
+                                ui->label_10->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
 
                                 // Needed to make the font bigger because it looked odd
                                 int size = ui->label_10->font().pointSize()+4;
                                 QFont newFont(ui->label_10->font().family(),size);
                                 ui->label_10->setFont(newFont);
                                 currentConfigBottomBox++;
+                            }
+                        }
+                        else if(afterPlus)
+                        {
+                            if(tp[0]=='"')
+                            {
+                                int firstQuotesBottomBox=100;
+                                int secondQuotesBottomBox=100;
+                                for(int i=0;i<tp.length();i++)
+                                {
+                                    if(tp[i]=='"')
+                                    {
+                                        if(firstQuotesBottomBox==100)
+                                        {
+                                            firstQuotesBottomBox=i;
+                                        }
+                                        else if(secondQuotesBottomBox==100)
+                                        {
+                                            secondQuotesBottomBox=i;
+                                        }
+                                    }
+                                }
+                                std::string itemToAdd;
+                                if(tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1)=="both"||tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1)=="all")
+                                    itemToAdd=" "+tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1);
+                                else
+                                    itemToAdd=tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1);
+
+                                if(currentConfigBottomBox==1)
+                                    ui->timeKeysBox->addItem(itemToAdd.c_str());
+                                else if(currentConfigBottomBox==2)
+                                    ui->levelstatBox->addItem(itemToAdd.c_str());
+                            }
+                            else
+                            {
+                                afterPlus=false;
                             }
                         }
                     }
@@ -326,7 +365,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // This makes sure that a logic order to display the IWADs is followed
-    // I think doing this is better than having: Doom 2, TNT, Doom,
+    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
+
     // Normal Doom
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
