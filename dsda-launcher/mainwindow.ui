@@ -576,9 +576,9 @@ border-radius:3px</string>
      <widget class="QWidget" name="widget" native="true">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>9</x>
         <y>73</y>
-        <width>281</width>
+        <width>280</width>
         <height>1</height>
        </rect>
       </property>
@@ -605,7 +605,7 @@ background-color: rgb(100, 100, 100);
       </property>
       <item>
        <property name="text">
-        <string> </string>
+        <string/>
        </property>
       </item>
      </widget>
@@ -630,19 +630,6 @@ background-color: rgb(100, 100, 100);
        </property>
       </item>
      </widget>
-     <widget class="QToolButton" name="editParameters">
-      <property name="geometry">
-       <rect>
-        <x>280</x>
-        <y>0</y>
-        <width>20</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
@@ -661,6 +648,16 @@ background-color: rgb(100, 100, 100);
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Stats&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <zorder>widget</zorder>
+     <zorder>fastCheck</zorder>
+     <zorder>noCheck</zorder>
+     <zorder>label_6</zorder>
+     <zorder>noCheck_3</zorder>
+     <zorder>noCheck_4</zorder>
+     <zorder>soloNetCheck</zorder>
+     <zorder>timeKeysBox</zorder>
+     <zorder>levelstatBox</zorder>
+     <zorder>label_10</zorder>
     </widget>
     <widget class="QWidget" name="wadsTab">
      <attribute name="title">

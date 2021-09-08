@@ -18,6 +18,8 @@
 #include <QNetworkReply>
 #include <iostream>
 #include <QRegularExpression>
+#include <QDesktopServices>
+#include <QtConcurrent>
 
 // Find the name of the OS
 std::string getOsName()
@@ -517,6 +519,41 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
+    // Other wads with the IWAD tag
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename!="doom"&&filename!="doom1"&&filename!="doomu"&&filename!="doom2"&&filename!="tnt"&&filename!="plutonia"&&filename!="freedoom1"&&filename!="freedoom"&&filename!="freedoom2"&&filename!="heretic"&&filename!="hexen"&&filename!="chex"&&filename!="hacx")
+        {
+                std::ifstream file;
+                if(getOsName()=="MacOS"||getOsName()=="Linux")
+                {
+                    file.open(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+filename.toStdString()+".wad");
+                    std::string buffer;
+                    while (std::getline(file, buffer)) {
+                        if(buffer[0]=='I'&&buffer[1]=='W')
+                        {
+                            ui->iwadSelect->addItems({filename});
+                        }
+                        break;
+                    }
+                }
+                else
+                {
+                    file.open(filename.toStdString()+".wad");
+                    std::string buffer;
+                    while (std::getline(file, buffer)) {
+                        if(buffer[0]=='I'&&buffer[1]=='W')
+                        {
+                            ui->iwadSelect->addItems({filename});
+                        }
+                        break;
+                    }
+                }
+        }
+    }
+
+
     // If no IWAD found, show a tool tip
     if(ui->iwadSelect->count()==0)
     {
@@ -574,7 +611,7 @@ void MainWindow::dropEvent(QDropEvent *e)
 {
     foreach (const QUrl &url, e->mimeData()->urls()) {
         QString fileName = url.toLocalFile();
-        if(fileName.toStdString().back()=='p') // *.lmp file end with "p"
+        if(fileName.toStdString().back()=='p'||fileName.toStdString().back()=='P') // *.lmp file ends with "p"
         {
                 ui->tabs->setCurrentIndex(2);
                 ui->recordDemo_2->setText(fileName);
@@ -616,6 +653,13 @@ void MainWindow::dropEvent(QDropEvent *e)
                         }
                     }
                 }
+        }
+        else if(fileName.toStdString().back()=='d'||fileName.toStdString().back()=='D')
+        {
+            QStringList wadsToAdd;
+            wadsToAdd.append(fileName);
+            addWads(wadsToAdd);
+            ui->tabs->setCurrentIndex(1);
         }
     }
 }
@@ -896,22 +940,22 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
 
     if(ui->recordDemo->text().size()>5)
     {
-        arguments += " -record "+ui->recordDemo->text().toStdString();
+        arguments += " -record '"+ui->recordDemo->text().toStdString()+"' ";
     }
 
     if(ui->recordDemo_2->text().size()>5)
     {
         if(ui->demoPlayOptions->currentIndex()==0)
         {
-            arguments += " -playdemo "+ui->recordDemo_2->text().toStdString(); // Plays demo at normal speed
+            arguments += " -playdemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Plays demo at normal speed
         }
         else if(ui->demoPlayOptions->currentIndex()==1)
         {
-            arguments += " -timedemo "+ui->recordDemo_2->text().toStdString(); // Used for viddumping
+            arguments += " -timedemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Used for viddumping
         }
         else if(ui->demoPlayOptions->currentIndex()==2)
         {
-            arguments += " -fastdemo "+ui->recordDemo_2->text().toStdString(); // Used for benchmarks
+            arguments += " -fastdemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Used for benchmarks
         }
     }
 
@@ -942,7 +986,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
-        system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str()); // This is the file where the console log is written to. It should be deleted everytime
         system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
@@ -952,7 +995,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
 
-        system((execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        system(("cd ~/ && " +execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
     else // Windows - Tested, but the paths could not have spaces, hope its fixed now
@@ -964,7 +1007,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
 
     // Again, don't allow the launch button to work twice in the space of 1 sec
     canLaunch=false;
-    QTimer::singleShot(1000, this, SLOT(delayLaunch()));
+    QTimer::singleShot(2000, this, SLOT(delayLaunch()));
 }
 
 // If the IWAD selected changes
@@ -1118,8 +1161,7 @@ void MainWindow::on_pushButton_3_clicked() // Play demo
 
 void MainWindow::on_toolButton_3_clicked()
 {
-    // docWindow->show();
-    // Go to url with documentation
+    QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/dsda-doom_parameters.md"));
 }
 
 QString demoFile;
@@ -1200,54 +1242,152 @@ void MainWindow::reloadLeaderboard()
     std::string category;
 
     // We need to change " " with "%20"
-    if(arg1=="UV Speed")
+    if(ui->iwadSelect->currentText()=="heretic")
     {
-        category = "UV%20Speed";
+        if(arg1=="SM Speed")
+        {
+            category = "SM%20Speed";
+        }
+        else if(arg1=="SM Max")
+        {
+            category = "SM%20Max";
+        }
+        else if(arg1=="BP Speed")
+        {
+            category = "BP%20Speed";
+        }
+        else if(arg1=="BP Max")
+        {
+            category = "BP%20Max";
+        }
+        else if(arg1=="NM Speed")
+        {
+            category = "NM%20Speed";
+        }
+        else if(arg1=="NM 100S")
+        {
+            category = "NM%20100S";
+        }
+        else if(arg1=="Tyson")
+        {
+            category = "Tyson";
+        }
+        else if(arg1=="Pacifist")
+        {
+            category = "Pacifist";
+        }
+        else if(arg1=="Stroller")
+        {
+            category = "Stroller";
+        }
+        else if(arg1=="NoMo")
+        {
+            category = "NoMo";
+        }
+        else if(arg1=="NoMo 100S")
+        {
+            category = "NoMo%20100S";
+        }
+        else if(arg1=="Collector")
+        {
+            category = "Collector";
+        }
     }
-    else if(arg1=="UV Max")
+    else if(ui->iwadSelect->currentText()=="hexen")
     {
-        category = "UV%20Max";
+        if(arg1=="Sk4 Speed")
+        {
+            category = "Sk4%20Speed";
+        }
+        else if(arg1=="Sk4 Max")
+        {
+            category = "Sk4%20Max";
+        }
+        else if(arg1=="Sk5 Speed")
+        {
+            category = "Sk5%20Speed";
+        }
+        else if(arg1=="Sk5 Max")
+        {
+            category = "Sk5%20Max";
+        }
+        else if(arg1=="Tyson")
+        {
+            category = "Tyson";
+        }
+        else if(arg1=="Pacifist")
+        {
+            category = "Pacifist";
+        }
+        else if(arg1=="Stroller")
+        {
+            category = "Stroller";
+        }
+        else if(arg1=="NoMo")
+        {
+            category = "NoMo";
+        }
+        else if(arg1=="NoMo 100S")
+        {
+            category = "NoMo%20100S";
+        }
+        else if(arg1=="Collector")
+        {
+            category = "Collector";
+        }
     }
-    else if(arg1=="UV Fast")
+    else
     {
-        category = "UV%20Fast";
+        if(arg1=="UV Speed")
+        {
+            category = "UV%20Speed";
+        }
+        else if(arg1=="UV Max")
+        {
+            category = "UV%20Max";
+        }
+        else if(arg1=="UV Fast")
+        {
+            category = "UV%20Fast";
+        }
+        else if(arg1=="UV Respawn")
+        {
+            category = "UV%20Respawn";
+        }
+        else if(arg1=="NM Speed")
+        {
+            category = "NM%20Speed";
+        }
+        else if(arg1=="NM 100S")
+        {
+            category = "NM%20100S";
+        }
+        else if(arg1=="Tyson")
+        {
+            category = "Tyson";
+        }
+        else if(arg1=="Pacifist")
+        {
+            category = "Pacifist";
+        }
+        else if(arg1=="Stroller")
+        {
+            category = "Stroller";
+        }
+        else if(arg1=="NoMo")
+        {
+            category = "NoMo";
+        }
+        else if(arg1=="NoMo 100S")
+        {
+            category = "NoMo%20100S";
+        }
+        else if(arg1=="Collector")
+        {
+            category = "Collector";
+        }
     }
-    else if(arg1=="UV Respawn")
-    {
-        category = "UV%20Respawn";
-    }
-    else if(arg1=="NM Speed")
-    {
-        category = "NM%20Speed";
-    }
-    else if(arg1=="NM 100S")
-    {
-        category = "NM%20100S";
-    }
-    else if(arg1=="Tyson")
-    {
-        category = "Tyson";
-    }
-    else if(arg1=="Pacifist")
-    {
-        category = "Pacifist";
-    }
-    else if(arg1=="Stroller")
-    {
-        category = "Stroller";
-    }
-    else if(arg1=="NoMo")
-    {
-        category = "NoMo";
-    }
-    else if(arg1=="NoMo 100S")
-    {
-        category = "NoMo%20100S";
-    }
-    else if(arg1=="Collector")
-    {
-        category = "Collector";
-    }
+
 
     std::string wad;
     std::string level;
@@ -1338,9 +1478,6 @@ void MainWindow::reloadLeaderboard()
     get_leaderboards(wad,level,category);
 
 }
-
-#include <QDesktopServices>
-#include <QtConcurrent>
 
 void MainWindow::on_toolButton_4_clicked() // Download the demo file of a run
 {
