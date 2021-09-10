@@ -1,20 +1,7 @@
-####################################################################
-# This is a comment						#
-#								#
-# For a complete guide on how to customize this launcher:		#
-# link								#
-#								#
-# Restart the launcher for the changes to take place		#
-#								#
-####################################################################
+# For a complete guide on how to customize this launcher:
+# https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md
 
 
-####################################################################
-#								#
-# 	Customize up to 4 toggles					#
-# "text that appears in the launcher" "actual parameter"		#
-#								#
-####################################################################
 
 "Fast Monsters" "-fast"
 
@@ -24,35 +11,17 @@
 
 "Solo Net" "-solo-net"
 
-####################################################################
-#								#
-# 	Change the preset for the bottom row			#
-# 	1 = Resolution + Fullscreen (Default)			#
-# 	2 = Customise 2 drop down menus				#
-#								#
-####################################################################
 
+
+
+# Bottom row type:
 
 1
 
 
-####################################################################
-#								#
-# (If you chose 1, ignore this)   				#
-#  If you chose 2, then you can customise the following		#
-# 								#
-#	+"Text on top of the drop down menus"			#
-#	"First option"   # Recommended to leave the first blank	#
-#	"Second option"						#
-#	"Third option"						#
-#	etc							#
-#								#
-#  If the last option is "both" or "all", then it will use every	#
-#  parameter in that drop down menu				#
-#  	ex: -levelstat -analysis					#
-#								#
-####################################################################
 
+
+# Edit the following, ONLY if you chose "2" before
 
 +"Time"
 "-time_use"
@@ -66,11 +35,3 @@
 "-analysis"
 "both"
 
-
-####################################################################
-#								#
-#	Messed up? Cant seems to get it working?			#
-#	You can try reseting this file to default			#
-#	Just delete this file, or delete EVERY line of text	#
-#								#
-####################################################################

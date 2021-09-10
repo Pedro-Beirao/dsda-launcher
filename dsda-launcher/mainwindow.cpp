@@ -20,6 +20,7 @@
 #include <QRegularExpression>
 #include <QDesktopServices>
 #include <QtConcurrent>
+#include <QMessageBox>
 
 // Find the name of the OS
 std::string getOsName()
@@ -99,6 +100,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Add event filter to the "additional arguments" box
     ui->argumentText->installEventFilter(this);
 
+    // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
+    ui->LaunchGameButton->installEventFilter(this);
+
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where QT tried to add spaces to those boxes if no numbers were added
     QRegularExpression rgx("[0-9]{2}");
@@ -142,11 +146,28 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Check if the launcher_config.txt file exists
     // If not, create it
-    QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt");
-    if(!check_file.exists())
-        system(("cp "+QCoreApplication::applicationDirPath()+"/../Resources/launcher_config.txt "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/").toStdString().c_str());
+    if(getOsName()=="MacOS")
+    {
+        QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt");
+        if(!check_file.exists())
+            system(("cp "+QCoreApplication::applicationDirPath()+"/../Resources/launcher_config.txt "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/").toStdString().c_str());
 
-    launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
+        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
+    }
+    else if(getOsName()=="Windows")
+    {
+        QFileInfo check_file(QCoreApplication::applicationDirPath()+"/launcher_config.txt");
+        if(!check_file.exists())
+        {
+            std::ofstream file_;
+            file_.open((QCoreApplication::applicationDirPath()+"/launcher_config.txt").toStdString());
+            if(file_.is_open())
+                file_ << "# For a complete guide on how to customize this launcher:\n# https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\n\n\n\n\"Fast Monsters\" \"-fast\"\n\"No Monsters\" \"-nomonsters\"\n\n\"Respawn Monsters\" \"-respawn\"\n\n\"Solo Net\" \"-solo-net\"\n\n\n\n# Bottom row type:\n\n1\n\n\n\n# Edit the following, ONLY if you chose \"2\" before\n\n+\"Time\"\n\"-time_use\"\n\"-time_keys\"\n\"-time_secrets\"\n\"-time_all\"\n\n\n+\"Stats\"\n\"-levelstat\"\n\"-analysis\"\n\"both\"\n";
+            file_.close();
+        }
+
+        launcher_configFilePath=(QCoreApplication::applicationDirPath()+"/launcher_config.txt").toStdString();
+    }
 
     // Open the launcher_config.txt file
     newfile.open(launcher_configFilePath,std::ios::in);
@@ -243,7 +264,7 @@ MainWindow::MainWindow(QWidget *parent)
                                 ui->label_6->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
 
                                 // Needed to make the font bigger because it looked odd
-                                int size = ui->label_6->font().pointSize()+4;
+                                int size = ui->label_6->font().pointSize()+2;
                                 QFont newFont(ui->label_6->font().family(),size);
                                 ui->label_6->setFont(newFont);
                                 currentConfigBottomBox++;
@@ -253,7 +274,7 @@ MainWindow::MainWindow(QWidget *parent)
                                 ui->label_10->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
 
                                 // Needed to make the font bigger because it looked odd
-                                int size = ui->label_10->font().pointSize()+4;
+                                int size = ui->label_10->font().pointSize()+2;
                                 QFont newFont(ui->label_10->font().family(),size);
                                 ui->label_10->setFont(newFont);
                                 currentConfigBottomBox++;
@@ -707,9 +728,9 @@ bool isSoloNet = false;
 std::string isFulscreen="w";
 
 
-void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
-    if(!canLaunch) // Dont allow 2 launchs in the time of 1 sec
+    if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
 
     /* Complevels:
@@ -729,7 +750,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
         17 - Current PrBoom
         21 - MBF 21
 
-        If the complevel start with 'D', then dont use the "-complevel" parameter
+        If the complevel starts with 'D', then dont use the "-complevel" parameter
         Otherwise, run "-complevel *First+Second char of the string*"
     */
     std::string complevelString = ui->compLevelSelect->currentText().toStdString();
@@ -827,19 +848,35 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
     {
         if(ui->wadsOnFolder->item(item)->text().toStdString().back()=='h')
         {
-            dehFiles += " '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
+            dehFiles += " \"" + ui->wadsOnFolder->item(item)->text().toStdString()+"\" ";
         }
         else
         {
-            files += " '" + ui->wadsOnFolder->item(item)->text().toStdString()+"' ";
+            files += " \"" + ui->wadsOnFolder->item(item)->text().toStdString()+"\" ";
         }
     }
     if(dehFiles!="")
     {
+        if(getOsName()=="Windows")
+        {
+            for(int i=0; i<dehFiles.length();i++)
+            {
+                if(dehFiles[i]=='/')
+                    dehFiles[i]='\\';
+            }
+        }
         arguments+= " -deh "+ dehFiles;
     }
     if(files!="")
     {
+        if(getOsName()=="Windows")
+        {
+            for(int i=0; i<files.length();i++)
+            {
+                if(files[i]=='/')
+                    files[i]='\\';
+            }
+        }
         arguments+= " -file "+ files;
     }
 
@@ -940,22 +977,22 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
 
     if(ui->recordDemo->text().size()>5)
     {
-        arguments += " -record '"+ui->recordDemo->text().toStdString()+"' ";
+        arguments += " -record \""+ui->recordDemo->text().toStdString()+"\" ";
     }
 
     if(ui->recordDemo_2->text().size()>5)
     {
         if(ui->demoPlayOptions->currentIndex()==0)
         {
-            arguments += " -playdemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Plays demo at normal speed
+            arguments += " -playdemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Plays demo at normal speed
         }
         else if(ui->demoPlayOptions->currentIndex()==1)
         {
-            arguments += " -timedemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Used for viddumping
+            arguments += " -timedemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Used for viddumping
         }
         else if(ui->demoPlayOptions->currentIndex()==2)
         {
-            arguments += " -fastdemo '"+ui->recordDemo_2->text().toStdString()+"' "; // Used for benchmarks
+            arguments += " -fastdemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Used for benchmarks
         }
     }
 
@@ -982,7 +1019,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
     if(onExit)
         return;
 
-    if(getOsName()=="MacOS") // Tested, its perfect
+    if(returnTooltip)
+    {
+        ui->LaunchGameButton->setToolTip("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+arguments.c_str());
+        arguments=" ";
+        return;
+    }
+
+    if(getOsName()=="MacOS") // Tested
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
@@ -998,12 +1042,35 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit) // Runs when you click
         system(("cd ~/ && " +execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
-    else // Windows - Tested, but the paths could not have spaces, hope its fixed now
-    {
+
+//I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
-        system(("cmd /c """+execPath+ """\\dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> """+execPath+"""\\LogFile.txt &").c_str());
+        std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
+        for(int i=0; i<cmd.length();i++)
+        {
+            if(cmd[i]=='/')
+                cmd[i]='\\';
+        }
+
+        STARTUPINFO si={sizeof(STARTUPINFO), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
+        PROCESS_INFORMATION pi={};
+        std::wstring cmdline = std::wstring(cmd.begin(), cmd.end());
+        if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.c_str()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS|CREATE_UNICODE_ENVIRONMENT|CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+        } else {
+                QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom.exe");
+        }
+
+        // system() also works fine, but leaves a cmd window in the background, so CreateProcess() is better
+        // system(("cmd /c \""+gamePath+"\"").c_str());
+
         arguments=" ";
-    }
+#endif
 
     // Again, don't allow the launch button to work twice in the space of 1 sec
     canLaunch=false;
@@ -1051,7 +1118,14 @@ void MainWindow::on_pushButton_clicked()
     }
     else
     {
-        system("start LogFile.txt >> LogFile.txt");
+        std::string logPath = "\"" + QCoreApplication::applicationDirPath().toStdString() + "\\LogFile.txt\"";
+        for(int i=0; i<logPath.length();i++)
+        {
+            if(logPath[i]=='/')
+                logPath[i]='\\';
+        }
+        qDebug() << logPath.c_str();
+        QProcess::startDetached(("notepad.exe " + logPath).c_str());
     }
 }
 
@@ -1523,19 +1597,32 @@ void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
 {
     if(event->key()==0x01000005 || event->key()==0x01000004) // Key is either ENTER or RETURN
     {
-        on_LaunchGameButton_clicked(false);
+        on_LaunchGameButton_clicked(false, false);
     }
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work on the additional parameters box
 {
+
+      if (object == (QObject*)ui->LaunchGameButton) {
+            if (ev->type() == QEvent::Enter)
+            {
+                on_LaunchGameButton_clicked(false, true);
+                return QWidget::eventFilter(object, ev);
+            }
+            if(ev->type() == QEvent::MouseButtonPress)
+            {
+                on_LaunchGameButton_clicked(false, false);
+                return QWidget::eventFilter(object, ev);
+            }
+      }
       if (ev->type() == QEvent::KeyPress)
       {
            QKeyEvent* keyEvent = (QKeyEvent*)ev;
 
            if (keyEvent->key() == 0x01000005 || keyEvent->key() == 0x01000004) // Key is either ENTER or RETURN
            {
-                on_LaunchGameButton_clicked(false);
+                on_LaunchGameButton_clicked(false, false);
                 return true;
            }
     }
@@ -1544,5 +1631,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
 void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, save the settings
 {
-    on_LaunchGameButton_clicked(true);
+    on_LaunchGameButton_clicked(true, false);
 }
+
+

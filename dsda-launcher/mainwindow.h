@@ -28,7 +28,7 @@ public slots:
     void delayLaunch();
     void closeEvent(QCloseEvent *event);
 
-    void on_LaunchGameButton_clicked(bool onExit);
+    void on_LaunchGameButton_clicked(bool onExit, bool returnTooltip);
     void on_iwadSelect_currentIndexChanged(int index);
     void on_pushButton_clicked();
     void on_plus_clicked();
