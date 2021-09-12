@@ -60,6 +60,7 @@ If you installed Qt with the online installer, careful with qmake not being in t
 
 // qmake "CONFIG+=deploy" ..
 // ^ this will add a "lib" folder to the .app bunndle
+// This is more of a personal note, please ignore
 ```
 6. Run make
 ```
