@@ -713,11 +713,11 @@ void MainWindow::foo() // CTRL+O runs this function to open the folder where the
 {
     if(getOsName()=="MacOS"|| getOsName()=="Linux")
     {
-        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
     }
     else
     {
-        system(("start "+QCoreApplication::applicationDirPath().toStdString()).c_str());
+        system(("start \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 
