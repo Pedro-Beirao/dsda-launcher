@@ -34,6 +34,7 @@ jobs:
           cd build
           qmake ..
           make
+          ls
       - name: release
         uses: actions/create-release@v1
         id: create_release
