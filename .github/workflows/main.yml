@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,10 +32,10 @@ jobs:
           cd dsda-launcher
           mkdir build
           cd build
-          qmake ..
+          qmake "CONFIG+=deploy" ..
           make
           ls
-          zip dsda-launcher dsda-launcher
+          zip dsda-launcher dsda-launcher.app
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
