@@ -35,11 +35,11 @@ jobs:
           qmake ..
           make
           windeployqt dsda-launcher.exe
-          zip -r win .
+          Compress-Archive -path .\* -destination .\win.zip
           dir
       - uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: dsda-launcher/build/win.zip
+          path: dsda-launcher\build\win.zip
 
 
