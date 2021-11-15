@@ -34,7 +34,7 @@ jobs:
           cd build
           qmake "CONFIG+=deploy" ..
           make
-          zip macos dsda-launcher.app
+          zip -r macos dsda-launcher.app
           ls
       - uses: actions/upload-artifact@v2
         with:
