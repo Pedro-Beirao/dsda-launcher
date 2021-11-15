@@ -34,8 +34,8 @@ jobs:
           cd build
           qmake "CONFIG+=deploy" ..
           make
+          zip macos dsda-launcher.app
           ls
-          zip dsda-launcher dsda-launcher.app
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -54,8 +54,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dsda-launcher/build/dsda-launcher.zip
-          asset_name: dsda-launcher.zip
+          asset_path: ./dsda-launcher/build/macos.zip
+          asset_name: macos.zip
           asset_content_type: application/zip
       
 
