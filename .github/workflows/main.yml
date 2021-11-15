@@ -36,6 +36,10 @@ jobs:
           make
           zip macos dsda-launcher.app
           ls
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: dsda-launcher/build/macos.zip
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,7 +48,7 @@ jobs:
         with:
           tag_name: 1.01
           release_name: New Release 
-          body: " "
+          body: "test"
           draft: true
           prerelease: false
       - name: Upload Release Asset
