@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,18 +28,18 @@ jobs:
         uses: jurplel/install-qt-action@v2
       - name: build
         run: |
-          ls
+          dir
           cd dsda-launcher
           mkdir build
           cd build
-          qmake "CONFIG+=deploy" ..
+          qmake ..
           make
-          macdeployqt dsda-launcher.app
-          zip -r macos dsda-launcher.app
-          ls
+          windeployqt dsda-launcher.exe
+          zip -r win .
+          dir
       - uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: dsda-launcher/build/macos.zip
+          path: dsda-launcher/build/win.zip
 
 
