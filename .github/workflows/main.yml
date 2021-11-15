@@ -28,7 +28,6 @@ jobs:
         uses: jurplel/install-qt-action@v2
       - name: build
         run: |
-          dir
           where make.exe
           cd dsda-launcher
           mkdir build
