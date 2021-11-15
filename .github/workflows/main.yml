@@ -29,11 +29,12 @@ jobs:
       - name: build
         run: |
           dir
+          where make.exe
           cd dsda-launcher
           mkdir build
           cd build
-          qmake ..
-          make
+          qmake.exe ..
+          make.exe
           windeployqt dsda-launcher.exe
           Compress-Archive -path .\* -destination .\win.zip
           dir
