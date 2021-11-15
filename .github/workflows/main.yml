@@ -43,7 +43,7 @@ jobs:
           prerelease: false
           release_name: ${{ steps.version.outputs.version }}
           tag_name: ${{ github.ref }}
-          body_path: dsda-launcher/dsda-launcher/build
+          body_path: dsda-launcher/build/dsda-launcher
         env:
           GITHUB_TOKEN: ${{ github.token }}
       
