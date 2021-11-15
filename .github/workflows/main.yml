@@ -27,7 +27,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
       - name: Build
-        run:
+        run: |
           ls
           cd dsda-launcher
           mkdir build
