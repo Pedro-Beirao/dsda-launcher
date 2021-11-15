@@ -35,7 +35,7 @@ jobs:
           qmake ..
           make
           ls
-          zip dsda-launcher
+          zip dsda-launcher dsda-launcher
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
