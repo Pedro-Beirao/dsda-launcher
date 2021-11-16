@@ -2,6 +2,11 @@
 
 name: CI
 
+env:
+  QT_VERSION:     "5.12.7"
+  MINGW_VERSION:  "win32_mingw73"
+  MINGW_PATH:     "mingw73_32"
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -23,16 +28,21 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          arch: win32_mingw73
-      - name: where
+      - name: Install correct version of mingw
         run: |
-          where make.exe
-          where qmake.exe
-          where mkdir
+          choco uninstall mingw --force
+          choco uninstall strawberryperl --force
+      - uses: numworks/setup-msys2@v1
+        with:
+          msystem: MINGW32
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.5.3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch:    ${{ env.MINGW_VERSION }}
+          extra:   --external 7z
+      - uses: actions/checkout@v2
       - name: build
         run: |
           cd dsda-launcher
