@@ -27,7 +27,9 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
       - name: where
-        run: where make.exe
+        run: |
+          where make.exe
+          where qmake.exe
       - name: build
         run: |
           cd dsda-launcher
