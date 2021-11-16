@@ -27,7 +27,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          arch: win32_msvc2015
+          arch: win32_mingw73
       - name: where
         run: |
           where make.exe
