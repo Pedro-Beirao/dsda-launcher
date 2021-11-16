@@ -43,6 +43,10 @@ jobs:
           version: ${{ env.QT_VERSION }}
           arch:    ${{ env.MINGW_VERSION }}
           extra:   --external 7z
+      - name: tree
+        run: |
+          cd \
+          tree /F
       - uses: actions/checkout@v2
       - name: build
         run: |
