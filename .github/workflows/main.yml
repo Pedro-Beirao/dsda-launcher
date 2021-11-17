@@ -48,6 +48,7 @@ jobs:
       
       - name: tree
         run: |
+          where make.exe
           cd \
           tree /F
       - uses: actions/checkout@v2
