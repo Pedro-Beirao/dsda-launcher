@@ -31,7 +31,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Install correct version of mingw
         run: |
-          choco install qt-sdk-windows-x64-mingw_opengl_seh
+          choco install qt5-default
       #    choco uninstall mingw --force
       #    choco uninstall strawberryperl --force
       #- uses: numworks/setup-msys2@v1
