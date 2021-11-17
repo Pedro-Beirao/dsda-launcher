@@ -55,7 +55,7 @@ jobs:
           cd dsda-launcher
           mkdir build
           cd build
-          qmake.exe ..
+          C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
           make.exe
           windeployqt dsda-launcher.exe
           Compress-Archive -path .\* -destination .\win.zip
