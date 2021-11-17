@@ -1063,10 +1063,12 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     }
 
 //I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
+
 #ifdef _WIN32
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
+
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
@@ -1075,7 +1077,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
                 cmd[i]='\\';
         }
 
-        STARTUPINFO si={sizeof(STARTUPINFO), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
+        STARTUPINFO si={sizeof(si), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
         PROCESS_INFORMATION pi={};
         std::wstring cmdline = std::wstring(cmd.begin(), cmd.end());
         if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.c_str()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS|CREATE_UNICODE_ENVIRONMENT|CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
@@ -1091,7 +1093,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         arguments=" ";
 #endif
 
-    // Again, don't allow the launch button to work twice in the space of 1 sec
+    // Again, don't allow the launch button to work twice in the space of 2 secs
     canLaunch=false;
     QTimer::singleShot(2000, this, SLOT(delayLaunch()));
 }
