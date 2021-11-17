@@ -58,7 +58,7 @@ jobs:
           mkdir build
           cd build
           C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
-          C:\ProgramData\Chocolatey\tools\install\bin\make.exe
+          C:\ProgramData\Chocolatey\bin\make.exe
           tree /F
           C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe dsda-launcher.exe
           Compress-Archive -path .\* -destination .\win.zip
