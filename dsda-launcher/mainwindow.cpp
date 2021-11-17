@@ -1063,7 +1063,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     }
 
 //I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
-
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
@@ -1086,7 +1089,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         // system(("cmd /c \""+gamePath+"\"").c_str());
 
         arguments=" ";
-
+#endif
 
     // Again, don't allow the launch button to work twice in the space of 1 sec
     canLaunch=false;
