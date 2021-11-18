@@ -52,7 +52,7 @@ jobs:
       - name: Install qt
         run: | 
           pip install yaqti &&
-          python -m yaqti install --version 6.2.0 --platform desktop --os windows --modules qtcharts
+          python -m yaqti install --version 6.2.0 --platform desktop --os windows
       
       - name: tree
         run: |
