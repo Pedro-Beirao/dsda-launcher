@@ -9,7 +9,7 @@ env:
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
     branches: [ main ]
 
@@ -26,6 +26,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
       - name: Install qt static
         run: |
           qt-windows-static-build.ps1
@@ -49,7 +50,6 @@ jobs:
           where make.exe
           cd \
           tree /F
-      - uses: actions/checkout@v2
       - name: build
         run: |
           cd dsda-launcher
