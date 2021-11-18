@@ -28,7 +28,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Install qt static
         run: |
-          .\qt-windows-static-build.ps1
+          qt-windows-static-build.ps1
       #    choco uninstall mingw --force
       #    choco uninstall strawberryperl --force
       #- uses: numworks/setup-msys2@v1
