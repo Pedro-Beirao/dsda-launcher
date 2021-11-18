@@ -43,12 +43,16 @@ jobs:
       #    target: 'desktop'
       #    arch: 'win64_mingw81'
       #    setup-python: 'false'
-      -   name: Install Qt
-          uses: WillBrennan/yaqti@2021.07.29
-          with:
-              version: '6.1.1'
-              host: 'windows'
-              target: 'desktop'
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install qt
+        run: | 
+          pip install yaqti &&
+          python -m yaqti install --version 6.2.0 --platform desktop --os windows --modules qtcharts
       
       - name: tree
         run: |
