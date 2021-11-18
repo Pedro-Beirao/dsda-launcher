@@ -58,8 +58,8 @@ jobs:
           qmake.exe ..
           make.exe
           tree /F
-          windeployqt.exe dsda-launcher.exe
-          Compress-Archive -path .\* -destination .\win.zip
+          windeployqt.exe release\dsda-launcher.exe
+          Compress-Archive -path .\release\* -destination .\win.zip
           dir
       - uses: actions/upload-artifact@v2
         with:
