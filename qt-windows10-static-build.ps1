@@ -110,10 +110,7 @@ function Main
     Expand-Archive $QtStaticDir\src\$QtSrcFileName $QtStaticDir\src $QtSrcDir
 
     # Patch Qt's mkspecs for static build.
-    $File = "$QtSrcDir\qtbase\mkspecs\win32-g++\qmake.conf"
-    if (-not (Select-String -Quiet -SimpleMatch -CaseSensitive "# [QT-STATIC-PATCH]" $File)) {
-        Write-Output "Patching $File ..."
-        Copy-Item $File "$File.orig"
+
         @"
 
 # [QT-STATIC-PATCH]
@@ -121,8 +118,7 @@ QMAKE_LFLAGS += -static -static-libgcc
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer
 DEFINES += QT_STATIC_BUILD
-"@ | Out-File -Append $File -Encoding Ascii
-    }
+"@
 
 	
 	
@@ -145,10 +141,11 @@ DEFINES += QT_STATIC_BUILD
     Pop-Location
 
     # Patch Qt's installed mkspecs for static build of application.
-    $File = "$QtDir\mkspecs\win32-g++\qmake.conf"
+    
+    = "$QtDir\mkspecs\win32-g++\qmake.conf"
     @"
 CONFIG += static
-"@ | Out-File -Append $File -Encoding Ascii
+"@ 
 
     Exit-Script
 }
