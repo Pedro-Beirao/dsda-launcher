@@ -53,7 +53,7 @@ jobs:
       - name: build
         run: |
           cd dsda-launcher
-          \a\dsda-launcher\dsda-launcher\qt-windows-static-build.ps1
+          \a\dsda-launcher\dsda-launcher\qt-windows10-static-build.ps1
           mkdir build
           cd build
           qmake.exe ..
