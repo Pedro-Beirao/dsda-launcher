@@ -3,9 +3,6 @@
 name: CI
 
 env:
-  QT_VERSION:     "5.12.7"
-  MINGW_VERSION:  "win32_mingw73"
-  MINGW_PATH:     "mingw73_32"
   ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
 # Controls when the workflow will run
@@ -29,21 +26,23 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Install correct version of mingw
-        run: |
-          choco install qt5-default
-          choco uninstall mingw --force
-          choco uninstall strawberryperl --force
-      - uses: numworks/setup-msys2@v1
-        with:
-          msystem: MINGW32
-      #
-      #- name: Install Qt
-      #  uses: jurplel/install-qt-action@v2.5.3
+      #- name: Install correct version of mingw
+      #  run: |
+      #    choco install qt5-default
+      #    choco uninstall mingw --force
+      #    choco uninstall strawberryperl --force
+      #- uses: numworks/setup-msys2@v1
       #  with:
-      #    version: ${{ env.QT_VERSION }}
-      #    arch:    ${{ env.MINGW_VERSION }}
-      #    extra:   --external 7z
+      #    msystem: MINGW32
+      #C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.14.0
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          setup-python: 'true'
       
       - name: tree
         run: |
@@ -56,7 +55,7 @@ jobs:
           cd dsda-launcher
           mkdir build
           cd build
-          C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
+          qmake.exe ..
           make.exe
           tree /F
           C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe dsda-launcher.exe
