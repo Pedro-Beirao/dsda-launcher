@@ -59,7 +59,7 @@
 [CmdletBinding()]
 param(
     $QtSrcUrl = "https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip",
-    $QtStaticDir = "\QT\Static", # NO TRAILING SLASH
+    $QtStaticDir = "D:\a\QT", # NO TRAILING SLASH
     $QtVersion = "5.15.2", #If you change this, you'll need to change the URL above to download as well...
     $MingwDir = "",
     [switch]$NoPause = $false
@@ -94,16 +94,7 @@ function Main
     # Qt installation directory.
     $QtDir = "$QtStaticDir\$QtVersion"
 
-    # Get MinGW root directory, if not specified on the command line.
-    if (-not $MingwDir) {
-        # Search all instances of gcc.exe from C:\Qt prebuilt environment.
-        $GccList = @(Get-ChildItem -Path C:\Qt\Tools\mingw*\bin\gcc.exe | ForEach-Object FullName | Sort-Object)
-        if ($GccList.Length -eq 0) {
-            Exit-Script "MinGW environment not found, no Qt prebuilt version?"
-        }
-        $MingwDir = (Split-Path -Parent (Split-Path -Parent $GccList[$GccList.Length - 1]))
-    }
-    Write-Output "Using MinGW from $MingwDir"
+
 
     # Build the directory tree where the static version of Qt will be installed.
     Create-Directory $QtStaticDir\src
@@ -133,16 +124,9 @@ DEFINES += QT_STATIC_BUILD
 "@ | Out-File -Append $File -Encoding Ascii
     }
 
-    # Set a clean path including MinGW.
-    $env:Path += "$MingwDir\bin;$MingwDir\opt\bin;$env:SystemRoot\system32;$env:SystemRoot;$env:SystemRoot\system32\WindowsPowerShell\v1.0\;"
 	
 	
-    # Check that the 'powershell' command is available
-	# ... and ruby, python and perl - as per: qt-everywhere-src-X.XX.X\README
-	#
-	# https://forum.qt.io/topic/118511/static-qt-environment-error-using-qt5-15-0/7
-	# 
-	[void] (Check-prequisites)	
+
 	
 
     # Force English locale to avoid weird effects of tools localization.
