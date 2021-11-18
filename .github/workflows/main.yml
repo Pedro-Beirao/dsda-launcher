@@ -27,9 +27,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Install qt static
-        run: |
-          qt-windows-static-build.ps1
+      #- name: Install qt static
+      #  run: |
+      #    qt-windows-static-build.ps1
       #    choco uninstall mingw --force
       #    choco uninstall strawberryperl --force
       #- uses: numworks/setup-msys2@v1
@@ -53,6 +53,7 @@ jobs:
       - name: build
         run: |
           cd dsda-launcher
+          ..\qt-windows-static-build.ps1
           mkdir build
           cd build
           qmake.exe ..
