@@ -41,7 +41,7 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: 'win64_mingw81'
+          arch: 'win32_mingw53'
           setup-python: 'false'
       
       - name: tree
