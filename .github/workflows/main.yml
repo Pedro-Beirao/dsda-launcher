@@ -59,7 +59,7 @@ jobs:
           make.exe
           tree /F
           mkdir lib
-          windeployqt.exe --libdir .\lib release\dsda-launcher.exe
+          windeployqt.exe --libdir .\release\lib --plugindir .\release\lib release\dsda-launcher.exe
           Compress-Archive -path .\release\* -destination .\win.zip
           dir
       - uses: actions/upload-artifact@v2
