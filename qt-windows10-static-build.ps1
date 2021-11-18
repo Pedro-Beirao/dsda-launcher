@@ -59,7 +59,7 @@
 [CmdletBinding()]
 param(
     $QtSrcUrl = "https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip",
-    $QtStaticDir = "C:\Qt\Static", # NO TRAILING SLASH
+    $QtStaticDir = "\QT\Static", # NO TRAILING SLASH
     $QtVersion = "5.15.2", #If you change this, you'll need to change the URL above to download as well...
     $MingwDir = "",
     [switch]$NoPause = $false
