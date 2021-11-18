@@ -36,14 +36,14 @@ jobs:
       #  with:
       #    msystem: MINGW32
       #C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
-      #- name: Install Qt
-      #  uses: jurplel/install-qt-action@v2.14.0
-      #  with:
-      #    version: '5.15.2'
-      #    host: 'windows'
-      #    target: 'desktop'
-      #    arch: 'win64_mingw81'
-      #    setup-python: 'false'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.14.0
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw81'
+          setup-python: 'false'
       
       - name: tree
         run: |
@@ -53,13 +53,13 @@ jobs:
       - name: build
         run: |
           cd dsda-launcher
-          \a\dsda-launcher\dsda-launcher\qt-windows10-static-build.ps1
           mkdir build
           cd build
           qmake.exe ..
           make.exe
           tree /F
-          windeployqt.exe release\dsda-launcher.exe
+          mkdir lib
+          windeployqt.exe --libdir .\lib release\dsda-launcher.exe
           Compress-Archive -path .\release\* -destination .\win.zip
           dir
       - uses: actions/upload-artifact@v2
