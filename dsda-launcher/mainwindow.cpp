@@ -1,3 +1,6 @@
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QDir>
@@ -1065,10 +1068,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 //I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
 
 #ifdef _WIN32
-#include <windows.h>
-#include <stdio.h>
-#include <tchar.h>
-
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
