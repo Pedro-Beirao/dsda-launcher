@@ -45,7 +45,7 @@ jobs:
       #    setup-python: 'false'
       - name: Install qt
         run: | 
-          pip install yaqti &&
+          pip install yaqti
           python -m yaqti install --version 6.1.1 --platform desktop --os windows
       
       - name: tree
