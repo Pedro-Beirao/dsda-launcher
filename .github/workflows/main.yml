@@ -41,8 +41,8 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: 'win64_msvc2019_64'
-          setup-python: 'true'
+          arch: 'win64_mingw81'
+          setup-python: 'false'
       
       - name: tree
         run: |
