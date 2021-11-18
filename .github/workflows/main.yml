@@ -35,14 +35,18 @@ jobs:
       #  with:
       #    msystem: MINGW32
       #C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2.14.0
-        with:
-          version: '6.1'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_mingw81'
-          setup-python: 'false'
+      #- name: Install Qt
+      #  uses: jurplel/install-qt-action@v2.14.0
+      #  with:
+      #    version: '6.1'
+      #    host: 'windows'
+      #    target: 'desktop'
+      #    arch: 'win64_mingw81'
+      #    setup-python: 'false'
+      - name: Install qt
+        run: | 
+          pip install yaqti &&
+          python -m yaqti install --version 6.1.1 --platform desktop --os windows
       
       - name: tree
         run: |
