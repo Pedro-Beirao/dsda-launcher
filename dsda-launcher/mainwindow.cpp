@@ -1,6 +1,8 @@
+#ifdef _WIN32
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
+#endif
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QDir>
@@ -381,7 +383,16 @@ MainWindow::MainWindow(QWidget *parent)
             on_editParameters_clicked();
           }
        }
+       QStringList arguments = QCoreApplication::arguments();
+           if(arguments.count() > 1)
+           {
 
+               QString absPath = QApplication::arguments().at(1);
+               if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
+               {
+                    ui->recordDemo_2->setText(absPath);
+               }
+           }
     // Set the parameters text correctly
     ui->fastCheck->setText(fastParamText.c_str());
     ui->noCheck->setText(nomoParamText.c_str());
@@ -393,7 +404,7 @@ MainWindow::MainWindow(QWidget *parent)
     {
         try {
             system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
 
         }  catch (...) { }
 
@@ -416,27 +427,7 @@ MainWindow::MainWindow(QWidget *parent)
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Shareware Doom
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="doom1")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Ultimate Doom
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="doomu")
+        if(filename=="doom" || filename=="doom1" || filename=="doomu")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -447,16 +438,6 @@ MainWindow::MainWindow(QWidget *parent)
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
         if(filename=="doom2")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // French Doom 2
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="doom2f")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -522,6 +503,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
+    /*
     // BFG Doom
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
@@ -561,6 +543,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->iwadSelect->addItems({filename});
         }
     }
+    */
 
     // Other wads with the IWAD tag
     foreach(QString filename, images) {
@@ -1066,7 +1049,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     }
 
 //I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
-
+// also, because of some weird error, I had to #include <windows.h> at the top of this file
 #ifdef _WIN32
         std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
