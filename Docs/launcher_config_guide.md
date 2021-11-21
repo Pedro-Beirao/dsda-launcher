@@ -1,7 +1,6 @@
 Here is a complete guide on how to customise the launcher.
 
 ## 1. Find the "launcher_config.txt" file
-   This is where you will be able to customise it
    
    **Windows**: Should be in the same folder as the launcher
    
@@ -33,7 +32,7 @@ Here is a complete guide on how to customise the launcher.
    
 ## 4. Change the Bottom Row Type
    
-   1 = The bottom row can either be the default "Fullscreen + Resolution" boxes
+   1 = The bottom row contains the "Fullscreen + Resolution" boxes
    
    or
                           
