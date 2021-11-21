@@ -26,6 +26,7 @@
 #include <QDesktopServices>
 #include <QtConcurrent>
 #include <QMessageBox>
+#include "settings.h"
 
 // Find the name of the OS
 std::string getOsName()
@@ -76,6 +77,9 @@ int bottomRow = 0;
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 bool canLaunch = true;
 
+// Create an instance of the settings window
+Settings *settingsWindow;
+
 // Lower case all letters of a string
 QString lowerCase(std::string word)
 {
@@ -107,6 +111,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->LaunchGameButton->installEventFilter(this);
+
+    // set the settings window
+    settingsWindow = new Settings;
 
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where QT tried to add spaces to those boxes if no numbers were added
@@ -1106,30 +1113,15 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
     // Reload the DSDA leaderboards only if the active tab is the DSDA one
     if(ui->tabs->currentIndex()==3)
     {
-        reloadLeaderboard();
+        reloadLeaderboard(true);
     }
 
 }
 
-// Show the LogFile.txt
+// Show the settings
 void MainWindow::on_pushButton_clicked()
 {
-    if(getOsName()=="MacOS" || getOsName()=="Linux")
-    {
-        std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        system(("open "+homePath+"/.dsda-doom/LogFile.txt >> "+homePath+"/.dsda-doom/LogFile.txt").c_str());
-    }
-    else
-    {
-        std::string logPath = "\"" + QCoreApplication::applicationDirPath().toStdString() + "\\LogFile.txt\"";
-        for(int i=0; i<logPath.length();i++)
-        {
-            if(logPath[i]=='/')
-                logPath[i]='\\';
-        }
-        qDebug() << logPath.c_str();
-        QProcess::startDetached(("notepad.exe " + logPath).c_str());
-    }
+    settingsWindow->show();
 }
 
 // Add pwads to be loaded
@@ -1221,7 +1213,7 @@ void MainWindow::on_tabs_currentChanged(int index)
 
     if(index==3) // Reload the DSDA leaderboards only if the active tab is the DSDA one
     {
-        reloadLeaderboard();
+        reloadLeaderboard(true);
     }
 }
 
@@ -1306,12 +1298,12 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
 void MainWindow::on_comboBox_currentIndexChanged(int index) // This is the category box (UV speed, UV max, etc)
 {
-    reloadLeaderboard();
+    reloadLeaderboard(false);
 }
 
 bool reloadingLeaderboards=false;
 
-void MainWindow::reloadLeaderboard()
+void MainWindow::reloadLeaderboard(bool changeWad)
 {
 
     reloadingLeaderboards=true;
@@ -1471,34 +1463,41 @@ void MainWindow::reloadLeaderboard()
 
 
 
-    if(ui->wadsOnFolder->count()<1)
+    if(changeWad)
     {
-        wad = ui->iwadSelect->currentText().toStdString();
-        for (int i = 0; i < wad.length(); i++)
-            {
-                wad[i] = tolower(wad[i]);
-            }
-        if(wad=="doomu"||wad=="doom1")
+        if(ui->wadsOnFolder->count()<1)
         {
-            wad="doom";
+            wad = ui->iwadSelect->currentText().toStdString();
+            for (int i = 0; i < wad.length(); i++)
+                {
+                    wad[i] = tolower(wad[i]);
+                }
+            if(wad=="doomu"||wad=="doom1")
+            {
+                wad="doom";
+            }
+        }
+        else
+        {
+            std::string wad1 = ui->wadsOnFolder->item(0)->text().toStdString();
+            for (int i = 0; i < wad1.length(); i++)
+                {
+                    wad1[i] = tolower(wad1[i]);
+                }
+            wad=wad1;
+            for (int i = 0; i < wad1.length(); i++)
+            {
+                if(wad1[i]=='/')
+                {
+                    wad = wad1.substr(i+1);
+                    wad.resize(wad.length()-4);
+                }
+            }
         }
     }
     else
     {
-        std::string wad1 = ui->wadsOnFolder->item(0)->text().toStdString();
-        for (int i = 0; i < wad1.length(); i++)
-            {
-                wad1[i] = tolower(wad1[i]);
-            }
-        wad=wad1;
-        for (int i = 0; i < wad1.length(); i++)
-        {
-            if(wad1[i]=='/')
-            {
-                wad = wad1.substr(i+1);
-                wad.resize(wad.length()-4);
-            }
-        }
+        wad=lowerCase(ui->wadLName->text().toStdString()).toStdString();
     }
 
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
@@ -1556,11 +1555,7 @@ void MainWindow::reloadLeaderboard()
 
 }
 
-void MainWindow::on_toolButton_4_clicked() // Download the demo file of a run
-{
-    QString link = demoFile;
-    QDesktopServices::openUrl(QUrl(link));
-}
+
 
 void MainWindow::on_episodeBox_textChanged(const QString &arg1)
 {
@@ -1568,7 +1563,7 @@ void MainWindow::on_episodeBox_textChanged(const QString &arg1)
     {
         // Prevents crashes
         QFuture<void> future = QtConcurrent::run([=]() {
-            reloadLeaderboard();
+            reloadLeaderboard(false);
         });
     }
 }
@@ -1579,7 +1574,7 @@ void MainWindow::on_levelBox_textChanged(const QString &arg1)
     {
         // Prevents crashes
         QFuture<void> future = QtConcurrent::run([=]() {
-            reloadLeaderboard();
+            reloadLeaderboard(false);
         });
     }
 }
@@ -1637,4 +1632,23 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
     on_LaunchGameButton_clicked(true, false);
 }
 
+
+
+void MainWindow::on_toolButton_5_clicked()
+{
+    std::string str = ui->comboBox->currentText().toStdString();
+    std::replace(str.begin(), str.end(), ' ', '+');
+    std::string lvl = ui->levelL->text().toStdString();
+    std::replace(lvl.begin(), lvl.end(), ' ', '+');
+    QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/"+ui->wadLName->text()+"/leaderboard?category="+str.c_str()+"&level="+lvl.c_str()));
+}
+
+
+
+
+
+void MainWindow::on_wadLName_editingFinished()
+{
+    reloadLeaderboard(false);
+}
 

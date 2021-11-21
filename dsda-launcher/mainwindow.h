@@ -22,7 +22,7 @@ private:
 public slots:
     void addWads(QStringList fileNames);
     void get_leaderboards(std::string wad, std::string level, std::string category);
-    void reloadLeaderboard();
+    void reloadLeaderboard(bool changeWad);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
     void delayLaunch();
@@ -48,7 +48,6 @@ public slots:
     void dropEvent(QDropEvent *e);
     void on_toolButton_3_clicked();
     void on_comboBox_currentIndexChanged(int index);
-    void on_toolButton_4_clicked();
     void on_episodeBox_textChanged(const QString &arg1);
     void on_levelBox_textChanged(const QString &arg1);
     void on_editParameters_clicked();
@@ -56,5 +55,7 @@ public slots:
 private slots:
 
 
+    void on_toolButton_5_clicked();
+    void on_wadLName_editingFinished();
 };
 #endif // MAINWINDOW_H

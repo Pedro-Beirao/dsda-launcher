@@ -31,13 +31,16 @@ DEFINES += "APP_NAME=dsda-launcher"
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    settings.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    settings.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    settings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
