@@ -72,6 +72,6 @@ Here is a complete guide on how to customise the launcher.
    ex: -levelstat -analysis	
    
    
-# Messed up?
+# Restore defaults
 
  If you messed up and can't get it to work, note that deleting the file will make the launcher reset it to default when restarting the launcher
