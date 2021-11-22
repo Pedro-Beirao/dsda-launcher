@@ -16,7 +16,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>25</x>
      <y>20</y>
      <width>121</width>
      <height>16</height>
@@ -35,6 +35,9 @@
      <height>24</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <property name="readOnly">
     <bool>false</bool>
    </property>
@@ -42,8 +45,8 @@
   <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>20</y>
+     <x>180</x>
+     <y>18</y>
      <width>131</width>
      <height>22</height>
     </rect>
@@ -59,13 +62,25 @@
    <property name="geometry">
     <rect>
      <x>319</x>
-     <y>40</y>
+     <y>37</y>
      <width>71</width>
      <height>24</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::WheelFocus</enum>
+   </property>
    <property name="text">
     <string>Browse</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>

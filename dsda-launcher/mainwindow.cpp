@@ -390,15 +390,19 @@ MainWindow::MainWindow(QWidget *parent)
             on_editParameters_clicked();
           }
        }
+       qDebug() << QApplication::arguments();
        QStringList arguments = QCoreApplication::arguments();
            if(arguments.count() > 1)
            {
-
-               QString absPath = QApplication::arguments().at(1);
-               if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
-               {
-                    ui->recordDemo_2->setText(absPath);
-               }
+                for(int i=1; i<arguments.count(); i++)
+                {
+                    qDebug() << QCoreApplication::arguments();
+                       QString absPath = QCoreApplication::arguments().at(i);
+                       if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
+                       {
+                            ui->recordDemo_2->setText(absPath);
+                       }
+                }
            }
     // Set the parameters text correctly
     ui->fastCheck->setText(fastParamText.c_str());
@@ -1038,17 +1042,18 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         return;
     }
 
+    Settings setting;
+    std::string execPath = setting.getDsdaDoomPath().toStdString();
+
     if(getOsName()=="MacOS") // Tested
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
     else if(getOsName()=="Linux") // Havent tested this yet. Sure hope it works
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
 
         system(("cd ~/ && " +execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
@@ -1058,7 +1063,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 //I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
 // also, because of some weird error, I had to #include <windows.h> at the top of this file
 #ifdef _WIN32
-        std::string execPath = QCoreApplication::applicationDirPath().toStdString();
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
         {

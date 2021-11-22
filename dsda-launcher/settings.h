@@ -15,9 +15,11 @@ public:
     explicit Settings(QWidget *parent = nullptr);
     ~Settings();
 
+public slots:
+    QString getDsdaDoomPath();
+
 private slots:
     void on_checkBox_toggled(bool checked);
-
     void on_pushButton_clicked();
 
 private:

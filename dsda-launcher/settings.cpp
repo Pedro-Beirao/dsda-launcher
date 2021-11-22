@@ -19,22 +19,40 @@ Settings::~Settings()
     delete ui;
 }
 
+QString Settings::getDsdaDoomPath()
+{
+    if(ui->checkBox->isChecked())
+    {
+        return QCoreApplication::applicationDirPath();
+    }
+    else
+    {
+        return ui->lineEdit->text();
+    }
+}
+
 void Settings::on_checkBox_toggled(bool checked)
 {
     if(checked)
     {
         ui->lineEdit->setReadOnly(true);
+        ui->lineEdit->setStyleSheet("color: rgb(139, 139, 139);");
     }
     else
     {
         ui->lineEdit->setReadOnly(false);
+        ui->lineEdit->setStyleSheet("");
     }
 }
 
 
 void Settings::on_pushButton_clicked()
 {
-    QStringList fileName = QFileDialog::getOpenFileNames(this, tr("Select dsda-doom folder path path"),"/",tr("Folder (*)"));
-    ui->lineEdit->setText(fileName[0]);
+    if(!ui->checkBox->isChecked())
+    {
+        QStringList fileName = QFileDialog::getOpenFileNames(this, tr("Select dsda-doom folder path path"),"/",tr("Folder (*)"));
+        if(fileName.size()>0)
+            ui->lineEdit->setText(fileName[0]);
+    }
 }
 
