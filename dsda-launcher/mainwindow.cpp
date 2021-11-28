@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
+#elif __APPLE__ || __MACH__
+#include "Mac.h"
 #endif
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
@@ -16,7 +18,6 @@
 #include <QMimeData>
 #include <QDebug>
 #include <vector>
-#include <QSettings>
 #include <QNetworkAccessManager>
 #include <QtNetwork>
 #include <QNetworkRequest>
@@ -27,6 +28,7 @@
 #include <QtConcurrent>
 #include <QMessageBox>
 #include "settings.h"
+
 
 // Find the name of the OS
 std::string getOsName()
@@ -41,7 +43,6 @@ std::string getOsName()
     return "Linux";
     #endif
 }
-
 // List of all the IWADs detected
 QStringList images;
 
@@ -106,6 +107,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Allow files to be droped in the launcher (*.wad *.lmp)
     setAcceptDrops(true);
 
+    // Hide the reload Leaderboard button
+    ui->ReloadLead->hide();
+
     // Add event filter to the "additional arguments" box
     ui->argumentText->installEventFilter(this);
 
@@ -127,12 +131,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Open the folder to add the IWADs
     QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
     shortcut->setAutoRepeat(false);
-
-    /* Might cause memory leaks, so Im going to comment this out for now
-    // Creates a new instance of the MainWindow
-    QShortcut * shortcut2 = new QShortcut(QKeySequence(Qt::Key_N | Qt::CTRL),this,SLOT(foo2()));
-    shortcut2->setAutoRepeat(false);
-    */
 
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(foo3()));
@@ -160,13 +158,14 @@ MainWindow::MainWindow(QWidget *parent)
     // If not, create it
     if(getOsName()=="MacOS")
     {
+        /*
         try {
             system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
         }  catch (...) { }
         QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt");
         if(!check_file.exists())
             system(("cp "+QCoreApplication::applicationDirPath()+"/../Resources/launcher_config.txt "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/").toStdString().c_str());
-
+        */
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
     }
     else if(getOsName()=="Windows")
@@ -200,196 +199,139 @@ MainWindow::MainWindow(QWidget *parent)
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
     }
 
-    // Open the launcher_config.txt file
-    newfile.open(launcher_configFilePath,std::ios::in);
-       if (newfile.is_open()){
-           // tp will be looped on every line
-          std::string tp;
-          try {
-              while(getline(newfile, tp))
-              {
-                  // If the first/second/third char is "#", then this is a comment, ignore
-                  // If the line is too small, ignore
-                if((tp[0]!='#'&&tp[1]!='#'&&tp[2]!='#') && tp.length()>3)
-                {
-                    // We need 2 strings, the Text and the Parameter
-                    // The Text is between the first and second quotes
-                    // The Parameter is between the third and forth quotes
-                    int firstQuotes=100;
-                    int secondQuotes=100;
-                    int thirdQuotes=100;
-                    int forthQuotes=100;
 
-                    for(int i=0;i<tp.length();i++) // Loop the chars to find the 4 quotes
-                    {
-                        if(tp[i]=='"')
-                        {
-                            if(firstQuotes==100)
-                            {
-                                firstQuotes=i;
-                            }
-                            else if(secondQuotes==100)
-                            {
-                                secondQuotes=i;
-                            }
-                            else if(thirdQuotes==100)
-                            {
-                                thirdQuotes=i;
-                            }
-                            else if(forthQuotes==100)
-                            {
-                                forthQuotes=i;
-                            }
-                        }
-                    }
 
-                    // Find the strings using substr of tp
-                    if(currentConfigLine==0)
-                    {
-                        fastParamText=tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1);
-                        fastParam=tp.substr(thirdQuotes+1,forthQuotes-thirdQuotes-1);
-                        currentConfigLine++;
-                    }
-                    else if(currentConfigLine==1)
-                    {
-                        nomoParamText=tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1);
-                        nomoParam=tp.substr(thirdQuotes+1,forthQuotes-thirdQuotes-1);
-                        currentConfigLine++;
-                    }
-                    else if(currentConfigLine==2)
-                    {
-                        respawnParamText=tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1);
-                        respawnParam=tp.substr(thirdQuotes+1,forthQuotes-thirdQuotes-1);
-                        currentConfigLine++;
-                    }
-                    else if(currentConfigLine==3)
-                    {
-                        solonetParamText=tp.substr(firstQuotes+1,secondQuotes-firstQuotes-1);
-                        solonetParam=tp.substr(thirdQuotes+1,forthQuotes-thirdQuotes-1);
-                        currentConfigLine++;
-                    }
-                    if(bottomRow==2) // If the bottom row can be customised
-                    {
-                        if(tp[0]=='+') // "+" means that its the text at the top of the drop down menus
-                        {
-                            afterPlus=true;
-                            int firstQuotesBottomText=100;
-                            int secondQuotesBottomText=100;
-                            for(int i=0;i<tp.length();i++)
-                            {
-                                if(tp[i]=='"')
-                                {
-                                    if(firstQuotesBottomText==100)
-                                    {
-                                        firstQuotesBottomText=i;
-                                    }
-                                    else if(secondQuotesBottomText==100)
-                                    {
-                                        secondQuotesBottomText=i;
-                                    }
-                                }
-                            }
+    QFile file(launcher_configFilePath.c_str());
+    if(file.open( QIODevice::ReadOnly ))
+        {
+            QByteArray bytes = file.readAll();
+            file.close();
 
-                            if(currentConfigBottomBox==0)
-                            {
-                                ui->label_6->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
+            QJsonParseError jsonError;
+            QJsonDocument document = QJsonDocument::fromJson( bytes, &jsonError );
+            if( jsonError.error != QJsonParseError::NoError )
+            {
+                 QMessageBox::warning(this, "dsda-launcher", ("Failed to parse json from dsda-launcher.json: "+jsonError.errorString().toStdString()).c_str());
+                return ;
+            }
+            if( document.isObject() )
+            {
+                QJsonObject jsonObj = document.object();
 
-                                // Needed to make the font bigger because it looked odd
-                                int size = ui->label_6->font().pointSize()+2;
-                                QFont newFont(ui->label_6->font().family(),size);
-                                ui->label_6->setFont(newFont);
-                                currentConfigBottomBox++;
-                            }
-                            else if(currentConfigBottomBox==1)
-                            {
-                                ui->label_10->setText(tp.substr(firstQuotesBottomText+1,secondQuotesBottomText-firstQuotesBottomText-1).c_str());
+                QJsonObject toggles = jsonObj.value("toggles").toObject();
+                fastParamText = toggles.keys()[0].toStdString();
+                fastParam = toggles.value(fastParamText.c_str()).toString().toStdString();
+                nomoParamText = toggles.keys()[1].toStdString();
+                nomoParam = toggles.value(nomoParamText.c_str()).toString().toStdString();
+                respawnParamText = toggles.keys()[2].toStdString();
+                respawnParam = toggles.value(respawnParamText.c_str()).toString().toStdString();
+                solonetParamText = toggles.keys()[3].toStdString();
+                solonetParam = toggles.value(solonetParamText.c_str()).toString().toStdString();
 
-                                // Needed to make the font bigger because it looked odd
-                                int size = ui->label_10->font().pointSize()+2;
-                                QFont newFont(ui->label_10->font().family(),size);
-                                ui->label_10->setFont(newFont);
-                                currentConfigBottomBox++;
-                            }
-                        }
-                        else if(afterPlus)
-                        {
-                            if(tp[0]=='"')
-                            {
-                                int firstQuotesBottomBox=100;
-                                int secondQuotesBottomBox=100;
-                                for(int i=0;i<tp.length();i++)
-                                {
-                                    if(tp[i]=='"')
-                                    {
-                                        if(firstQuotesBottomBox==100)
-                                        {
-                                            firstQuotesBottomBox=i;
-                                        }
-                                        else if(secondQuotesBottomBox==100)
-                                        {
-                                            secondQuotesBottomBox=i;
-                                        }
-                                    }
-                                }
-                                std::string itemToAdd;
-                                if(tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1)=="both"||tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1)=="all")
-                                    itemToAdd=" "+tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1);
-                                else
-                                    itemToAdd=tp.substr(firstQuotesBottomBox+1,secondQuotesBottomBox-firstQuotesBottomBox-1);
-
-                                if(currentConfigBottomBox==1)
-                                    ui->timeKeysBox->addItem(itemToAdd.c_str());
-                                else if(currentConfigBottomBox==2)
-                                    ui->levelstatBox->addItem(itemToAdd.c_str());
-                            }
-                            else
-                            {
-                                afterPlus=false;
-                            }
-                        }
-                    }
-                }
-                else if(tp[0]=='1' || tp[1]=='1') // If it finds a "1" at the beguining of the line, then its the Default bottom row
+                bottomRow = jsonObj.value("bottom row type").toInt();
+                if(bottomRow==1)
                 {
                     ui->timeKeysBox->hide();
                     ui->levelstatBox->hide();
                     ui->label_10->hide();
-                    bottomRow=1;
                     ui->comboBox_2->show();
                     ui->noCheck_3->show();
                     ui->label_6->show();
                 }
-                else if(tp[0]=='2' || tp[1]=='2') // If it finds a "2" at the beguining of the line, then its the Custom bottom row
+                else if(bottomRow==2)
                 {
                     ui->comboBox_2->hide();
                     ui->noCheck_3->hide();
-                    bottomRow=2;
                     ui->timeKeysBox->show();
                     ui->levelstatBox->show();
                     ui->label_10->show();
                     ui->label_6->show();
+
+                    QJsonObject bottomRow = jsonObj.value("bottom row").toObject();
+                    for(int i=0;i<bottomRow.size();i++)
+                    {
+                        if(currentConfigBottomBox>1)
+                            break;
+                        if(bottomRow.keys()[i][0]=='_')
+                            continue;
+                        if(currentConfigBottomBox==0)
+                        {
+                            ui->label_6->setText(bottomRow.keys()[i]);
+
+                            // Needed to make the font bigger because it looked odd
+                            int size = ui->label_6->font().pointSize()+2;
+                            QFont newFont(ui->label_6->font().family(),size);
+                            ui->label_6->setFont(newFont);
+                            currentConfigBottomBox++;
+                            QJsonArray bottomBox1List = bottomRow.value(bottomRow.keys()[i]).toArray();
+                            foreach (const QJsonValue & value, bottomBox1List) {
+
+                                if(value.toString()=="all" || value.toString()=="both")
+                                    ui->timeKeysBox->addItem(" "+value.toString());
+                                else
+                                    ui->timeKeysBox->addItem(value.toString());
+                            }
+                        }
+                        else
+                        {
+                            ui->label_10->setText(bottomRow.keys()[i]);
+
+                            // Needed to make the font bigger because it looked odd
+                            int size = ui->label_10->font().pointSize()+2;
+                            QFont newFont(ui->label_10->font().family(),size);
+                            ui->label_10->setFont(newFont);
+                            currentConfigBottomBox++;
+                            QJsonArray bottomBox1List = bottomRow.value(bottomRow.keys()[i]).toArray();
+                            foreach (const QJsonValue & value, bottomBox1List) {
+
+                                if(value.toString()=="all" || value.toString()=="both")
+                                    ui->levelstatBox->addItem(" "+value.toString());
+                                else
+                                    ui->levelstatBox->addItem(value.toString());
+                            }
+                        }
+                    }
                 }
-                else if(bottomRow==0) // If it finds a "0" at the beguining of the line, then there was an error
+
+                if(jsonObj.value("theme").toString()=="light")
                 {
-                    ui->timeKeysBox->hide();
-                    ui->levelstatBox->hide();
-                    ui->label_10->hide();
-                    ui->comboBox_2->hide();
-                    ui->noCheck_3->hide();
-                    ui->label_6->hide();
+                    #ifdef __APPLE__ || __MACH__
+                    macSetToLightTheme();
+                    #else
+                    QFile f( "lstyle.qss" );
+                    if ( !f.exists() )
+                    {
+                       qWarning() << "Unable to set dark stylesheet, file not found";
+                    }
+                    else
+                    {
+                       f.open( QFile::ReadOnly | QFile::Text );
+                       QTextStream ts( &f );
+                       qApp->setStyleSheet( ts.readAll() );
+                    }
+                    #endif
                 }
-              }
+                else if (jsonObj.value("theme").toString()=="dark")
+                {
+                    #ifdef __APPLE__ || __MACH__
+                    //macSetToDarkTheme();
+                    #else
+                    QFile f( "dstyle.qss" );
+                    if ( !f.exists() )
+                    {
+                       qWarning() << "Unable to set dark stylesheet, file not found";
+                    }
+                    else
+                    {
+                       f.open( QFile::ReadOnly | QFile::Text );
+                       QTextStream ts( &f );
+                       qApp->setStyleSheet( ts.readAll() );
+                    }
+                   #endif
+                }
+            }
+         }
 
-              // Dont forget to close :P
-              newfile.close();
-
-          }  catch (...) {
-              // Alright, found an error with the launcher_config.txt file, the launcher is still kinda usable, but its should be VERY clear to the user that something is not right
-            qDebug() << "crash :(";
-
-            on_editParameters_clicked();
-          }
-       }
        qDebug() << QApplication::arguments();
        QStringList arguments = QCoreApplication::arguments();
            if(arguments.count() > 1)
@@ -1043,20 +985,20 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     }
 
     Settings setting;
-    std::string execPath = setting.getDsdaDoomPath().toStdString();
+    //execPath = settings.value("execpath").toString().toStdString();
+    std::string execPath=QCoreApplication::applicationDirPath().toStdString();
 
-    if(getOsName()=="MacOS") // Tested
+
+    if(getOsName()=="MacOS")
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad "+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
     else if(getOsName()=="Linux") // Havent tested this yet. Sure hope it works
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        system(("rm "+homePath+"/.dsda-doom/LogFile.txt").c_str());
-
-        system(("cd ~/ && " +execPath+ "/dsda-doom -iwad "+ui->iwadSelect->currentText().toStdString()+".wad "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        system(("cd ~/ && " +execPath+ "/dsda-doom -iwad '"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         arguments=" ";
     }
 
@@ -1101,7 +1043,7 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
         }
 
     // These are episode/mission based. They need both warp boxes
-    if(sel=="doom"||sel=="doomu"||sel=="doom1"||sel=="freedoom1"||sel=="freedoom"||sel=="bfgdoom1"||sel=="bfgdoom"||sel=="heretic"||sel=="chex"||sel=="hacx")
+    if(sel=="doom"||sel=="doomu"||sel=="doom1"||sel=="freedoom1"||sel=="freedoom"||sel=="bfgdoom1"||sel=="bfgdoom"||sel=="heretic"||sel=="heretic1"||sel=="chex"||sel=="hacx")
     {
         ui->levelBox->show();
         ui->levelText->show();
@@ -1114,11 +1056,9 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
         ui->episodeText->setText("Level");
     }
 
-    // Reload the DSDA leaderboards only if the active tab is the DSDA one
-    if(ui->tabs->currentIndex()==3)
-    {
-        reloadLeaderboard(true);
-    }
+    // Reload the DSDA leaderboards
+    reloadLeaderboard(true,false);
+
 
 }
 
@@ -1214,11 +1154,6 @@ void MainWindow::on_tabs_currentChanged(int index)
         ui->pushButton_3->hide();
         ui->demoPlayOptions->hide();
     }
-
-    if(index==3) // Reload the DSDA leaderboards only if the active tab is the DSDA one
-    {
-        reloadLeaderboard(true);
-    }
 }
 
 void MainWindow::on_pushButton_2_clicked() // Record demo
@@ -1302,12 +1237,12 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
 void MainWindow::on_comboBox_currentIndexChanged(int index) // This is the category box (UV speed, UV max, etc)
 {
-    reloadLeaderboard(false);
+    reloadLeaderboard(false,false);
 }
 
 bool reloadingLeaderboards=false;
 
-void MainWindow::reloadLeaderboard(bool changeWad)
+void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 {
 
     reloadingLeaderboards=true;
@@ -1469,8 +1404,6 @@ void MainWindow::reloadLeaderboard(bool changeWad)
 
     if(changeWad)
     {
-        if(ui->wadsOnFolder->count()<1)
-        {
             wad = ui->iwadSelect->currentText().toStdString();
             for (int i = 0; i < wad.length(); i++)
                 {
@@ -1480,24 +1413,6 @@ void MainWindow::reloadLeaderboard(bool changeWad)
             {
                 wad="doom";
             }
-        }
-        else
-        {
-            std::string wad1 = ui->wadsOnFolder->item(0)->text().toStdString();
-            for (int i = 0; i < wad1.length(); i++)
-                {
-                    wad1[i] = tolower(wad1[i]);
-                }
-            wad=wad1;
-            for (int i = 0; i < wad1.length(); i++)
-            {
-                if(wad1[i]=='/')
-                {
-                    wad = wad1.substr(i+1);
-                    wad.resize(wad.length()-4);
-                }
-            }
-        }
     }
     else
     {
@@ -1554,8 +1469,15 @@ void MainWindow::reloadLeaderboard(bool changeWad)
         }
     qDebug() << (wad +" "+ level +" "+ category).c_str();
 
-    reloadingLeaderboards=false;
-    get_leaderboards(wad,level,category);
+    if(callApi)
+    {
+        reloadingLeaderboards=false;
+        get_leaderboards(wad,level,category);
+    }
+    else
+    {
+        clearLeaderboard();
+    }
 
 }
 
@@ -1563,24 +1485,12 @@ void MainWindow::reloadLeaderboard(bool changeWad)
 
 void MainWindow::on_episodeBox_textChanged(const QString &arg1)
 {
-    if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
-    {
-        // Prevents crashes
-        QFuture<void> future = QtConcurrent::run([=]() {
-            reloadLeaderboard(false);
-        });
-    }
+            reloadLeaderboard(false,false);
 }
 
 void MainWindow::on_levelBox_textChanged(const QString &arg1)
 {
-    if(ui->tabs->currentIndex()==3 && arg1.toStdString().length()>0)
-    {
-        // Prevents crashes
-        QFuture<void> future = QtConcurrent::run([=]() {
-            reloadLeaderboard(false);
-        });
-    }
+            reloadLeaderboard(false,false);
 }
 
 void MainWindow::on_editParameters_clicked() // Customise the launcher
@@ -1648,11 +1558,30 @@ void MainWindow::on_toolButton_5_clicked()
 }
 
 
-
-
-
-void MainWindow::on_wadLName_editingFinished()
+void MainWindow::clearLeaderboard()
 {
-    reloadLeaderboard(false);
+    ui->demoTime->setStyleSheet("color: rgb(150, 150, 150);");
+    ui->demoPlayer->setStyleSheet("color: rgb(150, 150, 150);");
+    ui->demoPort->setStyleSheet("color: rgb(150, 150, 150);");
+    ui->ReloadLead->show();
+}
+
+
+
+
+
+void MainWindow::on_ReloadLead_clicked()
+{
+    reloadLeaderboard(false, true);
+    ui->demoTime->setStyleSheet("");
+    ui->demoPlayer->setStyleSheet("");
+    ui->demoPort->setStyleSheet("");
+    ui->ReloadLead->hide();
+}
+
+
+void MainWindow::on_wadLName_textChanged(const QString &arg1)
+{
+    reloadLeaderboard(false,false);
 }
 

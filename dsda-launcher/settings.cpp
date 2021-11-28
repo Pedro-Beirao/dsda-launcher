@@ -1,6 +1,9 @@
 #include "settings.h"
 #include "ui_settings.h"
 #include <QFileDialog>
+#include <qsettings.h>
+#include <mainwindow.h>
+
 
 Settings::Settings(QWidget *parent) :
     QWidget(parent),
@@ -12,6 +15,8 @@ Settings::Settings(QWidget *parent) :
     {
         ui->lineEdit->setReadOnly(true);
     }
+
+    ui->restartWarning->hide();
 }
 
 Settings::~Settings()
@@ -19,7 +24,7 @@ Settings::~Settings()
     delete ui;
 }
 
-QString Settings::getDsdaDoomPath()
+QString Settings::getIWADsPath()
 {
     if(ui->checkBox->isChecked())
     {
@@ -50,9 +55,21 @@ void Settings::on_pushButton_clicked()
 {
     if(!ui->checkBox->isChecked())
     {
-        QStringList fileName = QFileDialog::getOpenFileNames(this, tr("Select dsda-doom folder path path"),"/",tr("Folder (*)"));
+        QStringList fileName = QFileDialog::getOpenFileNames(this, tr("Select the IWADs folder path"),"/",tr("Folder (*.wad)"));
         if(fileName.size()>0)
-            ui->lineEdit->setText(fileName[0]);
+        {
+            std::string iwadPath = fileName[0].toStdString();
+            std::size_t found = iwadPath.find_last_of("/\\");
+            ui->lineEdit->setText(iwadPath.substr(0,found).c_str());
+        }
     }
+}
+
+
+void Settings::on_pushButton_2_clicked()
+{
+    settings.setValue("iwadspath",getIWADsPath());
+
+    ui->restartWarning->show();
 }
 

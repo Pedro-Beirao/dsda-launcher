@@ -2,5 +2,6 @@
     <qresource prefix="/pngs">
         <file>pngs/minus.png</file>
         <file>pngs/plus.png</file>
+        <file>pngs/iu.png</file>
     </qresource>
 </RCC>

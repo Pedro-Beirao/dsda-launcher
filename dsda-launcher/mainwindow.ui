@@ -937,6 +937,9 @@ border-radius:3px</string>
         <height>16</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>Time: </string>
       </property>
@@ -988,6 +991,22 @@ border-radius:3px</string>
       </property>
       <property name="text">
        <string>Leaderboard</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="ReloadLead">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>95</y>
+        <width>51</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Reload</string>
       </property>
      </widget>
     </widget>

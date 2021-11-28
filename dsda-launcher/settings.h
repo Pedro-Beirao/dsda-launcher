@@ -16,11 +16,13 @@ public:
     ~Settings();
 
 public slots:
-    QString getDsdaDoomPath();
+    QString getIWADsPath();
 
 private slots:
     void on_checkBox_toggled(bool checked);
     void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::Settings *ui;

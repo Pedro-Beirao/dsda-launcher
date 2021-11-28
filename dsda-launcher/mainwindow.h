@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 
 QT_BEGIN_NAMESPACE
@@ -22,7 +23,7 @@ private:
 public slots:
     void addWads(QStringList fileNames);
     void get_leaderboards(std::string wad, std::string level, std::string category);
-    void reloadLeaderboard(bool changeWad);
+    void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
     void delayLaunch();
@@ -51,11 +52,15 @@ public slots:
     void on_episodeBox_textChanged(const QString &arg1);
     void on_levelBox_textChanged(const QString &arg1);
     void on_editParameters_clicked();
+    void clearLeaderboard();
 
 private slots:
 
 
     void on_toolButton_5_clicked();
-    void on_wadLName_editingFinished();
+    void on_ReloadLead_clicked();
+    void on_wadLName_textChanged(const QString &arg1);
 };
+extern QSettings settings;
+
 #endif // MAINWINDOW_H

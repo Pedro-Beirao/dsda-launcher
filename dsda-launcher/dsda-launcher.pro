@@ -21,6 +21,8 @@ macx
     APP_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_FILES
     QMAKE_INFO_PLIST =./Info.plist
+    HEADERS += Mac.h
+    OBJECTIVE_SOURCES += Mac.mm
 }
 
 DEFINES += "APP_NAME=dsda-launcher"
