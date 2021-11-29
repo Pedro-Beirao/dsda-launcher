@@ -119,8 +119,6 @@ void Settings::on_checkBox_clicked(bool checked)
 {
     if(!checked)
     {
-        QFile f( "lstyle.qss" );
-        QTextStream ts(&f);
         #ifdef __APPLE__ || __MACH__
         macSetToLightTheme();
         #else
