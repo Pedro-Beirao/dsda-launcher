@@ -44,14 +44,18 @@ jobs:
       #    target: 'desktop'
       #    arch: 'win64_mingw81'
       #    setup-python: 'false'
-      - name: Install Qt5/Qt6 (yaqti)
-        uses: WillBrennan/yaqti@2021.07.29
-        with:
-          # Qt version to pick 5.15.2 or 6.2.1
-          version: '6.2.0'
-          os: 'windows'
-          platform: 'desktop'
-          modules: 'qtcharts'
+      #- name: Install Qt5/Qt6 (yaqti)
+      #  uses: WillBrennan/yaqti@2021.07.29
+      #  with:
+      #    # Qt version to pick 5.15.2 or 6.2.1
+      #    version: '6.2.0'
+      #    os: 'windows'
+      #    platform: 'desktop'
+      #    modules: 'qtcharts'
+      - name: Install qt
+        run: | 
+          pip install yaqti &&
+          python -m yaqti install --version 6.2.0 --platform desktop --os windows --modules qtcharts
       - name: tree
         run: |
           where make.exe
