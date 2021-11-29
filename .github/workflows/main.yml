@@ -51,7 +51,7 @@ jobs:
           version: '6.2.0'
           os: 'windows'
           platform: 'desktop'
-          modules: 'qtcharts qtwebengine'
+          modules: 'qtcharts'
       - name: tree
         run: |
           where make.exe
