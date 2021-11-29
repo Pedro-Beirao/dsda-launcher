@@ -116,9 +116,11 @@ void Settings::on_pushButton_2_clicked()
 
 
 void Settings::on_checkBox_clicked(bool checked)
-{
+{/*
     if(!checked)
     {
+        QFile f( "lstyle.qss" );
+        QTextStream ts(&f);
         #ifdef __APPLE__ || __MACH__
         macSetToLightTheme();
         #else
@@ -154,7 +156,7 @@ void Settings::on_checkBox_clicked(bool checked)
         }
         #endif
         settings.setValue("theme","dark");
-    }
+    }*/
 }
 
 
