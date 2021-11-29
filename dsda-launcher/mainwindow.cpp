@@ -299,7 +299,7 @@ MainWindow::MainWindow(QWidget *parent)
        QStringList arguments = QCoreApplication::arguments();
            if(arguments.count() > 1)
            {
-                for(int i=1; i<arguments.count(); i++)
+                for(int i=0; i<arguments.count(); i++)
                 {
                     qDebug() << QCoreApplication::arguments();
                        QString absPath = QCoreApplication::arguments().at(i);
@@ -379,89 +379,51 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
-    // FreeDoom Phase 1
+    // FreeDoom Phase 1 / Phase 2
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="freedoom1" || filename=="freedoom")
+        if(filename=="freedoom1" || filename=="freedoom"||filename=="freedoom2")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    // FreeDoom Phase 2
+    // Heretic / Hexen
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="freedoom2")
+        if(filename=="heretic"||filename=="hexen")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    // Heretic
+    // BFG Doom / BFG Doom 2
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="heretic")
+        if(filename=="bfgdoom1"||filename=="bfgdoom"||filename=="bfgdoom2")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    // Hexen
+    // Chex Quest 1 / Hacx
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="hexen")
+        if(filename=="chex" || filename=="hacx")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    /*
-    // BFG Doom
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="bfgdoom1"||filename=="bfgdoom")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // BFG Doom 2
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="bfgdoom2")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Chex Quest 1
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="chex")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Hacx
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="hacx")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-    */
 
     // Other wads with the IWAD tag
+    // This might make the launcher slower if you have too many wads on the same folder as the launcher
+    // so Im going to comment this out
+    /*
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
@@ -494,6 +456,7 @@ MainWindow::MainWindow(QWidget *parent)
                 }
         }
     }
+    */
 
 
     // If no IWAD found, show a tool tip
