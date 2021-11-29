@@ -69,7 +69,6 @@ jobs:
           git clone git://code.qt.io/qt/qt5.git
           cd qt5
           git checkout 6.0
-          cd qt5
           perl init-repository
           mkdir qt6-build
           cd qt6-build
