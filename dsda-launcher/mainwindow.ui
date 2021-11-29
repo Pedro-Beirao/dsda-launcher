@@ -16,12 +16,6 @@
     <height>454</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>350</width>
-    <height>454</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>dsda-launcher</string>
   </property>

@@ -292,43 +292,6 @@ MainWindow::MainWindow(QWidget *parent)
                         }
                     }
                 }
-
-                if(jsonObj.value("theme").toString()=="light")
-                {
-                    #ifdef __APPLE__ || __MACH__
-                    macSetToLightTheme();
-                    #else
-                    QFile f( "lstyle.qss" );
-                    if ( !f.exists() )
-                    {
-                       qWarning() << "Unable to set dark stylesheet, file not found";
-                    }
-                    else
-                    {
-                       f.open( QFile::ReadOnly | QFile::Text );
-                       QTextStream ts( &f );
-                       qApp->setStyleSheet( ts.readAll() );
-                    }
-                    #endif
-                }
-                else if (jsonObj.value("theme").toString()=="dark")
-                {
-                    #ifdef __APPLE__ || __MACH__
-                    //macSetToDarkTheme();
-                    #else
-                    QFile f( "dstyle.qss" );
-                    if ( !f.exists() )
-                    {
-                       qWarning() << "Unable to set dark stylesheet, file not found";
-                    }
-                    else
-                    {
-                       f.open( QFile::ReadOnly | QFile::Text );
-                       QTextStream ts( &f );
-                       qApp->setStyleSheet( ts.readAll() );
-                    }
-                   #endif
-                }
             }
          }
 

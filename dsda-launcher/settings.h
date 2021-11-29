@@ -16,13 +16,14 @@ public:
     ~Settings();
 
 public slots:
-    QString getIWADsPath();
 
 private slots:
-    void on_checkBox_toggled(bool checked);
-    void on_pushButton_clicked();
-
     void on_pushButton_2_clicked();
+    void fooo();
+    void fooo3();
+    void on_checkBox_clicked(bool checked);
+
+    void on_toolButton_2_clicked();
 
 private:
     Ui::Settings *ui;
