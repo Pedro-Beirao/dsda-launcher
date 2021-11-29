@@ -70,6 +70,7 @@ jobs:
           cd qt5
           git checkout 6.0
           perl init-repository
+          cd ..
           mkdir qt6-build
           cd qt6-build
           ..\qt5\configure.bat -prefix C:\path\to\install
