@@ -28,6 +28,7 @@ win32|unix
 {
     CONFIG += c++11
     RC_ICONS = doom-launcher.ico
+    QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
 }
 macx
 {
