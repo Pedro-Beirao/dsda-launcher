@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>quickargs</class>
+ <widget class="QWidget" name="quickargs">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>198</width>
+    <height>278</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>198</width>
+    <height>278</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>198</width>
+    <height>278</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>dsda-launcher</string>
+  </property>
+  <widget class="QTreeWidget" name="treeWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>221</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Double Click to Add Argument</string>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+   </column>
+   <item>
+    <property name="text">
+     <string>Custom</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Save Games</string>
+    </property>
+    <item>
+     <property name="text">
+      <string extracomment="-loadgame 0">-loadgame 0</string>
+     </property>
+     <property name="toolTip">
+      <string>-loadgame 0</string>
+     </property>
+    </item>
+   </item>
+   <item>
+    <property name="text">
+     <string>Gameplay</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>-fast</string>
+     </property>
+     <property name="toolTip">
+      <string>-fast</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-nomonsters</string>
+     </property>
+     <property name="toolTip">
+      <string>-nomonsters</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-respawn</string>
+     </property>
+     <property name="toolTip">
+      <string>-respawn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-coop_spawns</string>
+     </property>
+     <property name="toolTip">
+      <string>-coop_spawns</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-solo-net</string>
+     </property>
+     <property name="toolTip">
+      <string>-solo-net</string>
+     </property>
+    </item>
+   </item>
+   <item>
+    <property name="text">
+     <string>Files</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>-iwad #.wad</string>
+     </property>
+     <property name="toolTip">
+      <string>-iwad #.wad</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-file #.wad</string>
+     </property>
+     <property name="toolTip">
+      <string>-file #.wad</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-deh #.deh</string>
+     </property>
+     <property name="toolTip">
+      <string>-deh #.deh</string>
+     </property>
+    </item>
+   </item>
+   <item>
+    <property name="text">
+     <string>Demos</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>-record #.lmp</string>
+     </property>
+     <property name="toolTip">
+      <string>-record #.lmp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-playdemo #.lmp</string>
+     </property>
+     <property name="toolTip">
+      <string>-playdemo #.lmp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-fastdemo #.lmp</string>
+     </property>
+     <property name="toolTip">
+      <string>-fastdemo #.lmp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-timedemo #.lmp</string>
+     </property>
+     <property name="toolTip">
+      <string>-timedemo #.lmp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>-viddump #.mp4</string>
+     </property>
+     <property name="toolTip">
+      <string>-viddump #.mp4</string>
+     </property>
+    </item>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

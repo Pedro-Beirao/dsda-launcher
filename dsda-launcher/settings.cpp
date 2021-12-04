@@ -59,7 +59,7 @@ void Settings::fooo() // CTRL+O runs this function to open the folder where the 
     }
     else
     {
-        system(("start \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        system(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 

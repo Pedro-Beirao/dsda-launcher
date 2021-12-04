@@ -28,6 +28,7 @@
 #include <QtConcurrent>
 #include <QMessageBox>
 #include "settings.h"
+#include "quickargs.h"
 
 
 // Find the name of the OS
@@ -81,6 +82,18 @@ bool canLaunch = true;
 // Create an instance of the settings window
 Settings *settingsWindow;
 
+// Create an instance of the quickargs window
+quickargs *quickargsWindow;
+
+MainWindow * MainWindow::pMainWindow = nullptr;
+
+MainWindow *MainWindow::getMainWin()
+{
+    return pMainWindow;
+}
+
+
+
 // Lower case all letters of a string
 QString lowerCase(std::string word)
 {
@@ -103,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    pMainWindow = this;
 
     // Allow files to be droped in the launcher (*.wad *.lmp)
     setAcceptDrops(true);
@@ -116,8 +130,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->LaunchGameButton->installEventFilter(this);
 
-    // set the settings window
+    // set the settings and quickargs windows
     settingsWindow = new Settings;
+    quickargsWindow = new quickargs;
+
 
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where QT tried to add spaces to those boxes if no numbers were added
@@ -311,9 +327,13 @@ MainWindow::MainWindow(QWidget *parent)
            }
     // Set the parameters text correctly
     ui->fastCheck->setText(fastParamText.c_str());
+    //ui->fastCheck->setToolTip(fastParam.c_str());
     ui->noCheck->setText(nomoParamText.c_str());
+    //ui->noCheck->setToolTip(nomoParam.c_str());
     ui->noCheck_4->setText(respawnParamText.c_str());
+    //ui->noCheck_4->setToolTip(respawnParam.c_str());
     ui->soloNetCheck->setText(solonetParamText.c_str());
+    //ui->soloNetCheck->setToolTip(solonetParam.c_str());
 
     // Find the IWADs in the correct folder depending on the OS
     if(getOsName()=="MacOS" || getOsName()=="Linux")
@@ -343,7 +363,7 @@ MainWindow::MainWindow(QWidget *parent)
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom" || filename=="doom1" || filename=="doomu")
+        if(filename=="doom" || filename=="doom1" || filename=="doomu"||filename=="freedoom1"||filename=="freedoom"||filename=="bfgdoom1"||filename=="bfgdoom")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -353,37 +373,17 @@ MainWindow::MainWindow(QWidget *parent)
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom2")
+        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    // TNT
+    // Final Doom
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="tnt")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Plutonia
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="plutonia")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // FreeDoom Phase 1 / Phase 2
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="freedoom1" || filename=="freedoom"||filename=="freedoom2")
+        if(filename=="tnt"||filename=="plutonia")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -394,16 +394,6 @@ MainWindow::MainWindow(QWidget *parent)
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
         if(filename=="heretic"||filename=="hexen")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // BFG Doom / BFG Doom 2
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="bfgdoom1"||filename=="bfgdoom"||filename=="bfgdoom2")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -516,7 +506,7 @@ void MainWindow::dropEvent(QDropEvent *e)
 {
     foreach (const QUrl &url, e->mimeData()->urls()) {
         QString fileName = url.toLocalFile();
-        if(fileName.toStdString().back()=='p'||fileName.toStdString().back()=='P') // *.lmp file ends with "p"
+        if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="lmp") // *.lmp file
         {
                 ui->tabs->setCurrentIndex(2);
                 ui->recordDemo_2->setText(fileName);
@@ -533,7 +523,7 @@ void MainWindow::dropEvent(QDropEvent *e)
                     std::string iwadText = "-iwad";
                     if(line.substr(0,5)=="-iwad")
                     {
-                        std::vector< int > aspas; // "aspas" means "quotes" on portuguese, I dont feel like changing it rn :P
+                        std::vector< int > aspas;
                         for(unsigned charIndex =0;charIndex<=line.length();charIndex++)
                         {
                             if(line[charIndex]=='"')
@@ -559,7 +549,7 @@ void MainWindow::dropEvent(QDropEvent *e)
                     }
                 }
         }
-        else if(fileName.toStdString().back()=='d'||fileName.toStdString().back()=='D')
+        else if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="wad")
         {
             QStringList wadsToAdd;
             wadsToAdd.append(fileName);
@@ -582,7 +572,7 @@ void MainWindow::foo() // CTRL+O runs this function to open the folder where the
     }
     else
     {
-        system(("start \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        system(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 
@@ -605,6 +595,15 @@ void MainWindow::addWads(QStringList fileNames) // Click the + button to add a w
 
 
 std::string arguments = " ";
+
+void MainWindow::addToArguments(QString string)
+{
+    if(ui->argumentText->toPlainText().length()>1 && ui->argumentText->toPlainText().back()!=' ')
+        ui->argumentText->setText(ui->argumentText->toPlainText()+" "+string);
+    else
+        ui->argumentText->setText(ui->argumentText->toPlainText()+string);
+}
+
 bool isFast=false;
 bool noMo =false;
 bool isRespawn=false;
@@ -992,6 +991,8 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 void MainWindow::on_pushButton_clicked()
 {
     settingsWindow->show();
+    settingsWindow->activateWindow();
+    settingsWindow->raise();
 }
 
 // Add pwads to be loaded
@@ -1427,7 +1428,7 @@ void MainWindow::on_editParameters_clicked() // Customise the launcher
     }
     else
     {
-        system("start launcher_config.txt");
+        system("explorer launcher_config.txt");
     }
 }
 
@@ -1470,6 +1471,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, save the settings
 {
     on_LaunchGameButton_clicked(true, false);
+    QApplication::quit();
 }
 
 
@@ -1511,3 +1513,10 @@ void MainWindow::on_wadLName_textChanged(const QString &arg1)
     reloadLeaderboard(false,false);
 }
 
+
+void MainWindow::on_toolButton_4_clicked()
+{
+    quickargsWindow->show();
+    //quickargsWindow->activateWindow();
+    //quickargsWindow->raise();
+}

@@ -16,9 +16,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    static MainWindow * getMainWin();
 
 private:
     Ui::MainWindow *ui;
+    static MainWindow * pMainWindow;
 
 public slots:
     void addWads(QStringList fileNames);
@@ -53,6 +55,7 @@ public slots:
     void on_levelBox_textChanged(const QString &arg1);
     void on_editParameters_clicked();
     void clearLeaderboard();
+    void addToArguments(QString string);
 
 private slots:
 
@@ -60,6 +63,7 @@ private slots:
     void on_toolButton_5_clicked();
     void on_ReloadLead_clicked();
     void on_wadLName_textChanged(const QString &arg1);
+    void on_toolButton_4_clicked();
 };
 extern QSettings settings;
 

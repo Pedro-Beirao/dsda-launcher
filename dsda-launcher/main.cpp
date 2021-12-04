@@ -2,6 +2,9 @@
 #include <QFile>
 #include <QApplication>
 #include <QStyleFactory>
+#include <QSplashScreen>
+#include <QTimer>
+#include <QDebug>
 
 
 int main(int argc, char *argv[])
@@ -47,13 +50,11 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-
-
-
     MainWindow w;
-
     w.ensurePolished();
     w.show();
+
+    a.setQuitOnLastWindowClosed(false);
 
     return a.exec();
 }
