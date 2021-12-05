@@ -6,6 +6,7 @@
 #include "Mac.h"
 #include <qshortcut.h>
 #include <qstandardpaths.h>
+#include <QProcess>
 
 // Find the name of the OS
 std::string getOsNameS()
@@ -59,7 +60,7 @@ void Settings::fooo() // CTRL+O runs this function to open the folder where the 
     }
     else
     {
-        system(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 
@@ -168,4 +169,3 @@ void Settings::on_toolButton_2_clicked()
         ui->lineEdit->setText(iwadPath.substr(0,found).c_str());
     */}
 }
-

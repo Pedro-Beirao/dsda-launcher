@@ -572,7 +572,7 @@ void MainWindow::foo() // CTRL+O runs this function to open the folder where the
     }
     else
     {
-        system(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 

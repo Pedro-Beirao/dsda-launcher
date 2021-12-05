@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include <QShortcut>
 #include <QStandardPaths>
+#include <QProcess>
 
 // Find the name of the OS
 std::string getOsNameQ()
@@ -59,7 +60,7 @@ void quickargs::foooo() // CTRL+O runs this function to open the folder where th
     }
     else
     {
-        system(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
     }
 }
 
