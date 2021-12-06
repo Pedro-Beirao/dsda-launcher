@@ -24,14 +24,13 @@ FORMS += \
     quickargs.ui \
     settings.ui
 
-win32|unix
-{
+win32 {
     CONFIG += c++11
     RC_ICONS = doom-launcher.ico
     QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
 }
-macx
-{
+
+mac {
     CONFIG += c++11 appbundle
     ICON = doom-launcher.icns
     APP_FILES.files = ./dsda-doom

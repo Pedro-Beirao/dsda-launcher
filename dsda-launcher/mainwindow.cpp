@@ -121,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Allow files to be droped in the launcher (*.wad *.lmp)
     setAcceptDrops(true);
 
+
+
     // Hide the reload Leaderboard button
     ui->ReloadLead->hide();
 
@@ -650,7 +652,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     // Difficulty or Skill
     int diffIndex = ui->diffBox->currentIndex();
     settings.setValue("skill",diffIndex);
-    if(ui->episodeBox->text().length()>0)
+    if(ui->episodeBox->text().length()>0 && ui->diffBox->currentIndex()!=0)
     {
         std::string skillArg = " -skill ";
         arguments+=" -skill "+std::to_string(diffIndex)+" ";

@@ -32,10 +32,8 @@
 *.app
 dsda-launcher/.DS_Store
 dsda-launcher/dsda-launcher.pro.user
-dsda-launcher/.DS_Store
 .DS_Store
-.DS_Store
-dsda-launcher/.DS_Store
 dsda-launcher/dsda-doom
 build-dsda-launcher-Desktop_Qt_6_1_1_clang_64bit-Debug
-dsda-launcher/.DS_Store
+.vscode
+dsda-launcher/build
