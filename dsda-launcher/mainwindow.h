@@ -56,14 +56,15 @@ public slots:
     void on_editParameters_clicked();
     void clearLeaderboard();
     void addToArguments(QString string);
+    void on_actionLoad_triggered();
+    void on_actionSave_triggered();
+    void LoadState(QString fileName);
+    void SaveState(QString fileName);
 
 private slots:
-
-
     void on_toolButton_5_clicked();
     void on_ReloadLead_clicked();
     void on_wadLName_textChanged(const QString &arg1);
-    void on_toolButton_4_clicked();
 };
 extern QSettings settings;
 

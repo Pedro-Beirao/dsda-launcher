@@ -11,17 +11,14 @@ DEFINES += "APP_NAME=dsda-launcher"
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    quickargs.cpp \
     settings.cpp
 
 HEADERS += \
     mainwindow.h \
-    settings.h \
-    quickargs.h
+    settings.h
 
 FORMS += \
     mainwindow.ui \
-    quickargs.ui \
     settings.ui
 
 win32 {

@@ -40,7 +40,8 @@ Settings::Settings(QWidget *parent) :
         ui->checkBox->setChecked(true);
         on_checkBox_clicked(true);
     }
-
+    
+    
     // Keyboard shortcuts
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
     // Open the folder to add the IWADs

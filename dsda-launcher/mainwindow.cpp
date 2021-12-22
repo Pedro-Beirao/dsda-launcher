@@ -28,8 +28,7 @@
 #include <QtConcurrent>
 #include <QMessageBox>
 #include "settings.h"
-#include "quickargs.h"
-
+#include <string>
 
 // Find the name of the OS
 std::string getOsName()
@@ -82,9 +81,6 @@ bool canLaunch = true;
 // Create an instance of the settings window
 Settings *settingsWindow;
 
-// Create an instance of the quickargs window
-quickargs *quickargsWindow;
-
 MainWindow * MainWindow::pMainWindow = nullptr;
 
 MainWindow *MainWindow::getMainWin()
@@ -104,7 +100,7 @@ QString lowerCase(std::string word)
     return word.c_str();
 }
 
-// Prevents launching the game twice if the button "Launch" is presse twice quickly
+// Prevents launching the game twice if the button "Launch" is pressed twice quickly
 void MainWindow::delayLaunch()
 {
     canLaunch=true;
@@ -132,9 +128,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->LaunchGameButton->installEventFilter(this);
 
-    // set the settings and quickargs windows
+    // set the settings window
     settingsWindow = new Settings;
-    quickargsWindow = new quickargs;
 
 
     // The "episode" and "level" boxes can only take 2 numbers
@@ -154,67 +149,62 @@ MainWindow::MainWindow(QWidget *parent)
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(foo3()));
     shortcut3->setAutoRepeat(false);
 
-    // Hides some UI that looks ugly if hidden in other QT ways
-    ui->pushButton_2->hide();
-    ui->pushButton_3->hide();
-    ui->demoPlayOptions->hide();
-
-    // The 4 lines for the 4 parameter toggles
-    int currentConfigLine = 0;
-
-    // The 2 "+" lines for the bottom row texts
     int currentConfigBottomBox = 0;
 
-    // The x lines for the bottom row boxes
-    bool afterPlus = false;
-
-    // launcher_config.txt file is where you can customise the launcher
+    // dsda-launcher.json file is where you can customise the launcher
     std::fstream newfile;
     std::string launcher_configFilePath;
 
-    // Check if the launcher_config.txt file exists
+    // Check if the dsda-launcher.json file exists
     // If not, create it
     if(getOsName()=="MacOS")
     {
-        /*
-        try {
+        QFileInfo check_file1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        QFileInfo check_file2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
+        if(!check_file1.exists())
+        {
             system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        }  catch (...) { }
-        QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt");
-        if(!check_file.exists())
-            system(("cp "+QCoreApplication::applicationDirPath()+"/../Resources/launcher_config.txt "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/").toStdString().c_str());
-        */
-        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
-    }
-    else if(getOsName()=="Windows")
-    {
-        QFileInfo check_file(QCoreApplication::applicationDirPath()+"/launcher_config.txt");
-        if(!check_file.exists())
+        }
+        if(!check_file2.exists())
         {
             std::ofstream file_;
-            file_.open((QCoreApplication::applicationDirPath()+"/launcher_config.txt").toStdString());
+            file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
             if(file_.is_open())
-                file_ << "# For a complete guide on how to customize this launcher:\n# https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\n\n\n\n\"Fast Monsters\" \"-fast\"\n\"No Monsters\" \"-nomonsters\"\n\n\"Respawn Monsters\" \"-respawn\"\n\n\"Solo Net\" \"-solo-net\"\n\n\n\n# Bottom row type:\n\n1\n\n\n\n# Edit the following, ONLY if you chose \"2\" before\n\n+\"Time\"\n\"-time_use\"\n\"-time_keys\"\n\"-time_secrets\"\n\"-time_all\"\n\n\n+\"Stats\"\n\"-levelstat\"\n\"-analysis\"\n\"both\"\n";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n     }\n}";
             file_.close();
         }
 
-        launcher_configFilePath=(QCoreApplication::applicationDirPath()+"/launcher_config.txt").toStdString();
+        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
+    }
+    else if(getOsName()=="Windows")
+    {
+        QFileInfo check_file(QCoreApplication::applicationDirPath()+"/dsda-launcher.json");
+        if(!check_file.exists())
+        {
+            std::ofstream file_;
+            file_.open((QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString());
+            if(file_.is_open())
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n  \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n  \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 2,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n       \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n          \"-time_keys\",\n         \"-time_secrets\",\n          \"-time_all\"\n           ]\n     }\n}";
+            file_.close();
+        }
+
+        launcher_configFilePath=(QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString();
     }
     else
     {
         try {
             system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
         }  catch (...) { }
-        QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt");
+        QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json");
         if(!check_file.exists())
         {
             std::ofstream file_;
-            file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString());
+            file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString());
             if(file_.is_open())
                 file_ << "# For a complete guide on how to customize this launcher:\n# https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\n\n\n\n\"Fast Monsters\" \"-fast\"\n\"No Monsters\" \"-nomonsters\"\n\n\"Respawn Monsters\" \"-respawn\"\n\n\"Solo Net\" \"-solo-net\"\n\n\n\n# Bottom row type:\n\n1\n\n\n\n# Edit the following, ONLY if you chose \"2\" before\n\n+\"Time\"\n\"-time_use\"\n\"-time_keys\"\n\"-time_secrets\"\n\"-time_all\"\n\n\n+\"Stats\"\n\"-levelstat\"\n\"-analysis\"\n\"both\"\n";
             file_.close();
         }
-        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/launcher_config.txt").toStdString();
+        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
     }
 
 
@@ -495,7 +485,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->levelstatBox->setCurrentIndex(settings.value("levelstat").toInt());
 }
 
-// Drag Event for *.wad *.lmp
+// Drag Event for *.wad *.lmp *.gfd
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     if (e->mimeData()->hasUrls()) {
@@ -503,7 +493,154 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     }
 }
 
-// Drop Event for *.wad *.lmp
+void MainWindow::LoadState(QString fileName)
+{
+    bool searchingPwads = false;
+    std::ifstream file;
+    file.open(fileName.toStdString());
+    std::string buffer;
+    while (std::getline(file, buffer)) {
+        if(buffer.substr(0,4)=="iwad" && buffer.substr(4).length()>1)
+        {
+            for(int i=0; i<ui->iwadSelect->count();i++)
+            {
+                if(ui->iwadSelect->itemText(i).toStdString()==buffer.substr(5))
+                {
+                    ui->iwadSelect->setCurrentIndex(i);
+                }
+            }
+        }
+        else if(buffer.substr(0,9)=="complevel" && buffer.substr(9).length()>1)
+        {
+            if(buffer.substr(10)[0]=='D')
+            {
+                ui->compLevelSelect->setCurrentIndex(0);
+            }
+            else
+            {
+                for(int i=0; i<ui->compLevelSelect->count();i++)
+                {
+                    std::string content=ui->compLevelSelect->itemText(i).toStdString().substr(0,2);
+                    content.erase(remove(content.begin(), content.end(), ' '), content.end());
+                    qDebug()<<buffer.substr(10).c_str()<<content.c_str();
+                    if(content==buffer.substr(10))
+                    {
+                        ui->compLevelSelect->setCurrentIndex(i);
+                    }
+                }
+            }
+        }
+        else if(buffer.substr(0,5)=="warp1" && buffer.substr(5).length()>0)
+        {
+                ui->episodeBox->setText(buffer.substr(6).c_str());
+        }
+        else if(buffer.substr(0,5)=="warp2" && buffer.substr(5).length()>0)
+        {
+                ui->levelBox->setText(buffer.substr(6).c_str());
+        }
+        else if(buffer.substr(0,5)=="skill" && buffer.substr(5).length()>1)
+        {
+                 ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
+        }
+        else if(buffer.substr(0,4)=="box1" && buffer.substr(4).length()>1)
+        {
+            if(buffer.substr(5)=="false")
+                 ui->fastCheck->setChecked(false);
+            else
+                ui->fastCheck->setChecked(true);
+        }
+        else if(buffer.substr(0,4)=="box2" && buffer.substr(4).length()>1)
+        {
+            if(buffer.substr(5)=="false")
+                 ui->noCheck->setChecked(false);
+            else
+                ui->noCheck->setChecked(true);
+        }
+        else if(buffer.substr(0,4)=="box3" && buffer.substr(4).length()>1)
+        {
+            if(buffer.substr(5)=="false")
+                 ui->noCheck_4->setChecked(false);
+            else
+                ui->noCheck_4->setChecked(true);
+        }
+        else if(buffer.substr(0,4)=="box4" && buffer.substr(4).length()>1)
+        {
+            if(buffer.substr(5)=="false")
+                 ui->soloNetCheck->setChecked(false);
+            else
+                ui->soloNetCheck->setChecked(true);
+        }
+        else if(buffer.substr(0,10)=="resolution" && buffer.substr(10).length()>1)
+        {
+            ui->comboBox_2->setCurrentIndex(stoi(buffer.substr(11)));
+        }
+        else if(buffer.substr(0,10)=="fullscreen" && buffer.substr(10).length()>1)
+        {
+            if(buffer.substr(11)=="false")
+                 ui->noCheck_3->setChecked(false);
+            else
+                ui->noCheck_3->setChecked(true);
+        }
+        else if(buffer.substr(0,9)=="dropdown1" && buffer.substr(9).length()>1)
+        {
+            ui->timeKeysBox->setCurrentIndex(stoi(buffer.substr(10)));
+        }
+        else if(buffer.substr(0,9)=="dropdown2" && buffer.substr(9).length()>1)
+        {
+            ui->levelstatBox->setCurrentIndex(stoi(buffer.substr(10)));
+        }
+        else if(buffer.substr(0,4)=="pwad")
+        {
+            searchingPwads=true;
+            ui->wadsOnFolder->clear();
+        }
+        else if(buffer.substr(0,7)=="endpwad")
+        {
+            searchingPwads=false;
+        }
+        else if(buffer.substr(0,6)=="record" && buffer.substr(6).length()>1)
+        {
+                ui->recordDemo->setText(buffer.substr(7).c_str());
+        }
+        else if(buffer.substr(0,8)=="playback" && buffer.substr(8).length()>1)
+        {
+                ui->recordDemo_2->setText(buffer.substr(9).c_str());
+        }
+        else if(buffer.substr(0,12)=="demodropdown" && buffer.substr(12).length()>1)
+        {
+            ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
+        }
+        else if(buffer.substr(0,10)=="additional" && buffer.substr(10).length()>0)
+        {
+            ui->argumentText->setText((buffer.substr(11)).c_str());
+        }
+        else if(searchingPwads==true)
+        {
+            ui->wadsOnFolder->addItem(buffer.c_str());
+        }
+
+    }
+}
+
+const char* bool_cast(const bool b) {
+    return b ? "true" : "false";
+}
+void MainWindow::SaveState(QString fileName)
+{
+    std::ofstream file_;
+    file_.open(fileName.toStdString());
+    std::string pwads;
+    for(int i=0; i<ui->wadsOnFolder->count();i++)
+    {
+        pwads += ui->wadsOnFolder->item(i)->text().toStdString()+"\n";
+    }
+    if(file_.is_open())
+        file_ << "iwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+ui->levelBox->text().toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\ndropdown1="+std::to_string(ui->timeKeysBox->currentIndex())+"\ndropdown2="+std::to_string(ui->levelstatBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+    file_.close();
+
+}
+
+// Drop Event for *.wad *.lmp *gfd
 void MainWindow::dropEvent(QDropEvent *e)
 {
     foreach (const QUrl &url, e->mimeData()->urls()) {
@@ -558,6 +695,30 @@ void MainWindow::dropEvent(QDropEvent *e)
             addWads(wadsToAdd);
             ui->tabs->setCurrentIndex(1);
         }
+        else if(lowerCase(fileName.toStdString().substr(fileName.length() - 5))=="state")
+        {
+               LoadState(fileName);
+        }
+    }
+}
+
+void MainWindow::on_actionLoad_triggered()
+{
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Load State"),settings.value("statefile").toString(),tr("state files (*.state)"));
+    if(fileNames.length()>0)
+    {
+        settings.setValue("statefile", fileNames[0]);
+        LoadState(fileNames[0]);
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Load State"),settings.value("statefile").toString(),tr("state files (*.state)"));
+    if(fileName != "")
+    {
+        settings.setValue("statefile", fileName);
+        SaveState(fileName);
     }
 }
 
@@ -1426,11 +1587,11 @@ void MainWindow::on_editParameters_clicked() // Customise the launcher
 {
     if(getOsName()=="MacOS"||getOsName()=="Linux")
     {
-        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/launcher_config.txt").c_str());
+        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
     }
     else
     {
-        system("explorer launcher_config.txt");
+        system("explorer dsda-launcher.json");
     }
 }
 
@@ -1515,10 +1676,3 @@ void MainWindow::on_wadLName_textChanged(const QString &arg1)
     reloadLeaderboard(false,false);
 }
 
-
-void MainWindow::on_toolButton_4_clicked()
-{
-    quickargsWindow->show();
-    //quickargsWindow->activateWindow();
-    //quickargsWindow->raise();
-}
