@@ -9,15 +9,18 @@ DEFINES += "APP_NAME=dsda-launcher"
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    console.cpp \
     main.cpp \
     mainwindow.cpp \
     settings.cpp
 
 HEADERS += \
+    console.h \
     mainwindow.h \
     settings.h
 
 FORMS += \
+    console.ui \
     mainwindow.ui \
     settings.ui
 

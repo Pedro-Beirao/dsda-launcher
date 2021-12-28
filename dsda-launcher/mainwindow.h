@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QProcess>
 
 
 QT_BEGIN_NAMESPACE
@@ -60,6 +61,13 @@ public slots:
     void on_actionSave_triggered();
     void LoadState(QString fileName);
     void SaveState(QString fileName);
+
+public Q_SLOTS:
+    void finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void error(QProcess::ProcessError error);
+    void readyReadStandardError();
+    void readyReadStandardOutput();
+    void started();
 
 private slots:
     void on_toolButton_5_clicked();

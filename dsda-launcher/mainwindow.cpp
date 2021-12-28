@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include "settings.h"
 #include <string>
+#include "console.h"
 
 // Find the name of the OS
 std::string getOsName()
@@ -80,6 +81,7 @@ bool canLaunch = true;
 
 // Create an instance of the settings window
 Settings *settingsWindow;
+Console *consoleWindow;
 
 MainWindow * MainWindow::pMainWindow = nullptr;
 
@@ -130,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // set the settings window
     settingsWindow = new Settings;
+    consoleWindow = new Console;
 
 
     // The "episode" and "level" boxes can only take 2 numbers
@@ -159,6 +162,9 @@ MainWindow::MainWindow(QWidget *parent)
     // If not, create it
     if(getOsName()=="MacOS")
     {
+        setMinimumHeight(455);
+        setMaximumHeight(455);
+
         QFileInfo check_file1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
         QFileInfo check_file2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
         if(!check_file1.exists())
@@ -178,6 +184,14 @@ MainWindow::MainWindow(QWidget *parent)
     }
     else if(getOsName()=="Windows")
     {
+        int size = ui->toolTip->font().pointSize()-2;
+        QFont newFont(ui->toolTip->font().family(),size);
+        std::string html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:10pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Press  </span><span style=\" font-size:10pt; font-weight:600;\">ctrl + o</span><span style=\"; font-size:10pt;\"> / </span><span style=\" font-size:10pt; font-weight:600;\">cmd + o</span><span style=\" font-size:10pt;\">  and drag your IWADs to the folder that opened</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Then restart the launcher</span></p></body></html>\"";
+        ui->toolTip->setHtml(html.c_str());
+
+        ui->LaunchGameButton->setFixedHeight(25);
+        ui->pushButton->setFixedHeight(23);
+
         QFileInfo check_file(QCoreApplication::applicationDirPath()+"/dsda-launcher.json");
         if(!check_file.exists())
         {
@@ -201,7 +215,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString());
             if(file_.is_open())
-                file_ << "# For a complete guide on how to customize this launcher:\n# https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\n\n\n\n\"Fast Monsters\" \"-fast\"\n\"No Monsters\" \"-nomonsters\"\n\n\"Respawn Monsters\" \"-respawn\"\n\n\"Solo Net\" \"-solo-net\"\n\n\n\n# Bottom row type:\n\n1\n\n\n\n# Edit the following, ONLY if you chose \"2\" before\n\n+\"Time\"\n\"-time_use\"\n\"-time_keys\"\n\"-time_secrets\"\n\"-time_all\"\n\n\n+\"Stats\"\n\"-levelstat\"\n\"-analysis\"\n\"both\"\n";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n     }\n}";
             file_.close();
         }
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
@@ -343,9 +357,6 @@ MainWindow::MainWindow(QWidget *parent)
     {
         QDir directory = QDir::currentPath();
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
-
-        // Looked weird otherwise
-        ui->pushButton_2->setStyleSheet("color: rgb(50, 50, 50);");
     }
 
     // This makes sure that a logic order to display the IWADs is followed
@@ -456,19 +467,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
     ui->episodeBox->setText(settings.value("warp1").toString());
     ui->levelBox->setText(settings.value("warp2").toString());
-    try {
-        ui->wadsOnFolder->addItem(settings.value("pwad1").toString());
-        ui->wadsOnFolder->addItem(settings.value("pwad2").toString());
-        ui->wadsOnFolder->addItem(settings.value("pwad3").toString());
-    }  catch (...) {
-
-    }
-    for(int itemIndex = ui->wadsOnFolder->count()-1; itemIndex>=0; itemIndex--)
+    int pwadCount = settings.value("pwadCount").toInt();
+    for(int i=0; i<pwadCount;i++)
     {
-        if(ui->wadsOnFolder->item(itemIndex)->text().toStdString().length()<5)
-        {
-            ui->wadsOnFolder->takeItem(itemIndex);
-        }
+        ui->wadsOnFolder->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
+
     }
     ui->fastCheck->setChecked(settings.value("fast").toBool());
     ui->noCheck->setChecked(settings.value("nomo").toBool());
@@ -773,9 +776,38 @@ bool isRespawn=false;
 bool isSoloNet = false;
 std::string isFulscreen="w";
 
+void MainWindow::error(QProcess::ProcessError error)
+{
+  qDebug() << "Error: " << error;
+}
+
+void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    QProcess *p = (QProcess *)sender();
+    delete p;
+    qDebug() << "Finished: " << exitCode;
+}
+
+void MainWindow::readyReadStandardError()
+{
+  qDebug() << "ReadyError";
+}
+
+void MainWindow::readyReadStandardOutput()
+{
+  QProcess *p = (QProcess *)sender();
+  QByteArray buf = p->readAllStandardOutput();
+
+  consoleWindow->changeText(buf.toStdString());
+}
+
+void MainWindow::started()
+{
+}
 
 void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
+    QStringList argList;
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
 
@@ -801,180 +833,96 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     */
     std::string complevelString = ui->compLevelSelect->currentText().toStdString();
     int complevelIndex = ui->compLevelSelect->currentIndex();
-    settings.setValue("complevel",complevelIndex);
     if(complevelString[0]!='D')
     {
-        std::string complevelText = " -complevel ";
-        complevelText.push_back(complevelString[0]);
-        complevelText.push_back(complevelString[1]);
-        arguments+=complevelText+" ";
+        argList.append("-complevel");
+        QString complevelNum;
+        complevelNum.push_back(complevelString[0]);
+        complevelNum.push_back(complevelString[1]);
+        argList.append(complevelNum);
     }
 
     // Difficulty or Skill
     int diffIndex = ui->diffBox->currentIndex();
-    settings.setValue("skill",diffIndex);
     if(ui->episodeBox->text().length()>0 && ui->diffBox->currentIndex()!=0)
     {
-        std::string skillArg = " -skill ";
-        arguments+=" -skill "+std::to_string(diffIndex)+" ";
+        argList.append("-skill");
+        argList.append((std::to_string(diffIndex)).c_str());
     }
 
     // Warping in Doom takes 2 boxes. 1 for the episode, 1 for the mission
     // Warping in Doom 2 takes 1 box, for the map
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
     {
-        arguments += " -warp "+ui->episodeBox->text().toStdString()+" "+ui->levelBox->text().toStdString();
-        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
-        settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
+        argList.append("-warp");
+        argList.append(ui->episodeBox->text());
+        argList.append(ui->levelBox->text());
     }
     else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
     {
-        arguments += " -warp "+ui->episodeBox->text().toStdString();
-        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
-        settings.remove("warp2");
+        argList.append("-warp");
+        argList.append(ui->episodeBox->text());
     }
-
-    // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
-    // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-    if(ui->episodeBox->text().toStdString()=="")
-    {
-        settings.remove("warp1");
-    }
-    if(ui->levelBox->text().toStdString()=="")
-    {
-        settings.remove("warp2");
-    }
-
-    // You can store 3 pwads at a time
-    // There are better ways of doing this that even allow more pwads to be stored, but noone loads more than 3 pwads at a time in boom
-    // When I make a fork of this launcher to accept any source port, I'll be sure to fix this so people can enjoy Brootal Dewm, Too Many Shotguns, Russian Overkill and HDoom at the same time
-    try {
-        settings.setValue("pwad1","");
-        settings.setValue("pwad2","");
-        settings.setValue("pwad3","");
-
-        if(ui->wadsOnFolder->count()>=3)
-        {
-            settings.setValue("pwad3",ui->wadsOnFolder->item(2)->text());
-            settings.setValue("pwad2",ui->wadsOnFolder->item(1)->text());
-            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
-        }
-        else if(ui->wadsOnFolder->count()==2)
-        {
-            settings.setValue("pwad3","");
-            settings.setValue("pwad2",ui->wadsOnFolder->item(1)->text());
-            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
-        }
-        else if(ui->wadsOnFolder->count()==1)
-        {
-            settings.setValue("pwad3","");
-            settings.setValue("pwad2","");
-            settings.setValue("pwad1",ui->wadsOnFolder->item(0)->text());
-        }
-        else
-        {
-            settings.setValue("pwad3","");
-            settings.setValue("pwad2","");
-            settings.setValue("pwad1","");
-        }
-
-    }  catch (...) {
-            // Safeguard to when you dont have 3 pwads loaded at the same time
-    }
-
 
     /* You can load 3 types of files.
         *.wad -file
         *.deh -deh
         *.bex -deh
     */
-    std::string dehFiles = "";
-    std::string files = "";
-    for(int item=0;item < ui->wadsOnFolder->count(); item++)
+    if(ui->wadsOnFolder->count()>0)
     {
-        if(ui->wadsOnFolder->item(item)->text().toStdString().back()=='h')
+        argList.append("-file");
+        for(int item=0;item < ui->wadsOnFolder->count(); item++)
         {
-            dehFiles += " \"" + ui->wadsOnFolder->item(item)->text().toStdString()+"\" ";
-        }
-        else
-        {
-            files += " \"" + ui->wadsOnFolder->item(item)->text().toStdString()+"\" ";
-        }
-    }
-    if(dehFiles!="")
-    {
-        if(getOsName()=="Windows")
-        {
-            for(int i=0; i<dehFiles.length();i++)
+            std::string fileToAdd = ui->wadsOnFolder->item(item)->text().toStdString();
+            if(getOsName()=="Windows")
             {
-                if(dehFiles[i]=='/')
-                    dehFiles[i]='\\';
+                for(int i=0; i<fileToAdd.length();i++)
+                {
+                    if(fileToAdd[i]=='/')
+                        fileToAdd[i]='\\';
+                }
             }
+            argList.append(fileToAdd.c_str());
         }
-        arguments+= " -deh "+ dehFiles;
-    }
-    if(files!="")
-    {
-        if(getOsName()=="Windows")
-        {
-            for(int i=0; i<files.length();i++)
-            {
-                if(files[i]=='/')
-                    files[i]='\\';
-            }
-        }
-        arguments+= " -file "+ files;
     }
 
 
     // Again, these are the parameters available on toggles
-    settings.setValue("fast",false);
-    settings.setValue("nomo",false);
-    settings.setValue("respawn",false);
-    settings.setValue("solonet",false);
     if(isFast)
     {
-        arguments += " "+fastParam+" ";
-        settings.setValue("fast",true);
+        argList.append((fastParam).c_str());
     }
     if(noMo)
     {
-        arguments += " "+nomoParam+" ";
-        settings.setValue("nomo",true);
+        argList.append((nomoParam).c_str());
     }
     if(isRespawn)
     {
-        arguments += " "+respawnParam+" ";
-        settings.setValue("respawn",true);
+        argList.append((respawnParam).c_str());
     }
     if(isSoloNet)
     {
-        arguments += " "+solonetParam+" ";
-        settings.setValue("solonet",true);
+        argList.append((solonetParam).c_str());
     }
 
     if(bottomRow==1)
     {
-        settings.setValue("fullscreen",false);
-        settings.setValue("geom",ui->comboBox_2->currentIndex());
-        if(isFulscreen!="w")
-        {
-            settings.setValue("fullscreen",true);
-        }
         if(ui->comboBox_2->currentIndex()==0)
         {
             if(isFulscreen=="w")
             {
-                arguments += " -nofullscreen ";
+                argList.append("-nofullscreen");
             }
             else
             {
-                arguments += " -fullscreen ";
+                argList.append("-fullscreen");
             }
         }
         else
         {
-            arguments += " -geom "+ ui->comboBox_2->currentText().toStdString()+isFulscreen;
+            argList.append("-geom");
+            argList.append((ui->comboBox_2->currentText().toStdString()+isFulscreen).c_str());
         }
     }
     else if(bottomRow==2)
@@ -985,19 +933,18 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             {
                 for(int i=(ui->timeKeysBox->count()-2);i>0;i--)
                 {
-                    arguments += " "+ui->timeKeysBox->itemText(i).toStdString()+" ";
+                    argList.append(ui->timeKeysBox->itemText(i));
                 }
             }
             else
             {
-                arguments += " "+ui->timeKeysBox->currentText().toStdString()+" ";
+                argList.append(ui->timeKeysBox->currentText());
             }
         }
         else
         {
-            arguments += " "+ui->timeKeysBox->currentText().toStdString()+" ";
+            argList.append(ui->timeKeysBox->currentText());
         }
-        settings.setValue("timeKeys", ui->timeKeysBox->currentIndex());
 
         if(ui->levelstatBox->currentIndex()==ui->levelstatBox->count()-1 && ui->levelstatBox->count()>1)
         {
@@ -1005,94 +952,161 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             {
                 for(int i=(ui->levelstatBox->count()-2);i>0;i--)
                 {
-                    arguments += " "+ui->levelstatBox->itemText(i).toStdString()+" ";
+                    argList.append(ui->levelstatBox->itemText(i));
                 }
             }
             else
             {
-                arguments += " "+ui->levelstatBox->currentText().toStdString()+" ";
+                argList.append(ui->levelstatBox->currentText());
             }
         }
         else
         {
-            arguments += " "+ui->levelstatBox->currentText().toStdString()+" ";
+            argList.append(ui->levelstatBox->currentText());
         }
-        settings.setValue("levelstat", ui->levelstatBox->currentIndex());
     }
 
 
     if(ui->recordDemo->text().size()>5)
     {
-        arguments += " -record \""+ui->recordDemo->text().toStdString()+"\" ";
+        argList.append("-record");
+        argList.append(ui->recordDemo->text());
     }
 
     if(ui->recordDemo_2->text().size()>5)
     {
         if(ui->demoPlayOptions->currentIndex()==0)
         {
-            arguments += " -playdemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Plays demo at normal speed
+            argList.append("-playdemo"); // Plays demo at normal speed
+            argList.append(ui->recordDemo_2->text());
         }
         else if(ui->demoPlayOptions->currentIndex()==1)
         {
-            arguments += " -timedemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Used for viddumping
+            argList.append("-timedemo"); // Used for viddumping
+            argList.append(ui->recordDemo_2->text());
         }
         else if(ui->demoPlayOptions->currentIndex()==2)
         {
-            arguments += " -fastdemo \""+ui->recordDemo_2->text().toStdString()+"\" "; // Used for benchmarks
+            argList.append("-fastdemo"); // Used for benchmarks
+            argList.append(ui->recordDemo_2->text());
         }
     }
 
-    // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-    if(ui->argumentText->toPlainText().toStdString()!="")
-    {
-        settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
+    std::string str = ui->argumentText->toPlainText().toStdString()+" ";
+
+    std::string strToAdd="";
+    for( size_t i=0; i<str.length(); i++){
+
+        char c = str[i];
+        if( c == ' '){
+             argList.append(strToAdd.c_str());
+             strToAdd="";
+        }else if(c == '\"' ){
+            i++;
+            while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
+        }else{
+            strToAdd.push_back(c);
+        }
     }
-    else
-    {
-        settings.remove("argumentText");
-    }
 
-    // Before, it was possible to hit ENTER on the additional parameters box, so we needed to change it to SPACE
-    // I'll comment that out for future reference
-    arguments += " " + ui->argumentText->toPlainText().toStdString() + " ";
-    // std::replace(arguments.begin(), arguments.end(), '\n', ' ');
-
-    settings.setValue("iwad",ui->iwadSelect->currentIndex());
-
-    qDebug() << arguments.c_str();
-
-    // All settings were saved, if the app is quiting, then exit this function
-    if(onExit)
-        return;
 
     if(returnTooltip)
     {
-        ui->LaunchGameButton->setToolTip("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+arguments.c_str());
-        arguments=" ";
+        std::string argStr;
+        foreach(QString i, argList)
+        {
+            argStr.append((i+" ").toStdString());
+        }
+        ui->LaunchGameButton->setToolTip("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
+        return;
+    }
+    else if(onExit)
+    {
+        settings.setValue("iwad",ui->iwadSelect->currentIndex());
+
+        // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
+        if(ui->argumentText->toPlainText().toStdString()!="")
+        {
+            settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
+        }
+        else
+        {
+            settings.remove("argumentText");
+        }
+        settings.setValue("fullscreen", ui->noCheck_3->isChecked());
+        settings.setValue("geom",ui->comboBox_2->currentIndex());
+
+        settings.setValue("timeKeys", ui->timeKeysBox->currentIndex());
+        settings.setValue("levelstat", ui->levelstatBox->currentIndex());
+
+
+        settings.setValue("solonet",isSoloNet);
+        settings.setValue("respawn",isRespawn);
+        settings.setValue("nomo",noMo);
+        settings.setValue("fast",isFast);
+
+        settings.setValue("complevel",complevelIndex);
+        settings.setValue("skill",diffIndex);
+
+        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
+        settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
+
+
+        // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
+        // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
+        if(ui->episodeBox->text().toStdString()=="")
+        {
+            settings.remove("warp1");
+        }
+        if(ui->levelBox->text().toStdString()=="")
+        {
+            settings.remove("warp2");
+        }
+
+        settings.setValue("pwadCount", ui->wadsOnFolder->count());
+        for(int i=0; i<ui->wadsOnFolder->count();i++)
+        {
+            settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wadsOnFolder->item(i)->text());
+        }
+
         return;
     }
 
-    Settings setting;
-    //execPath = settings.value("execpath").toString().toStdString();
     std::string execPath=QCoreApplication::applicationDirPath().toStdString();
-
+    consoleWindow->clearText();
 
     if(getOsName()=="MacOS")
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-        arguments=" ";
+        argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+        argList.push_front("-iwad");
+        //system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        qDebug()<<argList;
+        QProcess *process = new QProcess;
+        process->setWorkingDirectory(homePath.c_str());
+        process->start((execPath+"/../Resources/dsda-doom").c_str(), argList);
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+        connect(process, SIGNAL(started()), this, SLOT(started()));
     }
-    else if(getOsName()=="Linux") // Havent tested this yet. Sure hope it works
+    else if(getOsName()=="Linux")
     {
         std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        system(("cd ~/ && " +execPath+ "/dsda-doom -iwad '"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-        arguments=" ";
+        argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+        argList.push_front("-iwad");
+        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        qDebug()<<argList;
+        QProcess *process = new QProcess;
+        process->setWorkingDirectory(homePath.c_str());
+        process->setStandardOutputFile((homePath+"/.dsda-doom/log.txt").c_str(), QIODevice::Truncate);
+        process->start((execPath+"/dsda-doom").c_str(), argList);
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+        connect(process, SIGNAL(started()), this, SLOT(started()));
     }
-
-//I could not do getOsName()=="Windows" here, because it would give me errors when compiling to non Windows machines
-// also, because of some weird error, I had to #include <windows.h> at the top of this file
-#ifdef _WIN32
+    else
+    {
+    /*
         std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
         {
@@ -1114,7 +1128,18 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         // system(("cmd /c \""+gamePath+"\"").c_str());
 
         arguments=" ";
-#endif
+        */
+        argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+        argList.push_front("-iwad");
+        qDebug()<<argList;
+        QProcess *process = new QProcess;
+        process->setWorkingDirectory(execPath.c_str());
+        process->setStandardOutputFile((execPath+"/log.txt").c_str(), QIODevice::Truncate);
+        process->start((execPath+"/dsda-doom.exe").c_str(), argList);
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+        connect(process, SIGNAL(started()), this, SLOT(started()));
+    }
 
     // Again, don't allow the launch button to work twice in the space of 2 secs
     canLaunch=false;
@@ -1153,9 +1178,24 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 // Show the settings
 void MainWindow::on_pushButton_clicked()
 {
-    settingsWindow->show();
-    settingsWindow->activateWindow();
-    settingsWindow->raise();
+    consoleWindow->show();
+    consoleWindow->activateWindow();
+    consoleWindow->raise();
+    /*
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    */
+    /*
+    QMessageBox msgBox;
+    msgBox.setText("dsda-doom ");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    int ret = msgBox.exec();
+    */
 }
 
 // Add pwads to be loaded

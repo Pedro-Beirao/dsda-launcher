@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>454</height>
+    <height>475</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>350</width>
-    <height>454</height>
+    <height>475</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>350</width>
-    <height>454</height>
+    <height>475</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -428,11 +428,11 @@ border-radius:3px</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Settings</string>
+     <string>Console</string>
     </property>
     <property name="iconSize">
      <size>
@@ -805,19 +805,6 @@ color: rgb(255, 255, 255);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QToolButton" name="toolButton_2">
-      <property name="geometry">
-       <rect>
-        <x>272</x>
-        <y>90</y>
-        <width>26</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="demoTab">
      <attribute name="title">
@@ -1174,9 +1161,7 @@ border-radius:3px</string>
      </rect>
     </property>
     <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
+     <font/>
     </property>
     <property name="styleSheet">
      <string notr="true">border: 1px solid rgb(160, 160, 160);
