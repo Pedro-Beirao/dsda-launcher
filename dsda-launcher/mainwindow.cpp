@@ -30,6 +30,9 @@
 #include "settings.h"
 #include <string>
 #include "console.h"
+#include <QClipboard>
+
+QString version = "v1.0";
 
 // Find the name of the OS
 std::string getOsName()
@@ -90,7 +93,80 @@ MainWindow *MainWindow::getMainWin()
     return pMainWindow;
 }
 
+void MainWindow::changeMaxSkillLevel(int max)
+{
+    ui->diffBox->clear();
+    for(int i=0; i<=max;i++)
+    {
+        if(i!=0)
+            ui->diffBox->addItem(std::to_string(i).c_str());
+        else
+            ui->diffBox->addItem(" ");
+    }
+    ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
+}
 
+void MainWindow::changeResolutions(QListWidget *list)
+{
+    ui->comboBox_2->clear();
+    ui->comboBox_2->addItem(" ");
+    for(int i=0;i<list->count();i++)
+    {
+        ui->comboBox_2->addItem(list->item(i)->text());
+    }
+}
+
+void MainWindow::changeComplevelsList(int i)
+{
+    if(i==0)
+    {
+        ui->compLevelSelect->clear();
+        ui->compLevelSelect->addItems({"Default","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","9 - Boom","11 - MBF","21 - MBF 21"});
+    }
+    else if(i==1)
+    {
+        ui->compLevelSelect->clear();
+        ui->compLevelSelect->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","9 - Boom","10 - LxDoom","11 - MBF","17 - Current PrBoom","21 - MBF 21"});
+    }
+    else if(i==2)
+    {
+        ui->compLevelSelect->clear();
+        ui->compLevelSelect->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","7 - Boom's comp mode","8 - Boom v2.01","9 - Boom","10 - LxDoom","11 - MBF","12 - PrBoom v2.03beta","13 - PrBoom v2.1.0","14 - PrBoom v2.1.1 - 2.2.6","15 - PrBoom v2.3.x","16 - PrBoom v2.4.0","17 - Current PrBoom","21 - MBF 21"});
+    }
+}
+
+void MainWindow::changeButtonColor(bool isDark)
+{
+    if(isDark && getOsName()=="MacOS")
+    {
+        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                        "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(100, 100, 100);");
+    }
+    else if(getOsName()=="MacOS")
+    {
+        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                        "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
+        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
+        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
+
+        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(175, 175, 175);");
+    }
+    else if(isDark)
+    {
+        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(125, 125, 125);");
+    }
+    else
+    {
+        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(200, 200, 200);");
+    }
+}
 
 // Lower case all letters of a string
 QString lowerCase(std::string word)
@@ -119,8 +195,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Allow files to be droped in the launcher (*.wad *.lmp)
     setAcceptDrops(true);
 
-
-
     // Hide the reload Leaderboard button
     ui->ReloadLead->hide();
 
@@ -130,13 +204,13 @@ MainWindow::MainWindow(QWidget *parent)
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->LaunchGameButton->installEventFilter(this);
 
-    // set the settings window
+    // set the settings and console windows
     settingsWindow = new Settings;
     consoleWindow = new Console;
 
 
     // The "episode" and "level" boxes can only take 2 numbers
-    // This approach also prevents a problem where QT tried to add spaces to those boxes if no numbers were added
+    // This approach also prevents a problem where Qt tried to add spaces to those boxes if no numbers were added
     QRegularExpression rgx("[0-9]{2}");
     QValidator *comValidator = new QRegularExpressionValidator (rgx, this);
     ui->episodeBox->setValidator(comValidator);
@@ -176,7 +250,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n     }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
 
@@ -184,13 +258,19 @@ MainWindow::MainWindow(QWidget *parent)
     }
     else if(getOsName()=="Windows")
     {
-        int size = ui->toolTip->font().pointSize()-2;
-        QFont newFont(ui->toolTip->font().family(),size);
-        std::string html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:10pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Press  </span><span style=\" font-size:10pt; font-weight:600;\">ctrl + o</span><span style=\"; font-size:10pt;\"> / </span><span style=\" font-size:10pt; font-weight:600;\">cmd + o</span><span style=\" font-size:10pt;\">  and drag your IWADs to the folder that opened</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Then restart the launcher</span></p></body></html>\"";
+        std::string html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Press  </span><span style=\" font-size:8pt; font-weight:600;\">ctrl + o</span><span style=\"; font-size:8pt;\"> / </span><span style=\" font-size:8pt; font-weight:600;\">cmd + o</span><span style=\" font-size:8pt;\">  and drag your IWADs to the folder that opened</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Then restart the launcher</span></p></body></html>";
         ui->toolTip->setHtml(html.c_str());
 
         ui->LaunchGameButton->setFixedHeight(25);
         ui->pushButton->setFixedHeight(23);
+        ui->pushButton_4->setFixedHeight(23);
+        ui->pushButton_4->move(240,94);
+        ui->pushButton_2->setFixedHeight(28);
+        ui->pushButton_2->move(240,17);
+        ui->pushButton_3->setFixedHeight(28);
+        ui->pushButton_3->move(240,60);
+        ui->pushButton_5->move(225,423);
+        ui->toolButton_3->move(140,5);
 
         QFileInfo check_file(QCoreApplication::applicationDirPath()+"/dsda-launcher.json");
         if(!check_file.exists())
@@ -198,7 +278,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n  \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n  \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 2,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n       \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n          \"-time_keys\",\n         \"-time_secrets\",\n          \"-time_all\"\n           ]\n     }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
 
@@ -215,7 +295,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n     }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
@@ -234,9 +314,8 @@ MainWindow::MainWindow(QWidget *parent)
             if( jsonError.error != QJsonParseError::NoError )
             {
                  QMessageBox::warning(this, "dsda-launcher", ("Failed to parse json from dsda-launcher.json: "+jsonError.errorString().toStdString()).c_str());
-                return ;
             }
-            if( document.isObject() )
+            else if( document.isObject() )
             {
                 QJsonObject jsonObj = document.object();
 
@@ -259,6 +338,12 @@ MainWindow::MainWindow(QWidget *parent)
                     ui->comboBox_2->show();
                     ui->noCheck_3->show();
                     ui->label_6->show();
+
+                    QJsonArray resolution = jsonObj.value("resolution").toArray();
+                    foreach (const QJsonValue & value, resolution)
+                    {
+                        ui->comboBox_2->addItem(value.toString());
+                    }
                 }
                 else if(bottomRow==2)
                 {
@@ -317,20 +402,6 @@ MainWindow::MainWindow(QWidget *parent)
             }
          }
 
-       qDebug() << QApplication::arguments();
-       QStringList arguments = QCoreApplication::arguments();
-           if(arguments.count() > 1)
-           {
-                for(int i=0; i<arguments.count(); i++)
-                {
-                    qDebug() << QCoreApplication::arguments();
-                       QString absPath = QCoreApplication::arguments().at(i);
-                       if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
-                       {
-                            ui->recordDemo_2->setText(absPath);
-                       }
-                }
-           }
     // Set the parameters text correctly
     ui->fastCheck->setText(fastParamText.c_str());
     //ui->fastCheck->setToolTip(fastParam.c_str());
@@ -486,6 +557,41 @@ MainWindow::MainWindow(QWidget *parent)
     ui->argumentText->append(settings.value("argumentText").toString());
     ui->timeKeysBox->setCurrentIndex(settings.value("timeKeys").toInt());
     ui->levelstatBox->setCurrentIndex(settings.value("levelstat").toInt());
+
+    ui->recordDemo->setText(settings.value("recorddemo").toString());
+    ui->recordDemo_2->setText(settings.value("playdemo").toString());
+    ui->recordDemo_3->setText(settings.value("viddump").toString());
+
+    ui->demoPlayOptions->setCurrentIndex(settings.value("demoplaybox").toInt());
+
+    if(ui->demoPlayOptions->currentIndex()!=1)
+    {
+        ui->recordDemo_3->setHidden(true);
+        ui->pushButton_4->setHidden(true);
+    }
+
+    if(ui->recordDemo_3->text()=="")
+        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    else
+        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+
+
+
+    if(settings.value("maxskilllevel").toString()!="")
+        changeMaxSkillLevel(settings.value("maxskilllevel").toInt());
+
+    QStringList arguments = qApp->arguments();
+        if(arguments.count() > 1)
+        {
+             for(int i=0; i<arguments.count(); i++)
+             {
+                    QString absPath = qApp->arguments().at(i);
+                    if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
+                    {
+                         dropFile(absPath);
+                    }
+             }
+        }
 }
 
 // Drag Event for *.wad *.lmp *.gfd
@@ -524,8 +630,6 @@ void MainWindow::LoadState(QString fileName)
                 for(int i=0; i<ui->compLevelSelect->count();i++)
                 {
                     std::string content=ui->compLevelSelect->itemText(i).toStdString().substr(0,2);
-                    content.erase(remove(content.begin(), content.end(), ' '), content.end());
-                    qDebug()<<buffer.substr(10).c_str()<<content.c_str();
                     if(content==buffer.substr(10))
                     {
                         ui->compLevelSelect->setCurrentIndex(i);
@@ -547,31 +651,31 @@ void MainWindow::LoadState(QString fileName)
         }
         else if(buffer.substr(0,4)=="box1" && buffer.substr(4).length()>1)
         {
-            if(buffer.substr(5)=="false")
-                 ui->fastCheck->setChecked(false);
+            if(buffer.substr(5,4)=="true")
+                 ui->fastCheck->setChecked(true);
             else
-                ui->fastCheck->setChecked(true);
+                ui->fastCheck->setChecked(false);
         }
         else if(buffer.substr(0,4)=="box2" && buffer.substr(4).length()>1)
         {
-            if(buffer.substr(5)=="false")
-                 ui->noCheck->setChecked(false);
+            if(buffer.substr(5,4)=="true")
+                 ui->noCheck->setChecked(true);
             else
-                ui->noCheck->setChecked(true);
+                ui->noCheck->setChecked(false);
         }
         else if(buffer.substr(0,4)=="box3" && buffer.substr(4).length()>1)
         {
-            if(buffer.substr(5)=="false")
-                 ui->noCheck_4->setChecked(false);
+            if(buffer.substr(5,4)=="true")
+                 ui->noCheck_4->setChecked(true);
             else
-                ui->noCheck_4->setChecked(true);
+                ui->noCheck_4->setChecked(false);
         }
         else if(buffer.substr(0,4)=="box4" && buffer.substr(4).length()>1)
         {
-            if(buffer.substr(5)=="false")
-                 ui->soloNetCheck->setChecked(false);
+            if(buffer.substr(5,4)=="true")
+                 ui->soloNetCheck->setChecked(true);
             else
-                ui->soloNetCheck->setChecked(true);
+                ui->soloNetCheck->setChecked(false);
         }
         else if(buffer.substr(0,10)=="resolution" && buffer.substr(10).length()>1)
         {
@@ -579,10 +683,10 @@ void MainWindow::LoadState(QString fileName)
         }
         else if(buffer.substr(0,10)=="fullscreen" && buffer.substr(10).length()>1)
         {
-            if(buffer.substr(11)=="false")
-                 ui->noCheck_3->setChecked(false);
+            if(buffer.substr(11,4)=="true")
+                 ui->noCheck_3->setChecked(true);
             else
-                ui->noCheck_3->setChecked(true);
+                ui->noCheck_3->setChecked(false);
         }
         else if(buffer.substr(0,9)=="dropdown1" && buffer.substr(9).length()>1)
         {
@@ -601,11 +705,11 @@ void MainWindow::LoadState(QString fileName)
         {
             searchingPwads=false;
         }
-        else if(buffer.substr(0,6)=="record" && buffer.substr(6).length()>1)
+        else if(buffer.substr(0,6)=="record" && buffer.substr(6).length()>0)
         {
                 ui->recordDemo->setText(buffer.substr(7).c_str());
         }
-        else if(buffer.substr(0,8)=="playback" && buffer.substr(8).length()>1)
+        else if(buffer.substr(0,8)=="playback" && buffer.substr(8).length()>0)
         {
                 ui->recordDemo_2->setText(buffer.substr(9).c_str());
         }
@@ -643,65 +747,124 @@ void MainWindow::SaveState(QString fileName)
 
 }
 
+void MainWindow::dropFile(QString fileName)
+{
+    if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="lmp") // *.lmp file
+    {
+            ui->tabs->setCurrentIndex(2);
+            ui->recordDemo_2->setText(fileName);
+            std::ifstream file;
+            file.open(fileName.toStdString());
+            std::list<std::string> list;
+            std::string buffer;
+            while (std::getline(file, buffer)) {
+                list.push_front(buffer);
+            }
+            file.close();
+            foreach(std::string line, list)
+            {
+                if(line.substr(0,5)=="-iwad")
+                {
+                    std::string strToAdd="";
+                    QStringList argList;
+                    for( size_t i=0; i<line.length(); i++)
+                    {
+                        char c = line[i];
+                        if( c == ' '){
+                             argList.append(strToAdd.c_str());
+                             strToAdd="";
+                        }else if(c == '\"' ){
+                            i++;
+                            while( line[i] != '\"' ){ strToAdd.push_back(line[i]); i++; }
+                        }else{
+                            strToAdd.push_back(c);
+                        }
+                    }
+                    for(int i=0;i<argList.count()-1;i++)
+                    {
+                        if(argList[i]=="-iwad" && argList[i+1]!='-')
+                        {
+                            ui->iwadSelect->setCurrentIndex(ui->iwadSelect->findText(argList[i+1].toStdString().substr(0,argList[i+1].length()-4).c_str()));
+                        }
+                        else if(argList[i]=="-complevel" && argList[i+1]!='-')
+                        {
+                            if(argList[i+1].length()==1)
+                            {
+                                argList[i+1]+=" ";
+                            }
+                            for(int ii=0;ii<ui->compLevelSelect->count();ii++)
+                            {
+                                if(ui->compLevelSelect->itemText(ii).startsWith(argList[i+1]))
+                                {
+                                    ui->compLevelSelect->setCurrentIndex(ii);
+                                }
+                            }
+                        }
+                        else if(argList[i]=="-file" && argList[i+1]!='-')
+                        {
+                            bool isRecursive = settings.value("pwadrecursive").toBool();
+
+                            QStringList files;
+                            for(int ii=1;ii<argList.count()-i;i++)
+                            {
+                                if(argList[i+ii][0]=='-')
+                                {
+                                    break;
+                                }
+                                files.append(argList[i+ii]);
+                            }
+
+                            ui->wadsOnFolder->clear();
+                            int size = settings.beginReadArray("pwadfolders");
+                            if(size!=0)
+                            {
+                                for (int i = 0; i < size; i++) {
+                                    settings.setArrayIndex(i);
+                                    QString folder = settings.value("folder").toString();
+                                    if(folder!="")
+                                    {
+                                        QDir path(folder);
+                                        QStringList files0 = path.entryList(QDir::Files);
+                                        foreach(QString file0, files0)
+                                        {
+                                            for(int i=0; i<files.count(); i++)
+                                            {
+                                                if(files[i]==file0)
+                                                {
+                                                    ui->wadsOnFolder->addItem(folder+"/"+file0);
+                                                    files.remove(i);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            settings.endArray();
+                        }
+                    }
+                }
+            }
+    }
+    else if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="wad")
+    {
+        QStringList wadsToAdd;
+        wadsToAdd.append(fileName);
+        addWads(wadsToAdd);
+        ui->tabs->setCurrentIndex(1);
+    }
+    else if(lowerCase(fileName.toStdString().substr(fileName.length() - 5))=="state")
+    {
+           LoadState(fileName);
+    }
+}
+
 // Drop Event for *.wad *.lmp *gfd
 void MainWindow::dropEvent(QDropEvent *e)
 {
     foreach (const QUrl &url, e->mimeData()->urls()) {
         QString fileName = url.toLocalFile();
-        if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="lmp") // *.lmp file
-        {
-                ui->tabs->setCurrentIndex(2);
-                ui->recordDemo_2->setText(fileName);
-                std::ifstream file;
-                file.open(fileName.toStdString());
-                std::list<std::string> list;
-                std::string buffer;
-                while (std::getline(file, buffer)) {
-                    list.push_front(buffer);
-                }
-                file.close();
-                foreach(std::string line, list)
-                {
-                    std::string iwadText = "-iwad";
-                    if(line.substr(0,5)=="-iwad")
-                    {
-                        std::vector< int > aspas;
-                        for(unsigned charIndex =0;charIndex<=line.length();charIndex++)
-                        {
-                            if(line[charIndex]=='"')
-                            {
-                                aspas.push_back(charIndex);
-                            }
-                        }
-                        std::string iwadFile = line.substr(aspas[0]+1,aspas[1]-aspas[0]-1);
-                        for(int item=0;item < ui->iwadSelect->count(); item++)
-                        {
-                            for(unsigned letterIndex=0;letterIndex<iwadFile.length();letterIndex++)
-                            {
-                                if(isupper(iwadFile[letterIndex]))
-                                {
-                                    iwadFile[letterIndex] = tolower(iwadFile[letterIndex]);
-                                }
-                            }
-                            if(ui->iwadSelect->itemText(item).toStdString()+".wad"==iwadFile)
-                            {
-                                ui->iwadSelect->setCurrentIndex(item);
-                            }
-                        }
-                    }
-                }
-        }
-        else if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="wad")
-        {
-            QStringList wadsToAdd;
-            wadsToAdd.append(fileName);
-            addWads(wadsToAdd);
-            ui->tabs->setCurrentIndex(1);
-        }
-        else if(lowerCase(fileName.toStdString().substr(fileName.length() - 5))=="state")
-        {
-               LoadState(fileName);
-        }
+        dropFile(fileName);
     }
 }
 
@@ -723,6 +886,88 @@ void MainWindow::on_actionSave_triggered()
         settings.setValue("statefile", fileName);
         SaveState(fileName);
     }
+}
+
+void MainWindow::on_actionGithub_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher"));
+}
+
+void MainWindow::on_actionCheck_for_updates_triggered()
+{
+    QString latestVersion;
+            QNetworkRequest req(QUrl("https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest"));
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+            QJsonObject json;
+            QNetworkAccessManager nam;
+            QNetworkReply *reply = nam.get(req);
+
+            while (!reply->isFinished())
+            {
+                qApp->processEvents();
+            }
+
+            QByteArray response_data = reply->readAll();
+
+            QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
+
+            QJsonObject jsonobj = jsondoc.object();
+                foreach(const QString& key, jsonobj.keys()) {
+                    QJsonValue value = jsonobj.value(key);
+                    if(key=="name")
+                    {
+                        if(version!=value.toString())
+                        {
+                            QMessageBox msgBox;
+                            msgBox.setText("You have version "+version+"\n"+value.toString()+" is available");
+                            QPushButton* pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
+                            msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
+                            msgBox.setDefaultButton(pButtonYes);
+                            msgBox.exec();
+                            if (msgBox.clickedButton()==pButtonYes)
+                            {
+                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/"+value.toString()));
+                            }
+                        }
+                        else
+                        {
+                            QMessageBox msgBox;
+                            msgBox.setText("You already have the latest version, "+version);
+                            msgBox.setStandardButtons(QMessageBox::Ok);
+                            msgBox.setDefaultButton(QMessageBox::Ok);
+                            msgBox.exec();
+                        }
+                    }
+                }
+
+            reply->deleteLater();
+}
+
+void MainWindow::on_actionSet_triggered()
+{
+    settingsWindow->show();
+    settingsWindow->activateWindow();
+    settingsWindow->raise();
+}
+
+void MainWindow::on_actionTips_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("A few tips you should know:");
+    msgBox.setInformativeText("- Drag .wad / .deh files on top of the launcher to add them to the loaded files\n\n- Drag .lmp files on top of the launcher to play the demo and autoselect the correct IWAD, PWADs and complevel\n\n- For the mentioned autoselect to work correctly, go to the settings and set the PWADs folders");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
+}
+void MainWindow::on_actionWhat_is_this_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("State files");
+    msgBox.setInformativeText("These .state files save all the parameters selected on the launcher, and lets you load them again whenever you need");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
 }
 
 MainWindow::~MainWindow()
@@ -883,7 +1128,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
                         fileToAdd[i]='\\';
                 }
             }
-            argList.append(fileToAdd.c_str());
+            if(returnTooltip)
+                argList.append(("\""+fileToAdd+"\"").c_str());
+            else
+                argList.append((fileToAdd).c_str());
         }
     }
 
@@ -967,28 +1215,45 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     }
 
 
-    if(ui->recordDemo->text().size()>5)
+    if(ui->recordDemo->text().size()>2)
     {
         argList.append("-record");
         argList.append(ui->recordDemo->text());
     }
 
-    if(ui->recordDemo_2->text().size()>5)
+    if(ui->recordDemo_2->text().size()>2)
     {
         if(ui->demoPlayOptions->currentIndex()==0)
         {
             argList.append("-playdemo"); // Plays demo at normal speed
-            argList.append(ui->recordDemo_2->text());
+            if(returnTooltip)
+                argList.append("\""+ui->recordDemo_2->text()+"\"");
+            else
+                argList.append(ui->recordDemo_2->text());
         }
         else if(ui->demoPlayOptions->currentIndex()==1)
         {
             argList.append("-timedemo"); // Used for viddumping
-            argList.append(ui->recordDemo_2->text());
+            if(returnTooltip)
+                argList.append("\""+ui->recordDemo_2->text()+"\"");
+            else
+                argList.append(ui->recordDemo_2->text());
+            if(ui->recordDemo_3->text().length()>2)
+            {
+                argList.append("-viddump");
+                if(returnTooltip)
+                    argList.append("\""+ui->recordDemo_3->text()+"\"");
+                else
+                    argList.append(ui->recordDemo_3->text());
+            }
         }
         else if(ui->demoPlayOptions->currentIndex()==2)
         {
             argList.append("-fastdemo"); // Used for benchmarks
-            argList.append(ui->recordDemo_2->text());
+            if(returnTooltip)
+                argList.append("\""+ui->recordDemo_2->text()+"\"");
+            else
+                argList.append(ui->recordDemo_2->text());
         }
     }
 
@@ -1018,6 +1283,29 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             argStr.append((i+" ").toStdString());
         }
         ui->LaunchGameButton->setToolTip("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
+        QMessageBox msgBox;
+        msgBox.setText("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
+        msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
+        QPushButton* pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
+        msgBox.setDefaultButton(pButtonYes);
+        msgBox.exec();
+
+        if (msgBox.clickedButton()!=pButtonYes)
+        {
+            QClipboard *clip;
+            if(getOsName()=="MacOS")
+                clip->setText("\""+QCoreApplication::applicationDirPath()+"/../Resources/dsda-doom\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+            else if(getOsName()=="Linux")
+                clip->setText("\""+QCoreApplication::applicationDirPath()+"/dsda-doom\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+            else
+            {
+                std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+                std::replace(execPath.begin(),execPath.end(),'/','\\');
+                clip->setText("\""+QString(execPath.c_str())+"\\dsda-doom.exe\" -iwad \""+QString(execPath.c_str())+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+            }
+        }
+
+
         return;
     }
     else if(onExit)
@@ -1051,7 +1339,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
         settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
 
-
         // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
         // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
         if(ui->episodeBox->text().toStdString()=="")
@@ -1062,6 +1349,35 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         {
             settings.remove("warp2");
         }
+
+        if(ui->recordDemo->text().toStdString()!="")
+        {
+            settings.setValue("recorddemo",ui->recordDemo->text());
+        }
+        else
+        {
+            settings.remove("recorddemo");
+        }
+
+        if(ui->recordDemo_2->text().toStdString()!="")
+        {
+            settings.setValue("playdemo",ui->recordDemo_2->text());
+        }
+        else
+        {
+            settings.remove("playdemo");
+        }
+
+        if(ui->recordDemo_3->text().toStdString()!="")
+        {
+            settings.setValue("viddump",ui->recordDemo_3->text());
+        }
+        else
+        {
+            settings.remove("viddump");
+        }
+
+        settings.setValue("demoplaybox", ui->demoPlayOptions->currentIndex());
 
         settings.setValue("pwadCount", ui->wadsOnFolder->count());
         for(int i=0; i<ui->wadsOnFolder->count();i++)
@@ -1077,32 +1393,47 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 
     if(getOsName()=="MacOS")
     {
-        std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
-        argList.push_front("-iwad");
-        //system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-        qDebug()<<argList;
-        QProcess *process = new QProcess;
-        process->setWorkingDirectory(homePath.c_str());
-        process->start((execPath+"/../Resources/dsda-doom").c_str(), argList);
-        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
-        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
-        connect(process, SIGNAL(started()), this, SLOT(started()));
+        QFile port = QFile((execPath+"/../Resources/dsda-doom").c_str());
+        if(port.exists())
+        {
+            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
+            argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            argList.push_front("-iwad");
+            //system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+            qDebug()<<argList;
+            QProcess *process = new QProcess;
+            process->setWorkingDirectory(homePath.c_str());
+            process->start((execPath+"/../Resources/dsda-doom").c_str(), argList);
+            connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+            connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+            connect(process, SIGNAL(started()), this, SLOT(started()));
+        }
+        else
+        {
+            QMessageBox::warning(this, "dsda-launcher", "Cannot find dsda-doom");
+        }
     }
     else if(getOsName()=="Linux")
     {
-        std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-        argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
-        argList.push_front("-iwad");
-        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-        qDebug()<<argList;
-        QProcess *process = new QProcess;
-        process->setWorkingDirectory(homePath.c_str());
-        process->setStandardOutputFile((homePath+"/.dsda-doom/log.txt").c_str(), QIODevice::Truncate);
-        process->start((execPath+"/dsda-doom").c_str(), argList);
-        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
-        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
-        connect(process, SIGNAL(started()), this, SLOT(started()));
+        QFile port = QFile((execPath+"/dsda-doom").c_str());
+        if(port.exists())
+        {
+            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
+            argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            argList.push_front("-iwad");
+            //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+            qDebug()<<argList;
+            QProcess *process = new QProcess;
+            process->setWorkingDirectory(homePath.c_str());
+            process->start((execPath+"/dsda-doom").c_str(), argList);
+            connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+            connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+            connect(process, SIGNAL(started()), this, SLOT(started()));
+         }
+        else
+        {
+            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom");
+        }
     }
     else
     {
@@ -1129,16 +1460,23 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 
         arguments=" ";
         */
-        argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
-        argList.push_front("-iwad");
-        qDebug()<<argList;
-        QProcess *process = new QProcess;
-        process->setWorkingDirectory(execPath.c_str());
-        process->setStandardOutputFile((execPath+"/log.txt").c_str(), QIODevice::Truncate);
-        process->start((execPath+"/dsda-doom.exe").c_str(), argList);
-        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
-        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
-        connect(process, SIGNAL(started()), this, SLOT(started()));
+        QFile port = QFile((execPath+"/dsda-doom.exe").c_str());
+        if(port.exists())
+        {
+            argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            argList.push_front("-iwad");
+            qDebug()<<argList;
+            QProcess *process = new QProcess;
+            process->setWorkingDirectory(execPath.c_str());
+            process->start((execPath+"/dsda-doom.exe").c_str(), argList);
+            connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
+            connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+            connect(process, SIGNAL(started()), this, SLOT(started()));
+        }
+        else
+        {
+            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom.exe");
+        }
     }
 
     // Again, don't allow the launch button to work twice in the space of 2 secs
@@ -1175,7 +1513,7 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 
 }
 
-// Show the settings
+// Show the console
 void MainWindow::on_pushButton_clicked()
 {
     consoleWindow->show();
@@ -1252,9 +1590,9 @@ void MainWindow::on_noCheck_3_toggled(bool checked)
     else
         isFulscreen="w";
 }
-void MainWindow::on_toolButton_toggled(bool checked)
+void MainWindow::on_toolButton_clicked()
 {
-    if(checked)
+    if(ui->toolTip->isHidden())
         ui->toolTip->show();
     else
         ui->toolTip->hide();
@@ -1534,11 +1872,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 
     if(changeWad)
     {
-            wad = ui->iwadSelect->currentText().toStdString();
-            for (int i = 0; i < wad.length(); i++)
-                {
-                    wad[i] = tolower(wad[i]);
-                }
+            wad = lowerCase(ui->iwadSelect->currentText().toStdString()).toStdString();
             if(wad=="doomu"||wad=="doom1")
             {
                 wad="doom";
@@ -1549,6 +1883,8 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
         wad=lowerCase(ui->wadLName->text().toStdString()).toStdString();
     }
 
+
+    /*
     if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
     {
         level = "E"+ui->episodeBox->text().toStdString()+"M"+ui->levelBox->text().toStdString();
@@ -1557,46 +1893,54 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
     {
         if(ui->episodeBox->text().toStdString().length()==1)
         {
-            level = "Map 0"+ui->episodeBox->text().toStdString();
+            level = "Map0"+ui->episodeBox->text().toStdString();
         }
         else
         {
-            level = "Map "+ui->episodeBox->text().toStdString();
+            level = "Map"+ui->episodeBox->text().toStdString();
         }
 
     }
-    else if(!ui->levelBox->isHidden())
+    */
+    if(ui->wadLName_2->text()=="" || changeWad)
     {
-        level = "E1M1";
+        if(!ui->levelBox->isHidden())
+        {
+            level = "E1M1";
+        }
+        else
+        {
+            level = "Map01";
+        }
+        ui->wadLName_2->setText(level.c_str());
     }
-    else
+
+    level = ui->wadLName_2->text().toStdString();
+
+    wad.erase(std::remove(wad.begin(), wad.end(), ' '), wad.end());
+    level.erase(std::remove(level.begin(), level.end(), ' '), level.end());
+
+    if(lowerCase(level.substr(0,2))=="ep")
     {
-        level = "Map 01";
+        level = "Episode%20"+level.substr(2);
+    }
+    else if(tolower(level[0])=='e')
+    {
+        level = "E"+level.substr(1,1)+"M"+level.substr(3);
+    }
+    else if(lowerCase(level.substr(0,3))=="map")
+    {
+        if(level.substr(3).length()==1)
+            level = "Map%200"+level.substr(3);
+        else
+            level = "Map%20"+level.substr(3);
+    }
+    else if(lowerCase(level)=="d2all")
+    {
+        level = "D2All";
     }
 
     ui->wadLName->setText(wad.c_str());
-    ui->levelL->setText(level.c_str());
-
-    for (int i = 0; i < int(level.length()); i++)
-        {
-            if(level[i]==' ')
-            {
-                level.erase(i);
-                level.insert(i,"%20");
-                if(ui->episodeBox->text().toStdString().length()>1)
-                {
-                    level.append(ui->episodeBox->text().toStdString());
-                }
-                else if(ui->episodeBox->text().toStdString().length()==1)
-                {
-                    level.append("0" + ui->episodeBox->text().toStdString());
-                }
-                else
-                {
-                    level.append("01");
-                }
-            }
-        }
     qDebug() << (wad +" "+ level +" "+ category).c_str();
 
     if(callApi)
@@ -1623,17 +1967,6 @@ void MainWindow::on_levelBox_textChanged(const QString &arg1)
             reloadLeaderboard(false,false);
 }
 
-void MainWindow::on_editParameters_clicked() // Customise the launcher
-{
-    if(getOsName()=="MacOS"||getOsName()=="Linux")
-    {
-        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
-    }
-    else
-    {
-        system("explorer dsda-launcher.json");
-    }
-}
 
 void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
 {
@@ -1647,11 +1980,11 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 {
 
       if (object == (QObject*)ui->LaunchGameButton) {
-            if (ev->type() == QEvent::Enter)
-            {
-                on_LaunchGameButton_clicked(false, true);
-                return QWidget::eventFilter(object, ev);
-            }
+            //if (ev->type() == QEvent::Enter)
+            //{
+            //    on_LaunchGameButton_clicked(false, true);
+            //    return QWidget::eventFilter(object, ev);
+            //}
             if(ev->type() == QEvent::MouseButtonPress)
             {
                 on_LaunchGameButton_clicked(false, false);
@@ -1683,8 +2016,19 @@ void MainWindow::on_toolButton_5_clicked()
 {
     std::string str = ui->comboBox->currentText().toStdString();
     std::replace(str.begin(), str.end(), ' ', '+');
-    std::string lvl = ui->levelL->text().toStdString();
-    std::replace(lvl.begin(), lvl.end(), ' ', '+');
+    std::string lvl = ui->wadLName_2->text().toStdString();
+    lvl.erase(std::remove(lvl.begin(), lvl.end(), ' '), lvl.end());
+    if(tolower(lvl[0])=='e')
+    {
+        lvl = "E"+lvl.substr(1,1)+"M"+lvl.substr(3);
+    }
+    else if(lowerCase(lvl.substr(0,3))=="map")
+    {
+        if(lvl.substr(3).length()==1)
+            lvl = "Map%200"+lvl.substr(3);
+        else
+            lvl = "Map%20"+lvl.substr(3);
+    }
     QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/"+ui->wadLName->text()+"/leaderboard?category="+str.c_str()+"&level="+lvl.c_str()));
 }
 
@@ -1713,6 +2057,53 @@ void MainWindow::on_ReloadLead_clicked()
 
 void MainWindow::on_wadLName_textChanged(const QString &arg1)
 {
-    reloadLeaderboard(false,false);
+    clearLeaderboard();
+    //reloadLeaderboard(false,false);
+}
+
+void MainWindow::on_wadLName_2_textChanged(const QString &arg1)
+{
+    clearLeaderboard();
+    //reloadLeaderboard(false,false);
+}
+
+void MainWindow::on_recordDemo_3_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void MainWindow::on_demoPlayOptions_currentIndexChanged(int index)
+{
+    if(index!=1)
+    {
+        ui->recordDemo_3->setHidden(true);
+        ui->pushButton_4->setHidden(true);
+    }
+    else
+    {
+        ui->recordDemo_3->setHidden(false);
+        ui->pushButton_4->setHidden(false);
+    }
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("video files(*.mp4 *.mkv)"));
+    ui->recordDemo_3->setText(vidName);
+}
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    on_LaunchGameButton_clicked(false,true);
 }
 

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSettings>
 #include <QProcess>
+#include <QListWidget>
 
 
 QT_BEGIN_NAMESPACE
@@ -38,7 +39,7 @@ public slots:
     void on_minus_clicked();
     void on_fastCheck_toggled(bool checked);
     void on_noCheck_toggled(bool checked);
-    void on_toolButton_toggled(bool checked);
+    void on_toolButton_clicked();
     void on_noCheck_4_toggled(bool checked);
     void on_noCheck_3_toggled(bool checked);
     void on_soloNetCheck_toggled(bool checked);
@@ -54,13 +55,22 @@ public slots:
     void on_comboBox_currentIndexChanged(int index);
     void on_episodeBox_textChanged(const QString &arg1);
     void on_levelBox_textChanged(const QString &arg1);
-    void on_editParameters_clicked();
     void clearLeaderboard();
     void addToArguments(QString string);
     void on_actionLoad_triggered();
     void on_actionSave_triggered();
     void LoadState(QString fileName);
     void SaveState(QString fileName);
+    void on_actionGithub_triggered();
+    void on_actionCheck_for_updates_triggered();
+    void on_actionSet_triggered();
+    void on_actionTips_triggered();
+    void on_actionWhat_is_this_triggered();
+    void changeMaxSkillLevel(int max);
+    void changeButtonColor(bool isDark);
+    void changeComplevelsList(int i);
+    void changeResolutions(QListWidget *list);
+    void dropFile(QString fileName);
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -73,6 +83,11 @@ private slots:
     void on_toolButton_5_clicked();
     void on_ReloadLead_clicked();
     void on_wadLName_textChanged(const QString &arg1);
+    void on_recordDemo_3_textChanged(const QString &arg1);
+    void on_demoPlayOptions_currentIndexChanged(int index);
+    void on_pushButton_4_clicked();
+    void on_pushButton_5_clicked();
+    void on_wadLName_2_textChanged(const QString &arg1);
 };
 extern QSettings settings;
 

@@ -34,11 +34,17 @@
      <height>361</height>
     </rect>
    </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustIgnored</enum>
+   </property>
    <property name="readOnly">
     <bool>true</bool>
    </property>
    <property name="plainText">
     <string/>
+   </property>
+   <property name="centerOnScroll">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
