@@ -10,6 +10,8 @@ ___
 Doomworld thread: https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/
 
 Github repo: https://github.com/Pedro-Beirao/dsda-launcher/
+
+TODO list https://github.com/Pedro-Beirao/dsda-launcher/projects/1
 ___
 
 ### Screenshots:
