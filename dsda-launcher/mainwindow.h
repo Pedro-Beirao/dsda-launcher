@@ -62,15 +62,18 @@ public slots:
     void LoadState(QString fileName);
     void SaveState(QString fileName);
     void on_actionGithub_triggered();
+    void on_actionGithub_2_triggered();
     void on_actionCheck_for_updates_triggered();
     void on_actionSet_triggered();
     void on_actionTips_triggered();
     void on_actionWhat_is_this_triggered();
+    void on_actionCheck_for_Updates_triggered();
     void changeMaxSkillLevel(int max);
     void changeButtonColor(bool isDark);
     void changeComplevelsList(int i);
     void changeResolutions(QListWidget *list);
     void dropFile(QString fileName);
+    void findIwads(int type);
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);

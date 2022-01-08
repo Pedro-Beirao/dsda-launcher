@@ -1234,7 +1234,15 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionGithub"/>
     <addaction name="actionTips"/>
    </widget>
+   <widget class="QMenu" name="menudsda_doom">
+    <property name="title">
+     <string>dsda-doom</string>
+    </property>
+    <addaction name="actionCheck_for_Updates"/>
+    <addaction name="actionGithub_2"/>
+   </widget>
    <addaction name="menuAbout"/>
+   <addaction name="menudsda_doom"/>
    <addaction name="menuState"/>
   </widget>
   <action name="actionSave">
@@ -1280,6 +1288,16 @@ p, li { white-space: pre-wrap; }
   <action name="actionWhat_is_this">
    <property name="text">
     <string>What is this?</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Updates">
+   <property name="text">
+    <string>Check for Updates</string>
+   </property>
+  </action>
+  <action name="actionGithub_2">
+   <property name="text">
+    <string>Github</string>
    </property>
   </action>
  </widget>

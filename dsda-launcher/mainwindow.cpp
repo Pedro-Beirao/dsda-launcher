@@ -31,6 +31,7 @@
 #include <string>
 #include "console.h"
 #include <QClipboard>
+#include <sstream>
 
 QString version = "v1.0";
 
@@ -182,6 +183,122 @@ QString lowerCase(std::string word)
 void MainWindow::delayLaunch()
 {
     canLaunch=true;
+}
+
+void MainWindow::findIwads(int type)
+{
+    // Find the IWADs in the correct folder depending on the OS
+    if(getOsName()=="MacOS" || getOsName()=="Linux")
+    {
+        QFileInfo check1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        if(!check1.exists())
+            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+
+        QFileInfo check2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-doom.wad").c_str());
+        if(!check2.exists())
+            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+
+        QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+    }
+    else
+    {
+        QDir directory = QDir::currentPath();
+        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+    }
+
+    // This makes sure that a logic order to display the IWADs is followed
+    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
+
+    // Normal Doom
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename=="doom" || filename=="doom1" || filename=="doomu"||filename=="freedoom1"||filename=="freedoom"||filename=="bfgdoom1"||filename=="bfgdoom")
+        {
+            ui->iwadSelect->addItems({filename});
+        }
+    }
+
+    // Normal Doom 2
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2")
+        {
+            ui->iwadSelect->addItems({filename});
+        }
+    }
+
+    // Final Doom
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename=="tnt"||filename=="plutonia")
+        {
+            ui->iwadSelect->addItems({filename});
+        }
+    }
+
+    // Heretic / Hexen
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename=="heretic"||filename=="hexen")
+        {
+            ui->iwadSelect->addItems({filename});
+        }
+    }
+
+    // Chex Quest 1 / Hacx
+    foreach(QString filename, images) {
+        filename.resize (filename.size () - 4);
+        filename=lowerCase(filename.toStdString());
+        if(filename=="chex" || filename=="hacx")
+        {
+            ui->iwadSelect->addItems({filename});
+        }
+    }
+
+
+    // Other wads with the IWAD tag
+    // This might make the launcher slower if you have too many wads on the same folder as the launcher
+    //Im going to commant this out for now
+    if(type==1)
+    {
+        foreach(QString filename, images) {
+            filename.resize (filename.size () - 4);
+            filename=lowerCase(filename.toStdString());
+            if(filename!="doom"&&filename!="doom1"&&filename!="doomu"&&filename!="doom2"&&filename!="tnt"&&filename!="plutonia"&&filename!="freedoom1"&&filename!="freedoom"&&filename!="freedoom2"&&filename!="heretic"&&filename!="hexen"&&filename!="chex"&&filename!="hacx")
+            {
+                    std::ifstream file;
+                    if(getOsName()=="MacOS"||getOsName()=="Linux")
+                    {
+                        file.open(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+filename.toStdString()+".wad");
+                        std::string buffer;
+                        while (std::getline(file, buffer)) {
+                            if(buffer[0]=='I'&&buffer[1]=='W')
+                            {
+                                ui->iwadSelect->addItems({filename});
+                            }
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        file.open(filename.toStdString()+".wad");
+                        std::string buffer;
+                        while (std::getline(file, buffer)) {
+                            if(buffer[0]=='I'&&buffer[1]=='W')
+                            {
+                                ui->iwadSelect->addItems({filename});
+                            }
+                            break;
+                        }
+                    }
+            }
+        }
+    }
 }
 
 // MainWindow
@@ -412,115 +529,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->soloNetCheck->setText(solonetParamText.c_str());
     //ui->soloNetCheck->setToolTip(solonetParam.c_str());
 
-    // Find the IWADs in the correct folder depending on the OS
-    if(getOsName()=="MacOS" || getOsName()=="Linux")
-    {
-        try {
-            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
 
-        }  catch (...) { }
-
-        QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
-        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
-    }
-    else
-    {
-        QDir directory = QDir::currentPath();
-        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
-    }
-
-    // This makes sure that a logic order to display the IWADs is followed
-    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
-
-    // Normal Doom
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="doom" || filename=="doom1" || filename=="doomu"||filename=="freedoom1"||filename=="freedoom"||filename=="bfgdoom1"||filename=="bfgdoom")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Normal Doom 2
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Final Doom
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="tnt"||filename=="plutonia")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Heretic / Hexen
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="heretic"||filename=="hexen")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-    // Chex Quest 1 / Hacx
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="chex" || filename=="hacx")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
-
-
-    // Other wads with the IWAD tag
-    // This might make the launcher slower if you have too many wads on the same folder as the launcher
-    // so Im going to comment this out
-    /*
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename!="doom"&&filename!="doom1"&&filename!="doomu"&&filename!="doom2"&&filename!="tnt"&&filename!="plutonia"&&filename!="freedoom1"&&filename!="freedoom"&&filename!="freedoom2"&&filename!="heretic"&&filename!="hexen"&&filename!="chex"&&filename!="hacx")
-        {
-                std::ifstream file;
-                if(getOsName()=="MacOS"||getOsName()=="Linux")
-                {
-                    file.open(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+filename.toStdString()+".wad");
-                    std::string buffer;
-                    while (std::getline(file, buffer)) {
-                        if(buffer[0]=='I'&&buffer[1]=='W')
-                        {
-                            ui->iwadSelect->addItems({filename});
-                        }
-                        break;
-                    }
-                }
-                else
-                {
-                    file.open(filename.toStdString()+".wad");
-                    std::string buffer;
-                    while (std::getline(file, buffer)) {
-                        if(buffer[0]=='I'&&buffer[1]=='W')
-                        {
-                            ui->iwadSelect->addItems({filename});
-                        }
-                        break;
-                    }
-                }
-        }
-    }
-    */
+    findIwads(0);
 
 
     // If no IWAD found, show a tool tip
@@ -580,16 +590,16 @@ MainWindow::MainWindow(QWidget *parent)
     if(settings.value("maxskilllevel").toString()!="")
         changeMaxSkillLevel(settings.value("maxskilllevel").toInt());
 
+    if(ui->iwadSelect->currentIndex()==-1 && ui->iwadSelect->count()!=0)
+        ui->iwadSelect->setCurrentIndex(0);
+
     QStringList arguments = qApp->arguments();
         if(arguments.count() > 1)
         {
              for(int i=0; i<arguments.count(); i++)
              {
                     QString absPath = qApp->arguments().at(i);
-                    if(lowerCase(absPath.toStdString().substr(absPath.length() - 3))=="lmp")
-                    {
-                         dropFile(absPath);
-                    }
+                    dropFile(absPath);
              }
         }
 }
@@ -699,7 +709,6 @@ void MainWindow::LoadState(QString fileName)
         else if(buffer.substr(0,4)=="pwad")
         {
             searchingPwads=true;
-            ui->wadsOnFolder->clear();
         }
         else if(buffer.substr(0,7)=="endpwad")
         {
@@ -841,6 +850,41 @@ void MainWindow::dropFile(QString fileName)
                                 }
                             }
                             settings.endArray();
+                            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
+                            std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+
+                            if(files.count()!=0)
+                            {
+                                QString folder;
+                                if(getOsName()=="Windows")
+                                     folder = QCoreApplication::applicationDirPath();
+                                else
+                                     folder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
+                                QDir path(folder);
+                                QStringList files0 = path.entryList(QDir::Files);
+                                foreach(QString file0, files0)
+                                {
+                                    for(int i=0; i<files.count(); i++)
+                                    {
+                                        if(files[i]==file0)
+                                        {
+                                            ui->wadsOnFolder->addItem(folder+"/"+file0);
+                                            files.remove(i);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            /*
+                            if(files.count()!=0)
+                            {
+                                QMessageBox msgBox;
+                                msgBox.setText("Failed to locate "+files.at(0));
+                                msgBox.setInformativeText("You should add some PWAD folders in the settings");
+                                msgBox.addButton(tr("ok"), QMessageBox::YesRole);
+                                msgBox.exec();
+                            }
+                            */
                         }
                     }
                 }
@@ -893,25 +937,27 @@ void MainWindow::on_actionGithub_triggered()
     QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher"));
 }
 
+void MainWindow::on_actionGithub_2_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/kraflab/dsda-doom"));
+}
+
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
-    QString latestVersion;
+            QString launcherText;
+            QString launcherV;
+
             QNetworkRequest req(QUrl("https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest"));
             req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
             QJsonObject json;
             QNetworkAccessManager nam;
             QNetworkReply *reply = nam.get(req);
-
             while (!reply->isFinished())
             {
                 qApp->processEvents();
             }
-
             QByteArray response_data = reply->readAll();
-
             QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
-
             QJsonObject jsonobj = jsondoc.object();
                 foreach(const QString& key, jsonobj.keys()) {
                     QJsonValue value = jsonobj.value(key);
@@ -920,28 +966,110 @@ void MainWindow::on_actionCheck_for_updates_triggered()
                         if(version!=value.toString())
                         {
                             QMessageBox msgBox;
-                            msgBox.setText("You have version "+version+"\n"+value.toString()+" is available");
+                            msgBox.setText("DSDA-Launcher "+version);
+                            msgBox.setInformativeText("Available: "+value.toString());
                             QPushButton* pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
                             msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
                             msgBox.setDefaultButton(pButtonYes);
                             msgBox.exec();
                             if (msgBox.clickedButton()==pButtonYes)
                             {
-                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/"+value.toString()));
+                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/"+launcherV));
                             }
                         }
                         else
                         {
                             QMessageBox msgBox;
-                            msgBox.setText("You already have the latest version, "+version);
-                            msgBox.setStandardButtons(QMessageBox::Ok);
-                            msgBox.setDefaultButton(QMessageBox::Ok);
+                            msgBox.setText("DSDA-Launcher "+version);
+                            msgBox.setInformativeText("Up to Date");
+                            msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
                             msgBox.exec();
                         }
                     }
                 }
 
             reply->deleteLater();
+}
+
+void MainWindow::on_actionCheck_for_Updates_triggered()
+{
+    QString portText;
+    QString portV;
+
+    QString portversion;
+
+    std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
+    std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+
+    QString path;
+
+    if(getOsName()=="MacOS")
+        path = (execPath+"/../Resources/dsda-doom").c_str();
+    else if(getOsName()=="Linux")
+        path = (execPath+"/dsda-doom").c_str();
+    else
+        path = (execPath+"/dsda-doom.exe").c_str();
+
+    QFile port = QFile(path);
+    if(port.exists())
+    {
+        QProcess *process = new QProcess;
+        process->setWorkingDirectory(homePath.c_str());
+        process->start(path, {"-v"});
+        process->waitForStarted();
+        std::string data;
+
+        while(process->waitForReadyRead())
+            data.append(process->readAll());
+
+        std::stringstream  stream(data);
+        stream >> data >> data;
+        portversion = data.c_str();
+    }
+
+    QNetworkRequest req0(QUrl("https://api.github.com/repos/kraflab/dsda-doom/releases/latest"));
+    req0.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject json0;
+    QNetworkAccessManager nam0;
+    QNetworkReply *reply0 = nam0.get(req0);
+    while (!reply0->isFinished())
+    {
+        qApp->processEvents();
+    }
+    QByteArray response_data = reply0->readAll();
+    QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
+    QJsonObject jsonobj = jsondoc.object();
+        foreach(const QString& key, jsonobj.keys()) {
+            QJsonValue value = jsonobj.value(key);
+            if(key=="name")
+            {
+                if(portversion!=value.toString())
+                {
+                    QMessageBox msgBox;
+                    msgBox.setText("DSDA-Doom "+portversion);
+                    msgBox.setInformativeText("Available: "+value.toString());
+                    QPushButton* pButtonYes;
+                    pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
+                    msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
+                    msgBox.setDefaultButton(pButtonYes);
+                    msgBox.exec();
+                    if (msgBox.clickedButton()==pButtonYes)
+                    {
+                        QDesktopServices::openUrl(QUrl("https://www.doomworld.com/forum/topic/118074-dsda-doom-source-port-v0225/"));
+                    }
+                }
+                else
+                {
+                    QMessageBox msgBox;
+                    msgBox.setText("DSDA-Doom "+portversion);
+                    msgBox.setInformativeText("Up to Date");
+                    msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
+                    msgBox.exec();
+                }
+            }
+        }
+
+    reply0->deleteLater();
 }
 
 void MainWindow::on_actionSet_triggered()
@@ -1282,7 +1410,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         {
             argStr.append((i+" ").toStdString());
         }
-        ui->LaunchGameButton->setToolTip("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
         QMessageBox msgBox;
         msgBox.setText("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);

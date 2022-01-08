@@ -67,7 +67,15 @@ Settings::Settings(QWidget *parent) :
         ui->label_2->setFont(font);
         font.setPixelSize(11);
         ui->label_3->setFont(font);
+        ui->listWidget->clear();
+        ui->listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
     }
+    else
+    {
+        ui->textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
+    }
+
+    ui->textBrowser->setVisible(false);
 
     if(settings.value("complevels").toString()=="")
     {
@@ -120,13 +128,11 @@ Settings::Settings(QWidget *parent) :
     {
         for (int i = 0; i < size; i++) {
             settings.setArrayIndex(i);
-            if(settings.value("folder").toString()!="")
+            if(settings.value("folder").toString()!="" && settings.value("folder").toString()!=ui->listWidget->item(0)->text())
                 ui->listWidget->addItem(settings.value("folder").toString());
         }
     }
     settings.endArray();
-
-    ui->checkBox_2->setChecked(settings.value("pwadrecursive").toBool());
 }
 
 void Settings::fooo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
@@ -218,6 +224,7 @@ void Settings::on_toolButton_2_clicked()
     for (int i = 1; i < ui->listWidget->count(); i++) {
         settings.setArrayIndex(i);
         settings.setValue("folder", ui->listWidget->item(i)->text());
+        qDebug()<<ui->listWidget->item(i)->text();
     }
     settings.endArray();
 }
@@ -226,6 +233,13 @@ void Settings::on_toolButton_3_clicked()
 {
     if(ui->listWidget->count()>1 and ui->listWidget->currentRow()!=0)
         ui->listWidget->takeItem(ui->listWidget->currentRow());
+
+    settings.beginWriteArray("pwadfolders");
+    for (int i = 1; i < ui->listWidget->count(); i++) {
+        settings.setArrayIndex(i);
+        settings.setValue("folder", ui->listWidget->item(i)->text());
+    }
+    settings.endArray();
 }
 
 void Settings::on_pushButton_clicked()
@@ -339,8 +353,8 @@ void Settings::closeEvent(QCloseEvent *event) // When closing the launcher, save
 }
 
 
-void Settings::on_checkBox_2_toggled(bool checked)
+void Settings::on_toolButton_clicked()
 {
-    settings.setValue("pwadrecursive",checked);
+    ui->textBrowser->setVisible(!ui->textBrowser->isVisible());
 }
 

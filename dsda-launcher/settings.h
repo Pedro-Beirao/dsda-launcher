@@ -48,7 +48,7 @@ private slots:
 
     void on_toolButton_3_clicked();
 
-    void on_checkBox_2_toggled(bool checked);
+    void on_toolButton_clicked();
 
 private:
     Ui::Settings *ui;
