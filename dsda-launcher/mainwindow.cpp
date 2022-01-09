@@ -793,7 +793,7 @@ void MainWindow::dropFile(QString fileName)
                     {
                         if(argList[i]=="-iwad" && argList[i+1]!='-')
                         {
-                            ui->iwadSelect->setCurrentIndex(ui->iwadSelect->findText(argList[i+1].toStdString().substr(0,argList[i+1].length()-4).c_str()));
+                            ui->iwadSelect->setCurrentIndex(ui->iwadSelect->findText(lowerCase(argList[i+1].toStdString().substr(0,argList[i+1].length()-4))));
                         }
                         else if(argList[i]=="-complevel" && argList[i+1]!='-')
                         {
@@ -838,7 +838,7 @@ void MainWindow::dropFile(QString fileName)
                                         {
                                             for(int i=0; i<files.count(); i++)
                                             {
-                                                if(files[i]==file0)
+                                                if(lowerCase(files[i].toStdString())==lowerCase(file0.toStdString()))
                                                 {
                                                     ui->wadsOnFolder->addItem(folder+"/"+file0);
                                                     files.remove(i);
@@ -850,8 +850,6 @@ void MainWindow::dropFile(QString fileName)
                                 }
                             }
                             settings.endArray();
-                            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-                            std::string execPath = QCoreApplication::applicationDirPath().toStdString();
 
                             if(files.count()!=0)
                             {
@@ -866,7 +864,7 @@ void MainWindow::dropFile(QString fileName)
                                 {
                                     for(int i=0; i<files.count(); i++)
                                     {
-                                        if(files[i]==file0)
+                                        if(lowerCase(files[i].toStdString())==lowerCase(file0.toStdString()))
                                         {
                                             ui->wadsOnFolder->addItem(folder+"/"+file0);
                                             files.remove(i);
