@@ -1,6 +1,8 @@
 Here is a complete guide on how to customise the launcher.
 
-## 1. Find the "launcher_config.txt" file
+## 1. Find the "dsda-launcher.json" file
+
+   Go to the settings and click "Edit Quick Toggles"
    
    **Windows**: Should be in the same folder as the launcher
    
@@ -14,7 +16,7 @@ Here is a complete guide on how to customise the launcher.
    
    2 - Bottom row type
    
-   3 - Bottom row boxes
+   3 - Bottom row
    
 ## 3. Customise the Toggles
    
@@ -22,13 +24,13 @@ Here is a complete guide on how to customise the launcher.
 
    The 4 toggles in the image above are the default and are defined by:
    ```
-   "Fast Monsters" "-fast"
-   "No Monsters" "-nomonsters"
-   "Respawn Monsters" "-respawn"
-   "Solo Net" "-solo-net"
+   "Fast Monsters": "-fast",
+   "No Monsters": "-nomonsters",
+   "Respawn Monsters": "-respawn",
+   "Solo Net": "-solo-net"
    ```
    
-   "Text that appears in the launcher" "Parameter"
+   "Text that appears in the launcher": "Parameter"
    
 ## 4. Change the Bottom Row Type
    
@@ -40,30 +42,29 @@ Here is a complete guide on how to customise the launcher.
    
    Change the number that appears to 2 if you want to customise it. Leave it as 1 to stay with the "Fullscreen + Resolution"
    
-## 5. Customise the Bottom Row (Only if you chose 2)
+## 5. Customise the Bottom Row (Only if you chose 2 before)
 
    ```
-+"Time"
-"-time_use"
-"-time_keys"
-"-time_secrets"
-"-time_all"
-
-+"Stats"
-"-levelstat"
-"-analysis"
-"both"
+"Stats": [
+     "-levelstat",
+     "-analysis",
+     "both"
+     ],
+"Time": [
+     "-time_use",
+     "-time_keys",
+     "-time_secrets",
+     "-time_all"
+     ]
    ```
    
    ___
    
-   +"Text on top of the boxes"
-   
-   "Parameter"
-   
-   "Another Parameters"
-   
-   "etc"
+   "Text on top of the box": [
+      "Parameter",
+      "Another Parameters",
+      "etc"
+      ]
    
    ___
    
