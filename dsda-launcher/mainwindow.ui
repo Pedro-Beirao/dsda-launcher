@@ -1241,18 +1241,33 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionCheck_for_Updates"/>
     <addaction name="actionGithub_2"/>
    </widget>
+   <widget class="QMenu" name="menuAdvanced">
+    <property name="title">
+     <string>Advanced</string>
+    </property>
+    <addaction name="actionOpen_IWAD_folder"/>
+    <addaction name="actionOpen_Console"/>
+    <addaction name="actionCommand"/>
+   </widget>
    <addaction name="menuAbout"/>
    <addaction name="menudsda_doom"/>
+   <addaction name="menuAdvanced"/>
    <addaction name="menuState"/>
   </widget>
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionLoad">
    <property name="text">
     <string>Load</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
   <action name="actionVersion">
@@ -1298,6 +1313,40 @@ p, li { white-space: pre-wrap; }
   <action name="actionGithub_2">
    <property name="text">
     <string>Github</string>
+   </property>
+  </action>
+  <action name="actionOpen_IWAD_folder">
+   <property name="text">
+    <string>Open IWAD folder</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_bat_file">
+   <property name="text">
+    <string>.bat file</string>
+   </property>
+  </action>
+  <action name="action_sh_file">
+   <property name="text">
+    <string>.sh file</string>
+   </property>
+  </action>
+  <action name="actionCommand">
+   <property name="text">
+    <string>Export Command</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionOpen_Console">
+   <property name="text">
+    <string>Open Console</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

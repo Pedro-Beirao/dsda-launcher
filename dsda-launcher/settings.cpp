@@ -49,15 +49,15 @@ Settings::Settings(QWidget *parent) :
 
     pmainWindow = MainWindow::getMainWin();
 
-    if(settings.value("theme")=="light")
-    {
-        ui->checkBox->setChecked(false);
-        on_checkBox_clicked(false);
-    }
-    else
+    if(settings.value("theme")=="dark")
     {
         ui->checkBox->setChecked(true);
         on_checkBox_clicked(true);
+    }
+    else
+    {
+        ui->checkBox->setChecked(false);
+        on_checkBox_clicked(false);
     }
 
     if(getOsNameS()=="MacOS")
@@ -94,15 +94,14 @@ Settings::Settings(QWidget *parent) :
         ui->radioButton_3->setChecked(true);
     }
 
+    ui->lineEdit_2->setText(settings.value("exeName").toString());
+
     QRegularExpression rgx("[0-9]{1}");
     QValidator *comValidator = new QRegularExpressionValidator (rgx, this);
     ui->lineEdit->setValidator(comValidator);
     
-    // Keyboard shortcuts
+    // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
-    // Open the folder to add the IWADs
-    QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(fooo()));
-    shortcut->setAutoRepeat(false);
 
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
@@ -133,18 +132,6 @@ Settings::Settings(QWidget *parent) :
         }
     }
     settings.endArray();
-}
-
-void Settings::fooo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
-{
-    if(getOsNameS()=="MacOS"|| getOsNameS()=="Linux")
-    {
-        system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
-    }
-    else
-    {
-        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
-    }
 }
 
 void Settings::fooo3() // CTRL+W runs this function close the active window
@@ -356,5 +343,20 @@ void Settings::closeEvent(QCloseEvent *event) // When closing the launcher, save
 void Settings::on_toolButton_clicked()
 {
     ui->textBrowser->setVisible(!ui->textBrowser->isVisible());
+}
+
+
+void Settings::on_lineEdit_2_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        pmainWindow->changeExeName("dsda-doom");
+        ui->lineEdit_2->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        pmainWindow->changeExeName(arg1);
+        ui->lineEdit_2->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
 }
 

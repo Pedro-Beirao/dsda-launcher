@@ -17,7 +17,6 @@ public:
     Ui::Console *ui;
 
 public slots:
-    void fooo();
     void fooo3();
     void changeText(std::string s);
     void clearText();

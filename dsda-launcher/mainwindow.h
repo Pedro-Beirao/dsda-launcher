@@ -32,7 +32,7 @@ public slots:
     bool eventFilter(QObject *object, QEvent *ev);
     void delayLaunch();
     void closeEvent(QCloseEvent *event);
-    void on_LaunchGameButton_clicked(bool onExit, bool returnTooltip);
+    void on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd);
     void on_iwadSelect_currentIndexChanged(int index);
     void on_pushButton_clicked();
     void on_plus_clicked();
@@ -45,7 +45,6 @@ public slots:
     void on_soloNetCheck_toggled(bool checked);
     void on_tabs_currentChanged(int index);
     void foo();
-    void foo2();
     void foo3();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
@@ -53,8 +52,6 @@ public slots:
     void dropEvent(QDropEvent *e);
     void on_toolButton_3_clicked();
     void on_comboBox_currentIndexChanged(int index);
-    void on_episodeBox_textChanged(const QString &arg1);
-    void on_levelBox_textChanged(const QString &arg1);
     void clearLeaderboard();
     void addToArguments(QString string);
     void on_actionLoad_triggered();
@@ -74,6 +71,10 @@ public slots:
     void changeResolutions(QListWidget *list);
     void dropFile(QString fileName);
     void findIwads(int type);
+    void changeExeName(QString newName);
+    void on_actionCommand_triggered();
+    void on_actionOpen_IWAD_folder_triggered();
+    void on_actionOpen_Console_triggered();
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);

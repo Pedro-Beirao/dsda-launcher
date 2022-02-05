@@ -19,7 +19,6 @@ public:
 public slots:
 
 private slots:
-    void fooo();
     void fooo3();
     void on_checkBox_clicked(bool checked);
 
@@ -49,6 +48,8 @@ private slots:
     void on_toolButton_3_clicked();
 
     void on_toolButton_clicked();
+
+    void on_lineEdit_2_textChanged(const QString &arg1);
 
 private:
     Ui::Settings *ui;

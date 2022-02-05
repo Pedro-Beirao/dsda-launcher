@@ -470,7 +470,7 @@ color: rgb(255, 255, 255);</string>
        <x>10</x>
        <y>30</y>
        <width>321</width>
-       <height>201</height>
+       <height>171</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -564,6 +564,40 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;For this to work, you need to add the folders you have your PWADs in, to the following container.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>220</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Executable Name:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>215</y>
+       <width>131</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid rgb(180, 180, 180);
+padding-left: 6px;
+height: 20px;
+color: rgb(0, 0, 8);
+background-color: rgb(255, 255, 255);
+border-radius:3px</string>
+     </property>
+     <property name="placeholderText">
+      <string>dsda-doom</string>
      </property>
     </widget>
    </widget>

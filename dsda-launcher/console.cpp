@@ -24,11 +24,8 @@ Console::Console(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Keyboard shortcuts
+    // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
-    // Open the folder to add the IWADs
-    QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(fooo()));
-    shortcut->setAutoRepeat(false);
 
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
@@ -51,17 +48,6 @@ void Console::clearText()
     ui->text->setPlainText("");
 }
 
-void Console::fooo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
-{
-    if(getOsNameC()=="MacOS"|| getOsNameC()=="Linux")
-    {
-        system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
-    }
-    else
-    {
-        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
-    }
-}
 
 void Console::fooo3() // CTRL+W runs this function close the active window
 {

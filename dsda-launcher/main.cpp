@@ -11,10 +11,21 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-
     // Settings to be stored
     QSettings settings("pedrobeirao","dsda-launcher");
+
+    for (int i = 0; i < argc; ++i)
+    {
+        qDebug()<<argv[i];
+         if(std::string(argv[i])=="-clearsettings")
+         {
+             qDebug()<<"lol;";
+            settings.clear();
+         }
+    }
+
+
+    QApplication a(argc, argv);
 
     MainWindow w;
     w.ensurePolished();

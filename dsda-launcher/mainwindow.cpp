@@ -34,6 +34,7 @@
 #include <sstream>
 
 QString version = "v1.0";
+QString exeName = "dsda-doom";
 
 // Find the name of the OS
 std::string getOsName()
@@ -92,6 +93,11 @@ MainWindow * MainWindow::pMainWindow = nullptr;
 MainWindow *MainWindow::getMainWin()
 {
     return pMainWindow;
+}
+
+void MainWindow::changeExeName(QString newName)
+{
+    exeName = newName;
 }
 
 void MainWindow::changeMaxSkillLevel(int max)
@@ -194,9 +200,9 @@ void MainWindow::findIwads(int type)
         if(!check1.exists())
             system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
 
-        QFileInfo check2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-doom.wad").c_str());
+        QFileInfo check2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+exeName.toStdString()+".wad").c_str());
         if(!check2.exists())
-            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/dsda-doom.wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+".wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
 
         QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
@@ -224,7 +230,7 @@ void MainWindow::findIwads(int type)
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2")
+        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2"||filename=="doom2f")
         {
             ui->iwadSelect->addItems({filename});
         }
@@ -240,30 +246,20 @@ void MainWindow::findIwads(int type)
         }
     }
 
-    // Heretic / Hexen
+    // Heretic / Hexen / Chex Quest / Hacx
     foreach(QString filename, images) {
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="heretic"||filename=="hexen")
+        if(filename=="heretic"||filename=="hexen"||filename=="chex" || filename=="hacx")
         {
             ui->iwadSelect->addItems({filename});
         }
     }
 
-    // Chex Quest 1 / Hacx
-    foreach(QString filename, images) {
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        if(filename=="chex" || filename=="hacx")
-        {
-            ui->iwadSelect->addItems({filename});
-        }
-    }
 
 
     // Other wads with the IWAD tag
     // This might make the launcher slower if you have too many wads on the same folder as the launcher
-    //Im going to commant this out for now
     if(type==1)
     {
         foreach(QString filename, images) {
@@ -333,11 +329,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->episodeBox->setValidator(comValidator);
     ui->levelBox->setValidator(comValidator);
 
-    // Keyboard shortcuts
+    // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
-    // Open the folder to add the IWADs
-    QShortcut * shortcut = new QShortcut(QKeySequence(Qt::Key_O | Qt::CTRL),this,SLOT(foo()));
-    shortcut->setAutoRepeat(false);
 
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(foo3()));
@@ -367,7 +360,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
 
@@ -395,7 +388,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
 
@@ -412,7 +405,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::ofstream file_;
             file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString());
             if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment2\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
+                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
             file_.close();
         }
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
@@ -922,7 +915,7 @@ void MainWindow::on_actionLoad_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Load State"),settings.value("statefile").toString(),tr("state files (*.state)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"),settings.value("statefile").toString(),tr("state files (*.state)"));
     if(fileName != "")
     {
         settings.setValue("statefile", fileName);
@@ -1002,11 +995,11 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
     QString path;
 
     if(getOsName()=="MacOS")
-        path = (execPath+"/../Resources/dsda-doom").c_str();
+        path = (execPath+"/../Resources/"+exeName.toStdString()+"").c_str();
     else if(getOsName()=="Linux")
-        path = (execPath+"/dsda-doom").c_str();
+        path = (execPath+"/"+exeName.toStdString()).c_str();
     else
-        path = (execPath+"/dsda-doom.exe").c_str();
+        path = (execPath+"/"+exeName.toStdString()+".exe").c_str();
 
     QFile port = QFile(path);
     if(port.exists())
@@ -1096,6 +1089,26 @@ void MainWindow::on_actionWhat_is_this_triggered()
     msgBox.exec();
 }
 
+void MainWindow::on_actionCommand_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export command line"),settings.value("batfile").toString(),tr("batch files (*.bat *.sh *.zsh *.command)"));
+    if(fileName != "")
+    {
+        settings.setValue("batfile", fileName);
+        on_LaunchGameButton_clicked(false,true,fileName.toStdString());
+    }
+}
+
+void MainWindow::on_actionOpen_IWAD_folder_triggered()
+{
+    foo();
+}
+
+void MainWindow::on_actionOpen_Console_triggered()
+{
+    on_pushButton_clicked();
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -1103,6 +1116,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::foo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
+    qDebug()<<"z";
     if(getOsName()=="MacOS"|| getOsName()=="Linux")
     {
         system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
@@ -1113,11 +1127,6 @@ void MainWindow::foo() // CTRL+O runs this function to open the folder where the
     }
 }
 
-void MainWindow::foo2() // CTRL+N runs this function to open a new instance of the MainWindow
-{
-    MainWindow *newMainWindow = new MainWindow;
-    newMainWindow->show();
-}
 
 void MainWindow::foo3() // CTRL+W runs this function close the active window
 {
@@ -1176,7 +1185,7 @@ void MainWindow::started()
 {
 }
 
-void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
     QStringList argList;
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
@@ -1344,7 +1353,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     if(ui->recordDemo->text().size()>2)
     {
         argList.append("-record");
-        argList.append(ui->recordDemo->text());
+        if(returnTooltip)
+            argList.append("\""+ui->recordDemo->text()+"\"");
+        else
+            argList.append(ui->recordDemo->text());
     }
 
     if(ui->recordDemo_2->text().size()>2)
@@ -1404,12 +1416,51 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
     if(returnTooltip)
     {
         std::string argStr;
-        foreach(QString i, argList)
+        std::string argStrComplete;
+        foreach(QString p, argList)
         {
-            argStr.append((i+" ").toStdString());
+            argStrComplete.append((p+" ").toStdString());
+
+            int lastBar = 0;
+            for( size_t i=0; i<p.length(); i++){
+                if(p[i]=='/' || p[i]=='\\')
+                {
+                    lastBar=i+1;
+                }
+            }
+            p = p.toStdString().substr(lastBar).c_str();
+
+            if(p.length()>1 && p[0]!='"' && p[p.length()-1]=='"')
+            {
+                p = p.toStdString().substr(0,p.length()-1).c_str();
+            }
+
+            argStr.append((p+" ").toStdString());
         }
+
+        if(exportCmd!="")
+        {
+            std::ofstream file_;
+            file_.open(exportCmd);
+            std::string pwads;
+            qDebug()<<argStrComplete.c_str();
+            if(getOsName()=="MacOS")
+                file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+            else if(getOsName()=="Linux")
+                file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+            else
+            {
+                std::string execPath = QCoreApplication::applicationDirPath().toStdString();
+                std::replace(execPath.begin(),execPath.end(),'/','\\');
+                file_ << "\""+execPath+"\\"+exeName.toStdString()+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+            }
+            file_.close();
+
+            return;
+        }
+
         QMessageBox msgBox;
-        msgBox.setText("dsda-doom -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
+        msgBox.setText(exeName+" -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton* pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
@@ -1419,14 +1470,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
         {
             QClipboard *clip;
             if(getOsName()=="MacOS")
-                clip->setText("\""+QCoreApplication::applicationDirPath()+"/../Resources/dsda-doom\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+                clip->setText("\""+QCoreApplication::applicationDirPath()+"/../Resources/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
             else if(getOsName()=="Linux")
-                clip->setText("\""+QCoreApplication::applicationDirPath()+"/dsda-doom\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+                clip->setText("\""+QCoreApplication::applicationDirPath()+"/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
             else
             {
                 std::string execPath = QCoreApplication::applicationDirPath().toStdString();
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                clip->setText("\""+QString(execPath.c_str())+"\\dsda-doom.exe\" -iwad \""+QString(execPath.c_str())+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStr.c_str());
+                clip->setText("\""+QString(execPath.c_str())+"\\"+exeName+".exe\" -iwad \""+QString(execPath.c_str())+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
             }
         }
 
@@ -1510,6 +1561,8 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wadsOnFolder->item(i)->text());
         }
 
+        settings.setValue("exeName", exeName);
+
         return;
     }
 
@@ -1518,7 +1571,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 
     if(getOsName()=="MacOS")
     {
-        QFile port = QFile((execPath+"/../Resources/dsda-doom").c_str());
+        QFile port = QFile((execPath+"/../Resources/"+exeName.toStdString()+"").c_str());
         if(port.exists())
         {
             std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
@@ -1528,19 +1581,19 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath.c_str());
-            process->start((execPath+"/../Resources/dsda-doom").c_str(), argList);
+            process->start((execPath+"/../Resources/"+exeName.toStdString()).c_str(), argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
         }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", "Cannot find dsda-doom");
+            QMessageBox::warning(this, "dsda-launcher", "Cannot find "+exeName);
         }
     }
     else if(getOsName()=="Linux")
     {
-        QFile port = QFile((execPath+"/dsda-doom").c_str());
+        QFile port = QFile((execPath+"/"+exeName.toStdString()).c_str());
         if(port.exists())
         {
             std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
@@ -1550,14 +1603,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath.c_str());
-            process->start((execPath+"/dsda-doom").c_str(), argList);
+            process->start((execPath+"/"+exeName.toStdString()).c_str(), argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
          }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom");
+            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as "+exeName);
         }
     }
     else
@@ -1585,7 +1638,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
 
         arguments=" ";
         */
-        QFile port = QFile((execPath+"/dsda-doom.exe").c_str());
+        QFile port = QFile((execPath+"/"+exeName.toStdString()+".exe").c_str());
         if(port.exists())
         {
             argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
@@ -1593,14 +1646,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip) //
             qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(execPath.c_str());
-            process->start((execPath+"/dsda-doom.exe").c_str(), argList);
+            process->start((execPath+"/"+exeName.toStdString()+".exe").c_str(), argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
         }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom.exe");
+            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as "+exeName+".exe");
         }
     }
 
@@ -2080,24 +2133,11 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 
 }
 
-
-
-void MainWindow::on_episodeBox_textChanged(const QString &arg1)
-{
-            reloadLeaderboard(false,false);
-}
-
-void MainWindow::on_levelBox_textChanged(const QString &arg1)
-{
-            reloadLeaderboard(false,false);
-}
-
-
 void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
 {
     if(event->key()==0x01000005 || event->key()==0x01000004) // Key is either ENTER or RETURN
     {
-        on_LaunchGameButton_clicked(false, false);
+        on_LaunchGameButton_clicked(false, false,"");
     }
 }
 
@@ -2112,7 +2152,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
             //}
             if(ev->type() == QEvent::MouseButtonPress)
             {
-                on_LaunchGameButton_clicked(false, false);
+                on_LaunchGameButton_clicked(false, false,"");
                 return QWidget::eventFilter(object, ev);
             }
       }
@@ -2122,7 +2162,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
            if (keyEvent->key() == 0x01000005 || keyEvent->key() == 0x01000004) // Key is either ENTER or RETURN
            {
-                on_LaunchGameButton_clicked(false, false);
+                on_LaunchGameButton_clicked(false, false,"");
                 return true;
            }
     }
@@ -2131,7 +2171,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
 void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, save the settings
 {
-    on_LaunchGameButton_clicked(true, false);
+    on_LaunchGameButton_clicked(true, false,"");
     QApplication::quit();
 }
 
@@ -2229,6 +2269,6 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    on_LaunchGameButton_clicked(false,true);
+    on_LaunchGameButton_clicked(false,true,"");
 }
 
