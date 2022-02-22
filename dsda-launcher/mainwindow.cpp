@@ -33,7 +33,7 @@
 #include <QClipboard>
 #include <sstream>
 
-QString version = "v1.0";
+QString version = "v1.1";
 QString exeName = "dsda-doom";
 
 // Find the name of the OS
@@ -49,6 +49,12 @@ std::string getOsName()
     return "Linux";
     #endif
 }
+
+std::string osName = getOsName();
+
+// If dsda-doom is running
+bool running = false;
+
 // List of all the IWADs detected
 QStringList images;
 
@@ -144,7 +150,7 @@ void MainWindow::changeComplevelsList(int i)
 
 void MainWindow::changeButtonColor(bool isDark)
 {
-    if(isDark && getOsName()=="MacOS")
+    if(isDark && osName=="MacOS")
     {
         ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                         "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
@@ -154,7 +160,7 @@ void MainWindow::changeButtonColor(bool isDark)
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
         ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(100, 100, 100);");
     }
-    else if(getOsName()=="MacOS")
+    else if(osName=="MacOS")
     {
         ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                         "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
@@ -194,7 +200,7 @@ void MainWindow::delayLaunch()
 void MainWindow::findIwads(int type)
 {
     // Find the IWADs in the correct folder depending on the OS
-    if(getOsName()=="MacOS" || getOsName()=="Linux")
+    if(osName=="MacOS" || osName=="Linux")
     {
         QFileInfo check1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
         if(!check1.exists())
@@ -268,7 +274,7 @@ void MainWindow::findIwads(int type)
             if(filename!="doom"&&filename!="doom1"&&filename!="doomu"&&filename!="doom2"&&filename!="tnt"&&filename!="plutonia"&&filename!="freedoom1"&&filename!="freedoom"&&filename!="freedoom2"&&filename!="heretic"&&filename!="hexen"&&filename!="chex"&&filename!="hacx")
             {
                     std::ifstream file;
-                    if(getOsName()=="MacOS"||getOsName()=="Linux")
+                    if(osName=="MacOS"||osName=="Linux")
                     {
                         file.open(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+filename.toStdString()+".wad");
                         std::string buffer;
@@ -344,7 +350,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Check if the dsda-launcher.json file exists
     // If not, create it
-    if(getOsName()=="MacOS")
+    if(osName=="MacOS")
     {
         setMinimumHeight(455);
         setMaximumHeight(455);
@@ -366,7 +372,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
     }
-    else if(getOsName()=="Windows")
+    else if(osName=="Windows")
     {
         std::string html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Press  </span><span style=\" font-size:8pt; font-weight:600;\">ctrl + o</span><span style=\"; font-size:8pt;\"> / </span><span style=\" font-size:8pt; font-weight:600;\">cmd + o</span><span style=\" font-size:8pt;\">  and drag your IWADs to the folder that opened</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Then restart the launcher</span></p></body></html>";
         ui->toolTip->setHtml(html.c_str());
@@ -847,7 +853,7 @@ void MainWindow::dropFile(QString fileName)
                             if(files.count()!=0)
                             {
                                 QString folder;
-                                if(getOsName()=="Windows")
+                                if(osName=="Windows")
                                      folder = QCoreApplication::applicationDirPath();
                                 else
                                      folder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
@@ -994,9 +1000,9 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
 
     QString path;
 
-    if(getOsName()=="MacOS")
+    if(osName=="MacOS")
         path = (execPath+"/../Resources/"+exeName.toStdString()+"").c_str();
-    else if(getOsName()=="Linux")
+    else if(osName=="Linux")
         path = (execPath+"/"+exeName.toStdString()).c_str();
     else
         path = (execPath+"/"+exeName.toStdString()+".exe").c_str();
@@ -1116,8 +1122,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::foo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
-    qDebug()<<"z";
-    if(getOsName()=="MacOS"|| getOsName()=="Linux")
+    if(osName=="MacOS"|| osName=="Linux")
     {
         system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
     }
@@ -1165,31 +1170,46 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     QProcess *p = (QProcess *)sender();
     delete p;
-    qDebug() << "Finished: " << exitCode;
+    running = false;
 }
 
 void MainWindow::readyReadStandardError()
 {
-  qDebug() << "ReadyError";
 }
 
 void MainWindow::readyReadStandardOutput()
 {
   QProcess *p = (QProcess *)sender();
-  QByteArray buf = p->readAllStandardOutput();
+  QByteArray buf = p->readAllStandardError() + p->readAllStandardOutput();
 
   consoleWindow->changeText(buf.toStdString());
 }
 
 void MainWindow::started()
 {
+    running = true;
+}
+
+void gameIsRunning()
+{
+    QMessageBox msgBox;
+    msgBox.setText(exeName+" is still running.");
+    msgBox.addButton("Ok", QMessageBox::YesRole);
+    msgBox.exec();
 }
 
 void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
-    QStringList argList;
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
+
+    if(running)
+    {
+        gameIsRunning();
+        return;
+    }
+
+    QStringList argList;
 
     /* Complevels:
         Default
@@ -1255,7 +1275,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         for(int item=0;item < ui->wadsOnFolder->count(); item++)
         {
             std::string fileToAdd = ui->wadsOnFolder->item(item)->text().toStdString();
-            if(getOsName()=="Windows")
+            if(osName=="Windows")
             {
                 for(int i=0; i<fileToAdd.length();i++)
                 {
@@ -1444,9 +1464,9 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             file_.open(exportCmd);
             std::string pwads;
             qDebug()<<argStrComplete.c_str();
-            if(getOsName()=="MacOS")
+            if(osName=="MacOS")
                 file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
-            else if(getOsName()=="Linux")
+            else if(osName=="Linux")
                 file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
             else
             {
@@ -1469,9 +1489,9 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         if (msgBox.clickedButton()!=pButtonYes)
         {
             QClipboard *clip;
-            if(getOsName()=="MacOS")
+            if(osName=="MacOS")
                 clip->setText("\""+QCoreApplication::applicationDirPath()+"/../Resources/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
-            else if(getOsName()=="Linux")
+            else if(osName=="Linux")
                 clip->setText("\""+QCoreApplication::applicationDirPath()+"/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
             else
             {
@@ -1569,7 +1589,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     std::string execPath=QCoreApplication::applicationDirPath().toStdString();
     consoleWindow->clearText();
 
-    if(getOsName()=="MacOS")
+    if(osName=="MacOS")
     {
         QFile port = QFile((execPath+"/../Resources/"+exeName.toStdString()+"").c_str());
         if(port.exists())
@@ -1578,7 +1598,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
             argList.push_front("-iwad");
             //system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-            qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath.c_str());
             process->start((execPath+"/../Resources/"+exeName.toStdString()).c_str(), argList);
@@ -1591,7 +1610,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             QMessageBox::warning(this, "dsda-launcher", "Cannot find "+exeName);
         }
     }
-    else if(getOsName()=="Linux")
+    else if(osName=="Linux")
     {
         QFile port = QFile((execPath+"/"+exeName.toStdString()).c_str());
         if(port.exists())
@@ -1600,7 +1619,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
             argList.push_front("-iwad");
             //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
-            qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath.c_str());
             process->start((execPath+"/"+exeName.toStdString()).c_str(), argList);
@@ -1643,7 +1661,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
             argList.push_front("-iwad");
-            qDebug()<<argList;
             QProcess *process = new QProcess;
             process->setWorkingDirectory(execPath.c_str());
             process->start((execPath+"/"+exeName.toStdString()+".exe").c_str(), argList);
@@ -1722,6 +1739,20 @@ void MainWindow::on_plus_clicked()
     if(fileNames.length()>0)
     {
         settings.setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
+
+        std::string p = ui->wadsOnFolder->item(0)->text().toStdString();
+        if(p.substr(p.length()-3)=="wad")
+        {
+            int lastBar=0;
+            for( size_t i=0; i<p.length(); i++){
+                if(p[i]=='/' || p[i]=='\\')
+                {
+                    lastBar=i+1;
+                }
+            }
+            p = p.substr(lastBar);
+            ui->wadLName->setText(p.substr(0,p.length()-4).c_str());
+        }
     }
 }
 
@@ -2171,6 +2202,12 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
 void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, save the settings
 {
+    if(running)
+    {
+        gameIsRunning();
+        event->ignore();
+        return;
+    }
     on_LaunchGameButton_clicked(true, false,"");
     QApplication::quit();
 }
