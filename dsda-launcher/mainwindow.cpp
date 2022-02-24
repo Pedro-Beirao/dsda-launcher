@@ -592,6 +592,12 @@ MainWindow::MainWindow(QWidget *parent)
     if(ui->iwadSelect->currentIndex()==-1 && ui->iwadSelect->count()!=0)
         ui->iwadSelect->setCurrentIndex(0);
 
+    if(ui->episodeBox->text()=="")
+    {
+        ui->diffBox->setEnabled(false);
+        ui->label_5->setEnabled(false);
+    }
+
     QStringList arguments = qApp->arguments();
         if(arguments.count() > 1)
         {
@@ -1203,7 +1209,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
 
-    if(running)
+    if(running && !returnTooltip)
     {
         gameIsRunning();
         return;
@@ -1838,6 +1844,7 @@ void MainWindow::on_pushButton_2_clicked() // Record demo
     QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
     ui->recordDemo->setText(demoName);
 }
+
 void MainWindow::on_pushButton_3_clicked() // Play demo
 {
     QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
@@ -2307,5 +2314,21 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
     on_LaunchGameButton_clicked(false,true,"");
+}
+
+
+void MainWindow::on_episodeBox_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->diffBox->setEnabled(false);
+        ui->label_5->setEnabled(false);
+    }
+    else
+    {
+        ui->diffBox->setEnabled(true);
+        ui->label_5->setEnabled(true);
+    }
+
 }
 

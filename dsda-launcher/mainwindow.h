@@ -92,6 +92,7 @@ private slots:
     void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
     void on_wadLName_2_textChanged(const QString &arg1);
+    void on_episodeBox_textChanged(const QString &arg1);
 };
 extern QSettings settings;
 
