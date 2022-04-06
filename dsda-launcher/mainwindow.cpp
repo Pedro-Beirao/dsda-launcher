@@ -1128,9 +1128,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::foo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
-    if(osName=="MacOS"|| osName=="Linux")
+    if(osName=="MacOS")
     {
         system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
+    }
+    else if(osName=="Linux")
+    {
+        system(("xdg-open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
     }
     else
     {
@@ -1618,8 +1622,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     }
     else if(osName=="Linux")
     {
-        QFile port = QFile((execPath+"/"+exeName.toStdString()).c_str());
-        if(port.exists())
+        /* In Linux it's difficult to place dsda-doom and the launcher in the same folder, maybe you can use a symlink? or ask the user where it is? or even use whereis command.
+         * but a faster hacky work-around is to check the default directories where most users have their doom sourceports.
+         * when compiled using the official makefile dsda-doom and prboom+ get stored in '/usr/local/bin'.
+         * other source ports that you download from a package manager (I tested GZDoom and Chocolate Doom) exist  in '/usr/games'.
+         * There is also a slight possibility you can find a source port in '/usr/bin' but I haven't encountered any source port that does that.*/
+        QFile port = QFile(("/usr/local/bin/"+exeName.toStdString()).c_str());
+        QFile port2 = QFile(("/usr/games/"+exeName.toStdString()).c_str());
+        if(port.exists() || port2.exists())
         {
             std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
             argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
@@ -1627,14 +1637,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath.c_str());
-            process->start((execPath+"/"+exeName.toStdString()).c_str(), argList);
+            process->start(exeName, argList); // dsda-doom, GZDoom, and Chocolate Doom can all be launched by just entering their executable name, should work on all sourceports probs.
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
          }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as "+exeName);
+            QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed and exist in '/usr/local/bin' or '/usr/games'"));
         }
     }
     else
