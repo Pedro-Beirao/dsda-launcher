@@ -38,6 +38,7 @@ mac {
     APP_FILES.files += ./launcher_config.txt
     deploy {
         APP_FILES.files += ./lib
+        QMAKE_APPLE_DEVICE_ARCHS=arm64 x86_64
         message("ready for deploy")
     }
     APP_FILES.path = Contents/Resources

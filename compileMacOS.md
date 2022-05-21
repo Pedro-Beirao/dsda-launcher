@@ -8,8 +8,7 @@ ___
 
 ## Qt - https://www.qt.io/download
 ```
-You need Qt 5.15.0 or up
-(Tested with Qt 5.15.2)
+Tested with Qt 6.2.2
 
 You can install it with "brew" or the Qt online installer
 ```
@@ -58,9 +57,9 @@ qmake ..
 If you installed Qt with the online installer, careful with qmake not being in the path
 
 
-// qmake "CONFIG+=deploy" ..
-// ^ this will add a "lib" folder to the .app bunndle
-// This is more of a personal note, please ignore
+// qmake .. "QMAKE_APPLE_DEVICE_ARCHS=arm64;x86_64" "CONFIG+=deploy"
+// ^ this will add a "lib" folder to the .app bunndle (Only useful when distributing dsda-doom) and will compile for both x64 and arm64 archs
+
 ```
 6. Run make
 ```
