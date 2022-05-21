@@ -63,29 +63,17 @@ QSettings settings("pedrobeirao","dsda-launcher");
 
 // These are the parameters with toggles you can customise
 // These names come from the defaults I created
-// ...ParamText is the text displayed on the launcher
-// ...Param is the parameter loaded
 // -fast
-std::string fastParamText;
-std::string fastParam;
+QString fastParam = "-fast";
 
 // -nomonsters
-std::string nomoParamText;
-std::string nomoParam;
+QString nomoParam = "-nomonsters";
 
 // -respawn
-std::string respawnParamText;
-std::string respawnParam;
+QString respawnParam = "-respawn";
 
 // -solonet
-std::string solonetParamText;
-std::string solonetParam;
-
-// This is the bottom row that you can customise
-// 0 = Error / Nothing detected
-// 1 = Default
-// 2 = Custom
-int bottomRow = 0;
+QString solonetParam = "-solo-net";
 
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 bool canLaunch = true;
@@ -117,6 +105,22 @@ void MainWindow::changeMaxSkillLevel(int max)
             ui->diffBox->addItem(" ");
     }
     ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
+}
+
+void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
+{
+    ui->fastCheck->setText(t1);
+    ui->fastCheck->setToolTip(a1);
+    ui->noCheck->setText(t2);
+    ui->noCheck->setToolTip(a2);
+    ui->noCheck_4->setText(t3);
+    ui->noCheck_4->setToolTip(a3);
+    ui->soloNetCheck->setText(t4);
+    ui->soloNetCheck->setToolTip(a4);
+    fastParam = a1;
+    nomoParam = a2;
+    respawnParam = a3;
+    solonetParam = a4;
 }
 
 void MainWindow::changeResolutions(QListWidget *list)
@@ -342,191 +346,22 @@ MainWindow::MainWindow(QWidget *parent)
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(foo3()));
     shortcut3->setAutoRepeat(false);
 
-    int currentConfigBottomBox = 0;
-
-    // dsda-launcher.json file is where you can customise the launcher
-    std::fstream newfile;
-    std::string launcher_configFilePath;
-
-    // Check if the dsda-launcher.json file exists
-    // If not, create it
-    if(osName=="MacOS")
-    {
-        setMinimumHeight(455);
-        setMaximumHeight(455);
-
-        QFileInfo check_file1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        QFileInfo check_file2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
-        if(!check_file1.exists())
-        {
-            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        }
-        if(!check_file2.exists())
-        {
-            std::ofstream file_;
-            file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
-            if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
-            file_.close();
-        }
-
-        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
-    }
-    else if(osName=="Windows")
-    {
-        std::string html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Press  </span><span style=\" font-size:8pt; font-weight:600;\">ctrl + o</span><span style=\"; font-size:8pt;\"> / </span><span style=\" font-size:8pt; font-weight:600;\">cmd + o</span><span style=\" font-size:8pt;\">  and drag your IWADs to the folder that opened</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Then restart the launcher</span></p></body></html>";
-        ui->toolTip->setHtml(html.c_str());
-
-        ui->LaunchGameButton->setFixedHeight(25);
-        ui->pushButton->setFixedHeight(23);
-        ui->pushButton_4->setFixedHeight(23);
-        ui->pushButton_4->move(240,94);
-        ui->pushButton_2->setFixedHeight(28);
-        ui->pushButton_2->move(240,17);
-        ui->pushButton_3->setFixedHeight(28);
-        ui->pushButton_3->move(240,60);
-        ui->pushButton_5->move(225,423);
-        ui->toolButton_3->move(140,5);
-
-        QFileInfo check_file(QCoreApplication::applicationDirPath()+"/dsda-launcher.json");
-        if(!check_file.exists())
-        {
-            std::ofstream file_;
-            file_.open((QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString());
-            if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
-            file_.close();
-        }
-
-        launcher_configFilePath=(QCoreApplication::applicationDirPath()+"/dsda-launcher.json").toStdString();
-    }
-    else
-    {
-        try {
-            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        }  catch (...) { }
-        QFileInfo check_file(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json");
-        if(!check_file.exists())
-        {
-            std::ofstream file_;
-            file_.open((QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString());
-            if(file_.is_open())
-                file_ << "{\n\"_comment1\": \"https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/launcher_config_guide.md\",\n\"_comment2\":\"Restart the launcher for the changes to take place\",\n\n\"toggles\": {\n   \"Fast Monsters\": \"-fast\",\n   \"No Monsters\": \"-nomonsters\",\n   \"Respawn Monsters\": \"-respawn\",\n   \"Solo Net\": \"-solo-net\"\n   },\n\"bottom row type\": 1,\n\"bottom row\": {\n    \"_comment3\": \"Edit the following, ONLY if you chose '2' in the 'bottom row type'\",\n    \"Stats\": [\n        \"-levelstat\",\n        \"-analysis\",\n        \"both\"\n        ],\n    \"Time\": [\n        \"-time_use\",\n        \"-time_keys\",\n        \"-time_secrets\",\n        \"-time_all\"\n        ]\n    }\n}";
-            file_.close();
-        }
-        launcher_configFilePath=(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/dsda-launcher.json").toStdString();
-    }
-
-
-
-    QFile file(launcher_configFilePath.c_str());
-    if(file.open( QIODevice::ReadOnly ))
-        {
-            QByteArray bytes = file.readAll();
-            file.close();
-
-            QJsonParseError jsonError;
-            QJsonDocument document = QJsonDocument::fromJson( bytes, &jsonError );
-            if( jsonError.error != QJsonParseError::NoError )
-            {
-                 QMessageBox::warning(this, "dsda-launcher", ("Failed to parse json from dsda-launcher.json: "+jsonError.errorString().toStdString()).c_str());
-            }
-            else if( document.isObject() )
-            {
-                QJsonObject jsonObj = document.object();
-
-                QJsonObject toggles = jsonObj.value("toggles").toObject();
-                fastParamText = toggles.keys()[0].toStdString();
-                fastParam = toggles.value(fastParamText.c_str()).toString().toStdString();
-                nomoParamText = toggles.keys()[1].toStdString();
-                nomoParam = toggles.value(nomoParamText.c_str()).toString().toStdString();
-                respawnParamText = toggles.keys()[2].toStdString();
-                respawnParam = toggles.value(respawnParamText.c_str()).toString().toStdString();
-                solonetParamText = toggles.keys()[3].toStdString();
-                solonetParam = toggles.value(solonetParamText.c_str()).toString().toStdString();
-
-                bottomRow = jsonObj.value("bottom row type").toInt();
-                if(bottomRow==1)
-                {
-                    ui->timeKeysBox->hide();
-                    ui->levelstatBox->hide();
-                    ui->label_10->hide();
-                    ui->comboBox_2->show();
-                    ui->noCheck_3->show();
-                    ui->label_6->show();
-
-                    QJsonArray resolution = jsonObj.value("resolution").toArray();
-                    foreach (const QJsonValue & value, resolution)
-                    {
-                        ui->comboBox_2->addItem(value.toString());
-                    }
-                }
-                else if(bottomRow==2)
-                {
-                    ui->comboBox_2->hide();
-                    ui->noCheck_3->hide();
-                    ui->timeKeysBox->show();
-                    ui->levelstatBox->show();
-                    ui->label_10->show();
-                    ui->label_6->show();
-
-                    QJsonObject bottomRow = jsonObj.value("bottom row").toObject();
-                    for(int i=0;i<bottomRow.size();i++)
-                    {
-                        if(currentConfigBottomBox>1)
-                            break;
-                        if(bottomRow.keys()[i][0]=='_')
-                            continue;
-                        if(currentConfigBottomBox==0)
-                        {
-                            ui->label_6->setText(bottomRow.keys()[i]);
-
-                            // Needed to make the font bigger because it looked odd
-                            int size = ui->label_6->font().pointSize()+2;
-                            QFont newFont(ui->label_6->font().family(),size);
-                            ui->label_6->setFont(newFont);
-                            currentConfigBottomBox++;
-                            QJsonArray bottomBox1List = bottomRow.value(bottomRow.keys()[i]).toArray();
-                            foreach (const QJsonValue & value, bottomBox1List) {
-
-                                if(value.toString()=="all" || value.toString()=="both")
-                                    ui->timeKeysBox->addItem(" "+value.toString());
-                                else
-                                    ui->timeKeysBox->addItem(value.toString());
-                            }
-                        }
-                        else
-                        {
-                            ui->label_10->setText(bottomRow.keys()[i]);
-
-                            // Needed to make the font bigger because it looked odd
-                            int size = ui->label_10->font().pointSize()+2;
-                            QFont newFont(ui->label_10->font().family(),size);
-                            ui->label_10->setFont(newFont);
-                            currentConfigBottomBox++;
-                            QJsonArray bottomBox1List = bottomRow.value(bottomRow.keys()[i]).toArray();
-                            foreach (const QJsonValue & value, bottomBox1List) {
-
-                                if(value.toString()=="all" || value.toString()=="both")
-                                    ui->levelstatBox->addItem(" "+value.toString());
-                                else
-                                    ui->levelstatBox->addItem(value.toString());
-                            }
-                        }
-                    }
-                }
-            }
-         }
-
     // Set the parameters text correctly
-    ui->fastCheck->setText(fastParamText.c_str());
-    //ui->fastCheck->setToolTip(fastParam.c_str());
-    ui->noCheck->setText(nomoParamText.c_str());
-    //ui->noCheck->setToolTip(nomoParam.c_str());
-    ui->noCheck_4->setText(respawnParamText.c_str());
-    //ui->noCheck_4->setToolTip(respawnParam.c_str());
-    ui->soloNetCheck->setText(solonetParamText.c_str());
-    //ui->soloNetCheck->setToolTip(solonetParam.c_str());
+    if(settings.value("complevel").toString()!="")
+    {
+        fastParam = settings.value("toggle1a").toString();
+        nomoParam = settings.value("toggle2a").toString();
+        respawnParam = settings.value("toggle3a").toString();
+        solonetParam = settings.value("toggle4a").toString();
+        ui->fastCheck->setText(settings.value("toggle1t").toString());
+        ui->fastCheck->setToolTip(fastParam);
+        ui->noCheck->setText(settings.value("toggle2t").toString());
+        ui->noCheck->setToolTip(nomoParam);
+        ui->noCheck_4->setText(settings.value("toggle3t").toString());
+        ui->noCheck_4->setToolTip(respawnParam);
+        ui->soloNetCheck->setText(settings.value("toggle4t").toString());
+        ui->soloNetCheck->setToolTip(solonetParam);
+    }
 
 
     findIwads(0);
@@ -564,8 +399,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     ui->soloNetCheck->setChecked(settings.value("solonet").toBool());
     ui->argumentText->append(settings.value("argumentText").toString());
-    ui->timeKeysBox->setCurrentIndex(settings.value("timeKeys").toInt());
-    ui->levelstatBox->setCurrentIndex(settings.value("levelstat").toInt());
 
     ui->recordDemo->setText(settings.value("recorddemo").toString());
     ui->recordDemo_2->setText(settings.value("playdemo").toString());
@@ -703,14 +536,6 @@ void MainWindow::LoadState(QString fileName)
             else
                 ui->noCheck_3->setChecked(false);
         }
-        else if(buffer.substr(0,9)=="dropdown1" && buffer.substr(9).length()>1)
-        {
-            ui->timeKeysBox->setCurrentIndex(stoi(buffer.substr(10)));
-        }
-        else if(buffer.substr(0,9)=="dropdown2" && buffer.substr(9).length()>1)
-        {
-            ui->levelstatBox->setCurrentIndex(stoi(buffer.substr(10)));
-        }
         else if(buffer.substr(0,4)=="pwad")
         {
             searchingPwads=true;
@@ -756,7 +581,7 @@ void MainWindow::SaveState(QString fileName)
         pwads += ui->wadsOnFolder->item(i)->text().toStdString()+"\n";
     }
     if(file_.is_open())
-        file_ << "iwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+ui->levelBox->text().toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\ndropdown1="+std::to_string(ui->timeKeysBox->currentIndex())+"\ndropdown2="+std::to_string(ui->levelstatBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+        file_ << "iwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+ui->levelBox->text().toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
     file_.close();
 
 }
@@ -1304,79 +1129,36 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     // Again, these are the parameters available on toggles
     if(isFast)
     {
-        argList.append((fastParam).c_str());
+        argList.append(fastParam);
     }
     if(noMo)
     {
-        argList.append((nomoParam).c_str());
+        argList.append(nomoParam);
     }
     if(isRespawn)
     {
-        argList.append((respawnParam).c_str());
+        argList.append(respawnParam);
     }
     if(isSoloNet)
     {
-        argList.append((solonetParam).c_str());
+        argList.append(solonetParam);
     }
 
-    if(bottomRow==1)
+    if(ui->comboBox_2->currentIndex()==0)
     {
-        if(ui->comboBox_2->currentIndex()==0)
+        if(isFulscreen=="w")
         {
-            if(isFulscreen=="w")
-            {
-                argList.append("-nofullscreen");
-            }
-            else
-            {
-                argList.append("-fullscreen");
-            }
+            argList.append("-nofullscreen");
         }
         else
         {
-            argList.append("-geom");
-            argList.append((ui->comboBox_2->currentText().toStdString()+isFulscreen).c_str());
+            argList.append("-fullscreen");
         }
     }
-    else if(bottomRow==2)
+    else
     {
-        if(ui->timeKeysBox->currentIndex()==ui->timeKeysBox->count()-1 && ui->timeKeysBox->count()>1)
-        {
-            if(lowerCase(ui->timeKeysBox->currentText().toStdString())==" all"||lowerCase(ui->timeKeysBox->currentText().toStdString())==" both")
-            {
-                for(int i=(ui->timeKeysBox->count()-2);i>0;i--)
-                {
-                    argList.append(ui->timeKeysBox->itemText(i));
-                }
-            }
-            else
-            {
-                argList.append(ui->timeKeysBox->currentText());
-            }
-        }
-        else
-        {
-            argList.append(ui->timeKeysBox->currentText());
-        }
-
-        if(ui->levelstatBox->currentIndex()==ui->levelstatBox->count()-1 && ui->levelstatBox->count()>1)
-        {
-            if(lowerCase(ui->levelstatBox->currentText().toStdString())==" all"||lowerCase(ui->levelstatBox->currentText().toStdString())==" both")
-            {
-                for(int i=(ui->levelstatBox->count()-2);i>0;i--)
-                {
-                    argList.append(ui->levelstatBox->itemText(i));
-                }
-            }
-            else
-            {
-                argList.append(ui->levelstatBox->currentText());
-            }
-        }
-        else
-        {
-            argList.append(ui->levelstatBox->currentText());
-        }
+        argList.append("-geom");
+        argList.append((ui->comboBox_2->currentText().toStdString()+isFulscreen).c_str());
     }
 
 
@@ -1530,10 +1312,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         settings.setValue("fullscreen", ui->noCheck_3->isChecked());
         settings.setValue("geom",ui->comboBox_2->currentIndex());
 
-        settings.setValue("timeKeys", ui->timeKeysBox->currentIndex());
-        settings.setValue("levelstat", ui->levelstatBox->currentIndex());
-
-
         settings.setValue("solonet",isSoloNet);
         settings.setValue("respawn",isRespawn);
         settings.setValue("nomo",noMo);
@@ -1604,6 +1382,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         QFile port = QFile((execPath+"/../Resources/"+exeName.toStdString()+"").c_str());
         if(port.exists())
         {
+            qDebug() << argList;
             std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
             argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
             argList.push_front("-iwad");
@@ -1821,32 +1600,6 @@ void MainWindow::on_toolButton_clicked()
         ui->toolTip->show();
     else
         ui->toolTip->hide();
-}
-
-void MainWindow::on_tabs_currentChanged(int index)
-{
-    if(index==0)
-    {
-        if(bottomRow!=2)
-            ui->comboBox_2->show();
-    }
-    else
-    {
-        ui->comboBox_2->hide();
-    }
-
-    if(index==2)
-    {
-        ui->pushButton_2->show();
-        ui->pushButton_3->show();
-        ui->demoPlayOptions->show();
-    }
-    else
-    {
-        ui->pushButton_2->hide();
-        ui->pushButton_3->hide();
-        ui->demoPlayOptions->hide();
-    }
 }
 
 void MainWindow::on_pushButton_2_clicked() // Record demo

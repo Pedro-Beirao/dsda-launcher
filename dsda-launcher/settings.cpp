@@ -81,17 +81,28 @@ Settings::Settings(QWidget *parent) :
     {
         ui->radioButton_2->setChecked(true);
     }
-    else if(settings.value("complevels").toInt()==0)
+    else
     {
-        ui->radioButton->setChecked(true);
-    }
-    else if(settings.value("complevels").toInt()==1)
-    {
-        ui->radioButton_2->setChecked(true);
-    }
-    else if(settings.value("complevels").toInt()==2)
-    {
-        ui->radioButton_3->setChecked(true);
+        ui->lineEdit_3->setText(settings.value("toggle1t").toString());
+        ui->lineEdit_5->setText(settings.value("toggle1a").toString());
+        ui->lineEdit_4->setText(settings.value("toggle2t").toString());
+        ui->lineEdit_6->setText(settings.value("toggle2a").toString());
+        ui->lineEdit_7->setText(settings.value("toggle3t").toString());
+        ui->lineEdit_9->setText(settings.value("toggle3a").toString());
+        ui->lineEdit_8->setText(settings.value("toggle4t").toString());
+        ui->lineEdit_10->setText(settings.value("toggle4a").toString());
+        if(settings.value("complevels").toInt()==0)
+        {
+            ui->radioButton->setChecked(true);
+        }
+        else if(settings.value("complevels").toInt()==1)
+        {
+            ui->radioButton_2->setChecked(true);
+        }
+        else if(settings.value("complevels").toInt()==2)
+        {
+            ui->radioButton_3->setChecked(true);
+        }
     }
 
     ui->lineEdit_2->setText(settings.value("exeName").toString());
@@ -229,18 +240,6 @@ void Settings::on_toolButton_3_clicked()
     settings.endArray();
 }
 
-void Settings::on_pushButton_clicked()
-{
-    if(getOsNameS()=="MacOS" || getOsNameS()=="Linux")
-    {
-        system(("open "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/dsda-launcher.json").c_str());
-    }
-    else
-    {
-        QProcess::startDetached(("notepad \""+QCoreApplication::applicationDirPath().toStdString() + "\\dsda-launcher.json\"").c_str());
-    }
-}
-
 
 void Settings::on_lineEdit_textChanged(const QString &arg1)
 {
@@ -360,3 +359,124 @@ void Settings::on_lineEdit_2_textChanged(const QString &arg1)
     }
 }
 
+
+void Settings::on_pushButton_clicked()
+{
+    settings.setValue("toggle1t", ui->lineEdit_3->text());
+    settings.setValue("toggle1a", ui->lineEdit_5->text());
+
+    settings.setValue("toggle2t", ui->lineEdit_4->text());
+    settings.setValue("toggle2a", ui->lineEdit_6->text());
+
+    settings.setValue("toggle3t", ui->lineEdit_7->text());
+    settings.setValue("toggle3a", ui->lineEdit_9->text());
+
+    settings.setValue("toggle4t", ui->lineEdit_8->text());
+    settings.setValue("toggle4a", ui->lineEdit_10->text());
+
+    pmainWindow->changeToggles(ui->lineEdit_3->text(),ui->lineEdit_5->text(),ui->lineEdit_4->text(),ui->lineEdit_6->text(),ui->lineEdit_7->text(),ui->lineEdit_9->text(),ui->lineEdit_8->text(),ui->lineEdit_10->text());
+}
+
+
+void Settings::on_lineEdit_3_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_5_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_4_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_6_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_6->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_6->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_7_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_7->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_7->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_8_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_8->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_8->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_9_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_9->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_9->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void Settings::on_lineEdit_10_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_10->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_10->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}

@@ -479,7 +479,7 @@ border-radius:3px</string>
        <string notr="true"/>
       </property>
       <property name="text">
-       <string> Fast Monsters</string>
+       <string>Fast Monsters</string>
       </property>
       <property name="checked">
        <bool>false</bool>
@@ -498,7 +498,7 @@ border-radius:3px</string>
        <string notr="true"/>
       </property>
       <property name="text">
-       <string> No Monsters</string>
+       <string>No Monsters</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_6">
@@ -545,7 +545,7 @@ border-radius:3px</string>
        <string notr="true"/>
       </property>
       <property name="text">
-       <string> Respawn Monsters</string>
+       <string>Respawn Monsters</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="soloNetCheck">
@@ -558,7 +558,7 @@ border-radius:3px</string>
        </rect>
       </property>
       <property name="text">
-       <string> Solo Net</string>
+       <string>Solo Net</string>
       </property>
      </widget>
      <widget class="QWidget" name="widget" native="true">
@@ -572,66 +572,6 @@ border-radius:3px</string>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="timeKeysBox">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>15</x>
-        <y>95</y>
-        <width>131</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <item>
-       <property name="text">
-        <string/>
-       </property>
-      </item>
-     </widget>
-     <widget class="QComboBox" name="levelstatBox">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>95</y>
-        <width>131</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <item>
-       <property name="text">
-        <string/>
-       </property>
-      </item>
-     </widget>
-     <widget class="QLabel" name="label_10">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>80</y>
-        <width>101</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Stats&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QComboBox" name="comboBox_2">
@@ -659,9 +599,6 @@ border-radius:3px</string>
      <zorder>noCheck_3</zorder>
      <zorder>noCheck_4</zorder>
      <zorder>soloNetCheck</zorder>
-     <zorder>timeKeysBox</zorder>
-     <zorder>levelstatBox</zorder>
-     <zorder>label_10</zorder>
      <zorder>comboBox_2</zorder>
     </widget>
     <widget class="QWidget" name="wadsTab">

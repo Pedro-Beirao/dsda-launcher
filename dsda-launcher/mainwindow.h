@@ -43,7 +43,6 @@ public slots:
     void on_noCheck_4_toggled(bool checked);
     void on_noCheck_3_toggled(bool checked);
     void on_soloNetCheck_toggled(bool checked);
-    void on_tabs_currentChanged(int index);
     void foo();
     void foo3();
     void on_pushButton_2_clicked();
@@ -75,6 +74,7 @@ public slots:
     void on_actionCommand_triggered();
     void on_actionOpen_IWAD_folder_triggered();
     void on_actionOpen_Console_triggered();
+    void changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
