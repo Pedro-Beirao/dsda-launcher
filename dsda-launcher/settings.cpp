@@ -10,6 +10,7 @@
 #include <QStyleFactory>
 #include <QActionGroup>
 #include <QItemDelegate>
+#include <QScreen>
 
 // Find the name of the OS
 std::string getOsNameS()
@@ -129,6 +130,12 @@ Settings::Settings(QWidget *parent) :
             settings.setArrayIndex(i);
             ui->listWidget_2->addItem(settings.value("res").toString());
         }
+    }
+    else
+    {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect  geom = screen->geometry();
+        ui->listWidget_2->item(0)->setText(QString::number(geom.width()) + "x" + QString::number(geom.height()));
     }
     settings.endArray();
     pmainWindow->changeResolutions(ui->listWidget_2);

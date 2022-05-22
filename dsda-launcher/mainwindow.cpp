@@ -162,6 +162,7 @@ void MainWindow::changeButtonColor(bool isDark)
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
         ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+
         ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(100, 100, 100);");
     }
     else if(osName=="MacOS")
@@ -219,7 +220,7 @@ void MainWindow::findIwads(int type)
     }
     else
     {
-        QDir directory = QDir::currentPath();
+        QDir directory = QCoreApplication::applicationDirPath();
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
     }
 
@@ -432,11 +433,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     QStringList arguments = qApp->arguments();
+    ui->argumentText->setText("a"+QCoreApplication::applicationDirPath());
         if(arguments.count() > 1)
         {
-             for(int i=0; i<arguments.count(); i++)
+             for(int i=1; i<arguments.count(); i++)
              {
-                    QString absPath = qApp->arguments().at(i);
+                    QString absPath = arguments.at(i);
                     dropFile(absPath);
              }
         }

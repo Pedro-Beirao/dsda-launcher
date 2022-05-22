@@ -26,7 +26,6 @@ bool macIsInDarkTheme()
 
 void macSetToDarkTheme()
 {
-   // https://stackoverflow.com/questions/55925862/how-can-i-set-my-os-x-application-theme-in-code
    if (__builtin_available(macOS 10.14, *))
    {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
@@ -35,7 +34,6 @@ void macSetToDarkTheme()
 
 void macSetToLightTheme()
 {
-    // https://stackoverflow.com/questions/55925862/how-can-i-set-my-os-x-application-theme-in-code
     if (__builtin_available(macOS 10.14, *))
     {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
