@@ -1256,7 +1256,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             std::ofstream file_;
             file_.open(exportCmd);
             std::string pwads;
-            qDebug()<<argStrComplete.c_str();
             if(osName=="MacOS")
                 file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
             else if(osName=="Linux")
@@ -1383,7 +1382,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         QFile port = QFile((execPath+"/../Resources/"+exeName.toStdString()+"").c_str());
         if(port.exists())
         {
-            qDebug() << argList;
             std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
             argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
             argList.push_front("-iwad");
@@ -1630,7 +1628,6 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
 
     QNetworkRequest req(QUrl(QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str())));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    qDebug() << QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str());
 
     QJsonObject json;
     json.insert("player", "value1");
@@ -1651,7 +1648,6 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
     QJsonObject jsonobj = jsondoc.object();
         foreach(const QString& key, jsonobj.keys()) {
             QJsonValue value = jsonobj.value(key);
-            qDebug() << "Key = " << key << ", Value = " << value.toString();
             if(key=="player")
             {
                 player=value.toString();
@@ -1921,7 +1917,6 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
     }
 
     ui->wadLName->setText(wad.c_str());
-    qDebug() << (wad +" "+ level +" "+ category).c_str();
 
     if(callApi)
     {

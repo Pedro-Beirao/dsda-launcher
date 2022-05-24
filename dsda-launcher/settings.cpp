@@ -243,7 +243,6 @@ void Settings::on_toolButton_2_clicked()
     for (int i = 1; i < ui->listWidget->count(); i++) {
         settings.setArrayIndex(i);
         settings.setValue("folder", ui->listWidget->item(i)->text());
-        qDebug()<<ui->listWidget->item(i)->text();
     }
     settings.endArray();
 }
