@@ -622,7 +622,7 @@ background-color:rgb(230, 230, 230);
 border-radius:3px</string>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragDrop</enum>
+       <enum>QAbstractItemView::InternalMove</enum>
       </property>
       <property name="defaultDropAction">
        <enum>Qt::MoveAction</enum>

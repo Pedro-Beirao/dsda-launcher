@@ -22,6 +22,9 @@
     <height>300</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
    <string>Settings</string>
   </property>
@@ -200,7 +203,7 @@ border-radius:3px</string>
       <enum>QAbstractScrollArea::AdjustIgnored</enum>
      </property>
      <property name="dragEnabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="dragDropMode">
       <enum>QAbstractItemView::NoDragDrop</enum>

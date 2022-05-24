@@ -348,7 +348,7 @@ MainWindow::MainWindow(QWidget *parent)
     shortcut3->setAutoRepeat(false);
 
     // Set the parameters text correctly
-    if(settings.value("complevel").toString()!="")
+    if(settings.value("toggle1a").toString()!="")
     {
         fastParam = settings.value("toggle1a").toString();
         nomoParam = settings.value("toggle2a").toString();
@@ -433,7 +433,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     QStringList arguments = qApp->arguments();
-    ui->argumentText->setText("a"+QCoreApplication::applicationDirPath());
         if(arguments.count() > 1)
         {
              for(int i=1; i<arguments.count(); i++)

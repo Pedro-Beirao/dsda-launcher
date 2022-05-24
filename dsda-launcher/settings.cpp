@@ -81,6 +81,14 @@ Settings::Settings(QWidget *parent) :
     if(settings.value("complevels").toString()=="")
     {
         ui->radioButton_2->setChecked(true);
+        settings.setValue("toggle1t", ui->lineEdit_3->text());
+        settings.setValue("toggle1a", ui->lineEdit_5->text());
+        settings.setValue("toggle2t", ui->lineEdit_4->text());
+        settings.setValue("toggle2a", ui->lineEdit_6->text());
+        settings.setValue("toggle3t", ui->lineEdit_7->text());
+        settings.setValue("toggle3a", ui->lineEdit_9->text());
+        settings.setValue("toggle4t", ui->lineEdit_8->text());
+        settings.setValue("toggle4a", ui->lineEdit_10->text());
     }
     else
     {
@@ -126,9 +134,11 @@ Settings::Settings(QWidget *parent) :
     if(size!=0)
     {
         ui->listWidget_2->clear();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             settings.setArrayIndex(i);
             ui->listWidget_2->addItem(settings.value("res").toString());
+            ui->listWidget_2->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
         }
     }
     else
@@ -136,6 +146,10 @@ Settings::Settings(QWidget *parent) :
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect  geom = screen->geometry();
         ui->listWidget_2->item(0)->setText(QString::number(geom.width()) + "x" + QString::number(geom.height()));
+        for (int i = 0; i < ui->listWidget->count(); i++)
+        {
+            ui->listWidget_2->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
+        }
     }
     settings.endArray();
     pmainWindow->changeResolutions(ui->listWidget_2);
@@ -292,6 +306,8 @@ void Settings::on_toolButton_5_clicked()
 {
     if(ui->listWidget_2->count()>1)
         ui->listWidget_2->takeItem(ui->listWidget_2->currentRow());
+    on_listWidget_2_itemChanged(ui->listWidget_2->currentItem());
+
 }
 
 
