@@ -10,7 +10,8 @@ ___
 ```
 Tested with Qt 6.2.2
 
-You can install it with the Qt online installer, or with your package manager however you have to make sure you have version 6.2.2 or above (you can check using the `qmake -v` command.
+You can install it with the Qt online installer.
+If you instead use your package manager make sure you have version 6.2.2 or above (check using 'qmake -v').
 
 
 ```
@@ -22,12 +23,12 @@ When running the installer, I recommend that you install the "Qt for desktop env
 
 ## qmake
 ```
-This comes installed with Qt, it is located in Qt's install directory in 6.2.2/gcc_64/bin folder.
+This comes installed with Qt, no need to do anything.
 ```
 
 ## make
 ```
-make is a GNU program, it comes preinstalled with (almost) all GNU/Linux distributions so no need to do anything here.
+make is a GNU program, it's usually preinstalled with all GNU/Linux distributions so no need to do anything here.
 ```
 ___
 ## Compiling
@@ -39,6 +40,8 @@ ___
 3. Put the **dsda-doom.wad** file (not included in this repo) inside the dsda-launcher folder
 
       ^^^ Very important
+      
+   Note: if you built dsda-doom's binaries but didn't install it you will have to symlink it here too.
 
 4. Create a "build" folder
 ```
@@ -57,13 +60,13 @@ If you installed qmake from a package manager run the following and go to step 6
 qmake ..
 ```
 
-If you installed Qt with the online installer instead:-
+If you installed Qt with the online installer instead do this:-
 
-To make things simple, alias qmake to the it's path.
+To make things simple, alias 'qmake' to it's binary's path.
 ```
 alias qmake='[PathToQt]/[version number]/gcc_64/bin/qmake
 ```
-**For example** if you had Qt 6.2.2 in your home directory the commands would be:
+**For example** if you installed Qt 6.2.2 in your home directory the command would be:
 ```
 alias qmake='/home/username/Qt/6.2.2/gcc_64/bin/qmake
 ```
