@@ -37,25 +37,14 @@ ___
 
 2. Extract it & open the folder
  
-3. Put the **dsda-doom.wad** file (not included in this repo) inside the dsda-launcher folder
-
-      ^^^ Very important
-      
-   Note: if you built dsda-doom's binaries but didn't install it you will have to symlink it here too.
-
-4. Create a "build" folder
+3. Create a "build" folder
 ```
 mkdir build & cd build
 ```
 
-Your dsda-launcher folder should look like this: 
+4. Run qmake from inside of the build folder
 
-![Screenshot 2021-07-07 at 10 22 17](https://user-images.githubusercontent.com/82064173/124734657-40395480-df0d-11eb-81c1-fd19231c5035.jpg)
-
-
-5. Run qmake from inside of the build folder
-
-If you installed qmake from a package manager run the following and go to step 6:-
+If you installed qmake from a package manager run the following and go to step 5:-
 ```
 qmake ..
 ```
@@ -64,21 +53,23 @@ If you installed Qt with the online installer instead do this:-
 
 To make things simple, alias 'qmake' to it's binary's path.
 ```
-alias qmake='[PathToQt]/[version number]/gcc_64/bin/qmake
+alias qmake='[PathToQt]/[version number]/gcc_64/bin/qmake'
 ```
 **For example** if you installed Qt 6.2.2 in your home directory the command would be:
 ```
-alias qmake='/home/username/Qt/6.2.2/gcc_64/bin/qmake
+alias qmake='/home/username/Qt/6.2.2/gcc_64/bin/qmake'
 ```
 After that run qmake **inside the build folder**.
 ```
 qmake ..
 ```
 
-6. Run make
+5. Run make
 ```
 make
 ```
 
 There you go!
 You can now use the launcher.
+
+Note: if you built **dsda-doom's** binaries but didn't install it with 'make install' (a.k.a it doesn't exist in /usr/local/bin) you will have to symlink/copy it to the build folder.
