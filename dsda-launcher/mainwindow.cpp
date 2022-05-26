@@ -57,6 +57,10 @@ bool running = false;
 
 // List of all the IWADs detected
 QStringList images;
+QStringList imagesDOOMWADDIR;
+
+QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
+QString execPath;
 
 // Settings to be stored
 QSettings settings("pedrobeirao","dsda-launcher");
@@ -202,71 +206,129 @@ void MainWindow::delayLaunch()
     canLaunch=true;
 }
 
+int tilDOOMWADDIR = 0;
+
+QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
+
 void MainWindow::findIwads(int type)
 {
     // Find the IWADs in the correct folder depending on the OS
-    if(osName=="MacOS" || osName=="Linux")
+    if(osName=="MacOS")
     {
-        QFileInfo check1((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
-        if(!check1.exists())
-            system(("mkdir "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        qDebug() << QCoreApplication::applicationDirPath();
+        if(!QDir(dotfolder).exists())
+            QDir().mkdir(dotfolder);
 
-        QFileInfo check2((QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+exeName.toStdString()+".wad").c_str());
-        if(!check2.exists())
-            system(("cp "+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+".wad  "+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom").c_str());
+        if(!QFileInfo(dotfolder+"/"+exeName+".wad").exists())
+            QProcess::startDetached("cp", {execPath+"/../Resources/"+exeName+".wad",dotfolder});
 
-        QDir directory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+        QDir directory(dotfolder);
+        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+    }
+    else if(osName=="Linux")
+    {
+        if(!QDir(dotfolder).exists())
+            QDir().mkdir(dotfolder);
+
+        QDir directory(dotfolder);
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
     }
     else
     {
-        QDir directory = QCoreApplication::applicationDirPath();
+        QDir directory = execPath;
         images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
     }
 
-    // This makes sure that a logic order to display the IWADs is followed
+    tilDOOMWADDIR = images.size();
+    QDir doomwaddir(doomwaddirstr);
+    images += doomwaddir.entryList(QStringList() << "*.WAD",QDir::Files);
+    QStringList DOOMWADDIRiwads;
+
+    // This makes sure that a logical order to display the IWADs is followed
     // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
 
     // Normal Doom
-    foreach(QString filename, images) {
+    QStringList doomIWADs = {"doom","doom1","doomu","freedoom","freedoom1","bfgdoom","bfgdoom1"};
+    for(int j = 0; j < images.size(); j++)
+    {
+        QString filename = images[j];
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom" || filename=="doom1" || filename=="doomu"||filename=="freedoom1"||filename=="freedoom"||filename=="bfgdoom1"||filename=="bfgdoom")
+        for(int i = 0; i< doomIWADs.size(); i++)
         {
-            ui->iwadSelect->addItems({filename});
+            if(doomIWADs.at(i) == filename)
+            {
+                if(j < tilDOOMWADDIR)
+                    ui->iwadSelect->addItem(filename);
+                else
+                    DOOMWADDIRiwads.append(filename);
+                doomIWADs.replace(i, " ");
+            }
         }
     }
 
     // Normal Doom 2
-    foreach(QString filename, images) {
+    QStringList doom2IWADs = {"doom2","doom2f","freedoom2","bfgdoom2"};
+    for(int j = 0; j < images.size(); j++)
+    {
+        QString filename = images[j];
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="doom2"||filename=="freedoom2"||filename=="bfgdoom2"||filename=="doom2f")
+        for(int i = 0; i< doom2IWADs.size(); i++)
         {
-            ui->iwadSelect->addItems({filename});
+            if(doom2IWADs.at(i) == filename)
+            {
+                if(j < tilDOOMWADDIR)
+                    ui->iwadSelect->addItem(filename);
+                else
+                    DOOMWADDIRiwads.append(filename);
+                doom2IWADs.replace(i, " ");
+            }
         }
     }
 
     // Final Doom
-    foreach(QString filename, images) {
+    QStringList finaldoomIWADs = {"tnt","plutonia"};
+    for(int j = 0; j < images.size(); j++)
+    {
+        QString filename = images[j];
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="tnt"||filename=="plutonia")
+        for(int i = 0; i< finaldoomIWADs.size(); i++)
         {
-            ui->iwadSelect->addItems({filename});
+            if(finaldoomIWADs.at(i) == filename)
+            {
+                if(j < tilDOOMWADDIR)
+                    ui->iwadSelect->addItem(filename);
+                else
+                    DOOMWADDIRiwads.append(filename);
+                finaldoomIWADs.replace(i, " ");
+            }
         }
     }
 
     // Heretic / Hexen / Chex Quest / Hacx
-    foreach(QString filename, images) {
+    QStringList otherIWADs = {"heretic","hexen","chex","hacx"};
+    for(int j = 0; j < images.size(); j++)
+    {
+        QString filename = images[j];
         filename.resize (filename.size () - 4);
         filename=lowerCase(filename.toStdString());
-        if(filename=="heretic"||filename=="hexen"||filename=="chex" || filename=="hacx")
+        for(int i = 0; i< otherIWADs.size(); i++)
         {
-            ui->iwadSelect->addItems({filename});
+            if(otherIWADs.at(i) == filename)
+            {
+                if(j < tilDOOMWADDIR)
+                    ui->iwadSelect->addItem(filename);
+                else
+                    DOOMWADDIRiwads.append(filename);
+                otherIWADs.replace(i, " ");
+            }
         }
     }
 
+    tilDOOMWADDIR = ui->iwadSelect->count();
+    ui->iwadSelect->addItems(DOOMWADDIRiwads);
 
 
     // Other wads with the IWAD tag
@@ -315,6 +377,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     pMainWindow = this;
+
+    execPath = QCoreApplication::applicationDirPath();
 
     // Allow files to be droped in the launcher (*.wad *.lmp)
     setAcceptDrops(true);
@@ -686,9 +750,9 @@ void MainWindow::dropFile(QString fileName)
                             {
                                 QString folder;
                                 if(osName=="Windows")
-                                     folder = QCoreApplication::applicationDirPath();
+                                     folder = execPath;
                                 else
-                                     folder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
+                                     folder = dotfolder;
                                 QDir path(folder);
                                 QStringList files0 = path.entryList(QDir::Files);
                                 foreach(QString file0, files0)
@@ -827,23 +891,20 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
 
     QString portversion;
 
-    std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-    std::string execPath = QCoreApplication::applicationDirPath().toStdString();
-
     QString path;
 
     if(osName=="MacOS")
-        path = (execPath+"/../Resources/"+exeName.toStdString()+"").c_str();
+        path = execPath+"/../Resources/"+exeName;
     else if(osName=="Linux")
-        path = (execPath+"/"+exeName.toStdString()).c_str();
+        path = execPath+"/"+exeName;
     else
-        path = (execPath+"/"+exeName.toStdString()+".exe").c_str();
+        path = execPath+"/"+exeName+".exe";
 
     QFile port = QFile(path);
     if(port.exists())
     {
         QProcess *process = new QProcess;
-        process->setWorkingDirectory(homePath.c_str());
+        process->setWorkingDirectory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         process->start(path, {"-v"});
         process->waitForStarted();
         std::string data;
@@ -956,15 +1017,15 @@ void MainWindow::foo() // CTRL+O runs this function to open the folder where the
 {
     if(osName=="MacOS")
     {
-        system(("open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
+        QProcess::startDetached("open", {dotfolder});
     }
     else if(osName=="Linux")
     {
-        system(("xdg-open \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom\"").c_str());
+        QProcess::startDetached("xdg-open", {dotfolder});
     }
     else
     {
-        QProcess::startDetached(("explorer \""+QCoreApplication::applicationDirPath().toStdString() + "\"").c_str());
+        QProcess::startDetached("explorer.exe", {execPath});
     }
 }
 
@@ -1257,14 +1318,13 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             file_.open(exportCmd);
             std::string pwads;
             if(osName=="MacOS")
-                file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/../Resources/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
             else if(osName=="Linux")
-                file_ << "\""+QCoreApplication::applicationDirPath().toStdString()+"/"+exeName.toStdString()+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
             else
             {
-                std::string execPath = QCoreApplication::applicationDirPath().toStdString();
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                file_ << "\""+execPath+"\\"+exeName.toStdString()+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText().toStdString()+".wad\" "+argStrComplete;
+                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
             }
             file_.close();
 
@@ -1282,14 +1342,26 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             QClipboard *clip;
             if(osName=="MacOS")
-                clip->setText("\""+QCoreApplication::applicationDirPath()+"/../Resources/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+            {
+                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                else
+                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+            }
             else if(osName=="Linux")
-                clip->setText("\""+QCoreApplication::applicationDirPath()+"/"+exeName+"\" -iwad \""+QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+            {
+                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                else
+                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+            }
             else
             {
-                std::string execPath = QCoreApplication::applicationDirPath().toStdString();
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                clip->setText("\""+QString(execPath.c_str())+"\\"+exeName+".exe\" -iwad \""+QString(execPath.c_str())+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                else
+                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+doomwaddirstr+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
             }
         }
 
@@ -1374,21 +1446,23 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         return;
     }
 
-    std::string execPath=QCoreApplication::applicationDirPath().toStdString();
     consoleWindow->clearText();
 
     if(osName=="MacOS")
     {
-        QFile port = QFile((execPath+"/../Resources/"+exeName.toStdString()+"").c_str());
+        QFile port = QFile(execPath+"/../Resources/"+exeName+"");
         if(port.exists())
         {
-            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-            argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
+            else
+                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
+            qDebug() << argList << tilDOOMWADDIR;
             argList.push_front("-iwad");
-            //system(("cd ~/ && " + execPath+"/../Resources/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
             QProcess *process = new QProcess;
-            process->setWorkingDirectory(homePath.c_str());
-            process->start((execPath+"/../Resources/"+exeName.toStdString()).c_str(), argList);
+            process->setWorkingDirectory(homePath);
+            process->start(execPath+"/../Resources/"+exeName, argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -1409,12 +1483,15 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         QFile port2 = QFile(("/usr/games/"+exeName.toStdString()).c_str());
         if(port.exists() || port2.exists())
         {
-            std::string homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString();
-            argList.push_front((homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
+            else
+                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
             argList.push_front("-iwad");
             //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
             QProcess *process = new QProcess;
-            process->setWorkingDirectory(homePath.c_str());
+            process->setWorkingDirectory(homePath);
             process->start(exeName, argList); // dsda-doom, GZDoom, and Chocolate Doom can all be launched by just entering their executable name, should work on all sourceports probs.
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
@@ -1450,14 +1527,17 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 
         arguments=" ";
         */
-        QFile port = QFile((execPath+"/"+exeName.toStdString()+".exe").c_str());
+        QFile port = QFile(execPath+"/"+exeName+".exe");
         if(port.exists())
         {
-            argList.push_front((execPath+"/"+ui->iwadSelect->currentText().toStdString()+".wad").c_str());
+            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+                argList.push_front(execPath+"/"+ui->iwadSelect->currentText()+".wad");
+            else
+                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
-            process->setWorkingDirectory(execPath.c_str());
-            process->start((execPath+"/"+exeName.toStdString()+".exe").c_str(), argList);
+            process->setWorkingDirectory(execPath);
+            process->start(execPath+"/"+exeName+".exe", argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
