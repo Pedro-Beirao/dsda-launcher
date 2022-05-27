@@ -706,7 +706,7 @@ void MainWindow::dropFile(QString fileName)
                         }
                         else if(argList[i]=="-file" && argList[i+1]!='-')
                         {
-                            bool isRecursive = settings.value("pwadrecursive").toBool();
+                            // bool isRecursive = settings.value("pwadrecursive").toBool();
 
                             QStringList files;
                             for(int ii=1;ii<argList.count()-i;i++)
@@ -746,6 +746,8 @@ void MainWindow::dropFile(QString fileName)
                             }
                             settings.endArray();
 
+
+
                             if(files.count()!=0)
                             {
                                 QString folder;
@@ -755,29 +757,40 @@ void MainWindow::dropFile(QString fileName)
                                      folder = dotfolder;
                                 QDir path(folder);
                                 QStringList files0 = path.entryList(QDir::Files);
-                                foreach(QString file0, files0)
+                                QString f = QString(qgetenv("DOOMWADPATH"));
+                                int prev = 0;
+                                int tilDOOMWADPATH = files0.size();
+                                for(int j = 0; j<f.length(); j++)
+                                {
+                                    if (f.at(j) == ':' || f.at(j) == ';' || j+1 == f.length())
+                                    {
+                                        files0.append(QDir(f.mid(prev, j-prev)).entryList(QDir::Files));
+                                        prev = j+1;
+                                    }
+                                }
+                                qDebug() << files0;
+
+                                for(int j=0; j<files0.count(); j++)
                                 {
                                     for(int i=0; i<files.count(); i++)
                                     {
-                                        if(lowerCase(files[i].toStdString())==lowerCase(file0.toStdString()))
+                                        if(lowerCase(files[i].toStdString())==lowerCase(files0.at(j).toStdString()))
                                         {
-                                            ui->wadsOnFolder->addItem(folder+"/"+file0);
+                                            if(j < tilDOOMWADPATH)
+                                                ui->wadsOnFolder->addItem(folder+"/"+files0.at(j));
+                                            else
+                                                if(osName == "Windows")
+                                                    ui->wadsOnFolder->addItem("$DOOMWADPATH/"+files0.at(j));
+                                                else
+                                                    ui->wadsOnFolder->addItem("%DOOMWADPATH%/"+files0.at(j));
                                             files.remove(i);
                                             break;
                                         }
                                     }
                                 }
                             }
-                            /*
-                            if(files.count()!=0)
-                            {
-                                QMessageBox msgBox;
-                                msgBox.setText("Failed to locate "+files.at(0));
-                                msgBox.setInformativeText("You should add some PWAD folders in the settings");
-                                msgBox.addButton(tr("ok"), QMessageBox::YesRole);
-                                msgBox.exec();
-                            }
-                            */
+
+
                         }
                     }
                 }
@@ -1183,7 +1196,12 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             if(returnTooltip)
                 argList.append(("\""+fileToAdd+"\"").c_str());
             else
-                argList.append((fileToAdd).c_str());
+                if(fileToAdd.substr(0,5) == "$DOOM")
+                    argList.append((fileToAdd.substr(13)).c_str());
+                else if (fileToAdd.substr(0,5) == "%DOOM")
+                    argList.append((fileToAdd.substr(14)).c_str());
+                else
+                    argList.append((fileToAdd).c_str());
         }
     }
 
@@ -1458,9 +1476,9 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
                 argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
             else
                 argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
-            qDebug() << argList << tilDOOMWADDIR;
+            qDebug() << argList;
             argList.push_front("-iwad");
-            QProcess *process = new QProcess;
+            QProcess *process = new QProcess(this);
             process->setWorkingDirectory(homePath);
             process->start(execPath+"/../Resources/"+exeName, argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
