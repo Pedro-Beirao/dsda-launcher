@@ -702,11 +702,6 @@ border-radius:3px</string>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>*Same Folder as Launcher*</string>
-      </property>
-     </item>
     </widget>
     <widget class="QToolButton" name="toolButton_2">
      <property name="geometry">

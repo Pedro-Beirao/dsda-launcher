@@ -68,8 +68,6 @@ Settings::Settings(QWidget *parent) :
         ui->label_2->setFont(font);
         font.setPixelSize(11);
         ui->label_3->setFont(font);
-        ui->listWidget->clear();
-        ui->listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
     }
     else
     {
@@ -146,7 +144,7 @@ Settings::Settings(QWidget *parent) :
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect  geom = screen->geometry();
         ui->listWidget_2->item(0)->setText(QString::number(geom.width()) + "x" + QString::number(geom.height()));
-        for (int i = 0; i < ui->listWidget->count(); i++)
+        for (int i = 0; i < ui->listWidget_2->count(); i++)
         {
             ui->listWidget_2->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
         }
@@ -154,12 +152,26 @@ Settings::Settings(QWidget *parent) :
     settings.endArray();
     pmainWindow->changeResolutions(ui->listWidget_2);
 
+    if(getOsNameS() == "Windows")
+    {
+        ui->listWidget->addItem("Same Folder as Launcher");
+        ui->listWidget->addItem("%DOOMWADPATH%");
+    }
+    else
+    {
+
+        ui->listWidget->addItem("$DOOMWADPATH");
+        ui->listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+    }
+    ui->listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
+    ui->listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());
+
     size = settings.beginReadArray("pwadfolders");
     if(size!=0)
     {
         for (int i = 0; i < size; i++) {
             settings.setArrayIndex(i);
-            if(settings.value("folder").toString()!="" && settings.value("folder").toString()!=ui->listWidget->item(0)->text())
+            if(settings.value("folder").toString()!="")
                 ui->listWidget->addItem(settings.value("folder").toString());
         }
     }
@@ -240,8 +252,8 @@ void Settings::on_toolButton_2_clicked()
     }
 
     settings.beginWriteArray("pwadfolders");
-    for (int i = 1; i < ui->listWidget->count(); i++) {
-        settings.setArrayIndex(i);
+    for (int i = 2; i < ui->listWidget->count(); i++) {
+        settings.setArrayIndex(i-2);
         settings.setValue("folder", ui->listWidget->item(i)->text());
     }
     settings.endArray();
@@ -249,12 +261,12 @@ void Settings::on_toolButton_2_clicked()
 
 void Settings::on_toolButton_3_clicked()
 {
-    if(ui->listWidget->count()>1 and ui->listWidget->currentRow()!=0)
+    if(ui->listWidget->count()>2 && ui->listWidget->currentRow()>1)
         ui->listWidget->takeItem(ui->listWidget->currentRow());
 
     settings.beginWriteArray("pwadfolders");
-    for (int i = 1; i < ui->listWidget->count(); i++) {
-        settings.setArrayIndex(i);
+    for (int i = 2; i < ui->listWidget->count(); i++) {
+        settings.setArrayIndex(i-2);
         settings.setValue("folder", ui->listWidget->item(i)->text());
     }
     settings.endArray();
