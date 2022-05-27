@@ -780,9 +780,9 @@ void MainWindow::dropFile(QString fileName)
                                                 ui->wadsOnFolder->addItem(folder+"/"+files0.at(j));
                                             else
                                                 if(osName == "Windows")
-                                                    ui->wadsOnFolder->addItem("$DOOMWADPATH/"+files0.at(j));
-                                                else
                                                     ui->wadsOnFolder->addItem("%DOOMWADPATH%/"+files0.at(j));
+                                                else
+                                                    ui->wadsOnFolder->addItem("$DOOMWADPATH/"+files0.at(j));
                                             files.remove(i);
                                             break;
                                         }
@@ -1193,15 +1193,15 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
                         fileToAdd[i]='\\';
                 }
             }
+            if(fileToAdd.substr(0,5) == "$DOOM")
+                fileToAdd = fileToAdd.substr(13);
+            else if (fileToAdd.substr(0,5) == "%DOOM")
+                fileToAdd = fileToAdd.substr(14);
+
             if(returnTooltip)
                 argList.append(("\""+fileToAdd+"\"").c_str());
             else
-                if(fileToAdd.substr(0,5) == "$DOOM")
-                    argList.append((fileToAdd.substr(13)).c_str());
-                else if (fileToAdd.substr(0,5) == "%DOOM")
-                    argList.append((fileToAdd.substr(14)).c_str());
-                else
-                    argList.append((fileToAdd).c_str());
+                argList.append((fileToAdd).c_str());
         }
     }
 
@@ -1314,7 +1314,8 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argStrComplete.append((p+" ").toStdString());
 
             int lastBar = 0;
-            for( size_t i=0; i<p.length(); i++){
+            for( size_t i=0; i<p.length(); i++)
+            {
                 if(p[i]=='/' || p[i]=='\\')
                 {
                     lastBar=i+1;
@@ -1476,7 +1477,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
                 argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
             else
                 argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
-            qDebug() << argList;
             argList.push_front("-iwad");
             QProcess *process = new QProcess(this);
             process->setWorkingDirectory(homePath);
