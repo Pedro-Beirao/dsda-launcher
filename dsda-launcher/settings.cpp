@@ -143,10 +143,13 @@ Settings::Settings(QWidget *parent) :
     {
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect  geom = screen->geometry();
-        ui->listWidget_2->item(0)->setText(QString::number(geom.width()) + "x" + QString::number(geom.height()));
-        for (int i = 0; i < ui->listWidget_2->count(); i++)
+        if(geom.width() > 1920 || geom.height() > 1080)
         {
-            ui->listWidget_2->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
+            ui->listWidget_2->item(0)->setText(QString::number(geom.width()) + "x" + QString::number(geom.height()));
+            for (int i = 0; i < ui->listWidget_2->count(); i++)
+            {
+                ui->listWidget_2->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
+            }
         }
     }
     settings.endArray();
