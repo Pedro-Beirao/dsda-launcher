@@ -1495,11 +1495,11 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         /* In Linux it's difficult to place dsda-doom and the launcher in the same folder, maybe you can use a symlink? or ask the user where it is? or even use whereis command.
          * but a faster hacky work-around is to check the default directories where most users have their doom sourceports.
          * when compiled using the official makefile dsda-doom and prboom+ get stored in '/usr/local/bin'.
-         * other source ports that you download from a package manager (I tested GZDoom and Chocolate Doom) exist  in '/usr/games'.
-         * There is also a slight possibility you can find a source port in '/usr/bin' but I haven't encountered any source port that does that.*/
+         * other source ports that you download from a package manager (I tested GZDoom and Chocolate Doom) exist  in '/usr/games'.*/
         QFile port = QFile(("/usr/local/bin/"+exeName.toStdString()).c_str());
         QFile port2 = QFile(("/usr/games/"+exeName.toStdString()).c_str());
-        if(port.exists() || port2.exists())
+        QFile port3 = QFile(("/usr/bin/"+exeName.toStdString()).c_str());
+        if(port.exists() || port2.exists() || port3.exists())
         {
             QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
             if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
@@ -1517,7 +1517,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
          }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed and exist in '/usr/local/bin' or '/usr/games'"));
+            QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed and exist in '/usr/bin' or '/usr/local/bin' or '/usr/games'"));
         }
     }
     else
