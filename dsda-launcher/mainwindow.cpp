@@ -1492,33 +1492,33 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     }
     else if(osName=="Linux")
     {
-        /* In Linux it's difficult to place dsda-doom and the launcher in the same folder, maybe you can use a symlink? or ask the user where it is? or even use whereis command.
-         * but a faster hacky work-around is to check the default directories where most users have their doom sourceports.
-         * when compiled using the official makefile dsda-doom and prboom+ get stored in '/usr/local/bin'.
-         * other source ports that you download from a package manager (I tested GZDoom and Chocolate Doom) exist  in '/usr/games'.*/
-        QFile port = QFile(("/usr/local/bin/"+exeName.toStdString()).c_str());
-        QFile port2 = QFile(("/usr/games/"+exeName.toStdString()).c_str());
-        QFile port3 = QFile(("/usr/bin/"+exeName.toStdString()).c_str());
-        if(port.exists() || port2.exists() || port3.exists())
+        QFile port = QFile(execPath+"/"+exeName);
+        QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
+            argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
+        else
+            argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
+        argList.push_front("-iwad");
+        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
+        QStringList apar; apar << exeName;
+        QProcess whichProcess;
+        whichProcess.start("which", apar);
+        whichProcess.waitForFinished();
+        QString processPath;
+        // If it finds an executable in the dsda-launcher folder, it will prioritize it over the one installed in a bin folder.
+        if(port.exists()) processPath = execPath + "/" + exeName;
+        else processPath = exeName;
+        if(whichProcess.readAllStandardOutput() != "")
         {
-            QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
-            else
-                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
-            argList.push_front("-iwad");
-            //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath);
-            process->start(exeName, argList); // dsda-doom, GZDoom, and Chocolate Doom can all be launched by just entering their executable name, should work on all sourceports probs.
+            process->start(processPath, argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
-         }
-        else
-        {
-            QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed and exist in '/usr/bin' or '/usr/local/bin' or '/usr/games'"));
         }
+        else QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + exeName + " exists, symlink it to dsda-launcher's folder."));
     }
     else
     {
