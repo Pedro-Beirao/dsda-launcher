@@ -1287,20 +1287,23 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
     }
 
-    std::string str = ui->argumentText->toPlainText().toStdString()+" ";
+    if (ui->argumentText->toPlainText() != "")
+    {
+        std::string str = ui->argumentText->toPlainText().toStdString()+" ";
 
-    std::string strToAdd="";
-    for( size_t i=0; i<str.length(); i++){
+        std::string strToAdd="";
+        for( size_t i=0; i<str.length(); i++){
 
-        char c = str[i];
-        if( c == ' '){
-             argList.append(strToAdd.c_str());
-             strToAdd="";
-        }else if(c == '\"' ){
-            i++;
-            while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
-        }else{
-            strToAdd.push_back(c);
+            char c = str[i];
+            if( c == ' '){
+                 argList.append(strToAdd.c_str());
+                 strToAdd="";
+            }else if(c == '\"' ){
+                i++;
+                while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
+            }else{
+                strToAdd.push_back(c);
+            }
         }
     }
 
@@ -1465,6 +1468,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         return;
     }
 
+    for (int i = 0; i < argList.count(); i++)
+        if (argList.at(i) == "")
+            argList.removeAt(i);
+
     consoleWindow->clearText();
 
     if(osName=="MacOS")
@@ -1480,6 +1487,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argList.push_front("-iwad");
             QProcess *process = new QProcess(this);
             process->setWorkingDirectory(homePath);
+            qDebug() << argList;
             process->start(execPath+"/../Resources/"+exeName, argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
