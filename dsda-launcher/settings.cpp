@@ -12,30 +12,16 @@
 #include <QItemDelegate>
 #include <QScreen>
 
-// Find the name of the OS
-std::string getOsNameS()
-{
-    #ifdef _WIN32
-    return "Windows";
-    #elif _WIN64
-    return "Windows";
-    #elif __APPLE__ || __MACH__
-    return "MacOS";
-    #else
-    return "Linux";
-    #endif
-}
-
 MainWindow * pmainWindow;
 
 void Settings::changeButtonColorS(bool isDark)
 {
-    if(isDark && getOsNameS()=="MacOS")
+    if(isDark)
     {
         ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                         "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
     }
-    else if(getOsNameS()=="MacOS")
+    else
     {
         ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                         "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
@@ -61,18 +47,15 @@ Settings::Settings(QWidget *parent) :
         on_checkBox_clicked(false);
     }
 
-    if(getOsNameS()=="MacOS")
-    {
+#ifdef __APPLE__
         QFont font = ui->label_2->font();
         font.setPixelSize(13);
         ui->label_2->setFont(font);
         font.setPixelSize(11);
         ui->label_3->setFont(font);
-    }
-    else
-    {
+#else
         ui->textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
-    }
+#endif
 
     ui->textBrowser->setVisible(false);
 
@@ -155,17 +138,13 @@ Settings::Settings(QWidget *parent) :
     settings.endArray();
     pmainWindow->changeResolutions(ui->listWidget_2);
 
-    if(getOsNameS() == "Windows")
-    {
+#ifdef _WIN32
         ui->listWidget->addItem("Same Folder as Launcher");
         ui->listWidget->addItem("%DOOMWADPATH%");
-    }
-    else
-    {
-
+#else
         ui->listWidget->addItem("$DOOMWADPATH");
         ui->listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
-    }
+#endif
     ui->listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
     ui->listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());
 
@@ -198,6 +177,7 @@ void Settings::on_checkBox_clicked(bool checked)
     {
         #ifdef __APPLE__
         macSetToLightTheme();
+        changeButtonColorS(false);
         #elif __WIN32__
                 qApp->setStyle(QStyleFactory::create("Windowsvista"));
                 QPalette lightPalette;
@@ -210,12 +190,12 @@ void Settings::on_checkBox_clicked(bool checked)
         #endif
         settings.setValue("theme","light");
         pmainWindow->changeButtonColor(false);
-        changeButtonColorS(false);
     }
     else
      {
         #ifdef __APPLE__
         macSetToDarkTheme();
+        changeButtonColorS(true);
         #else
         qApp->setStyle(QStyleFactory::create("Fusion"));
         QPalette darkPalette;
@@ -239,7 +219,6 @@ void Settings::on_checkBox_clicked(bool checked)
         #endif
         settings.setValue("theme","dark");
         pmainWindow->changeButtonColor(true);
-        changeButtonColorS(true);
     }
 }
 

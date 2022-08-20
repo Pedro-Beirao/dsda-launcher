@@ -4,20 +4,6 @@
 #include <QStandardPaths>
 #include <QProcess>
 
-// Find the name of the OS
-std::string getOsNameC()
-{
-    #ifdef _WIN32
-    return "Windows";
-    #elif _WIN64
-    return "Windows";
-    #elif __APPLE__ || __MACH__
-    return "MacOS";
-    #else
-    return "Linux";
-    #endif
-}
-
 Console::Console(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Console)
