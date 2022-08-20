@@ -14,14 +14,6 @@ int main(int argc, char *argv[])
     // Settings to be stored
     QSettings settings("pedrobeirao","dsda-launcher");
 
-    for (int i = 0; i < argc; ++i)
-    {
-         if(std::string(argv[i])=="-clearsettings")
-         {
-            settings.clear();
-         }
-    }
-
     QApplication a(argc, argv);
 
     MainWindow w;

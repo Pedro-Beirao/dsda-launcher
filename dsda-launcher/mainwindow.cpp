@@ -501,116 +501,129 @@ void MainWindow::LoadState(QString fileName)
     std::ifstream file;
     file.open(fileName.toStdString());
     std::string buffer;
-    while (std::getline(file, buffer)) {
-        if(buffer.substr(0,4)=="iwad" && buffer.substr(4).length()>1)
+    std::getline(file, buffer);
+    std::getline(file, buffer);
+    std::getline(file, buffer);
+    if(buffer.substr(4).length()>1) // iwad
+    {
+        for(int i=0; i<ui->iwadSelect->count();i++)
         {
-            for(int i=0; i<ui->iwadSelect->count();i++)
+            if(ui->iwadSelect->itemText(i).toStdString()==buffer.substr(5))
             {
-                if(ui->iwadSelect->itemText(i).toStdString()==buffer.substr(5))
-                {
-                    ui->iwadSelect->setCurrentIndex(i);
-                }
+                ui->iwadSelect->setCurrentIndex(i);
             }
         }
-        else if(buffer.substr(0,9)=="complevel" && buffer.substr(9).length()>1)
-        {
-            if(buffer.substr(10)[0]=='D')
+    }
+    std::getline(file, buffer);
+    if(buffer.substr(9).length()>1) // complevel
             {
-                ui->compLevelSelect->setCurrentIndex(0);
-            }
-            else
-            {
-                for(int i=0; i<ui->compLevelSelect->count();i++)
+                if(buffer.substr(10)[0]=='D')
                 {
-                    std::string content=ui->compLevelSelect->itemText(i).toStdString().substr(0,2);
-                    if(content==buffer.substr(10))
+                    ui->compLevelSelect->setCurrentIndex(0);
+                }
+                else
+                {
+                    for(int i=0; i<ui->compLevelSelect->count();i++)
                     {
-                        ui->compLevelSelect->setCurrentIndex(i);
+                        std::string content=ui->compLevelSelect->itemText(i).toStdString().substr(0,2);
+                        if(content==buffer.substr(10))
+                        {
+                            ui->compLevelSelect->setCurrentIndex(i);
+                        }
                     }
                 }
             }
-        }
-        else if(buffer.substr(0,5)=="warp1" && buffer.substr(5).length()>0)
-        {
-                ui->episodeBox->setText(buffer.substr(6).c_str());
-        }
-        else if(buffer.substr(0,5)=="warp2" && buffer.substr(5).length()>0)
-        {
-                ui->levelBox->setText(buffer.substr(6).c_str());
-        }
-        else if(buffer.substr(0,5)=="skill" && buffer.substr(5).length()>1)
-        {
-                 ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
-        }
-        else if(buffer.substr(0,4)=="box1" && buffer.substr(4).length()>1)
-        {
-            if(buffer.substr(5,4)=="true")
-                 ui->fastCheck->setChecked(true);
-            else
-                ui->fastCheck->setChecked(false);
-        }
-        else if(buffer.substr(0,4)=="box2" && buffer.substr(4).length()>1)
-        {
-            if(buffer.substr(5,4)=="true")
-                 ui->noCheck->setChecked(true);
-            else
-                ui->noCheck->setChecked(false);
-        }
-        else if(buffer.substr(0,4)=="box3" && buffer.substr(4).length()>1)
-        {
-            if(buffer.substr(5,4)=="true")
-                 ui->noCheck_4->setChecked(true);
-            else
-                ui->noCheck_4->setChecked(false);
-        }
-        else if(buffer.substr(0,4)=="box4" && buffer.substr(4).length()>1)
-        {
-            if(buffer.substr(5,4)=="true")
-                 ui->soloNetCheck->setChecked(true);
-            else
-                ui->soloNetCheck->setChecked(false);
-        }
-        else if(buffer.substr(0,10)=="resolution" && buffer.substr(10).length()>1)
-        {
-            ui->comboBox_2->setCurrentIndex(stoi(buffer.substr(11)));
-        }
-        else if(buffer.substr(0,10)=="fullscreen" && buffer.substr(10).length()>1)
-        {
-            if(buffer.substr(11,4)=="true")
-                 ui->noCheck_3->setChecked(true);
-            else
-                ui->noCheck_3->setChecked(false);
-        }
-        else if(buffer.substr(0,4)=="pwad")
-        {
-            searchingPwads=true;
-        }
-        else if(buffer.substr(0,7)=="endpwad")
-        {
-            searchingPwads=false;
-        }
-        else if(buffer.substr(0,6)=="record" && buffer.substr(6).length()>0)
-        {
-                ui->recordDemo->setText(buffer.substr(7).c_str());
-        }
-        else if(buffer.substr(0,8)=="playback" && buffer.substr(8).length()>0)
-        {
-                ui->recordDemo_2->setText(buffer.substr(9).c_str());
-        }
-        else if(buffer.substr(0,12)=="demodropdown" && buffer.substr(12).length()>1)
-        {
-            ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
-        }
-        else if(buffer.substr(0,10)=="additional" && buffer.substr(10).length()>0)
-        {
-            ui->argumentText->setText((buffer.substr(11)).c_str());
-        }
-        else if(searchingPwads==true)
-        {
+    std::getline(file, buffer);
+    if(buffer.substr(5).length()>0) // warp 1
+            {
+                    ui->episodeBox->setText(buffer.substr(6).c_str());
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(5).length()>0) //warp 2
+            {
+                    ui->levelBox->setText(buffer.substr(6).c_str());
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(5).length()>1) // skill
+            {
+                     ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(4).length()>1) // box1
+            {
+                if(buffer.substr(5,4)=="true")
+                     ui->fastCheck->setChecked(true);
+                else
+                    ui->fastCheck->setChecked(false);
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(4).length()>1) // box2
+            {
+                if(buffer.substr(5,4)=="true")
+                     ui->noCheck->setChecked(true);
+                else
+                    ui->noCheck->setChecked(false);
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(4).length()>1) // box3
+            {
+                if(buffer.substr(5,4)=="true")
+                     ui->noCheck_4->setChecked(true);
+                else
+                    ui->noCheck_4->setChecked(false);
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(4).length()>1) //box4
+            {
+                if(buffer.substr(5,4)=="true")
+                     ui->soloNetCheck->setChecked(true);
+                else
+                    ui->soloNetCheck->setChecked(false);
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(10).length()>1) // resolution
+            {
+                ui->comboBox_2->setCurrentIndex(stoi(buffer.substr(11)));
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(10).length()>1) // fullscreen
+            {
+                if(buffer.substr(11,4)=="true")
+                     ui->noCheck_3->setChecked(true);
+                else
+                    ui->noCheck_3->setChecked(false);
+            }
+    std::getline(file, buffer);
+    ui->wadsOnFolder->clear();
+    if(buffer.substr(0,4)=="pwad")
+    {
+         while (std::getline(file, buffer))
+         {
+            if(buffer.substr(0,7)=="endpwad")
+                break;
             ui->wadsOnFolder->addItem(buffer.c_str());
-        }
-
+         }
     }
+    std::getline(file, buffer);
+    if(buffer.substr(6).length()>0) // record demo
+            {
+                    ui->recordDemo->setText(buffer.substr(7).c_str());
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(8).length()>0) // playback demo
+            {
+                    ui->recordDemo_2->setText(buffer.substr(9).c_str());
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(12).length()>1) // demo drop down
+            {
+                ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
+            }
+    std::getline(file, buffer);
+    if(buffer.substr(10).length()>0) // additional arguments
+            {
+                ui->argumentText->setText((buffer.substr(11)).c_str());
+            }
 }
 
 const char* bool_cast(const bool b) {
@@ -626,7 +639,7 @@ void MainWindow::SaveState(QString fileName)
         pwads += ui->wadsOnFolder->item(i)->text().toStdString()+"\n";
     }
     if(file_.is_open())
-        file_ << "iwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+ui->levelBox->text().toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+        file_ << "# Do not edit this file manually\n\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+ui->levelBox->text().toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
     file_.close();
 
 }
