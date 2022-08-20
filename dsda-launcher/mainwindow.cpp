@@ -380,7 +380,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     execPath = QCoreApplication::applicationDirPath();
 
-    // Allow files to be droped in the launcher (*.wad *.lmp)
+    // Allow files to be droped in the launcher (*.wad *.lmp *.deh *.bex)
     setAcceptDrops(true);
 
     // Hide the reload Leaderboard button
@@ -507,7 +507,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
 }
 
-// Drag Event for *.wad *.lmp *.gfd
+// Drag Event for *.wad *.lmp *.state *.deh *.bex
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     if (e->mimeData()->hasUrls()) {
@@ -653,7 +653,8 @@ void MainWindow::SaveState(QString fileName)
 
 void MainWindow::dropFile(QString fileName)
 {
-    if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="lmp") // *.lmp file
+    QString tmp = lowerCase(fileName.toStdString().substr(fileName.length() - 4));
+    if(tmp==".lmp") // *.lmp file
     {
             ui->tabs->setCurrentIndex(2);
             ui->recordDemo_2->setText(fileName);
@@ -768,7 +769,6 @@ void MainWindow::dropFile(QString fileName)
                                         prev = j+1;
                                     }
                                 }
-                                qDebug() << files0;
 
                                 for(int j=0; j<files0.count(); j++)
                                 {
@@ -796,14 +796,14 @@ void MainWindow::dropFile(QString fileName)
                 }
             }
     }
-    else if(lowerCase(fileName.toStdString().substr(fileName.length() - 3))=="wad")
+    else if(tmp==".wad" || tmp==".bex" || tmp==".deh")
     {
         QStringList wadsToAdd;
         wadsToAdd.append(fileName);
         addWads(wadsToAdd);
         ui->tabs->setCurrentIndex(1);
     }
-    else if(lowerCase(fileName.toStdString().substr(fileName.length() - 5))=="state")
+    else if(tmp=="tate")
     {
            LoadState(fileName);
     }
@@ -1079,6 +1079,7 @@ void MainWindow::error(QProcess::ProcessError error)
 void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     QProcess *p = (QProcess *)sender();
+    qDebug() << exitCode;
     delete p;
     running = false;
 }
@@ -1485,7 +1486,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             else
                 argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
             argList.push_front("-iwad");
-            QProcess *process = new QProcess(this);
+            QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath);
             qDebug() << argList;
             process->start(execPath+"/../Resources/"+exeName, argList);
@@ -1721,7 +1722,39 @@ void MainWindow::on_pushButton_3_clicked() // Play demo
 
 void MainWindow::on_toolButton_3_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/blob/main/Docs/dsda-doom_parameters.md"));
+    if (!canLaunch)
+        return;
+
+    QString path;
+
+    if(osName=="MacOS")
+        path = execPath+"/../Resources/"+exeName;
+    else if(osName=="Linux")
+        path = execPath+"/"+exeName;
+    else
+        path = execPath+"/"+exeName+".exe";
+
+    QFile port = QFile(path);
+    if(port.exists())
+    {
+        if(osName=="MacOS")
+        {
+            QProcess *process = new QProcess;
+            process->startDetached("sh", {"-c", "echo \""+path+" --help ; rm /tmp/dsda-doom-params.sh\" > /tmp/dsda-doom-params.sh ; chmod +x /tmp/dsda-doom-params.sh ; open -a Terminal /tmp/dsda-doom-params.sh"});
+        }
+        else if (osName=="Windows")
+        {
+            system(("cmd /k "+path.toStdString()+" --help").c_str());
+        }
+        else
+        {
+            // xterm is the most reliable terminal to use, but it seems a few distros do not have it
+            system(("xterm -e 'bash -c \""+path.toStdString()+" --help ;bash\"'").c_str());
+        }
+    }
+
+    canLaunch=false;
+    QTimer::singleShot(2000, this, SLOT(delayLaunch()));
 }
 
 QString demoFile;
@@ -1779,7 +1812,7 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
             }
         }
     ui->demoTime->setText(("Time: "+time));
-    ui->demoPlayer->setText(("Player: "+player));
+    ui->demoPlayer->setText((player));
     ui->demoPort->setText((date));
 
     reply->deleteLater();

@@ -777,7 +777,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>220</y>
        <width>121</width>
        <height>16</height>
@@ -790,9 +790,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QLineEdit" name="lineEdit_2">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>150</x>
        <y>215</y>
-       <width>131</width>
+       <width>181</width>
        <height>24</height>
       </rect>
      </property>

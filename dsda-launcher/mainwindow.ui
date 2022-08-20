@@ -987,7 +987,19 @@ border-radius:3px</string>
        </rect>
       </property>
       <property name="text">
-       <string>Player:</string>
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
       </property>
      </widget>
      <widget class="QLabel" name="demoPort">
