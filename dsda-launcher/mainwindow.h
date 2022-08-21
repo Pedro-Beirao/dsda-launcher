@@ -6,6 +6,7 @@
 #include <QProcess>
 #include <QListWidget>
 
+const QString version = "v1.1";
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

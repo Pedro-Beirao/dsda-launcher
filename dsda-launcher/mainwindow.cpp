@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
-#elif __APPLE__ || __MACH__
+#elif __APPLE__
 #include "Mac.h"
 #endif
 #include "mainwindow.h"
@@ -33,17 +33,21 @@
 #include <QClipboard>
 #include <sstream>
 
-QString version = "v1.1";
-QString exeName = "dsda-doom";
+
 
 // If dsda-doom is running
 bool running = false;
+
+QString exeName = "dsda-doom";
 
 // List of all the IWADs detected
 QStringList images;
 QStringList imagesDOOMWADDIR;
 
+#if defined(__APPLE__) || defined(__linux__)
 QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
+#endif
+
 QString execPath;
 
 // Settings to be stored
@@ -375,7 +379,6 @@ MainWindow::MainWindow(QWidget *parent)
     // set the settings and console windows
     settingsWindow = new Settings;
     consoleWindow = new Console;
-
 
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where Qt tried to add spaces to those boxes if no numbers were added
@@ -1449,6 +1452,8 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
 
         settings.setValue("exeName", exeName);
+
+        settings.setValue("version", version);
 
         return;
     }

@@ -20,11 +20,12 @@ int main(int argc, char *argv[])
     w.ensurePolished();
     w.show();
 
-    if(settings.value("complevel").toString()=="")
+    if(settings.value("version").toString()!=version)
     {
         QMessageBox msgBox;
-        msgBox.setText("Some things you should know before you start using the launcher:");
-        msgBox.setInformativeText("- Drag .wad / .deh files on top of the launcher to add them to the loaded files\n\n- Drag .lmp files on top of the launcher to play the demo and autoselect the correct IWAD, PWADs and complevel\n\n- For the mentioned autoselect to work correctly, go to the settings and set the PWADs folders");
+        msgBox.setWindowTitle("dsda-launcher " + version);
+        msgBox.setText("It is recommended that you use dsda-doom v0.25 or later");
+        msgBox.setInformativeText("Here are a few tips you should know:\n\n- Drag .wad / .deh files on top of the launcher to add them to the loaded files\n\n- Drag .lmp files on top of the launcher to play the demo and autoselect the correct IWAD, PWADs and complevel\n\n- For the mentioned autoselect to work correctly, go to the settings and set the PWADs folders");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
