@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QProcess>
 #include <QListWidget>
+#include <QPushButton>
 
 const QString version = "v1.1";
 
@@ -76,6 +77,11 @@ public slots:
     void on_actionOpen_IWAD_folder_triggered();
     void on_actionOpen_Console_triggered();
     void changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
+    void changeWadLName();
+    void whenAnimationFinishn();
+    void whenAnimationFinishp();
+    void nextStackedWidget();
+    void previousStackedWidget();
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -94,6 +100,12 @@ private slots:
     void on_pushButton_5_clicked();
     void on_wadLName_2_textChanged(const QString &arg1);
     void on_episodeBox_textChanged(const QString &arg1);
+    void on_toolButton_4_clicked();
+    void on_toolButton_6_clicked();
+    void on_recordDemo_4_textChanged(const QString &arg1);
+    void on_recordDemo_5_textChanged(const QString &arg1);
+    void on_pushButton_6_clicked();
+    void on_pushButton_7_clicked();
 };
 extern QSettings settings;
 

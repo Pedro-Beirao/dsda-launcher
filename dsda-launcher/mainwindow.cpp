@@ -32,6 +32,7 @@
 #include "console.h"
 #include <QClipboard>
 #include <sstream>
+#include <qgraphicseffect.h>
 
 
 
@@ -39,10 +40,6 @@
 bool running = false;
 
 QString exeName = "dsda-doom";
-
-// List of all the IWADs detected
-QStringList images;
-QStringList imagesDOOMWADDIR;
 
 #if defined(__APPLE__) || defined(__linux__)
 QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
@@ -69,6 +66,8 @@ QString solonetParam = "-solo-net";
 
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 bool canLaunch = true;
+
+QStringList iwadsPaths;
 
 // Create an instance of the settings window
 Settings *settingsWindow;
@@ -146,6 +145,21 @@ void MainWindow::changeComplevelsList(int i)
 
 void MainWindow::changeButtonColor(bool isDark)
 {
+
+    if(isDark)
+    {
+        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+    }
+    else
+    {
+        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
+        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
+    }
 #ifdef __APPLE__
     if(isDark)
     {
@@ -203,6 +217,9 @@ QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
 void MainWindow::findIwads(int type)
 {
+    QFileInfoList imagesInfo;
+    QStringList images;
+    QStringList imagesLower;
     // Find the IWADs in the correct folder depending on the OS
 #ifdef __APPLE__
         if(!QDir(dotfolder).exists())
@@ -212,105 +229,72 @@ void MainWindow::findIwads(int type)
             QProcess::startDetached("cp", {execPath+"/../Resources/"+exeName+".wad",dotfolder});
 
         QDir directory(dotfolder);
-        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+        imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 #elif __linux__
         if(!QDir(dotfolder).exists())
             QDir().mkdir(dotfolder);
 
         QDir directory(dotfolder);
-        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+        imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 #else
         QDir directory = execPath;
-        images = directory.entryList(QStringList() << "*.WAD",QDir::Files);
+        imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 #endif
 
-    tilDOOMWADDIR = images.size();
+    tilDOOMWADDIR = imagesInfo.size();
     QDir doomwaddir(doomwaddirstr);
-    images += doomwaddir.entryList(QStringList() << "*.WAD",QDir::Files);
+    imagesInfo += doomwaddir.entryInfoList(QStringList() << "*.WAD",QDir::Files);
+
+    foreach(QFileInfo imageInfo, imagesInfo)
+    {
+        images += imageInfo.absoluteFilePath();
+        imagesLower += imageInfo.baseName().toLower();
+    }
+
     QStringList DOOMWADDIRiwads;
 
     // This makes sure that a logical order to display the IWADs is followed
     // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
 
     // Normal Doom
-    QStringList doomIWADs = {"doom","doom1","doomu","freedoom","freedoom1","bfgdoom","bfgdoom1"};
-    for(int j = 0; j < images.size(); j++)
+    QStringList doomIWADs = {
+        "doom",
+        "doom1",
+        "doomu",
+        "freedoom",
+        "freedoom1",
+        "bfgdoom",
+        "bfgdoom1",
+
+        "doom2",
+        "doom2f",
+        "freedoom2",
+        "bfgdoom2",
+
+        "tnt",
+        "plutonia",
+
+        "heretic",
+        "hexen",
+        "chex",
+        "hacx"
+    };
+    for(int i = 0; i< doomIWADs.size(); i++)
     {
-        QString filename = images[j];
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        for(int i = 0; i< doomIWADs.size(); i++)
+        for(int j = 0; j < images.size(); j++)
         {
-            if(doomIWADs.at(i) == filename)
+            if(doomIWADs.at(i) == imagesLower[j])
             {
                 if(j < tilDOOMWADDIR)
-                    ui->iwadSelect->addItem(filename);
+                    ui->iwadSelect->addItem(imagesLower[j]);
                 else
-                    DOOMWADDIRiwads.append(filename);
+                    DOOMWADDIRiwads.append(imagesLower[j]);
                 doomIWADs.replace(i, " ");
+                iwadsPaths.append(images[j]);
             }
         }
     }
 
-    // Normal Doom 2
-    QStringList doom2IWADs = {"doom2","doom2f","freedoom2","bfgdoom2"};
-    for(int j = 0; j < images.size(); j++)
-    {
-        QString filename = images[j];
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        for(int i = 0; i< doom2IWADs.size(); i++)
-        {
-            if(doom2IWADs.at(i) == filename)
-            {
-                if(j < tilDOOMWADDIR)
-                    ui->iwadSelect->addItem(filename);
-                else
-                    DOOMWADDIRiwads.append(filename);
-                doom2IWADs.replace(i, " ");
-            }
-        }
-    }
-
-    // Final Doom
-    QStringList finaldoomIWADs = {"tnt","plutonia"};
-    for(int j = 0; j < images.size(); j++)
-    {
-        QString filename = images[j];
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        for(int i = 0; i< finaldoomIWADs.size(); i++)
-        {
-            if(finaldoomIWADs.at(i) == filename)
-            {
-                if(j < tilDOOMWADDIR)
-                    ui->iwadSelect->addItem(filename);
-                else
-                    DOOMWADDIRiwads.append(filename);
-                finaldoomIWADs.replace(i, " ");
-            }
-        }
-    }
-
-    // Heretic / Hexen / Chex Quest / Hacx
-    QStringList otherIWADs = {"heretic","hexen","chex","hacx"};
-    for(int j = 0; j < images.size(); j++)
-    {
-        QString filename = images[j];
-        filename.resize (filename.size () - 4);
-        filename=lowerCase(filename.toStdString());
-        for(int i = 0; i< otherIWADs.size(); i++)
-        {
-            if(otherIWADs.at(i) == filename)
-            {
-                if(j < tilDOOMWADDIR)
-                    ui->iwadSelect->addItem(filename);
-                else
-                    DOOMWADDIRiwads.append(filename);
-                otherIWADs.replace(i, " ");
-            }
-        }
-    }
 
     tilDOOMWADDIR = ui->iwadSelect->count();
     ui->iwadSelect->addItems(DOOMWADDIRiwads);
@@ -321,8 +305,6 @@ void MainWindow::findIwads(int type)
     if(type==1)
     {
         foreach(QString filename, images) {
-            filename.resize (filename.size () - 4);
-            filename=lowerCase(filename.toStdString());
             if(filename!="doom"&&filename!="doom1"&&filename!="doomu"&&filename!="doom2"&&filename!="tnt"&&filename!="plutonia"&&filename!="freedoom1"&&filename!="freedoom"&&filename!="freedoom2"&&filename!="heretic"&&filename!="hexen"&&filename!="chex"&&filename!="hacx")
             {
                     std::ifstream file;
@@ -451,6 +433,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->recordDemo->setText(settings.value("recorddemo").toString());
     ui->recordDemo_2->setText(settings.value("playdemo").toString());
     ui->recordDemo_3->setText(settings.value("viddump").toString());
+    ui->recordDemo_4->setText(settings.value("hud").toString());
+    ui->recordDemo_5->setText(settings.value("config").toString());
 
     ui->demoPlayOptions->setCurrentIndex(settings.value("demoplaybox").toInt());
 
@@ -464,6 +448,16 @@ MainWindow::MainWindow(QWidget *parent)
         ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     else
         ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+
+    if(ui->recordDemo_4->text()=="")
+        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    else
+        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+
+    if(ui->recordDemo_5->text()=="")
+        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    else
+        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
 
 
@@ -1080,12 +1074,17 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void MainWindow::readyReadStandardError()
 {
+
+    QProcess *p = (QProcess *)sender();
+    QByteArray buf = p->readAllStandardError();
+
+    consoleWindow->changeText(buf.toStdString());
 }
 
 void MainWindow::readyReadStandardOutput()
 {
   QProcess *p = (QProcess *)sender();
-  QByteArray buf = p->readAllStandardError() + p->readAllStandardOutput();
+  QByteArray buf = p->readAllStandardOutput();
 
   consoleWindow->changeText(buf.toStdString());
 }
@@ -1114,6 +1113,107 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         return;
     }
 
+    int complevelIndex = ui->compLevelSelect->currentIndex();
+    int diffIndex = ui->diffBox->currentIndex();
+
+    if(onExit)
+        {
+            settings.setValue("iwad",ui->iwadSelect->currentIndex());
+
+            // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
+            if(ui->argumentText->toPlainText().toStdString()!="")
+            {
+                settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
+            }
+            else
+            {
+                settings.remove("argumentText");
+            }
+            settings.setValue("fullscreen", ui->noCheck_3->isChecked());
+            settings.setValue("geom",ui->comboBox_2->currentIndex());
+
+            settings.setValue("solonet",isSoloNet);
+            settings.setValue("respawn",isRespawn);
+            settings.setValue("nomo",noMo);
+            settings.setValue("fast",isFast);
+
+            settings.setValue("complevel",complevelIndex);
+            settings.setValue("skill",diffIndex);
+
+            settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
+            settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
+
+            // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
+            // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
+            if(ui->episodeBox->text().toStdString()=="")
+            {
+                settings.remove("warp1");
+            }
+            if(ui->levelBox->text().toStdString()=="")
+            {
+                settings.remove("warp2");
+            }
+
+            if(ui->recordDemo->text().toStdString()!="")
+            {
+                settings.setValue("recorddemo",ui->recordDemo->text());
+            }
+            else
+            {
+                settings.remove("recorddemo");
+            }
+
+            if(ui->recordDemo_2->text().toStdString()!="")
+            {
+                settings.setValue("playdemo",ui->recordDemo_2->text());
+            }
+            else
+            {
+                settings.remove("playdemo");
+            }
+
+            if(ui->recordDemo_3->text().toStdString()!="")
+            {
+                settings.setValue("viddump",ui->recordDemo_3->text());
+            }
+            else
+            {
+                settings.remove("viddump");
+            }
+
+            if(ui->recordDemo_4->text().toStdString()!="")
+            {
+                settings.setValue("hud",ui->recordDemo_4->text());
+            }
+            else
+            {
+                settings.remove("hud");
+            }
+
+            if(ui->recordDemo_5->text().toStdString()!="")
+            {
+                settings.setValue("config",ui->recordDemo_5->text());
+            }
+            else
+            {
+                settings.remove("config");
+            }
+
+            settings.setValue("demoplaybox", ui->demoPlayOptions->currentIndex());
+
+            settings.setValue("pwadCount", ui->wadsOnFolder->count());
+            for(int i=0; i<ui->wadsOnFolder->count();i++)
+            {
+                settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wadsOnFolder->item(i)->text());
+            }
+
+            settings.setValue("exeName", exeName);
+
+            settings.setValue("version", version);
+
+            return;
+        }
+
     QStringList argList;
 
     /* Complevels:
@@ -1137,7 +1237,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         Otherwise, run "-complevel *First+Second char of the string*"
     */
     std::string complevelString = ui->compLevelSelect->currentText().toStdString();
-    int complevelIndex = ui->compLevelSelect->currentIndex();
     if(complevelString[0]!='D')
     {
         argList.append("-complevel");
@@ -1148,7 +1247,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     }
 
     // Difficulty or Skill
-    int diffIndex = ui->diffBox->currentIndex();
     if(ui->episodeBox->text().length()>0 && ui->diffBox->currentIndex()!=0)
     {
         argList.append("-skill");
@@ -1222,11 +1320,11 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     {
         if(isFulscreen=="w")
         {
-            argList.append("-nofullscreen");
+            argList.append("-window");
         }
         else
         {
-            argList.append("-fullscreen");
+            argList.append("-nowindow");
         }
     }
     else
@@ -1236,7 +1334,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     }
 
 
-    if(ui->recordDemo->text().size()>2)
+    if(ui->recordDemo->text()!="")
     {
         argList.append("-record");
         if(returnTooltip)
@@ -1245,7 +1343,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argList.append(ui->recordDemo->text());
     }
 
-    if(ui->recordDemo_2->text().size()>2)
+    if(ui->recordDemo_2->text()!="")
     {
         if(ui->demoPlayOptions->currentIndex()==0)
         {
@@ -1280,6 +1378,26 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
                 argList.append(ui->recordDemo_2->text());
         }
     }
+
+    if(ui->recordDemo_4->text()!="")
+    {
+        argList.append("-hud");
+        if(returnTooltip)
+            argList.append("\""+ui->recordDemo_4->text()+"\"");
+        else
+            argList.append(ui->recordDemo_4->text());
+    }
+
+    if(ui->recordDemo_5->text()!="")
+    {
+        argList.append("-config");
+        if(returnTooltip)
+            argList.append("\""+ui->recordDemo_5->text()+"\"");
+        else
+            argList.append(ui->recordDemo_5->text());
+    }
+
+
 
     if (ui->argumentText->toPlainText() != "")
     {
@@ -1334,12 +1452,12 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             file_.open(exportCmd);
             std::string pwads;
 #ifdef __APPLE__
-                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
 #elif __linux__
-                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
 #else
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText()+".wad\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
 #endif
             file_.close();
 
@@ -1357,103 +1475,15 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             QClipboard *clip;
 #ifdef __APPLE__
-                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
-                else
-                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
 #elif __linux__
-                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+dotfolder+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
-                else
-                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
 #else
-                std::replace(execPath.begin(),execPath.end(),'/','\\');
-                if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+execPath+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
-                else
-                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+doomwaddirstr+"\\"+ui->iwadSelect->currentText()+".wad\" "+argStrComplete.c_str());
+                    std::replace(execPath.begin(),execPath.end(),'/','\\');
+                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
 #endif
         }
 
-
-        return;
-    }
-    else if(onExit)
-    {
-        settings.setValue("iwad",ui->iwadSelect->currentIndex());
-
-        // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-        if(ui->argumentText->toPlainText().toStdString()!="")
-        {
-            settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
-        }
-        else
-        {
-            settings.remove("argumentText");
-        }
-        settings.setValue("fullscreen", ui->noCheck_3->isChecked());
-        settings.setValue("geom",ui->comboBox_2->currentIndex());
-
-        settings.setValue("solonet",isSoloNet);
-        settings.setValue("respawn",isRespawn);
-        settings.setValue("nomo",noMo);
-        settings.setValue("fast",isFast);
-
-        settings.setValue("complevel",complevelIndex);
-        settings.setValue("skill",diffIndex);
-
-        settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
-        settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
-
-        // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
-        // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-        if(ui->episodeBox->text().toStdString()=="")
-        {
-            settings.remove("warp1");
-        }
-        if(ui->levelBox->text().toStdString()=="")
-        {
-            settings.remove("warp2");
-        }
-
-        if(ui->recordDemo->text().toStdString()!="")
-        {
-            settings.setValue("recorddemo",ui->recordDemo->text());
-        }
-        else
-        {
-            settings.remove("recorddemo");
-        }
-
-        if(ui->recordDemo_2->text().toStdString()!="")
-        {
-            settings.setValue("playdemo",ui->recordDemo_2->text());
-        }
-        else
-        {
-            settings.remove("playdemo");
-        }
-
-        if(ui->recordDemo_3->text().toStdString()!="")
-        {
-            settings.setValue("viddump",ui->recordDemo_3->text());
-        }
-        else
-        {
-            settings.remove("viddump");
-        }
-
-        settings.setValue("demoplaybox", ui->demoPlayOptions->currentIndex());
-
-        settings.setValue("pwadCount", ui->wadsOnFolder->count());
-        for(int i=0; i<ui->wadsOnFolder->count();i++)
-        {
-            settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wadsOnFolder->item(i)->text());
-        }
-
-        settings.setValue("exeName", exeName);
-
-        settings.setValue("version", version);
 
         return;
     }
@@ -1469,16 +1499,14 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         if(port.exists())
         {
             QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
-            else
-                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
+            argList.push_front(iwadsPaths.at(ui->iwadSelect->currentIndex()));
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath);
             process->start(execPath+"/../Resources/"+exeName, argList);
             connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
             connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+            connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
             connect(process, SIGNAL(started()), this, SLOT(started()));
         }
         else
@@ -1488,11 +1516,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 #elif __linux__
         QFile port = QFile(execPath+"/"+exeName);
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-        if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-            argList.push_front(homePath+"/.dsda-doom/"+ui->iwadSelect->currentText()+".wad");
-        else
-            argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
-        argList.push_front("-iwad");
+        argList.push_front(iwadsPaths.at(ui->iwadSelect->currentIndex()));
         //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
         QStringList apar; apar << exeName;
@@ -1540,10 +1564,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         QFile port = QFile(execPath+"/"+exeName+".exe");
         if(port.exists())
         {
-            if(ui->iwadSelect->currentIndex() < tilDOOMWADDIR)
-                argList.push_front(execPath+"/"+ui->iwadSelect->currentText()+".wad");
-            else
-                argList.push_front(doomwaddirstr+"/"+ui->iwadSelect->currentText()+".wad");
+            argList.push_front(iwadsPaths.at(ui->iwadSelect->currentIndex()));
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(execPath);
@@ -1573,7 +1594,7 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
         }
 
     // These are episode/mission based. They need both warp boxes
-    if(sel=="doom"||sel=="doomu"||sel=="doom1"||sel=="freedoom1"||sel=="freedoom"||sel=="bfgdoom1"||sel=="bfgdoom"||sel=="heretic"||sel=="heretic1"||sel=="chex"||sel=="hacx")
+    if(sel=="doom"||sel=="doomu"||sel=="doom1"||sel=="freedoom1"||sel=="freedoom"||sel=="bfgdoom1"||sel=="bfgdoom"||sel=="heretic"||sel=="heretic1"||sel=="chex"||sel=="hacx"||sel=="rekkrsa")
     {
         ui->levelBox->show();
         ui->levelText->show();
@@ -1598,21 +1619,23 @@ void MainWindow::on_pushButton_clicked()
     consoleWindow->show();
     consoleWindow->activateWindow();
     consoleWindow->raise();
-    /*
-    QMessageBox msgBox;
-    msgBox.setText("The document has been modified.");
-    msgBox.setInformativeText("Do you want to save your changes?");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    int ret = msgBox.exec();
-    */
-    /*
-    QMessageBox msgBox;
-    msgBox.setText("dsda-doom ");
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    int ret = msgBox.exec();
-    */
+}
+
+void MainWindow::changeWadLName()
+{
+    std::string p = ui->wadsOnFolder->item(0)->text().toStdString();
+    if(p.substr(p.length()-4)==".wad")
+    {
+        int lastBar=0;
+        for( size_t i=0; i<p.length(); i++){
+            if(p[i]=='/' || p[i]=='\\')
+            {
+                lastBar=i+1;
+            }
+        }
+        p = p.substr(lastBar);
+        ui->wadLName->setText(p.substr(0,p.length()-4).c_str());
+    }
 }
 
 // Add pwads to be loaded
@@ -1623,24 +1646,10 @@ void MainWindow::on_plus_clicked()
     if(fileNames.length()>0)
     {
         settings.setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
-
-        std::string p = ui->wadsOnFolder->item(0)->text().toStdString();
-        if(p.substr(p.length()-3)=="wad")
-        {
-            int lastBar=0;
-            for( size_t i=0; i<p.length(); i++){
-                if(p[i]=='/' || p[i]=='\\')
-                {
-                    lastBar=i+1;
-                }
-            }
-            p = p.substr(lastBar);
-            ui->wadLName->setText(p.substr(0,p.length()-4).c_str());
-        }
     }
 }
 
-// Remove a pwad form the list
+// Remove a pwad from the list
 void MainWindow::on_minus_clicked()
 {
     ui->wadsOnFolder->takeItem(ui->wadsOnFolder->currentRow());
@@ -1693,13 +1702,15 @@ void MainWindow::on_toolButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked() // Record demo
 {
-    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
+    settings.setValue("demofolder",demoName);
     ui->recordDemo->setText(demoName);
 }
 
 void MainWindow::on_pushButton_3_clicked() // Play demo
 {
-    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
+    settings.setValue("demofolder",demoName);
     ui->recordDemo_2->setText(demoName);
 }
 
@@ -2207,5 +2218,124 @@ void MainWindow::on_episodeBox_textChanged(const QString &arg1)
         ui->label_5->setEnabled(true);
     }
 
+}
+
+void MainWindow::on_toolButton_4_clicked()
+{
+   ui->toolButton_4->setText("-");
+   nextStackedWidget();
+}
+
+void MainWindow::on_toolButton_6_clicked()
+{
+    ui->toolButton_6->setText("-");
+    previousStackedWidget();
+}
+
+
+
+void MainWindow::nextStackedWidget()
+{
+    ui->stackedWidget->widget(ui->stackedWidget->currentIndex()+1)->show();
+
+    QPropertyAnimation *anim = new QPropertyAnimation(ui->stackedWidget->currentWidget(), "pos");
+    anim->setDuration(350);
+    anim->setEasingCurve(QEasingCurve::OutQuart);
+    anim->setStartValue(QPoint(0, 0));
+    anim->setEndValue(QPoint(-265, 0));
+
+    QPropertyAnimation *animn = new QPropertyAnimation(ui->stackedWidget->widget(ui->stackedWidget->currentIndex()+1), "pos");
+    animn->setDuration(350);
+    animn->setEasingCurve(QEasingCurve::OutQuart);
+    animn->setStartValue(QPoint(265, 0));
+    animn->setEndValue(QPoint(0, 0));
+
+    QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
+    animgroup->addAnimation(anim);
+    animgroup->addAnimation(animn);
+
+    animgroup->start(QAbstractAnimation::DeleteWhenStopped);
+
+     connect(animgroup, SIGNAL(finished()),this,SLOT(whenAnimationFinishn()));
+}
+
+void MainWindow::previousStackedWidget()
+{
+    ui->stackedWidget->widget(ui->stackedWidget->currentIndex()-1)->show();
+
+    QPropertyAnimation *anim = new QPropertyAnimation(ui->stackedWidget->currentWidget(), "pos");
+    anim->setDuration(350);
+    anim->setEasingCurve(QEasingCurve::OutQuart);
+    anim->setStartValue(QPoint(0, 0));
+    anim->setEndValue(QPoint(265, 0));
+
+    QPropertyAnimation *animn = new QPropertyAnimation(ui->stackedWidget->widget(ui->stackedWidget->currentIndex()-1), "pos");
+    animn->setDuration(350);
+    animn->setEasingCurve(QEasingCurve::OutQuart);
+    animn->setStartValue(QPoint(-265, 0));
+    animn->setEndValue(QPoint(0, 0));
+
+    QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
+    animgroup->addAnimation(anim);
+    animgroup->addAnimation(animn);
+
+    animgroup->start(QAbstractAnimation::DeleteWhenStopped);
+
+     connect(animgroup, SIGNAL(finished()),this,SLOT(whenAnimationFinishp()));
+}
+
+void MainWindow::whenAnimationFinishn()
+{
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()+1);
+    ui->toolButton_4->setText(">");
+}
+
+void MainWindow::whenAnimationFinishp()
+{
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()-1);
+    ui->toolButton_6->setText("<");
+}
+
+
+
+void MainWindow::on_recordDemo_4_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void MainWindow::on_recordDemo_5_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+}
+
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("DSDAHUD.lmp"),settings.value("hudfolder").toString(),tr("DSDAHUD file (*.lmp)"));
+    settings.setValue("hudfolder",fileName);
+    ui->recordDemo_4->setText(fileName);
+}
+
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("dsda-doom.cfg"),settings.value("configfolder").toString(),tr("Config file (*.cfg)"));
+    settings.setValue("configfolder",fileName);
+    ui->recordDemo_5->setText(fileName);
 }
 
