@@ -158,6 +158,9 @@ Settings::Settings(QWidget *parent) :
         }
     }
     settings.endArray();
+
+
+    ui->label_5->hide();
 }
 
 void Settings::fooo3() // CTRL+W runs this function close the active window
@@ -297,9 +300,9 @@ void Settings::on_radioButton_3_toggled(bool checked)
 
 void Settings::on_toolButton_5_clicked()
 {
-    if(ui->listWidget_2->count()>1)
+    if(ui->listWidget_2->count()>0)
         ui->listWidget_2->takeItem(ui->listWidget_2->currentRow());
-    on_listWidget_2_itemChanged(ui->listWidget_2->currentItem());
+    ui->label_5->show();
 
 }
 
@@ -311,12 +314,13 @@ void Settings::on_toolButton_4_clicked()
     ui->listWidget_2->item(0)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
     ui->listWidget_2->scrollToTop();
     ui->listWidget_2->setCurrentRow(0);
+    ui->label_5->show();
 }
 
 
 void Settings::on_listWidget_2_itemChanged(QListWidgetItem *item)
 {
-    pmainWindow->changeResolutions(ui->listWidget_2);
+    ui->label_5->show();
 }
 
 void Settings::on_toolButton_6_clicked()
@@ -327,7 +331,7 @@ void Settings::on_toolButton_6_clicked()
         QListWidgetItem *item = ui->listWidget_2->takeItem(row);
         ui->listWidget_2->insertItem(row-1,item);
         ui->listWidget_2->setCurrentRow(row-1);
-        pmainWindow->changeResolutions(ui->listWidget_2);
+        ui->label_5->show();
     }
 }
 
@@ -340,18 +344,13 @@ void Settings::on_toolButton_7_clicked()
         QListWidgetItem *item = ui->listWidget_2->takeItem(row);
         ui->listWidget_2->insertItem(row+1,item);
         ui->listWidget_2->setCurrentRow(row+1);
-        pmainWindow->changeResolutions(ui->listWidget_2);
+        ui->label_5->show();
     }
 }
 
 void Settings::closeEvent(QCloseEvent *event) // When closing the launcher, save the settings
 {
-    settings.beginWriteArray("resolutions");
-    for (int i = 0; i < ui->listWidget_2->count(); i++) {
-        settings.setArrayIndex(i);
-        settings.setValue("res", ui->listWidget_2->item(i)->text());
-    }
-    settings.endArray();
+
 }
 
 
@@ -378,6 +377,12 @@ void Settings::on_lineEdit_2_textChanged(const QString &arg1)
 
 void Settings::on_pushButton_clicked()
 {
+    ui->label_5->hide();
+
+    pmainWindow->changeResolutions(ui->listWidget_2);
+
+    pmainWindow->changeToggles(ui->lineEdit_3->text(),ui->lineEdit_5->text(),ui->lineEdit_4->text(),ui->lineEdit_6->text(),ui->lineEdit_7->text(),ui->lineEdit_9->text(),ui->lineEdit_8->text(),ui->lineEdit_10->text());
+
     settings.setValue("toggle1t", ui->lineEdit_3->text());
     settings.setValue("toggle1a", ui->lineEdit_5->text());
 
@@ -390,7 +395,12 @@ void Settings::on_pushButton_clicked()
     settings.setValue("toggle4t", ui->lineEdit_8->text());
     settings.setValue("toggle4a", ui->lineEdit_10->text());
 
-    pmainWindow->changeToggles(ui->lineEdit_3->text(),ui->lineEdit_5->text(),ui->lineEdit_4->text(),ui->lineEdit_6->text(),ui->lineEdit_7->text(),ui->lineEdit_9->text(),ui->lineEdit_8->text(),ui->lineEdit_10->text());
+    settings.beginWriteArray("resolutions");
+    for (int i = 0; i < ui->listWidget_2->count(); i++) {
+        settings.setArrayIndex(i);
+        settings.setValue("res", ui->listWidget_2->item(i)->text());
+    }
+    settings.endArray();
 }
 
 
@@ -404,6 +414,7 @@ void Settings::on_lineEdit_3_textChanged(const QString &arg1)
     {
         ui->lineEdit_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -417,6 +428,7 @@ void Settings::on_lineEdit_5_textChanged(const QString &arg1)
     {
         ui->lineEdit_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -430,6 +442,7 @@ void Settings::on_lineEdit_4_textChanged(const QString &arg1)
     {
         ui->lineEdit_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -443,6 +456,7 @@ void Settings::on_lineEdit_6_textChanged(const QString &arg1)
     {
         ui->lineEdit_6->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -456,6 +470,7 @@ void Settings::on_lineEdit_7_textChanged(const QString &arg1)
     {
         ui->lineEdit_7->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -469,6 +484,7 @@ void Settings::on_lineEdit_8_textChanged(const QString &arg1)
     {
         ui->lineEdit_8->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -482,6 +498,7 @@ void Settings::on_lineEdit_9_textChanged(const QString &arg1)
     {
         ui->lineEdit_9->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }
 
 
@@ -495,4 +512,5 @@ void Settings::on_lineEdit_10_textChanged(const QString &arg1)
     {
         ui->lineEdit_10->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+    ui->label_5->show();
 }

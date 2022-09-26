@@ -6,21 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>300</height>
+    <width>586</width>
+    <height>376</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>399</width>
-    <height>300</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>399</width>
-    <height>300</height>
-   </size>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="acceptDrops">
    <bool>false</bool>
@@ -33,12 +27,27 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>381</width>
-     <height>281</height>
+     <width>565</width>
+     <height>355</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="tabPosition">
+    <enum>QTabWidget::North</enum>
+   </property>
+   <property name="tabShape">
+    <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
     <number>0</number>
+   </property>
+   <property name="elideMode">
+    <enum>Qt::ElideNone</enum>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -177,477 +186,16 @@ border-radius:3px</string>
       <string>Full</string>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>25</y>
-       <width>101</width>
-       <height>201</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(139, 138, 140);
-color: #000;
-height: 20px;
-background-color:rgb(230, 230, 230);
-border-radius:3px</string>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustIgnored</enum>
-     </property>
-     <property name="dragEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="dragDropMode">
-      <enum>QAbstractItemView::NoDragDrop</enum>
-     </property>
-     <property name="defaultDropAction">
-      <enum>Qt::MoveAction</enum>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>false</bool>
-     </property>
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectItems</enum>
-     </property>
-     <property name="movement">
-      <enum>QListView::Static</enum>
-     </property>
-     <property name="layoutMode">
-      <enum>QListView::Batched</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>3840x2160</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>1920x1080</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>1600x900</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>1440x900</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>1280x720</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>1152x720</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>640x480</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>640x400</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>320x240</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>320x200</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-      </property>
-     </item>
-    </widget>
-    <widget class="QToolButton" name="toolButton_4">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>30</y>
-       <width>20</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/pngs/pngs/plus.png);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="toolButton_5">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>60</y>
-       <width>20</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/pngs/pngs/minus.png);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>225</x>
-       <y>5</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Resolutions</string>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="toolButton_6">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>160</y>
-       <width>20</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/pngs/pngs/up.png);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="toolButton_7">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>190</y>
-       <width>20</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/pngs/pngs/down.png);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
-     <string>Toggles</string>
+     <string>Customization</string>
     </attribute>
-    <widget class="QLineEdit" name="lineEdit_3">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>75</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>Fast Monsters</string>
-     </property>
-     <property name="placeholderText">
-      <string>Fast Monsters</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_4">
-     <property name="geometry">
-      <rect>
-       <x>205</x>
-       <y>75</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>No Monsters</string>
-     </property>
-     <property name="placeholderText">
-      <string>No Monsters</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>105</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>-fast</string>
-     </property>
-     <property name="placeholderText">
-      <string>-fast</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_6">
-     <property name="geometry">
-      <rect>
-       <x>205</x>
-       <y>105</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>-nomonsters</string>
-     </property>
-     <property name="placeholderText">
-      <string>-nomonsters</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_7">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>155</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>Respawn Monsters</string>
-     </property>
-     <property name="placeholderText">
-      <string>Respawn Monsters</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
-     <property name="geometry">
-      <rect>
-       <x>205</x>
-       <y>155</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>Solo Net</string>
-     </property>
-     <property name="placeholderText">
-      <string>Solo Net</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_9">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>185</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>-respawn</string>
-     </property>
-     <property name="placeholderText">
-      <string>-respawn</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_10">
-     <property name="geometry">
-      <rect>
-       <x>205</x>
-       <y>185</y>
-       <width>151</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>-solo-net</string>
-     </property>
-     <property name="placeholderText">
-      <string>-solo-net</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_6">
-     <property name="geometry">
-      <rect>
-       <x>22</x>
-       <y>21</y>
-       <width>241</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Here you can customise the toggles</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_11">
-     <property name="geometry">
-      <rect>
-       <x>255</x>
-       <y>13</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>Text</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_12">
-     <property name="geometry">
-      <rect>
-       <x>255</x>
-       <y>40</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-padding-left: 6px;
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>Parameter</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>215</y>
+       <x>440</x>
+       <y>290</y>
        <width>71</width>
        <height>32</height>
       </rect>
@@ -657,6 +205,461 @@ border-radius:3px</string>
      </property>
      <property name="default">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>60</y>
+       <width>120</width>
+       <height>80</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>351</width>
+       <height>195</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Toggles</string>
+     </property>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Separate multiple parameters with a ';'</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>Fast Monsters</string>
+      </property>
+      <property name="placeholderText">
+       <string>Fast Monsters</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>-fast</string>
+      </property>
+      <property name="placeholderText">
+       <string>-fast</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>Respawn Monsters</string>
+      </property>
+      <property name="placeholderText">
+       <string>Respawn Monsters</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>-respawn</string>
+      </property>
+      <property name="placeholderText">
+       <string>-respawn</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_4">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>50</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>No Monsters</string>
+      </property>
+      <property name="placeholderText">
+       <string>No Monsters</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_6">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>80</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>-nomonsters</string>
+      </property>
+      <property name="placeholderText">
+       <string>-nomonsters</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_8">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>130</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>Solo Net</string>
+      </property>
+      <property name="placeholderText">
+       <string>Solo Net</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_10">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>160</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+      </property>
+      <property name="text">
+       <string>-solo-net</string>
+      </property>
+      <property name="placeholderText">
+       <string>-solo-net</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>0</y>
+       <width>151</width>
+       <height>195</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Resolutions</string>
+     </property>
+     <widget class="QToolButton" name="toolButton_7">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>160</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/pngs/pngs/down.png);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_6">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>130</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/pngs/pngs/up.png);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>35</y>
+        <width>101</width>
+        <height>150</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid rgb(139, 138, 140);
+color: #000;
+height: 20px;
+background-color:rgb(230, 230, 230);
+border-radius:3px</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="dragDropMode">
+       <enum>QAbstractItemView::InternalMove</enum>
+      </property>
+      <property name="defaultDropAction">
+       <enum>Qt::MoveAction</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
+      <property name="layoutMode">
+       <enum>QListView::Batched</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>3840x2160</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1920x1080</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1600x900</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1440x900</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1280x720</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1152x720</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>640x480</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>640x400</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>320x240</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>320x200</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+     </widget>
+     <widget class="QToolButton" name="toolButton_4">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>40</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/pngs/pngs/plus.png);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_5">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>70</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/pngs/pngs/minus.png);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>270</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 4);</string>
+     </property>
+     <property name="text">
+      <string>Don't forget to save!</string>
      </property>
     </widget>
    </widget>

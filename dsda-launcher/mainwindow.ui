@@ -838,6 +838,7 @@ border-radius:3px</string>
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="page_3"/>
      </widget>
     </widget>
     <widget class="QWidget" name="wadsTab">
