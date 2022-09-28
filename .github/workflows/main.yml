@@ -125,7 +125,7 @@ jobs:
           ls
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-          ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -appimage -unsupported-allow-new-glibc
+          ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -unsupported-allow-new-glibc
           zip -r ../linux.zip .
           ls
       - uses: actions/upload-artifact@v2
