@@ -295,6 +295,7 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
+    <zorder>label</zorder>
     <zorder>checkBox</zorder>
     <zorder>label_2</zorder>
     <zorder>lineEdit</zorder>
@@ -303,7 +304,6 @@ border-radius:3px</string>
     <zorder>radioButton</zorder>
     <zorder>radioButton_3</zorder>
     <zorder>toolButton</zorder>
-    <zorder>label</zorder>
     <zorder>toolButton_3</zorder>
     <zorder>listWidget</zorder>
     <zorder>toolButton_2</zorder>

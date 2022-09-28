@@ -1436,6 +1436,19 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             argList.append(ui->recordDemo_5->text());
     }
 
+    if (ui->comboBox_3->currentIndex()==1)
+        argList.append("-track_pacifist");
+    else if(ui->comboBox_3->currentIndex()==2)
+        argList.append("-track_100k");
+
+    if (ui->comboBox_4->currentIndex()==1)
+        argList.append("-time_use");
+    else if(ui->comboBox_4->currentIndex()==2)
+        argList.append("-time_keys");
+    else if(ui->comboBox_4->currentIndex()==3)
+        argList.append("-time_secrets");
+    else if(ui->comboBox_4->currentIndex()==4)
+        argList.append("-time_all");
 
 
     if (ui->argumentText->toPlainText() != "")
@@ -1504,7 +1517,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
 
         QMessageBox msgBox;
-        msgBox.setText(exeName+" -iwad "+ui->iwadSelect->currentText()+".wad "+argStr.c_str());
+        msgBox.setText("Executable: "+exeName+"\nIWAD: "+ui->iwadSelect->currentText()+"\nParameters: "+argStr.c_str());
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton* pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
@@ -1550,7 +1563,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
         else
         {
-            QMessageBox::warning(this, "dsda-launcher", "Cannot find "+exeName);
+            QMessageBox::warning(this, "dsda-launcher", exeName + " was not found in dsda-launcher.app/Contents/Resources/"+exeName);
         }
 #elif __linux__
         QFile port = QFile(execPath+"/"+exeName);
