@@ -18,8 +18,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  build-windows:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
@@ -90,12 +89,47 @@ jobs:
           make.exe
           tree /F
           mkdir lib
-          windeployqt.exe --libdir .\release\lib --plugindir .\release\lib release\dsda-launcher.exe
-          Compress-Archive -path .\release\* -destination .\win.zip
+          windeployqt.exe release\dsda-launcher.exe
+          Compress-Archive -path .\release\* -destination .\windows.zip
           dir
       - uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
+          name: mwindows
           path: dsda-launcher\build\win.zip
+  build-linux:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.14.0
+        with:
+          aqtversion: '==2.1.*'
+          version: '6.2.0'
+          host: 'linux'
+          target: 'desktop'
+          arch: 'gcc_64'
+          tools: 'tools_openssl_x64'
+          
+      - name: build
+        run: |
+          cd dsda-launcher
+          mkdir build
+          cd build
+          qmake ..
+          make
+          ls
+          linuxdeployqt ./dsda-launcher
+          zip -r ../linux.zip .
+          ls
+      - uses: actions/upload-artifact@v2
+        with:
+          name: linux
+          path: dsda-launcher/linux.zip
+    
 
 
