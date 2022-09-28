@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=DSDA-Launcher
+Comment=launcher for a enhanced clone of the classic first-person shooter Doom
+Icon=dsda-doom
+TryExec=dsda-doom
+Exec=dsda-launcher
+Categories=Game;ActionGame;
+MimeType=application/x-doom-wad;
+Keywords=first;person;shooter;doom;boom;mbf;prboom;
