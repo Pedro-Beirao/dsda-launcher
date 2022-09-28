@@ -134,11 +134,6 @@ void MainWindow::changeComplevelsList(int i)
     else if(i==1)
     {
         ui->compLevelSelect->clear();
-        ui->compLevelSelect->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","9 - Boom","10 - LxDoom","11 - MBF","17 - Current PrBoom","21 - MBF 21"});
-    }
-    else if(i==2)
-    {
-        ui->compLevelSelect->clear();
         ui->compLevelSelect->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","7 - Boom's comp mode","8 - Boom v2.01","9 - Boom","10 - LxDoom","11 - MBF","12 - PrBoom v2.03beta","13 - PrBoom v2.1.0","14 - PrBoom v2.1.1 - 2.2.6","15 - PrBoom v2.3.x","16 - PrBoom v2.4.0","17 - Current PrBoom","21 - MBF 21"});
     }
 }

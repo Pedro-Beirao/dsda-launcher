@@ -28,8 +28,6 @@ private slots:
 
     void on_radioButton_toggled(bool checked);
 
-    void on_radioButton_2_toggled(bool checked);
-
     void on_radioButton_3_toggled(bool checked);
 
     void on_toolButton_5_clicked();
@@ -66,6 +64,8 @@ private slots:
     void on_lineEdit_9_textChanged(const QString &arg1);
 
     void on_lineEdit_10_textChanged(const QString &arg1);
+
+    void settingsChanged();
 
 private:
     Ui::Settings *ui;
