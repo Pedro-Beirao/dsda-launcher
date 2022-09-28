@@ -86,7 +86,8 @@ jobs:
           mkdir build
           cd build
           qmake.exe ..
-          make.exe
+          make.exe -static-libgcc -static-libstdc++
+          make.exe clean
           tree /F
           mkdir lib
           windeployqt.exe release\dsda-launcher.exe
@@ -94,7 +95,7 @@ jobs:
           dir
       - uses: actions/upload-artifact@v2
         with:
-          name: mwindows
+          name: windows
           path: dsda-launcher\build\windows.zip
   build-linux:
     # The type of runner that the job will run on
@@ -122,10 +123,43 @@ jobs:
           cd build
           qmake ..
           make
+          make clean
           ls
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -unsupported-allow-new-glibc
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: dsda-launcher/build
+  build-macos:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.14.0
+        with:
+          aqtversion: '==2.1.*'
+          version: '6.2.0'
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+          
+      - name: build
+        run: |
+          cd dsda-launcher
+          mkdir build
+          cd build
+          qmake ..
+          make
+          make clean
+          ls
+          macdeployqt ./dsda-launcher
       - uses: actions/upload-artifact@v3
         with:
           name: linux
