@@ -57,7 +57,7 @@ qmake ..
 If you installed Qt with the online installer, careful with qmake not being in the path
 
 
-// qmake .. "QMAKE_APPLE_DEVICE_ARCHS=arm64;x86_64" "CONFIG+=deploy"
+// qmake .. "CONFIG+=deploy"
 // ^ this will add a "lib" folder to the .app bunndle (Only useful when distributing dsda-doom) and will compile for both x64 and arm64 archs
 
 ```

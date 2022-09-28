@@ -86,7 +86,7 @@ jobs:
           mkdir build
           cd build
           qmake.exe ..
-          make.exe -static-libgcc -static-libstdc++
+          make.exe
           make.exe clean
           tree /F
           mkdir lib
@@ -155,7 +155,7 @@ jobs:
           cd dsda-launcher
           mkdir build
           cd build
-          qmake ..
+          qmake .. "CONFIG+=noport"
           make
           make clean
           ls

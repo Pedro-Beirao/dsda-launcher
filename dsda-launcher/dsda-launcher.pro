@@ -33,9 +33,10 @@ win32 {
 mac {
     CONFIG += c++11 appbundle
     ICON = doom-launcher.icns
-    APP_FILES.files = ./dsda-doom
-    APP_FILES.files += ./dsda-doom.wad
-    APP_FILES.files += ./launcher_config.txt
+    !noport {
+        APP_FILES.files = ./dsda-doom
+        APP_FILES.files += ./dsda-doom.wad
+    }
     deploy {
         APP_FILES.files += ./lib
         QMAKE_APPLE_DEVICE_ARCHS=arm64 x86_64
