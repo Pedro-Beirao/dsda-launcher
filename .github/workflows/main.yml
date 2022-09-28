@@ -159,7 +159,7 @@ jobs:
           make
           make clean
           ls
-          macdeployqt ./dsda-launcher
+          macdeployqt ./dsda-launcher.app
       - uses: actions/upload-artifact@v3
         with:
           name: linux
