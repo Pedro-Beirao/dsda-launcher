@@ -162,7 +162,7 @@ jobs:
           macdeployqt ./dsda-launcher.app
       - uses: actions/upload-artifact@v3
         with:
-          name: linux
+          name: mac
           path: dsda-launcher/build
     
 
