@@ -490,16 +490,31 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     }
 }
 
-void MainWindow::LoadState(QString fileName)
+void MainWindow::LoadState(QString fileName, bool isString)
 {
-    bool searchingPwads = false;
-    std::ifstream file;
-    file.open(fileName.toStdString());
+    std::stringstream file;
+
+    if (isString)
+    {
+        file << fileName.toStdString();
+    }
+    else
+    {
+        std::ifstream filef(fileName.toStdString());
+        if (!filef.is_open())
+        {
+            return;
+        }
+
+        file << filef.rdbuf();
+        filef.close();
+    }
+
     std::string buffer;
     std::getline(file, buffer);
     std::getline(file, buffer);
     std::getline(file, buffer);
-    if(buffer.substr(4).length()>1) // iwad
+    if(buffer.substr(0,5)=="iwad=") // iwad
     {
         for(int i=0; i<ui->iwadSelect->count();i++)
         {
@@ -510,7 +525,7 @@ void MainWindow::LoadState(QString fileName)
         }
     }
     std::getline(file, buffer);
-    if(buffer.substr(9).length()>1) // complevel
+    if(buffer.substr(0,10)=="complevel=") // complevel
             {
                 if(buffer.substr(10)[0]=='D')
                 {
@@ -529,22 +544,22 @@ void MainWindow::LoadState(QString fileName)
                 }
             }
     std::getline(file, buffer);
-    if(buffer.substr(5).length()>0) // warp 1
+    if(buffer.substr(0,6)=="warp1=") // warp 1
             {
                     ui->episodeBox->setText(buffer.substr(6).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(5).length()>0) //warp 2
+    if(buffer.substr(0,6)=="warp2=") //warp 2
             {
                     ui->levelBox->setText(buffer.substr(6).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(5).length()>1) // skill
+    if(buffer.substr(0,6)=="skill=") // skill
             {
                      ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
             }
     std::getline(file, buffer);
-    if(buffer.substr(4).length()>1) // box1
+    if(buffer.substr(0,5)=="box1=") // box1
             {
                 if(buffer.substr(5,4)=="true")
                      ui->fastCheck->setChecked(true);
@@ -552,7 +567,7 @@ void MainWindow::LoadState(QString fileName)
                     ui->fastCheck->setChecked(false);
             }
     std::getline(file, buffer);
-    if(buffer.substr(4).length()>1) // box2
+    if(buffer.substr(0,5)=="box2=") // box2
             {
                 if(buffer.substr(5,4)=="true")
                      ui->noCheck->setChecked(true);
@@ -560,7 +575,7 @@ void MainWindow::LoadState(QString fileName)
                     ui->noCheck->setChecked(false);
             }
     std::getline(file, buffer);
-    if(buffer.substr(4).length()>1) // box3
+    if(buffer.substr(0,5)=="box3=") // box3
             {
                 if(buffer.substr(5,4)=="true")
                      ui->noCheck_4->setChecked(true);
@@ -568,7 +583,7 @@ void MainWindow::LoadState(QString fileName)
                     ui->noCheck_4->setChecked(false);
             }
     std::getline(file, buffer);
-    if(buffer.substr(4).length()>1) //box4
+    if(buffer.substr(0,5)=="box4=") //box4
             {
                 if(buffer.substr(5,4)=="true")
                      ui->soloNetCheck->setChecked(true);
@@ -576,12 +591,12 @@ void MainWindow::LoadState(QString fileName)
                     ui->soloNetCheck->setChecked(false);
             }
     std::getline(file, buffer);
-    if(buffer.substr(10).length()>1) // resolution
+    if(buffer.substr(0,11)=="resolution=") // resolution
             {
                 ui->comboBox_2->setCurrentIndex(stoi(buffer.substr(11)));
             }
     std::getline(file, buffer);
-    if(buffer.substr(10).length()>1) // fullscreen
+    if(buffer.substr(0,11)=="fullscreen=") // fullscreen
             {
                 if(buffer.substr(11,4)=="true")
                      ui->noCheck_3->setChecked(true);
@@ -589,22 +604,22 @@ void MainWindow::LoadState(QString fileName)
                     ui->noCheck_3->setChecked(false);
             }
     std::getline(file, buffer);
-    if(buffer.substr(3).length()>0) // hud
+    if(buffer.substr(0,4)=="hud=") // hud
             {
                 ui->recordDemo_4->setText(buffer.substr(4).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(6).length()>0) // config
+    if(buffer.substr(0,7)=="config=") // config
             {
                 ui->recordDemo_5->setText(buffer.substr(7).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(5).length()>1) // track
+    if(buffer.substr(0,6)=="track=") // track
             {
                 ui->comboBox_3->setCurrentIndex(stoi(buffer.substr(6)));
             }
      std::getline(file, buffer);
-     if(buffer.substr(4).length()>1) // time
+     if(buffer.substr(0,5)=="time=") // time
              {
                  ui->comboBox_4->setCurrentIndex(stoi(buffer.substr(5)));
              }
@@ -620,25 +635,26 @@ void MainWindow::LoadState(QString fileName)
          }
     }
     std::getline(file, buffer);
-    if(buffer.substr(6).length()>0) // record demo
+    if(buffer.substr(0,7)=="record=") // record demo
             {
                     ui->recordDemo->setText(buffer.substr(7).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(8).length()>0) // playback demo
+    if(buffer.substr(0,9)=="playback=") // playback demo
             {
                     ui->recordDemo_2->setText(buffer.substr(9).c_str());
             }
     std::getline(file, buffer);
-    if(buffer.substr(12).length()>1) // demo drop down
+    if(buffer.substr(0,13)=="demodropdown=") // demo drop down
             {
                 ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
             }
     std::getline(file, buffer);
-    if(buffer.substr(10).length()>0) // additional arguments
+    if(buffer.substr(0,11)=="additional=") // additional arguments
             {
                 ui->argumentText->setText((buffer.substr(11)).c_str());
             }
+
 }
 
 const char* bool_cast(const bool b) {
@@ -822,7 +838,7 @@ void MainWindow::dropFile(QString fileName)
     }
     else if(tmp=="tate")
     {
-           LoadState(fileName);
+           LoadState(fileName, 0);
     }
 }
 
@@ -841,7 +857,7 @@ void MainWindow::on_actionLoad_triggered()
     if(fileNames.length()>0)
     {
         settings.setValue("statefile", fileNames[0]);
-        LoadState(fileNames[0]);
+        LoadState(fileNames[0], 0);
     }
 }
 

@@ -41,7 +41,6 @@ void historyList::getHistory()
 {
     ui->listWidget->clear();
 
-    bool searchingPwads = false;
     std::ifstream file;
     file.open(filePath.toStdString());
 
@@ -49,7 +48,6 @@ void historyList::getHistory()
     {
         return;
     }
-
 
     std::string buffer;
     std::getline(file, buffer);
@@ -211,5 +209,49 @@ void historyList::getHistory()
         ui->listWidget->addItem(iwad+"\n"+skill+level+params+pwads+demo);
     }
 
-
+    file.close();
 }
+
+void historyList::on_pushButton_2_clicked()
+{
+    std::ifstream file;
+    file.open(filePath.toStdString());
+    QString text = "#lol\n\n";
+
+    if (!file.is_open())
+    {
+        return;
+    }
+
+    int c = -1;
+    std::string buffer;
+    while (!file.eof())
+    {
+        getline(file, buffer);
+        if (buffer == "-")
+        {
+            c++;
+            getline(file, buffer);
+            getline(file, buffer);
+        }
+        if (c == ui->listWidget->currentRow())
+        {
+            text += (buffer+"\n").c_str();
+        }
+        else if (c > ui->listWidget->currentRow())
+        {
+            break;
+        }
+    }
+
+    file.close();
+    qDebug() << text;
+    hmainWindow->LoadState(text, 1);
+}
+
+
+
+
+
+
+

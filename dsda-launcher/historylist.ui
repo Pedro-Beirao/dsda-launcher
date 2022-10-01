@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>249</width>
-    <height>439</height>
+    <width>221</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QListWidget" name="listWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>0</x>
+     <y>0</y>
      <width>221</width>
      <height>401</height>
     </rect>
@@ -33,6 +33,38 @@
    </property>
    <property name="currentRow">
     <number>-1</number>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>125</x>
+     <y>405</y>
+     <width>80</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Launch</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>405</y>
+     <width>80</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>

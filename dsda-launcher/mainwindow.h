@@ -57,7 +57,7 @@ public slots:
     void addToArguments(QString string);
     void on_actionLoad_triggered();
     void on_actionSave_triggered();
-    void LoadState(QString fileName);
+    void LoadState(QString fileName, bool isString);
     void SaveState(QString fileName);
     void on_actionGithub_triggered();
     void on_actionGithub_2_triggered();
