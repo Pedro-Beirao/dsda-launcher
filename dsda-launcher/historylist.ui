@@ -6,13 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>500</height>
+    <width>249</width>
+    <height>439</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>History</string>
   </property>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>221</width>
+     <height>401</height>
+    </rect>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+   <property name="currentRow">
+    <number>-1</number>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

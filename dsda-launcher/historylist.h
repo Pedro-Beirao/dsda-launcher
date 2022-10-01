@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::historyList *ui;
+
+public slots:
+    void getHistory();
 };
 
 #endif // HISTORYLIST_H
