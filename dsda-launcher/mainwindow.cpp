@@ -33,6 +33,7 @@
 #include <QClipboard>
 #include <sstream>
 #include <qgraphicseffect.h>
+#include "historylist.h"
 
 
 
@@ -72,6 +73,7 @@ QStringList iwadsPaths;
 // Create an instance of the settings window
 Settings *settingsWindow;
 Console *consoleWindow;
+historyList *historyListWindow;
 
 MainWindow * MainWindow::pMainWindow = nullptr;
 
@@ -356,6 +358,7 @@ MainWindow::MainWindow(QWidget *parent)
     // set the settings and console windows
     settingsWindow = new Settings;
     consoleWindow = new Console;
+    historyListWindow = new historyList;
 
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where Qt tried to add spaces to those boxes if no numbers were added
@@ -1008,6 +1011,14 @@ void MainWindow::on_actionOpen_IWAD_folder_triggered()
 void MainWindow::on_actionOpen_Console_triggered()
 {
     on_pushButton_clicked();
+}
+
+void MainWindow::on_actionHistory_triggered()
+{
+
+    historyListWindow->show();
+    historyListWindow->activateWindow();
+    historyListWindow->raise();
 }
 
 MainWindow::~MainWindow()

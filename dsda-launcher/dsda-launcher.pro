@@ -10,17 +10,20 @@ DEFINES += "APP_NAME=dsda-launcher"
 
 SOURCES += \
     console.cpp \
+    historylist.cpp \
     main.cpp \
     mainwindow.cpp \
     settings.cpp
 
 HEADERS += \
     console.h \
+    historylist.h \
     mainwindow.h \
     settings.h
 
 FORMS += \
     console.ui \
+    historylist.ui \
     mainwindow.ui \
     settings.ui
 

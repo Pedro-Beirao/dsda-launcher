@@ -82,6 +82,7 @@ public slots:
     void whenAnimationFinishp();
     void nextStackedWidget();
     void previousStackedWidget();
+    void on_actionHistory_triggered();
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);

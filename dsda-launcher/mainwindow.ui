@@ -1436,6 +1436,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionOpen_IWAD_folder"/>
     <addaction name="actionOpen_Console"/>
+    <addaction name="actionHistory"/>
     <addaction name="actionCommand"/>
    </widget>
    <addaction name="menuAbout"/>
@@ -1536,6 +1537,14 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionHistory">
+   <property name="text">
+    <string>History</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>
