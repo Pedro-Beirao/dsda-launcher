@@ -1761,7 +1761,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         file.close();
     }
 
-    if (count >= 2)
+    if (count >= 20)
     {
         needToDelete = true;
     }
