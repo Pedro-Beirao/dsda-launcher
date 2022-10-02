@@ -44,6 +44,9 @@ QString exeName = "dsda-doom";
 
 #if defined(__APPLE__) || defined(__linux__)
 QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
+QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
+#else
+QString historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
 #endif
 
 QString execPath;
@@ -523,8 +526,8 @@ void MainWindow::LoadState(QString fileName, bool isString)
                 ui->iwadSelect->setCurrentIndex(i);
             }
         }
+        std::getline(file, buffer);
     }
-    std::getline(file, buffer);
     if(buffer.substr(0,10)=="complevel=") // complevel
             {
                 if(buffer.substr(10)[0]=='D')
@@ -542,88 +545,88 @@ void MainWindow::LoadState(QString fileName, bool isString)
                         }
                     }
                 }
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,6)=="warp1=") // warp 1
             {
                     ui->episodeBox->setText(buffer.substr(6).c_str());
+                    std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,6)=="warp2=") //warp 2
             {
                     ui->levelBox->setText(buffer.substr(6).c_str());
+                    std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,6)=="skill=") // skill
             {
                      ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
+                     std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,5)=="box1=") // box1
             {
                 if(buffer.substr(5,4)=="true")
                      ui->fastCheck->setChecked(true);
                 else
                     ui->fastCheck->setChecked(false);
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,5)=="box2=") // box2
             {
                 if(buffer.substr(5,4)=="true")
                      ui->noCheck->setChecked(true);
                 else
                     ui->noCheck->setChecked(false);
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,5)=="box3=") // box3
             {
                 if(buffer.substr(5,4)=="true")
                      ui->noCheck_4->setChecked(true);
                 else
                     ui->noCheck_4->setChecked(false);
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,5)=="box4=") //box4
             {
                 if(buffer.substr(5,4)=="true")
                      ui->soloNetCheck->setChecked(true);
                 else
                     ui->soloNetCheck->setChecked(false);
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,11)=="resolution=") // resolution
             {
                 ui->comboBox_2->setCurrentIndex(stoi(buffer.substr(11)));
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,11)=="fullscreen=") // fullscreen
             {
                 if(buffer.substr(11,4)=="true")
                      ui->noCheck_3->setChecked(true);
                 else
                     ui->noCheck_3->setChecked(false);
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,4)=="hud=") // hud
             {
                 ui->recordDemo_4->setText(buffer.substr(4).c_str());
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,7)=="config=") // config
             {
                 ui->recordDemo_5->setText(buffer.substr(7).c_str());
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,6)=="track=") // track
             {
                 ui->comboBox_3->setCurrentIndex(stoi(buffer.substr(6)));
+                std::getline(file, buffer);
             }
-     std::getline(file, buffer);
      if(buffer.substr(0,5)=="time=") // time
              {
                  ui->comboBox_4->setCurrentIndex(stoi(buffer.substr(5)));
+                 std::getline(file, buffer);
              }
-      std::getline(file, buffer);
     ui->wadsOnFolder->clear();
     if(buffer.substr(0,4)=="pwad")
     {
@@ -633,23 +636,23 @@ void MainWindow::LoadState(QString fileName, bool isString)
                 break;
             ui->wadsOnFolder->addItem(buffer.c_str());
          }
+         std::getline(file, buffer);
     }
-    std::getline(file, buffer);
     if(buffer.substr(0,7)=="record=") // record demo
             {
                     ui->recordDemo->setText(buffer.substr(7).c_str());
+                    std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,9)=="playback=") // playback demo
             {
                     ui->recordDemo_2->setText(buffer.substr(9).c_str());
+                    std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,13)=="demodropdown=") // demo drop down
             {
                 ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
+                std::getline(file, buffer);
             }
-    std::getline(file, buffer);
     if(buffer.substr(0,11)=="additional=") // additional arguments
             {
                 ui->argumentText->setText((buffer.substr(11)).c_str());
@@ -663,7 +666,6 @@ const char* bool_cast(const bool b) {
 void MainWindow::SaveState(QString fileName)
 {
     std::ofstream file_;
-    file_.open(fileName.toStdString());
     std::string pwads;
     for(int i=0; i<ui->wadsOnFolder->count();i++)
     {
@@ -674,8 +676,24 @@ void MainWindow::SaveState(QString fileName)
     {
         levelbox = ui->levelBox->text();
     }
-    if(file_.is_open())
-        file_ << "# Do not edit this file manually\n\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+levelbox.toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\nhud="+ui->recordDemo_4->text().toStdString()+"\nconfig="+ui->recordDemo_5->text().toStdString()+"\ntrack="+std::to_string(ui->comboBox_3->currentIndex())+"\ntime="+std::to_string(ui->comboBox_4->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+    if (fileName.at(fileName.size()-1)=='s')
+    {
+        file_.open(fileName.toStdString(),std::ios_base::app);
+        if(file_.is_open())
+        {
+            file_ << "-\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+levelbox.toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\nhud="+ui->recordDemo_4->text().toStdString()+"\nconfig="+ui->recordDemo_5->text().toStdString()+"\ntrack="+std::to_string(ui->comboBox_3->currentIndex())+"\ntime="+std::to_string(ui->comboBox_4->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+        }
+
+    }
+    else
+    {
+        file_.open(fileName.toStdString());
+        if(file_.is_open())
+        {
+            file_ << "# Do not edit this file manually\n\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+levelbox.toStdString()+"\nskill="+std::to_string(ui->diffBox->currentIndex())+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+std::to_string(ui->comboBox_2->currentIndex())+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\nhud="+ui->recordDemo_4->text().toStdString()+"\nconfig="+ui->recordDemo_5->text().toStdString()+"\ntrack="+std::to_string(ui->comboBox_3->currentIndex())+"\ntime="+std::to_string(ui->comboBox_4->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+        }
+    }
+
     file_.close();
 
 }
@@ -1686,9 +1704,75 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
 #endif
 
+    SaveHistory(ui->iwadSelect->currentText(), argList);
+
     // Again, don't allow the launch button to work twice in the space of 2 secs
     canLaunch=false;
     QTimer::singleShot(2000, this, SLOT(delayLaunch()));
+}
+
+void MainWindow::SaveHistory(QString iwad, QStringList args)
+{
+    int checksum = 0;
+    int count = 0;
+    bool needToDelete = false;
+    std::ostringstream stream;
+    if (QFileInfo(historyPath).exists())
+    {
+        std::ifstream file;
+        file.open(historyPath.toStdString());
+
+        if (!file.is_open())
+        {
+            return;
+        }
+
+        std::string buffer;
+        std::getline(file, buffer);
+        std::getline(file, buffer);
+        std::getline(file, buffer);
+        count = std::stoi(buffer.substr(6));
+        if (count >= 20)
+        {
+            needToDelete = true;
+        }
+
+        std::getline(file, buffer);
+        QString t = iwad;
+        for (QString arg : args)
+        {
+            t += arg;
+        }
+        QByteArray arr = t.toLatin1();
+        checksum = qChecksum(arr.data(), arr.length());
+
+        stream << file.rdbuf();
+
+        file.close();
+    }
+
+    count++;
+    std::string h = "# Do not edit this file manually\n\ncount="+std::to_string(count)+"\nchecksum="+std::to_string(checksum)+"\n";
+    std::string streamstr = stream.str();
+    if (streamstr!="")
+    {
+        h += streamstr+"\n";
+    }
+
+    std::ofstream out(historyPath.toStdString()+"s");
+    if (!needToDelete)
+    {
+        out << h;
+        out.close();
+        SaveState((historyPath.toStdString()+"s").c_str());
+        rename((historyPath.toStdString()+"s").c_str(),historyPath.toStdString().c_str());
+    }
+    else
+    {
+
+    }
+
+
 }
 
 // If the IWAD selected changes

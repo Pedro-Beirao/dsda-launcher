@@ -61,10 +61,10 @@ void historyList::getHistory()
 
     int count = std::stoi(buffer.substr(6));
     std::getline(file, buffer);
+    std::getline(file, buffer);
 
     for (int c = 0; c < count; c++)
     {
-        std::getline(file, buffer);
         std::getline(file, buffer);
         QString iwad;
         QString level;
@@ -231,7 +231,6 @@ void historyList::on_pushButton_2_clicked()
         if (buffer == "-")
         {
             c++;
-            getline(file, buffer);
             getline(file, buffer);
         }
         if (c == ui->listWidget->currentRow())
