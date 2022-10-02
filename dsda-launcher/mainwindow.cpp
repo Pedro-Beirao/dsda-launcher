@@ -46,7 +46,7 @@ QString exeName = "dsda-doom";
 QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
 QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
 #else
-QString historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
+QString historyPath;
 #endif
 
 QString execPath;
@@ -345,6 +345,9 @@ MainWindow::MainWindow(QWidget *parent)
     pMainWindow = this;
 
     execPath = QCoreApplication::applicationDirPath();
+#ifdef _WIN32
+historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
+#endif
 
     // Allow files to be droped in the launcher (*.wad *.lmp *.deh *.bex)
     setAcceptDrops(true);
@@ -1808,6 +1811,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     }
     out.close();
     SaveState((historyPath.toStdString()+"s").c_str());
+    remove((historyPath.toStdString()).c_str());
     rename((historyPath.toStdString()+"s").c_str(),historyPath.toStdString().c_str());
 
 

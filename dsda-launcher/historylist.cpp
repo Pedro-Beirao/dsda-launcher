@@ -10,7 +10,7 @@ MainWindow * hmainWindow;
 #if defined(__APPLE__) || defined(__linux__)
 QString filePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
 #else
-QString filePath = QCoreApplication::applicationDirPath()+"\\history.states";
+QString filePath;
 #endif
 
 historyList::historyList(QWidget *parent) :
@@ -20,6 +20,9 @@ historyList::historyList(QWidget *parent) :
     ui->setupUi(this);
 
     hmainWindow = MainWindow::getMainWin();
+#ifdef _WIN32
+    filePath = QCoreApplication::applicationDirPath()+"\\history.states";
+#endif
 }
 
 historyList::~historyList()
