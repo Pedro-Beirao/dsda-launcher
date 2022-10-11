@@ -5,7 +5,7 @@
 	<key>CFBundleExecutable</key>
 	<string>dsda-launcher</string>
 	<key>CFBundleIconFile</key>
-	<string>doom-launcher.icns</string>
+	<string>dsda-launcher.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>p.dsda-launcher</string>
 	<key>CFBundlePackageType</key>
