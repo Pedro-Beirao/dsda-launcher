@@ -85,14 +85,14 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>83</y>
+       <y>154</y>
        <width>91</width>
        <height>16</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>9</pointsize>
+       <pointsize>13</pointsize>
       </font>
      </property>
      <property name="text">
@@ -105,8 +105,8 @@
     <widget class="QLineEdit" name="lineEdit">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>80</y>
+       <x>125</x>
+       <y>150</y>
        <width>25</width>
        <height>24</height>
       </rect>
@@ -121,36 +121,21 @@ border-radius:3px</string>
      <property name="text">
       <string>5</string>
      </property>
+     <property name="maxLength">
+      <number>2</number>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>98</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Default = 5</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
+     <property name="placeholderText">
+      <string>5</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>140</y>
+       <y>70</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -163,7 +148,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>160</y>
+       <y>90</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -176,7 +161,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>180</y>
+       <y>110</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -295,11 +280,60 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
+    <widget class="QLineEdit" name="lineEdit_11">
+     <property name="geometry">
+      <rect>
+       <x>112</x>
+       <y>186</y>
+       <width>31</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid rgb(160, 160, 160);
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+     </property>
+     <property name="text">
+      <string>20</string>
+     </property>
+     <property name="maxLength">
+      <number>2</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="placeholderText">
+      <string>20</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>190</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Max history:</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
     <zorder>label</zorder>
     <zorder>checkBox</zorder>
     <zorder>label_2</zorder>
     <zorder>lineEdit</zorder>
-    <zorder>label_3</zorder>
     <zorder>label_4</zorder>
     <zorder>radioButton</zorder>
     <zorder>radioButton_3</zorder>
@@ -308,6 +342,8 @@ border-radius:3px</string>
     <zorder>listWidget</zorder>
     <zorder>toolButton_2</zorder>
     <zorder>textBrowser</zorder>
+    <zorder>lineEdit_11</zorder>
+    <zorder>label_3</zorder>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">

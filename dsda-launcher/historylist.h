@@ -20,6 +20,7 @@ private:
 
 public slots:
     void getHistory();
+    void fooo3();
 private slots:
     void on_pushButton_2_clicked();
 };

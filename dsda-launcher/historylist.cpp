@@ -57,21 +57,20 @@ void historyList::getHistory()
         return;
     }
 
-    std::string buffer;
-    std::getline(file, buffer);
-    std::getline(file, buffer);
-    std::getline(file, buffer);
-
     QString box1 = settings.value("toggle1t").toString();
     QString box2 = settings.value("toggle2t").toString();
     QString box3 = settings.value("toggle3t").toString();
     QString box4 = settings.value("toggle4t").toString();
 
-    int count = std::stoi(buffer.substr(6));
-    std::getline(file, buffer);
-    std::getline(file, buffer);
+    std::string buffer;
+    while (buffer.substr(0,1) != "-" && !file.eof())
+    {
+        std::getline(file, buffer);
+    }
 
-    for (int c = 0; c < count; c++)
+
+
+    while (!file.eof())
     {
         std::getline(file, buffer);
         QString iwad;
@@ -82,21 +81,22 @@ void historyList::getHistory()
         QString params="";
         QString pwads="";
         QString demo="";
-        if(buffer.substr(4).length()>1) // iwad
+        if(buffer.substr(0,5)=="iwad=") // iwad
         {
             iwad = buffer.substr(5).c_str();
+            std::getline(file, buffer);
         }
         std::getline(file, buffer);
-        std::getline(file, buffer);
 
-        if(buffer.substr(5).length()>0) // warp 1
+        if(buffer.substr(0,6)=="warp1=") // warp 1
                 {
                         l1=buffer.substr(6);
+                        std::getline(file, buffer);
                 }
-        std::getline(file, buffer);
-        if(buffer.substr(5).length()>0) //warp 2
+        if(buffer.substr(0,6)=="warp2=") //warp 2
                 {
                         l2=buffer.substr(6);
+                        std::getline(file, buffer);
                 }
         if (l2=="" && l1!="")
         {
@@ -106,15 +106,14 @@ void historyList::getHistory()
             }
             else
             {
-                level = ("MAP0"+l1+" - ").c_str();
+                level = ("MAP"+l1+" - ").c_str();
             }
         }
         else if (l1!="")
         {
             level = ("E"+l1+"M"+l2+" - ").c_str();
         }
-        std::getline(file, buffer);
-        if(buffer.substr(5).length()>1) // skill
+        if(buffer.substr(0,6)=="skill=") // skill
                 {
                     if (0 < stoi(buffer.substr(6)) && stoi(buffer.substr(6)) <= 5)
                     {
@@ -124,32 +123,33 @@ void historyList::getHistory()
                     {
                         skill = ("skill="+buffer.substr(6)+" - ").c_str();
                     }
+                    std::getline(file, buffer);
                 }
-        std::getline(file, buffer);
-        if(buffer.substr(4).length()>1) // box1
+        if(buffer.substr(0,5)=="box1=") // box1
                 {
                     if(buffer.substr(5,4)=="true")
                          params+=box1+", ";
+                    std::getline(file, buffer);
                 }
-        std::getline(file, buffer);
-        if(buffer.substr(4).length()>1) // box2
+        if(buffer.substr(0,5)=="box2=") // box2
                 {
                     if(buffer.substr(5,4)=="true")
                          params+=box2+", ";
+                    std::getline(file, buffer);
                 }
-        std::getline(file, buffer);
-        if(buffer.substr(4).length()>1) // box3
+        if(buffer.substr(0,5)=="box3=") // box3
                 {
                     if(buffer.substr(5,4)=="true")
                          params+=box3+", ";
+                    std::getline(file, buffer);
                 }
-        std::getline(file, buffer);
-        if(buffer.substr(4).length()>1) //box4
+        if(buffer.substr(0,5)=="box4=") //box4
                 {
                     if(buffer.substr(5,4)=="true")
                          params+=box4+", ";
+                    std::getline(file, buffer);
                 }
-        if (params!="")
+        if (params.size()>2)
         {
             params.resize(params.size()-2);
         }
@@ -162,16 +162,14 @@ void historyList::getHistory()
             level.resize(level.size()-3);
         }
 
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
+        while (buffer.substr(0,4)!="pwad" && !file.eof())
+        {
+            std::getline(file, buffer);
+        }
+
         if(buffer.substr(0,4)=="pwad")
         {
-             while (std::getline(file, buffer))
+             while (std::getline(file, buffer) && !file.eof())
              {
                 if(buffer.substr(0,7)=="endpwad")
                     break;
@@ -191,8 +189,8 @@ void historyList::getHistory()
                  pwads.resize(pwads.size()-2);
                  pwads = "\n"+pwads;
              }
+             std::getline(file, buffer);
         }
-        std::getline(file, buffer);
         if(buffer.substr(7).length()>0) // record demo
                 {
                         int lastBar = 0;
@@ -209,12 +207,12 @@ void historyList::getHistory()
         {
             demo="\n"+demo;
         }
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
-        std::getline(file, buffer);
+        while (buffer.substr(0,1)!="-" && !file.eof())
+        {
+            std::getline(file, buffer);
+        }
         QListWidgetItem item;
-        ui->listWidget->addItem(iwad+"\n"+skill+level+params+pwads+demo);
+        ui->listWidget->insertItem(0,iwad+"\n"+skill+level+params+pwads+demo);
     }
 
     file.close();
@@ -241,24 +239,23 @@ void historyList::on_pushButton_2_clicked()
     std::string buffer;
     while (!file.eof())
     {
-        getline(file, buffer);
+        std::getline(file, buffer);
         if (buffer == "-")
         {
             c++;
-            getline(file, buffer);
+            std::getline(file, buffer);
         }
-        if (c == ui->listWidget->currentRow())
+        if (c == ui->listWidget->count()-1-ui->listWidget->currentRow())
         {
             text += (buffer+"\n").c_str();
         }
-        else if (c > ui->listWidget->currentRow())
+        else if (c > ui->listWidget->count()-1-ui->listWidget->currentRow())
         {
             break;
         }
     }
 
     file.close();
-    qDebug() << text;
     hmainWindow->LoadState(text, 1);
 }
 

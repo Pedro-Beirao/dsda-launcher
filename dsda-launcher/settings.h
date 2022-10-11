@@ -67,6 +67,8 @@ private slots:
 
     void settingsChanged();
 
+    void on_lineEdit_11_textChanged(const QString &arg1);
+
 private:
     Ui::Settings *ui;
 };

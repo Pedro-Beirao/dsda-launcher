@@ -51,8 +51,6 @@ Settings::Settings(QWidget *parent) :
         QFont font = ui->label_2->font();
         font.setPixelSize(13);
         ui->label_2->setFont(font);
-        font.setPixelSize(11);
-        ui->label_3->setFont(font);
 #else
         ui->textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
 #endif
@@ -93,9 +91,8 @@ Settings::Settings(QWidget *parent) :
 
     ui->lineEdit_2->setText(settings.value("exeName").toString());
 
-    QRegularExpression rgx("[0-9]{1}");
-    QValidator *comValidator = new QRegularExpressionValidator (rgx, this);
-    ui->lineEdit->setValidator(comValidator);
+    ui->lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{1}"), this));
+    ui->lineEdit_11->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
     
     // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
@@ -106,6 +103,9 @@ Settings::Settings(QWidget *parent) :
 
     if(settings.value("maxskilllevel").toString()!="")
         ui->lineEdit->setText(settings.value("maxskilllevel").toString());
+
+    if(settings.value("maxhistory").toString()!="")
+        ui->lineEdit_11->setText(settings.value("maxhistory").toString());
 
     int size = settings.beginReadArray("resolutions");
     if(size!=0)
@@ -515,3 +515,17 @@ void Settings::settingsChanged()
     ui->label_8->hide();
     ui->label_5->show();
 }
+
+void Settings::on_lineEdit_11_textChanged(const QString &arg1)
+{
+    if(arg1=="")
+    {
+        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    else
+    {
+        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    }
+    settings.setValue("maxhistory", arg1);
+}
+
