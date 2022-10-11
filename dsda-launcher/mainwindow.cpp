@@ -1625,7 +1625,6 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             argList.removeAt(i);
         }
-        qDebug() << argList.at(i);
     }
 
     consoleWindow->clearText();
@@ -1779,7 +1778,6 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     }
 
     int maxhistory = settings.value("maxhistory").toInt();
-    qDebug() << maxhistory;
     if (count >= maxhistory)
     {
         needToDelete = count - maxhistory + 1;
