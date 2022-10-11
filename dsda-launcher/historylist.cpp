@@ -4,6 +4,7 @@
 #include <QStandardPaths>
 #include <QSettings>
 #include <mainwindow.h>
+#include <QShortcut>
 
 MainWindow * hmainWindow;
 
@@ -20,6 +21,10 @@ historyList::historyList(QWidget *parent) :
     ui->setupUi(this);
 
     hmainWindow = MainWindow::getMainWin();
+
+    QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
+    shortcut3->setAutoRepeat(false);
+
 #ifdef _WIN32
     filePath = QCoreApplication::applicationDirPath()+"\\history.states";
 #endif
@@ -213,6 +218,12 @@ void historyList::getHistory()
     }
 
     file.close();
+}
+
+void historyList::fooo3() // CTRL+W runs this function close the active window
+{
+    QWidget *currentWindow = QApplication::activeWindow();
+    currentWindow->close();
 }
 
 void historyList::on_pushButton_2_clicked()
