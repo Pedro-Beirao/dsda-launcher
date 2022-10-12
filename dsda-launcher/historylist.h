@@ -23,6 +23,7 @@ public slots:
     void fooo3();
 private slots:
     void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
 };
 
 #endif // HISTORYLIST_H

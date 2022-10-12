@@ -265,3 +265,264 @@ void historyList::on_pushButton_2_clicked()
 
 
 
+
+void historyList::on_pushButton_3_clicked()
+{
+    QStringList argList;
+    QString iwadName;
+
+    std::ifstream file;
+    file.open(filePath.toStdString());
+
+    if (!file.is_open())
+    {
+        return;
+    }
+
+    int c = -1;
+    std::string buffer;
+    while (!file.eof())
+    {
+        std::getline(file, buffer);
+        if (buffer == "-")
+        {
+            c++;
+            std::getline(file, buffer);
+        }
+        if (c == ui->listWidget->count()-1-ui->listWidget->currentRow())
+        {
+            if(buffer.substr(0,5)=="iwad=") // iwad
+            {
+                iwadName = buffer.substr(5).c_str();
+                std::getline(file, buffer);
+            }
+            if(buffer.substr(0,10)=="complevel=") // complevel
+                    {
+                        argList.append("-complevel");
+                        if(buffer.substr(10)[0]!='D')
+                        {
+                            argList.append(buffer.substr(10).c_str());
+                        }
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,6)=="warp1=") // warp 1
+                    {
+                            if (!buffer.substr(6).empty())
+                            {
+                                argList.append("-warp");
+                                argList.append(buffer.substr(6).c_str());
+                            }
+                            std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,6)=="warp2=") //warp 2
+                    {
+                            if (!buffer.substr(6).empty())
+                            {
+                                argList.append(buffer.substr(6).c_str());
+                            }
+                            std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,6)=="skill=") // skill
+                    {
+                            if (buffer.substr(6)!="0")
+                            {
+                                 argList.append("-skill");
+                                 argList.append(buffer.substr(6).c_str());
+                            }
+                             std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,5)=="box1=") // box1
+                    {
+                        if(buffer.substr(5)=="true")
+                             argList.append(settings.value("toggle1a").toString());
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,5)=="box2=") // box2
+                    {
+                        if(buffer.substr(5)=="true")
+                             argList.append(settings.value("toggle2a").toString());
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,5)=="box3=") // box3
+                    {
+                        if(buffer.substr(5)=="true")
+                             argList.append(settings.value("toggle3a").toString());
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,5)=="box4=") //box4
+                    {
+                        if(buffer.substr(5)=="true")
+                             argList.append(settings.value("toggle4a").toString());
+                        std::getline(file, buffer);
+                    }
+            std::string fullscreen = "w";
+            std::string resBox = "0";
+            if(buffer.substr(0,11)=="resolution=") // resolution
+                    {
+                        resBox = buffer.substr(11);
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,11)=="fullscreen=") // fullscreen
+                    {
+                        if(buffer.substr(11)=="true")
+                             fullscreen = "f";
+                        std::getline(file, buffer);
+                    }
+            if(resBox=="0")
+            {
+                if(fullscreen=="w")
+                {
+                    argList.append("-window");
+                }
+                else
+                {
+                    argList.append("-nowindow");
+                }
+            }
+            else
+            {
+                argList.append("-geom");
+                argList.append((resBox+fullscreen).c_str());
+            }
+
+            if(buffer.substr(0,4)=="hud=") // hud
+                    {
+                        if (!buffer.substr(4).empty())
+                        {
+                             argList.append("-hud");
+                             argList.append(buffer.substr(4).c_str());
+                        }
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,7)=="config=") // config
+                    {
+                        if (!buffer.substr(7).empty())
+                        {
+                             argList.append("-config");
+                             argList.append(buffer.substr(7).c_str());
+                        }
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,6)=="track=") // track
+                    {
+                        QString tmp = buffer.substr(6).c_str();
+                        if (tmp=="1")
+                            argList.append("-track_pacifist");
+                        else if(tmp=="2")
+                            argList.append("-track_100k");
+                        std::getline(file, buffer);
+                    }
+             if(buffer.substr(0,5)=="time=") // time
+                     {
+                         QString tmp = buffer.substr(5).c_str();
+                         if (tmp=="1")
+                             argList.append("-time_use");
+                         else if(tmp=="2")
+                             argList.append("-time_keys");
+                         else if(tmp=="3")
+                             argList.append("-time_secrets");
+                         else if(tmp=="4")
+                             argList.append("-time_all");
+                         std::getline(file, buffer);
+                     }
+             QStringList files;
+            if(buffer.substr(0,4)=="pwad")
+            {
+                 while (std::getline(file, buffer))
+                 {
+                    if(buffer.substr(0,7)=="endpwad")
+                        break;
+                    files.append(buffer.c_str());
+                 }
+                 std::getline(file, buffer);
+            }
+            if (files.size()>0)
+            {
+                argList.append("-file");
+                argList.append(files);
+            }
+            if(buffer.substr(0,7)=="record=") // record demo
+                    {
+                            if (!buffer.substr(7).empty())
+                            {
+                                 argList.append("-record");
+                                 argList.append(buffer.substr(7).c_str());
+                            }
+                            std::getline(file, buffer);
+                    }
+            QString demo="";
+            if(buffer.substr(0,9)=="playback=") // playback demo
+                    {
+                            if (!buffer.substr(9).empty())
+                            {
+                                 demo = buffer.substr(9).c_str();
+                            }
+                            std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,13)=="demodropdown=") // demo drop down
+                    {
+                        if (buffer.substr(13)=="1")
+                        {
+                             argList.append("-playdemo");
+                             argList.append(demo);
+                        }
+                        else if (buffer.substr(13)=="2")
+                        {
+                             argList.append("-timedemo");
+                             argList.append(demo);
+                        }
+                        else if (buffer.substr(13)=="3")
+                        {
+                             argList.append("-fastdemo");
+                             argList.append(demo);
+                        }
+                        std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,8)=="viddump=") // record demo
+                    {
+                            if (!buffer.substr(8).empty())
+                            {
+                                 argList.append("-viddump");
+                                 argList.append(buffer.substr(8).c_str());
+                            }
+                            std::getline(file, buffer);
+                    }
+            if(buffer.substr(0,11)=="additional=") // additional arguments
+                    {
+                        if (buffer.substr(11) != "")
+                        {
+                            std::string str = buffer.substr(11)+" ";
+
+                            std::string strToAdd="";
+                            for( size_t i=0; i<str.length(); i++){
+
+                                char c = str[i];
+                                if( c == ' '){
+                                    if (strToAdd != "")
+                                    {
+                                        argList.append(strToAdd.c_str());
+                                        strToAdd="";
+                                    }
+                                }else if(c == '\"' ){
+                                    i++;
+                                    while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
+                                }else{
+                                    strToAdd.push_back(c);
+                                }
+                            }
+                        }
+                    }
+
+            break;
+        }
+        else if (c > ui->listWidget->count()-1-ui->listWidget->currentRow())
+        {
+            break;
+        }
+    }
+
+    file.close();
+
+    hmainWindow->Launch(iwadName, argList);
+}
+

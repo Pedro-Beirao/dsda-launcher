@@ -618,6 +618,9 @@ border-radius:3px</string>
         <property name="editable">
          <bool>false</bool>
         </property>
+        <property name="maxCount">
+         <number>30</number>
+        </property>
         <item>
          <property name="text">
           <string/>

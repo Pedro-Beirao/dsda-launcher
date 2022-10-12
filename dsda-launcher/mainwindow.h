@@ -84,6 +84,7 @@ public slots:
     void previousStackedWidget();
     void on_actionHistory_triggered();
     void SaveHistory(QString iwad, QStringList args);
+    void Launch(QString iwadName, QStringList argList);
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
