@@ -68,8 +68,6 @@ void historyList::getHistory()
         std::getline(file, buffer);
     }
 
-
-
     while (!file.eof())
     {
         std::getline(file, buffer);
@@ -81,6 +79,7 @@ void historyList::getHistory()
         QString params="";
         QString pwads="";
         QString demo="";
+        bool mid = false;
         if(buffer.substr(0,5)=="iwad=") // iwad
         {
             iwad = buffer.substr(5).c_str();
@@ -102,16 +101,21 @@ void historyList::getHistory()
         {
             if (l1.size()==1)
             {
-                level = ("MAP0"+l1+" - ").c_str();
+                level = ("MAP0"+l1).c_str();
             }
             else
             {
-                level = ("MAP"+l1+" - ").c_str();
+                level = ("MAP"+l1).c_str();
             }
         }
         else if (l1!="")
         {
-            level = ("E"+l1+"M"+l2+" - ").c_str();
+            level = ("E"+l1+"M"+l2).c_str();
+        }
+        if (level!="")
+        {
+            level += " - ";
+            mid = true;
         }
         if(buffer.substr(0,6)=="skill=") // skill
                 {
@@ -120,11 +124,16 @@ void historyList::getHistory()
                         int si = stoi(buffer.substr(6));
                         if (0 < si && si <= 5)
                         {
-                            skill = skillT.at(si)+" - ";
+                            skill = skillT.at(si);
                         }
                         else
                         {
-                            skill = ("skill="+buffer.substr(6)+" - ").c_str();
+                            skill = ("skill="+buffer.substr(6)).c_str();
+                        }
+                        if (skill!="")
+                        {
+                            skill += " - ";
+                            mid = true;
                         }
                     }
                     std::getline(file, buffer);
@@ -156,14 +165,7 @@ void historyList::getHistory()
         if (params.size()>2)
         {
             params.resize(params.size()-2);
-        }
-        if (skill!=""&&level==""&&params=="")
-        {
-            skill.resize(skill.size()-3);
-        }
-        if (level!=""&&params=="")
-        {
-            level.resize(level.size()-3);
+            mid = true;
         }
 
         while (buffer.substr(0,4)!="pwad" && !file.eof())
@@ -215,8 +217,14 @@ void historyList::getHistory()
         {
             std::getline(file, buffer);
         }
-        QListWidgetItem item;
-        ui->listWidget->insertItem(0,iwad+"\n"+skill+level+params+pwads+demo);
+        if (mid)
+        {
+            ui->listWidget->insertItem(0,iwad+"\n"+skill+level+params+pwads+demo);
+        }
+        else
+        {
+            ui->listWidget->insertItem(0,iwad+skill+level+params+pwads+demo);
+        }
     }
 
     file.close();

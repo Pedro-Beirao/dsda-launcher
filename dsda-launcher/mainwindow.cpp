@@ -35,8 +35,6 @@
 #include <qgraphicseffect.h>
 #include "historylist.h"
 
-
-
 // If dsda-doom is running
 bool running = false;
 
