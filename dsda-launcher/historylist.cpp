@@ -115,13 +115,17 @@ void historyList::getHistory()
         }
         if(buffer.substr(0,6)=="skill=") // skill
                 {
-                    if (0 < stoi(buffer.substr(6)) && stoi(buffer.substr(6)) <= 5)
+                    if (buffer.substr(6).length()>0)
                     {
-                        skill = skillT.at(stoi(buffer.substr(6)))+" - ";
-                    }
-                    else if (0 < stoi(buffer.substr(6)))
-                    {
-                        skill = ("skill="+buffer.substr(6)+" - ").c_str();
+                        int si = stoi(buffer.substr(6));
+                        if (0 < si && si <= 5)
+                        {
+                            skill = skillT.at(si)+" - ";
+                        }
+                        else
+                        {
+                            skill = ("skill="+buffer.substr(6)+" - ").c_str();
+                        }
                     }
                     std::getline(file, buffer);
                 }
@@ -324,7 +328,7 @@ void historyList::on_pushButton_3_clicked()
                     }
             if(buffer.substr(0,6)=="skill=") // skill
                     {
-                            if (buffer.substr(6)!="0")
+                            if (buffer.substr(6).length()>0 && buffer.substr(6)!="0")
                             {
                                  argList.append("-skill");
                                  argList.append(buffer.substr(6).c_str());
