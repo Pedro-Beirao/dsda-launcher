@@ -1490,7 +1490,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
         else
         {
-            argList.append("-nowindow");
+            argList.append("-fullscreen");
         }
     }
     else
