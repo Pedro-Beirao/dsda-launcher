@@ -79,7 +79,6 @@ void historyList::getHistory()
         QString params="";
         QString pwads="";
         QString demo="";
-        bool mid = false;
         if(buffer.substr(0,5)=="iwad=") // iwad
         {
             iwad = buffer.substr(5).c_str();
@@ -115,7 +114,6 @@ void historyList::getHistory()
         if (level!="")
         {
             level += " - ";
-            mid = true;
         }
         if(buffer.substr(0,6)=="skill=") // skill
                 {
@@ -133,7 +131,6 @@ void historyList::getHistory()
                         if (skill!="")
                         {
                             skill += " - ";
-                            mid = true;
                         }
                     }
                     std::getline(file, buffer);
@@ -162,11 +159,6 @@ void historyList::getHistory()
                          params+=box4+", ";
                     std::getline(file, buffer);
                 }
-        if (params.size()>2)
-        {
-            params.resize(params.size()-2);
-            mid = true;
-        }
 
         while (buffer.substr(0,4)!="pwad" && !file.eof())
         {
@@ -217,13 +209,15 @@ void historyList::getHistory()
         {
             std::getline(file, buffer);
         }
-        if (mid)
+        QString slp = skill + level + params;
+        if (!slp.isEmpty())
         {
-            ui->listWidget->insertItem(0,iwad+"\n"+skill+level+params+pwads+demo);
+            slp.resize(slp.size()-2);
+            ui->listWidget->insertItem(0,iwad+"\n"+slp+pwads+demo);
         }
         else
         {
-            ui->listWidget->insertItem(0,iwad+skill+level+params+pwads+demo);
+            ui->listWidget->insertItem(0,iwad+pwads+demo);
         }
     }
 
