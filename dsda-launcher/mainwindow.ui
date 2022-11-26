@@ -208,12 +208,15 @@ border-radius:3px</string>
      <rect>
       <x>35</x>
       <y>57</y>
-      <width>81</width>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>CompLevel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="episodeText">
@@ -1331,6 +1334,22 @@ border-radius:3px</string>
      </widget>
     </widget>
    </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>225</x>
+      <y>425</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>?</string>
+    </property>
+   </widget>
    <widget class="QTextBrowser" name="toolTip">
     <property name="enabled">
      <bool>true</bool>
@@ -1365,22 +1384,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Then restart the launcher&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
-    <property name="geometry">
-     <rect>
-      <x>225</x>
-      <y>425</y>
-      <width>20</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>?</string>
-    </property>
-   </widget>
    <zorder>groupBox_4</zorder>
    <zorder>groupBox</zorder>
    <zorder>LaunchGameButton</zorder>
@@ -1397,8 +1400,8 @@ p, li { white-space: pre-wrap; }
    <zorder>levelText</zorder>
    <zorder>pushButton</zorder>
    <zorder>tabs</zorder>
-   <zorder>toolTip</zorder>
    <zorder>pushButton_5</zorder>
+   <zorder>toolTip</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

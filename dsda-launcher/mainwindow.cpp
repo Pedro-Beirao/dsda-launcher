@@ -159,53 +159,7 @@ void MainWindow::changeComplevelsList(int i)
 void MainWindow::changeButtonColor(bool isDark)
 {
 
-    if(isDark)
-    {
-        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-    }
-    else
-    {
-        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
-        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); text-align:center; border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
-    }
-#ifdef __APPLE__
-    if(isDark)
-    {
-        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
 
-        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(100, 100, 100);");
-    }
-    else
-    {
-        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
-
-        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(175, 175, 175);");
-    }
-#else
-    if(isDark)
-    {
-        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(125, 125, 125);");
-    }
-    else
-    {
-        ui->widget->setStyleSheet("color: rgb(200, 200, 200);background-color: rgb(200, 200, 200);");
-    }
-#endif
 }
 
 // Lower case all letters of a string
