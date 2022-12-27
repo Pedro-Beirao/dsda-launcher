@@ -174,7 +174,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>370</x>
-       <y>8</y>
+       <y>107</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -187,7 +187,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>35</y>
+       <y>135</y>
        <width>195</width>
        <height>101</height>
       </rect>
@@ -213,7 +213,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>10</y>
+       <y>110</y>
        <width>121</width>
        <height>16</height>
       </rect>
@@ -226,7 +226,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>70</y>
+       <y>170</y>
        <width>20</width>
        <height>20</height>
       </rect>
@@ -242,9 +242,9 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>277</x>
-       <y>30</y>
+       <y>130</y>
        <width>211</width>
-       <height>171</height>
+       <height>91</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -268,7 +268,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>40</y>
+       <y>140</y>
        <width>20</width>
        <height>20</height>
       </rect>
@@ -330,6 +330,116 @@ border-radius:3px</string>
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
+    <widget class="QToolButton" name="toolButton_8">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>70</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pngs/pngs/minus.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textBrowser_2">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>35</y>
+       <width>171</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid rgb(160, 160, 160);
+padding-left: 6px;
+color: #000;
+height: 20px;
+background-color:rgb(255, 255, 255);
+border-radius:3px</string>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;The launcher will search for IWADs on these folders.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>277</x>
+       <y>30</y>
+       <width>211</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid rgb(139, 138, 140);
+color: #000;
+height: 20px;
+background-color:rgb(230, 230, 230);
+border-radius:3px</string>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideNone</enum>
+     </property>
+     <property name="isWrapping" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>10</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IWAD Folders</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="toolButton_9">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>7</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>?</string>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="toolButton_10">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>40</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pngs/pngs/plus.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
     <zorder>label</zorder>
     <zorder>checkBox</zorder>
     <zorder>label_2</zorder>
@@ -344,6 +454,12 @@ border-radius:3px</string>
     <zorder>textBrowser</zorder>
     <zorder>lineEdit_11</zorder>
     <zorder>label_3</zorder>
+    <zorder>toolButton_8</zorder>
+    <zorder>listWidget_3</zorder>
+    <zorder>label_9</zorder>
+    <zorder>toolButton_9</zorder>
+    <zorder>toolButton_10</zorder>
+    <zorder>textBrowser_2</zorder>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">

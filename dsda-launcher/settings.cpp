@@ -47,6 +47,7 @@ Settings::Settings(QWidget *parent) :
 #endif
 
     ui->textBrowser->setVisible(false);
+    ui->textBrowser_2->setVisible(false);
 
     if(settings.value("complevels").toString()=="")
     {
@@ -126,14 +127,23 @@ Settings::Settings(QWidget *parent) :
     pmainWindow->changeResolutions(ui->listWidget_2);
 
 #ifdef _WIN32
-        ui->listWidget->addItem("Same Folder as Launcher");
+        ui->listWidget->addItem("Same Folder as the Launcher");
         ui->listWidget->addItem("%DOOMWADPATH%");
+
+        ui->listWidget_3->addItem("Same Folder as the Launcher");
+        ui->listWidget_3->addItem("%DOOMWADDIR%");
 #else
         ui->listWidget->addItem("$DOOMWADPATH");
         ui->listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+
+        ui->listWidget_3->addItem("$DOOMWADDIR");
+        ui->listWidget_3->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
 #endif
     ui->listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
     ui->listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());
+
+    ui->listWidget_3->item(0)->setFlags(QFlags<Qt::ItemFlag>());
+    ui->listWidget_3->item(1)->setFlags(QFlags<Qt::ItemFlag>());
 
     size = settings.beginReadArray("pwadfolders");
     if(size!=0)
@@ -142,6 +152,17 @@ Settings::Settings(QWidget *parent) :
             settings.setArrayIndex(i);
             if(settings.value("folder").toString()!="")
                 ui->listWidget->addItem(settings.value("folder").toString());
+        }
+    }
+    settings.endArray();
+
+    size = settings.beginReadArray("iwadfolders");
+    if(size!=0)
+    {
+        for (int i = 0; i < size; i++) {
+            settings.setArrayIndex(i);
+            if(settings.value("folder").toString()!="")
+                ui->listWidget_3->addItem(settings.value("folder").toString());
         }
     }
     settings.endArray();
@@ -223,11 +244,9 @@ void Settings::on_checkBox_clicked(bool checked)
 
 void Settings::on_toolButton_2_clicked()
 {
-    QString dirName = QFileDialog::getExistingDirectory(this, tr("Select PWAD folder"),"/home",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Select PWAD folder"),"~/",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
     if(dirName!="")
     {
-        //std::string iwadPath = fileName[0].toStdString();
-        //std::size_t found = iwadPath.find_last_of("/\\");
         ui->listWidget->addItem(dirName);
     }
 
@@ -526,5 +545,42 @@ void Settings::on_lineEdit_11_textChanged(const QString &arg1)
         ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     settings.setValue("maxhistory", arg1);
+}
+
+
+void Settings::on_toolButton_9_clicked()
+{
+    ui->textBrowser_2->setVisible(!ui->textBrowser_2->isVisible());
+}
+
+
+void Settings::on_toolButton_10_clicked()
+{
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Select IWAD folder"),"~/",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+    if(dirName!="")
+    {
+        ui->listWidget_3->addItem(dirName);
+    }
+
+    settings.beginWriteArray("iwadfolders");
+    for (int i = 2; i < ui->listWidget_3->count(); i++) {
+        settings.setArrayIndex(i-2);
+        settings.setValue("folder", ui->listWidget_3->item(i)->text());
+    }
+    settings.endArray();
+}
+
+
+void Settings::on_toolButton_8_clicked()
+{
+    if(ui->listWidget_3->count()>2 && ui->listWidget_3->currentRow()>1)
+        ui->listWidget_3->takeItem(ui->listWidget_3->currentRow());
+
+    settings.beginWriteArray("iwadfolders");
+    for (int i = 2; i < ui->listWidget_3->count(); i++) {
+        settings.setArrayIndex(i-2);
+        settings.setValue("folder", ui->listWidget_3->item(i)->text());
+    }
+    settings.endArray();
 }
 

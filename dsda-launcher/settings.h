@@ -69,6 +69,12 @@ private slots:
 
     void on_lineEdit_11_textChanged(const QString &arg1);
 
+    void on_toolButton_9_clicked();
+
+    void on_toolButton_10_clicked();
+
+    void on_toolButton_8_clicked();
+
 private:
     Ui::Settings *ui;
 };

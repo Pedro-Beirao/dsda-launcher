@@ -66,10 +66,10 @@ QString respawnParam = "-respawn";
 // -solonet
 QString solonetParam = "-solo-net";
 
+QVector<QPair<QString, QString>> iwads_paths;
+
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 bool canLaunch = true;
-
-QStringList iwadsPaths;
 
 // Create an instance of the settings window
 Settings *settingsWindow;
@@ -86,11 +86,25 @@ QStringList doom1IWADs = {
     "freedoom1",
     "bfgdoom",
     "bfgdoom1",
+
     "heretic",
     "heretic1",
+
     "chex",
     "hacx",
     "rekkrsa"
+};
+
+QStringList doom2IWADs = {
+    "doom2",
+    "doom2f",
+    "freedoom2",
+    "bfgdoom2",
+
+    "tnt",
+    "plutonia",
+
+    "hexen",
 };
 
 MainWindow *MainWindow::getMainWin()
@@ -178,15 +192,12 @@ void MainWindow::delayLaunch()
     canLaunch=true;
 }
 
-int tilDOOMWADDIR = 0;
-
 QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
 void MainWindow::findIwads(int type)
 {
     QFileInfoList imagesInfo;
-    QStringList images;
-    QStringList imagesLower;
+
     // Find the IWADs in the correct folder depending on the OS
 #ifdef __APPLE__
         if(!QDir(dotfolder).exists())
@@ -208,99 +219,59 @@ void MainWindow::findIwads(int type)
         imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 #endif
 
-    tilDOOMWADDIR = imagesInfo.size();
     QDir doomwaddir(doomwaddirstr);
     imagesInfo += doomwaddir.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 
-    foreach(QFileInfo imageInfo, imagesInfo)
+    int size = settings.beginReadArray("iwadfolders");
+    if(size!=0)
     {
-        images += imageInfo.absoluteFilePath();
-        imagesLower += imageInfo.baseName().toLower();
-    }
-
-    QStringList DOOMWADDIRiwads;
-
-    // This makes sure that a logical order to display the IWADs is followed
-    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
-    QStringList doomIWADs = {
-        "doom",
-        "doom1",
-        "doomu",
-        "freedoom",
-        "freedoom1",
-        "bfgdoom",
-        "bfgdoom1",
-
-        "doom2",
-        "doom2f",
-        "freedoom2",
-        "bfgdoom2",
-
-        "tnt",
-        "plutonia",
-
-
-        "heretic",
-        "heretic1",
-        "hexen",
-
-        "chex",
-        "hacx",
-        "rekkrsa"
-    };
-
-    for(int i = 0; i< doomIWADs.size(); i++)
-    {
-        for(int j = 0; j < images.size(); j++)
-        {
-            if(doomIWADs.at(i) == imagesLower[j])
+        for (int i = 0; i < size; i++) {
+            settings.setArrayIndex(i);
+            QString folder = settings.value("folder").toString();
+            if(folder!="")
             {
-                if(j < tilDOOMWADDIR)
-                    ui->iwadSelect->addItem(imagesLower[j]);
-                else
-                    DOOMWADDIRiwads.append(imagesLower[j]);
-                doomIWADs.replace(i, " ");
-                iwadsPaths.append(images[j]);
+                QDir folder0(folder);
+                imagesInfo += folder0.entryInfoList(QStringList() << "*.WAD",QDir::Files);
             }
         }
     }
+    settings.endArray();
 
-
-    tilDOOMWADDIR = ui->iwadSelect->count();
-    ui->iwadSelect->addItems(DOOMWADDIRiwads);
-
-
-    // Other wads with the IWAD tag
-    // This might make the launcher slower if you have too many wads on the same folder as the launcher
-    if(type==1)
+    foreach(QFileInfo imageInfo, imagesInfo)
     {
-        foreach(QString filename, images) {
-            if(!doomIWADs.contains(filename))
+        QString toLow = imageInfo.baseName().toLower();
+
+        bool found = false;
+        for (QPair<QString, QString> l : iwads_paths)
+        {
+            if (l.first == toLow)
             {
-                    std::ifstream file;
-#if defined(__APPLE__) || defined(__linux__)
-                        file.open(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString()+"/.dsda-doom/"+filename.toStdString()+".wad");
-                        std::string buffer;
-                        while (std::getline(file, buffer))
-                        {
-                            if(buffer[0]=='I'&&buffer[1]=='W')
-                            {
-                                ui->iwadSelect->addItems({filename});
-                            }
-                            break;
-                        }
-#else
-                        file.open(filename.toStdString()+".wad");
-                        std::string buffer;
-                        while (std::getline(file, buffer))
-                        {
-                            if(buffer[0]=='I'&&buffer[1]=='W')
-                            {
-                                ui->iwadSelect->addItems({filename});
-                            }
-                            break;
-                        }
-#endif
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            iwads_paths.push_back({toLow, imageInfo.absoluteFilePath()});
+        }
+    }
+
+    // This makes sure that a logical order to display the IWADs is followed
+    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
+    QStringList doomIWADs = doom1IWADs + doom2IWADs;
+
+    int cur = 0;
+    for(int i = 0; i< doomIWADs.size(); i++)
+    {
+        for(int j = 0; j < iwads_paths.size(); j++)
+        {
+            if(doomIWADs.at(i) == iwads_paths[j].first)
+            {
+                ui->iwadSelect->addItem(iwads_paths[j].first);
+                iwads_paths.swapItemsAt(j, cur);
+                cur++;
+                doomIWADs.replace(i, " ");
+                break;
             }
         }
     }
@@ -766,8 +737,6 @@ void MainWindow::dropFile(QString fileName)
                         }
                         else if(argList[i]=="-file" && argList[i+1]!='-')
                         {
-                            // bool isRecursive = settings.value("pwadrecursive").toBool();
-
                             QStringList files;
                             for(int ii=1;ii<argList.count()-i;i++)
                             {
@@ -866,7 +835,7 @@ void MainWindow::dropFile(QString fileName)
         addWads(wadsToAdd);
         ui->tabs->setCurrentIndex(1);
     }
-    else if(tmp=="tate")
+    else if(tmp=="tate") // .state
     {
            LoadState(fileName, 0);
     }
@@ -1588,7 +1557,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             file_.open(exportCmd);
             std::string pwads;
 #ifdef __APPLE__
-                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #elif __linux__
                 file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
 #else
@@ -1611,7 +1580,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             QClipboard *clip = QApplication::clipboard();
 #ifdef __APPLE__
-                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
 #elif __linux__
                     clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
 #else
@@ -1648,7 +1617,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         if(port.exists())
         {
             QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-            argList.push_front(iwadsPaths.at(ui->iwadSelect->findText(iwadName)));
+            argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath);
