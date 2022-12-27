@@ -172,7 +172,35 @@ void MainWindow::changeComplevelsList(int i)
 
 void MainWindow::changeButtonColor(bool isDark)
 {
+#ifdef __APPLE__
+    if(isDark)
+    {
+        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                        "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+    }
+    else
+    {
+        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                        "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
+        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
+        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
+        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
+        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+                                      "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
 
+    }
+#endif
 
 }
 
@@ -1559,10 +1587,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 #ifdef __APPLE__
                 file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #elif __linux__
-                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #else
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #endif
             file_.close();
 
@@ -1582,10 +1610,10 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 #ifdef __APPLE__
                     clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
 #elif __linux__
-                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
 #else
                     std::replace(execPath.begin(),execPath.end(),'/','\\');
-                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwadsPaths.at(ui->iwadSelect->currentIndex())+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
 #endif
         }
 
@@ -1634,7 +1662,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
 #elif __linux__
         QFile port = QFile(execPath+"/"+exeName);
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-        argList.push_front(iwadsPaths.at(ui->iwadSelect->findText(iwadName)));
+        argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
         //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
         QStringList apar; apar << exeName;
@@ -1682,7 +1710,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         QFile port = QFile(execPath+"/"+exeName+".exe");
         if(port.exists())
         {
-            argList.push_front(iwadsPaths.at(ui->iwadSelect->findText(iwadName)));
+            argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(execPath);

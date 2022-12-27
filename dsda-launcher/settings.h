@@ -37,7 +37,6 @@ private slots:
 
     void on_toolButton_6_clicked();
     void closeEvent(QCloseEvent *event);
-    void changeButtonColorS(bool isDark);
 
     void on_toolButton_7_clicked();
 
