@@ -285,13 +285,13 @@ void Settings::on_lineEdit_textChanged(const QString &arg1)
     {
         settings.setValue("maxskilllevel",5);
         pmainWindow->changeMaxSkillLevel(5);
-        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
         settings.setValue("maxskilllevel",arg1.toInt());
         pmainWindow->changeMaxSkillLevel(arg1.toInt());
-        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
 
