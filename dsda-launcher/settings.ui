@@ -469,7 +469,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>440</x>
-       <y>200</y>
+       <y>205</y>
        <width>71</width>
        <height>32</height>
       </rect>
@@ -495,7 +495,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>0</y>
+       <y>5</y>
        <width>351</width>
        <height>195</height>
       </rect>
@@ -713,7 +713,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>370</x>
-       <y>0</y>
+       <y>5</y>
        <width>151</width>
        <height>195</height>
       </rect>
@@ -924,7 +924,7 @@ color: rgb(255, 255, 255);</string>
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>206</y>
+       <y>212</y>
        <width>131</width>
        <height>16</height>
       </rect>
@@ -977,7 +977,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>390</x>
-       <y>207</y>
+       <y>212</y>
        <width>131</width>
        <height>16</height>
       </rect>

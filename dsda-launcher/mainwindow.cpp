@@ -342,6 +342,8 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     ui->episodeBox->setValidator(comValidator);
     ui->levelBox->setValidator(comValidator);
 
+    ui->stackedWidget->setAttribute(Qt::WA_TranslucentBackground);
+
     // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
 

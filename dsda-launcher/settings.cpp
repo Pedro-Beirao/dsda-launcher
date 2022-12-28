@@ -181,7 +181,9 @@ void Settings::on_checkBox_clicked(bool checked)
 {
     if(!checked)
     {
-        qApp->setStyleSheet("QLabel::disabled {color: rgba(200, 200, 200);}");
+        qApp->setStyleSheet("QLabel::disabled {color: rgba(200, 200, 200);}"
+                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
+                            );
 
 #ifdef __APPLE__
         macSetToLightTheme();
@@ -231,12 +233,14 @@ QPalette darkPalette;
         qApp->setStyleSheet("* {color: rgb(221, 221, 221);background: rgb(53, 53, 53);}"
                             "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
                             "QLabel::disabled {color: rgb(120, 120, 120);}"
-                            "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                            "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150); max-height: 25px;}"
                             "QPushButton:pressed {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}"
+                            //"QPushButton:default {border: 1px solid rgb(4,93,244)}"
                             "QCheckBox {spacing: 4px;border: none;}"
                             "QRadioButton {spacing: 4px;border: none;}"
                             "QTabWidget {background-color: rgba(50, 50, 200, 200); border: none; }"
                             "QTabWidget::pane {top: -1px;margin: 0px;padding: 0px;border: 1px solid rgb(79, 79, 79);}"
+                            "QStackedWidget > QWidget{background: rgba(50, 50, 50, 0);}"
                             "QTabBar {qproperty-drawBase: 0;border: none;}"
                             "QTabBar::tab {padding-left: 0.7em;padding-right: 0.7em;padding-bottom: 4px;padding-top: 3px;min-width: 8ex;border-right: 1px solid rgb(79, 79, 79);border-left: 1px solid rgb(79, 79, 79);}"
                             "QTabBar::tab::top:!selected:hover {background-color: rgb(50, 50, 50)}"
@@ -253,10 +257,14 @@ QPalette darkPalette;
                             "QComboBox:on {border: 1px solid rgb(4,93,244); background-color: rgb(43,69,94); selection-background-color:rgb(79, 79, 79)}"
                             "QComboBox:focus {border: 1px solid rgb(79, 79, 79); background: rgb(53, 53, 53);}"
                             "QCheckBox::indicator:unchecked:hover {background-color: rgb(240,240,240); border-radius: 3px}"
+                            "QGroupBox {padding-top: 2px;padding-left:7px;border-radius: 3px;margin:1px;}"
+                            "QGroupBox::title {subcontrol-origin: content;}"
                             "QMenuBar::item:selected {background: rgb(43,43,43)}"
                             "QMenuBar::item:pressed {background: rgb(43,43,43)}"
                             "QMenu {border: 1px solid rgb(79, 79, 79)}"
                             "QMenu::item:selected {background-color: rgb(55,63,86)}"
+                            "QListView {alternate-background-color: rgb(63, 63, 63);}"
+                            "QMessageBox QPushButton {padding: 5px 10px;}"
                             );
 
 #endif
