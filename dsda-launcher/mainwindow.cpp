@@ -533,7 +533,7 @@ void MainWindow::LoadState(QString fileName, bool isString)
             {
                   if (buffer.substr(6).length()>0)
                   {
-                     ui->diffBox->setCurrentIndex(stoi(buffer.substr(6)));
+                     ui->diffBox->setCurrentIndex(atoi(buffer.substr(6).c_str()));
                   }
                   else
                   {
@@ -600,7 +600,7 @@ void MainWindow::LoadState(QString fileName, bool isString)
             {
                 if (buffer.substr(6).length()>0)
                 {
-                    ui->comboBox_3->setCurrentIndex(stoi(buffer.substr(6)));
+                    ui->comboBox_3->setCurrentIndex(atoi(buffer.substr(6).c_str()));
                 }
                 else
                 {
@@ -612,7 +612,7 @@ void MainWindow::LoadState(QString fileName, bool isString)
              {
                  if (buffer.substr(5).length()>0)
                  {
-                     ui->comboBox_4->setCurrentIndex(stoi(buffer.substr(5)));
+                     ui->comboBox_4->setCurrentIndex(atoi(buffer.substr(5).c_str()));
                  }
                  else
                  {
@@ -645,7 +645,7 @@ void MainWindow::LoadState(QString fileName, bool isString)
             {
                 if (buffer.substr(13).length()>0)
                 {
-                    ui->demoPlayOptions->setCurrentIndex(stoi(buffer.substr(13)));
+                    ui->demoPlayOptions->setCurrentIndex(atoi(buffer.substr(13).c_str()));
                 }
                 else
                 {
@@ -682,7 +682,7 @@ void MainWindow::SaveState(QString fileName)
         levelbox = ui->levelBox->text();
     }
     QString skillbox = "";
-    if (ui->diffBox->isEnabled())
+    if (ui->diffBox->isEnabled() && ui->diffBox->currentIndex() != 0)
     {
         skillbox = ui->diffBox->currentText();
     }
@@ -1630,6 +1630,9 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 
 void MainWindow::Launch(QString iwadName, QStringList argList)
 {
+    if (!canLaunch)
+        return;
+
     for (int i = 0; i < argList.count(); i++)
     {
         if (argList.at(i) == "")
@@ -1727,7 +1730,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
 
         // Again, don't allow the launch button to work twice in the space of 2 secs
         canLaunch=false;
-        QTimer::singleShot(2000, this, SLOT(delayLaunch()));
+        QTimer::singleShot(1000, this, SLOT(delayLaunch()));
 }
 
 void MainWindow::SaveHistory(QString iwad, QStringList args)
@@ -1774,7 +1777,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
 
         if (buffer.substr(0,9)=="checksum=" && buffer.substr(9).length()>0)
         {
-            if (checksum==std::stoi(buffer.substr(9)))
+            if (checksum==std::atoi(buffer.substr(9).c_str()))
             {
                 file.close();
                 return;

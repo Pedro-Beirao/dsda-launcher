@@ -119,7 +119,8 @@ void historyList::getHistory()
                 {
                     if (buffer.substr(6).length()>0)
                     {
-                        int si = stoi(buffer.substr(6));
+                        int si = atoi(buffer.substr(6).c_str());
+                        qDebug() << si;
                         if (0 < si && si <= 5)
                         {
                             skill = skillT.at(si);
@@ -304,9 +305,9 @@ void historyList::on_pushButton_3_clicked()
             }
             if(buffer.substr(0,10)=="complevel=") // complevel
                     {
-                        argList.append("-complevel");
                         if(buffer.substr(10)[0]!='D')
                         {
+                            argList.append("-complevel");
                             argList.append(buffer.substr(10).c_str());
                         }
                         std::getline(file, buffer);
@@ -374,7 +375,7 @@ void historyList::on_pushButton_3_clicked()
                              fullscreen = "f";
                         std::getline(file, buffer);
                     }
-            if(resBox=="0")
+            if(resBox.size() < 2)
             {
                 if(fullscreen=="w")
                 {
