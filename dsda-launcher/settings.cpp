@@ -430,115 +430,70 @@ void Settings::on_pushButton_clicked()
     settings.endArray();
 }
 
-
-void Settings::on_lineEdit_3_textChanged(const QString &arg1)
+void set_placeholder_styleSheet(QLineEdit *l, const QString &arg1)
 {
     if(arg1=="")
     {
-        ui->lineEdit_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        l->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
-        ui->lineEdit_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        l->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
+}
+
+void Settings::on_lineEdit_3_textChanged(const QString &arg1)
+{
+    set_placeholder_styleSheet(ui->lineEdit_3, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_5_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_5, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_4_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_4, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_6_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_6->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_6->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_6, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_7_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_7->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_7->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_7, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_8_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_8->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_8->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_8, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_9_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_9->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_9->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_9, arg1);
     settingsChanged();
 }
 
 
 void Settings::on_lineEdit_10_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_10->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_10->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_10, arg1);
     settingsChanged();
 }
 
@@ -550,14 +505,7 @@ void Settings::settingsChanged()
 
 void Settings::on_lineEdit_11_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->lineEdit_11->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
+    set_placeholder_styleSheet(ui->lineEdit_11, arg1);
     settings.setValue("maxhistory", arg1);
 }
 
