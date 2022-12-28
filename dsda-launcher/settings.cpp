@@ -33,12 +33,9 @@ Settings::Settings(QWidget *parent) :
         on_checkBox_clicked(false);
     }
 
-#ifdef __APPLE__
-        QFont font = ui->label_2->font();
-        font.setPixelSize(13);
-        ui->label_2->setFont(font);
-#else
-        ui->textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
+#ifdef _WIN32
+        ui->textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
+        ui->textBrowser_2->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">The launcher will search for IWADs on these folders.</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>");
 #endif
 
     ui->textBrowser->setVisible(false);
@@ -234,7 +231,7 @@ QPalette darkPalette;
                             "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
                             "QLabel::disabled {color: rgb(120, 120, 120);}"
                             "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150); max-height: 25px;}"
-                            "QPushButton:pressed {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}"
+                            "QPushButton:hover {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(62, 62, 62); color: rgb(150, 150, 150)}"
                             //"QPushButton:default {border: 1px solid rgb(4,93,244)}"
                             "QCheckBox {spacing: 4px;border: none;}"
                             "QRadioButton {spacing: 4px;border: none;}"
