@@ -220,11 +220,10 @@ void MainWindow::delayLaunch()
     canLaunch=true;
 }
 
-QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
-
 void MainWindow::findIwads(int type)
 {
     QFileInfoList imagesInfo;
+    QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
     // Find the IWADs in the correct folder depending on the OS
 #ifdef __APPLE__
@@ -236,15 +235,21 @@ void MainWindow::findIwads(int type)
 
         QDir directory(dotfolder);
         imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
+
+        doomwaddirstr = doomwaddirstr.split(":")[0];
 #elif __linux__
         if(!QDir(dotfolder).exists())
             QDir().mkdir(dotfolder);
 
         QDir directory(dotfolder);
         imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
+
+        doomwaddirstr = doomwaddirstr.split(":")[0];
 #else
         QDir directory = execPath;
         imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
+
+        doomwaddirstr = doomwaddirstr.split(";")[0];
 #endif
 
     QDir doomwaddir(doomwaddirstr);
@@ -826,8 +831,13 @@ void MainWindow::dropFile(QString fileName)
                                 int tilDOOMWADPATH = files0.size();
                                 for(int j = 0; j<f.length(); j++)
                                 {
-                                    if (f.at(j) == ':' || f.at(j) == ';' || j+1 == f.length())
+#ifdef _WIN32
+                                    if (f.at(j) == ';' || j+1 == f.length())
+#else
+                                    if (f.at(j) == ':' || j+1 == f.length())
+#endif
                                     {
+                                        ui->argumentText->setText(ui->argumentText->toPlainText() + "\n" + f.mid(prev, j-prev));
                                         files0.append(QDir(f.mid(prev, j-prev)).entryList(QDir::Files));
                                         prev = j+1;
                                     }
@@ -855,8 +865,6 @@ void MainWindow::dropFile(QString fileName)
                                     }
                                 }
                             }
-
-
                         }
                     }
                 }
