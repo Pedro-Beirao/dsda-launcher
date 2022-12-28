@@ -182,16 +182,20 @@ void Settings::on_checkBox_clicked(bool checked)
     if(!checked)
     {
         qApp->setStyleSheet("QLabel::disabled {color: rgba(200, 200, 200);}");
-        #ifdef __APPLE__
+
+#ifdef __APPLE__
         macSetToLightTheme();
 
         ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                         "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
         ui->toolButton_9->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                         "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        #endif
-        //#else
-        //#endif
+#else
+        QPalette lightPalette;
+        qApp->setPalette(lightPalette);
+#endif
+
+
 
         settings.setValue("theme","light");
         pmainWindow->changeButtonColor(false);
@@ -205,44 +209,57 @@ void Settings::on_checkBox_clicked(bool checked)
                                         "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
         ui->toolButton_9->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                         "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        #endif
-/*
-        QFile styleFile(QCoreApplication::applicationDirPath()+"/Dark.qss");
-        styleFile.open( QFile::ReadOnly );
-        QString style( styleFile.readAll() );
-        qApp->setStyleSheet( style );
-*/
-        qApp->setStyleSheet("* {background: rgb(53, 53, 53);color: rgb(221, 221, 221);}"
-                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50; 0);font: 13px}"
-                            "QLabel::disabled {color: rgb(200, 200, 200);}"
+#elif __linux__
+QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+    qApp->setPalette(darkPalette);
+    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+
+#elif _WIN32
+        qApp->setStyleSheet("* {color: rgb(221, 221, 221);background: rgb(53, 53, 53);}"
+                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
+                            "QLabel::disabled {color: rgb(120, 120, 120);}"
                             "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                             "QPushButton:pressed {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}"
                             "QCheckBox {spacing: 4px;border: none;}"
                             "QRadioButton {spacing: 4px;border: none;}"
-                            "QTabWidget {background: rgb(45, 45, 45); border: none}"
+                            "QTabWidget {background-color: rgba(50, 50, 200, 200); border: none; }"
                             "QTabWidget::pane {top: -1px;margin: 0px;padding: 0px;border: 1px solid rgb(79, 79, 79);}"
                             "QTabBar {qproperty-drawBase: 0;border: none;}"
                             "QTabBar::tab {padding-left: 0.7em;padding-right: 0.7em;padding-bottom: 4px;padding-top: 3px;min-width: 8ex;border-right: 1px solid rgb(79, 79, 79);border-left: 1px solid rgb(79, 79, 79);}"
                             "QTabBar::tab::top:!selected:hover {background-color: rgb(50, 50, 50)}"
                             "QTabBar::tab::selected {background: rgb(53, 53, 53); margin-left: -3px;margin-right: -3px;border-top: 1px solid rgb(79, 79, 79);border-bottom:none;}"
-                            "QTabBar::tab:!selected {margin-top: 4px;background: rgb(47, 47, 47);border-top: 1px solid rgb(79, 79, 79);border-bottom: 0px solid rgb(79, 79, 79);}"
+                            "QTabBar::tab:!selected {margin-top: 4px;background: rgb(47, 47, 47);border-top: 1px solid rgb(79, 79, 79);border-bottom: 1px solid rgb(79, 79, 79);}"
                             "QTabBar::tab:first:selected {margin-left: 0;}"
                             "QTabBar::tab:last:selected {margin-right: 0;}"
-                            "QComboBox {border: 1px solid rgb(79, 79, 79);}"
+                            "QComboBox {border: 1px solid rgb(79, 79, 79);background: rgb(53, 53, 53);}"
+                            "QComboBox::disabled {border: 1px solid rgb(60, 60, 60);}"
+                            "QComboBox::arrow {border: 1px solid rgb(60, 60, 60);}"
                             "QComboBox::drop-down {margin: 5px; padding-left: 12px; height: 12px; width: 12px; image: url(\":/pngs/pngs/combo_box_arrow.png\");}"
                             "QGroupBox {border: 1px solid rgb(79, 79, 79);}"
                             "QComboBox:hover {border: 1px solid rgb(4,93,244); background-color: rgb(55,63,76)}"
                             "QComboBox:on {border: 1px solid rgb(4,93,244); background-color: rgb(43,69,94); selection-background-color:rgb(79, 79, 79)}"
                             "QComboBox:focus {border: 1px solid rgb(79, 79, 79); background: rgb(53, 53, 53);}"
-                            "QComboBox:open {border: 1px solid rgb(0, 79, 79);}"
                             "QCheckBox::indicator:unchecked:hover {background-color: rgb(240,240,240); border-radius: 3px}"
                             "QMenuBar::item:selected {background: rgb(43,43,43)}"
                             "QMenuBar::item:pressed {background: rgb(43,43,43)}"
                             "QMenu {border: 1px solid rgb(79, 79, 79)}"
-                            "QMenu::item:selected {background-color: rgb(55,63,76)}"
+                            "QMenu::item:selected {background-color: rgb(55,63,86)}"
                             );
 
-        //#endif
+#endif
         settings.setValue("theme","dark");
         pmainWindow->changeButtonColor(true);
     }
