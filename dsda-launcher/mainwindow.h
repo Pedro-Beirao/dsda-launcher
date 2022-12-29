@@ -85,6 +85,7 @@ public slots:
     void on_actionHistory_triggered();
     void SaveHistory(QString iwad, QStringList args);
     void Launch(QString iwadName, QStringList argList);
+    void showSSLDialog();
 
 public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);

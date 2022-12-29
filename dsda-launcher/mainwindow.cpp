@@ -117,6 +117,15 @@ void MainWindow::changeExeName(QString newName)
     exeName = newName;
 }
 
+void MainWindow::showSSLDialog()
+{
+    QMessageBox msgBox;
+    msgBox.setText("SSL library not found. Network features not available.");
+    msgBox.setInformativeText("It should have been packaged with the Launcher.\nIf reinstalling does not fix this, try manually installing OpenSSL.\n\nlibssl-1_1-x64.dll + libcrypto-1_1-x64.dll");
+    msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
+    msgBox.exec();
+}
+
 void MainWindow::changeMaxSkillLevel(int max)
 {
     ui->diffBox->clear();
@@ -923,6 +932,12 @@ void MainWindow::on_actionGithub_2_triggered()
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
+            if (!QSslSocket::supportsSsl())
+            {
+                showSSLDialog();
+                return;
+            }
+
             QString launcherV;
 
             QNetworkRequest req(QUrl("https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest"));
@@ -971,6 +986,12 @@ void MainWindow::on_actionCheck_for_updates_triggered()
 
 void MainWindow::on_actionCheck_for_Updates_triggered()
 {
+    if (!QSslSocket::supportsSsl())
+    {
+        showSSLDialog();
+        return;
+    }
+
     QString portversion;
 
     QString path;
@@ -2017,6 +2038,12 @@ void MainWindow::on_toolButton_3_clicked()
 QString demoFile;
 void MainWindow::get_leaderboards(std::string wad, std::string level, std::string category) // Get the WR for a run from dsdarchive.com
 {
+    if (!QSslSocket::supportsSsl())
+    {
+        showSSLDialog();
+        return;
+    }
+
     QString player;
     QString time;
     QString engine;
