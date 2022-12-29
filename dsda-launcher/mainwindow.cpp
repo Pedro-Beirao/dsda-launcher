@@ -2004,7 +2004,7 @@ void MainWindow::on_toolButton_3_clicked()
             process->startDetached("sh", {"-c", "echo \""+path+" --help ; rm /tmp/dsda-doom-params.sh\" > /tmp/dsda-doom-params.sh ; chmod +x /tmp/dsda-doom-params.sh ; open -a Terminal /tmp/dsda-doom-params.sh"});
             process->deleteLater();
 #elif _WIN32
-            system(("start cmd.exe /k "+ path.toStdString()+" --help").c_str());
+            system(("start cmd.exe /k \""+ path.toStdString()+"\" --help").c_str());
 #else
             // xterm is the most reliable terminal to use, but it seems a few distros do not have it
             system(("xterm -e 'bash -c \""+path.toStdString()+" --help ;bash\"'").c_str());
