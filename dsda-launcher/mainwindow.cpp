@@ -837,7 +837,6 @@ void MainWindow::dropFile(QString fileName)
                                     if (f.at(j) == ':' || j+1 == f.length())
 #endif
                                     {
-                                        ui->argumentText->setText(ui->argumentText->toPlainText() + "\n" + f.mid(prev, j-prev));
                                         files0.append(QDir(f.mid(prev, j-prev)).entryList(QDir::Files));
                                         prev = j+1;
                                     }
