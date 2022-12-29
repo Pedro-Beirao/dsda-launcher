@@ -118,6 +118,7 @@ jobs:
           
       - name: build
         run: |
+          sudo apt install libfuse2
           cd dsda-launcher
           mkdir build
           cd build
