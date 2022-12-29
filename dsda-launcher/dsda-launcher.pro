@@ -41,9 +41,8 @@ mac {
         APP_FILES.files += ./dsda-doom.wad
     }
     deploy {
-        APP_FILES.files += ./lib
         QMAKE_APPLE_DEVICE_ARCHS=arm64 x86_64
-        message("ready for deploy")
+        message("Compiling for both archs")
     }
     APP_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_FILES

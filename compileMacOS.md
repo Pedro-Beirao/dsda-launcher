@@ -58,7 +58,7 @@ If you installed Qt with the online installer, careful with qmake not being in t
 
 
 // qmake .. "CONFIG+=deploy"
-// ^ this will add a "lib" folder to the .app bunndle (Only useful when distributing dsda-doom) and will compile for both x64 and arm64 archs
+// ^ this will compile for both x64 and arm64 archs
 
 ```
 6. Run make
