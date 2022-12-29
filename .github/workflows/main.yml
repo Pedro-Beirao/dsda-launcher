@@ -25,18 +25,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      #- name: Install qt static
-      #  run: |
-      #    qt-windows-static-build.ps1
-      #    choco uninstall mingw --force
-      #    choco uninstall strawberryperl --force
-      #- uses: numworks/setup-msys2@v1
-      #  with:
-      #    msystem: MINGW32
-      #C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ..
-      
-      
+      - uses: actions/checkout@v3.2.0
+    
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
         with:
@@ -45,36 +35,8 @@ jobs:
           target: 'desktop'
           arch: 'win64_mingw81'
           setup-python: 'false'
-          
-          
-      #- name: Install Qt5/Qt6 (yaqti)
-      #  uses: WillBrennan/yaqti@2021.07.29
-      #  with:
-      #    # Qt version to pick 5.15.2 or 6.2.1
-      #    version: '6.2.0'
-      #    os: 'windows'
-      #    platform: 'desktop'
-      #    modules: 'qtcharts'
-      #- name: Set up Python 3.x
-      #  uses: actions/setup-python@v2
-      #  with:
-      #    python-version: 3.x
-      #- name: Install qt
-      #  run: | 
-      #    pip install yaqti &&
-      #    python -m yaqti install --version 6.2.0 --platform desktop --os windows --modules qtcharts
-      #- name: install qt static
-      #  run: |
-      #    git clone git://code.qt.io/qt/qt5.git
-      #    cd qt5
-      #    git checkout 6.0
-      #    perl init-repository
-      #    cd ..
-      #    mkdir qt6-build
-      #    cd qt6-build
-      #    ..\qt5\configure.bat -prefix C:\path\to\install
-      #    cmake --build . 
-      #    cmake --install .
+
+        
       - name: tree
         run: |
           where make.exe
@@ -104,7 +66,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.2.0
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
@@ -140,7 +102,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.2.0
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
