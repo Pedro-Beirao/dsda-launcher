@@ -7,7 +7,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
-const QString version = "v1.1";
+const QString version = "v1.2";
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
