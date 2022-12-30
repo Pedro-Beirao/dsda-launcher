@@ -239,8 +239,7 @@ void MainWindow::findIwads(int type)
         if(!QDir(dotfolder).exists())
             QDir().mkdir(dotfolder);
 
-        if(!QFileInfo::exists(dotfolder+"/"+exeName+".wad"))
-            QProcess::startDetached("cp", {execPath+"/../Resources/"+exeName+".wad",dotfolder});
+        QProcess::startDetached("cp", {execPath+"/../Resources/"+exeName+".wad",dotfolder});
 
         QDir directory(dotfolder);
         imagesInfo = directory.entryInfoList(QStringList() << "*.WAD",QDir::Files);
