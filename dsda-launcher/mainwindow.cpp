@@ -223,6 +223,14 @@ QString lowerCase(std::string word)
     return word.c_str();
 }
 
+// Remove file extension
+QString removeExtension(QString path)
+{
+    int dot_pos = path.lastIndexOf('.');
+
+    return lowerCase(path.left(dot_pos).toStdString());
+}
+
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 void MainWindow::delayLaunch()
 {
@@ -730,71 +738,70 @@ void MainWindow::SaveState(QString fileName)
 
 void MainWindow::dropFile(QString fileName)
 {
-    QString tmp = lowerCase(fileName.toStdString().substr(fileName.length() - 4));
-    if(tmp==".lmp") // *.lmp file
+    int dot_pos = fileName.lastIndexOf('.');
+    if (dot_pos == -1) return;
+
+    QString tmp = lowerCase(fileName.mid(dot_pos+1).toStdString());
+
+    if(tmp=="lmp")
     {
             ui->tabs->setCurrentIndex(2);
             ui->recordDemo_2->setText(fileName);
             std::ifstream file;
             file.open(fileName.toStdString());
-            std::list<std::string> list;
-            std::string buffer;
-            while (std::getline(file, buffer)) {
-                list.push_front(buffer);
-            }
-            file.close();
-            foreach(std::string line, list)
+            std::string line;
+            while(getline(file, line, '\n'))
             {
                 if(line.substr(0,5)=="-iwad")
                 {
-                    std::string strToAdd="";
+                    ui->wadsOnFolder->clear();
+
                     QStringList argList;
-                    for( size_t i=0; i<line.length(); i++)
+                    std::string tmp;
+                    for (size_t i = 0; i < line.size(); i++)
                     {
-                        char c = line[i];
-                        if( c == ' '){
-                             argList.append(strToAdd.c_str());
-                             strToAdd="";
-                        }else if(c == '\"' ){
-                            i++;
-                            while( line[i] != '\"' ){ strToAdd.push_back(line[i]); i++; }
-                        }else{
-                            strToAdd.push_back(c);
+                        if (line[i] != ' ' && line[i] != '\"')
+                        {
+                            tmp += line[i];
+                        }
+                        else if (!tmp.empty())
+                        {
+                            argList.push_back(QString::fromStdString(tmp));
+                            tmp.clear();
                         }
                     }
+                    if (!tmp.empty())
+                    {
+                        argList.push_back(QString::fromStdString(tmp));
+                        tmp.clear();
+                    }
+
                     for(int i=0;i<argList.count()-1;i++)
                     {
-                        if(argList[i]=="-iwad" && argList[i+1]!='-')
+                        if(argList[i]=="-iwad")
                         {
-                            ui->iwadSelect->setCurrentIndex(ui->iwadSelect->findText(lowerCase(argList[i+1].toStdString().substr(0,argList[i+1].length()-4))));
-                        }
-                        else if(argList[i]=="-complevel" && argList[i+1]!='-')
-                        {
-                            if(argList[i+1].length()==1)
+                            dot_pos = argList[i+1].lastIndexOf('.');
+
+                            int iwad_index = ui->iwadSelect->findText(argList[i+1].left(dot_pos));
+                            if (iwad_index != -1)
                             {
-                                argList[i+1]+=" ";
-                            }
-                            for(int ii=0;ii<ui->compLevelSelect->count();ii++)
-                            {
-                                if(ui->compLevelSelect->itemText(ii).startsWith(argList[i+1]))
-                                {
-                                    ui->compLevelSelect->setCurrentIndex(ii);
-                                }
+                                ui->iwadSelect->setCurrentIndex(iwad_index);
                             }
                         }
-                        else if(argList[i]=="-file" && argList[i+1]!='-')
+                        else if(argList[i]=="-file")
                         {
                             QStringList files;
-                            for(int ii=1;ii<argList.count()-i;i++)
+                            for(int ii=i+1; ii < argList.count(); ii++)
                             {
-                                if(argList[i+ii][0]=='-')
+                                if(argList[ii].size() == 0 || argList[ii][0] == '-')
                                 {
                                     break;
                                 }
-                                files.append(argList[i+ii]);
+
+                                QString tmp = removeExtension(argList[ii]);
+                                files.append(tmp);
                             }
 
-                            ui->wadsOnFolder->clear();
                             int size = settings.beginReadArray("pwadfolders");
                             if(size!=0)
                             {
@@ -807,9 +814,10 @@ void MainWindow::dropFile(QString fileName)
                                         QStringList files0 = path.entryList(QDir::Files);
                                         foreach(QString file0, files0)
                                         {
+                                            QString tmp = removeExtension(file0);
                                             for(int i=0; i<files.count(); i++)
                                             {
-                                                if(lowerCase(files[i].toStdString())==lowerCase(file0.toStdString()))
+                                                if(files[i].toStdString() == tmp.toStdString())
                                                 {
                                                     ui->wadsOnFolder->addItem(folder+"/"+file0);
                                                     files.remove(i);
@@ -876,15 +884,16 @@ void MainWindow::dropFile(QString fileName)
                     }
                 }
             }
+            file.close();
     }
-    else if(tmp==".wad" || tmp==".bex" || tmp==".deh")
+    else if(tmp=="wad" || tmp=="bex" || tmp=="deh")
     {
         QStringList wadsToAdd;
         wadsToAdd.append(fileName);
         addWads(wadsToAdd);
         ui->tabs->setCurrentIndex(1);
     }
-    else if(tmp=="tate") // .state
+    else if(tmp=="state")
     {
            LoadState(fileName, 0);
     }
