@@ -29,13 +29,13 @@ FORMS += \
 
 win32 {
     CONFIG += c++11
-    RC_ICONS = dsda-launcher.ico
+    RC_ICONS = icons/dsda-launcher.ico
     QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
 }
 
 mac {
     CONFIG += c++11 appbundle
-    ICON = dsda-launcher.icns
+    ICON = icons/dsda-launcher.icns
     !noport {
         APP_FILES.files = ./dsda-doom
         APP_FILES.files += ./dsda-doom.wad
