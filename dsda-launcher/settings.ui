@@ -34,7 +34,7 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget">
+  <widget class="QTabWidget" name="settings_tabWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -56,7 +56,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -65,7 +65,7 @@
     <attribute name="title">
      <string>General</string>
     </attribute>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="darkTheme_checkBox">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -81,7 +81,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="maxSkillLevel_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -102,7 +102,7 @@
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="maxSkillLevel_lineEdit">
      <property name="geometry">
       <rect>
        <x>125</x>
@@ -131,7 +131,7 @@ border-radius:3px</string>
       <string>5</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="cpmplevels_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -144,7 +144,7 @@ border-radius:3px</string>
       <string>Complevels:</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QRadioButton" name="minimalComplevels_radioButton">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -157,7 +157,7 @@ border-radius:3px</string>
       <string>Minimal</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_3">
+    <widget class="QRadioButton" name="fullComplevels_radioButton">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -170,7 +170,7 @@ border-radius:3px</string>
       <string>Full</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="toolButton">
+    <widget class="QPushButton" name="PWADFolders_pushButton">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -183,7 +183,7 @@ border-radius:3px</string>
       <string>?</string>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="textBrowser">
+    <widget class="QTextBrowser" name="PWADFolders_textBrowser">
      <property name="geometry">
       <rect>
        <x>260</x>
@@ -210,7 +210,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;For this to work, you need to add the folders you have your PWADs in, to the following container.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="PWADFolders_label">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -223,7 +223,7 @@ p, li { white-space: pre-wrap; }
       <string>PWAD Folders</string>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_3">
+    <widget class="QToolButton" name="minusPWADFolders_toolButton">
      <property name="geometry">
       <rect>
        <x>500</x>
@@ -239,7 +239,7 @@ p, li { white-space: pre-wrap; }
       <string/>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QListWidget" name="PWADFolders_listWidget">
      <property name="geometry">
       <rect>
        <x>277</x>
@@ -265,7 +265,7 @@ border-radius:3px</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_2">
+    <widget class="QToolButton" name="plusPWADFolders_toolButton">
      <property name="geometry">
       <rect>
        <x>500</x>
@@ -281,7 +281,7 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_11">
+    <widget class="QLineEdit" name="maxHistory_lineEdit">
      <property name="geometry">
       <rect>
        <x>112</x>
@@ -310,7 +310,7 @@ border-radius:3px</string>
       <string>20</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="maxHistory_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -331,7 +331,7 @@ border-radius:3px</string>
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_8">
+    <widget class="QToolButton" name="minusIWADFolders_toolButton">
      <property name="geometry">
       <rect>
        <x>500</x>
@@ -347,7 +347,7 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="textBrowser_2">
+    <widget class="QTextBrowser" name="IWADFolders_textBrowser">
      <property name="geometry">
       <rect>
        <x>260</x>
@@ -373,7 +373,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget_3">
+    <widget class="QListWidget" name="IWADFolders_listWidget">
      <property name="geometry">
       <rect>
        <x>277</x>
@@ -399,7 +399,7 @@ border-radius:3px</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_9">
+    <widget class="QLabel" name="IWADFolders_label">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -412,7 +412,7 @@ border-radius:3px</string>
       <string>IWAD Folders</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="toolButton_9">
+    <widget class="QPushButton" name="IWADFolders_pushButton">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -425,7 +425,7 @@ border-radius:3px</string>
       <string>?</string>
      </property>
     </widget>
-    <widget class="QToolButton" name="toolButton_10">
+    <widget class="QToolButton" name="plusIWADFolders_toolButton">
      <property name="geometry">
       <rect>
        <x>500</x>
@@ -441,32 +441,32 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
-    <zorder>label</zorder>
-    <zorder>checkBox</zorder>
-    <zorder>label_2</zorder>
-    <zorder>lineEdit</zorder>
-    <zorder>label_4</zorder>
-    <zorder>radioButton</zorder>
-    <zorder>radioButton_3</zorder>
-    <zorder>toolButton</zorder>
-    <zorder>toolButton_3</zorder>
-    <zorder>listWidget</zorder>
-    <zorder>toolButton_2</zorder>
-    <zorder>textBrowser</zorder>
-    <zorder>lineEdit_11</zorder>
-    <zorder>label_3</zorder>
-    <zorder>toolButton_8</zorder>
-    <zorder>listWidget_3</zorder>
-    <zorder>label_9</zorder>
-    <zorder>toolButton_9</zorder>
-    <zorder>toolButton_10</zorder>
-    <zorder>textBrowser_2</zorder>
+    <zorder>PWADFolders_label</zorder>
+    <zorder>darkTheme_checkBox</zorder>
+    <zorder>maxSkillLevel_label</zorder>
+    <zorder>maxSkillLevel_lineEdit</zorder>
+    <zorder>cpmplevels_label</zorder>
+    <zorder>minimalComplevels_radioButton</zorder>
+    <zorder>fullComplevels_radioButton</zorder>
+    <zorder>PWADFolders_pushButton</zorder>
+    <zorder>minusPWADFolders_toolButton</zorder>
+    <zorder>PWADFolders_listWidget</zorder>
+    <zorder>plusPWADFolders_toolButton</zorder>
+    <zorder>PWADFolders_textBrowser</zorder>
+    <zorder>maxHistory_lineEdit</zorder>
+    <zorder>maxHistory_label</zorder>
+    <zorder>minusIWADFolders_toolButton</zorder>
+    <zorder>IWADFolders_listWidget</zorder>
+    <zorder>IWADFolders_label</zorder>
+    <zorder>IWADFolders_pushButton</zorder>
+    <zorder>plusIWADFolders_toolButton</zorder>
+    <zorder>IWADFolders_textBrowser</zorder>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
      <string>Customization</string>
     </attribute>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="save_pushButton">
      <property name="geometry">
       <rect>
        <x>440</x>
@@ -492,7 +492,7 @@ border-radius:3px</string>
       </rect>
      </property>
     </widget>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="toggles_groupBox">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -504,7 +504,7 @@ border-radius:3px</string>
      <property name="title">
       <string>Toggles</string>
      </property>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="togglesTip_label">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -517,7 +517,7 @@ border-radius:3px</string>
        <string>Separate multiple parameters with a ';'</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="fastText_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -541,7 +541,7 @@ border-radius:3px</string>
        <string>Fast Monsters</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="fastParam_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -565,7 +565,7 @@ border-radius:3px</string>
        <string>-fast</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_7">
+     <widget class="QLineEdit" name="respawnText_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -589,7 +589,7 @@ border-radius:3px</string>
        <string>Respawn Monsters</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_9">
+     <widget class="QLineEdit" name="respawnParam_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -613,7 +613,7 @@ border-radius:3px</string>
        <string>-respawn</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="nomoText_lineEdit">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -637,7 +637,7 @@ border-radius:3px</string>
        <string>No Monsters</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="nomoParam_lineEdit">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -661,7 +661,7 @@ border-radius:3px</string>
        <string>-nomonsters</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_8">
+     <widget class="QLineEdit" name="solonetText_lineEdit">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -685,7 +685,7 @@ border-radius:3px</string>
        <string>Solo Net</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_10">
+     <widget class="QLineEdit" name="solonetParam_lineEdit">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -710,7 +710,7 @@ border-radius:3px</string>
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="resolutions_groupBox">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -722,7 +722,7 @@ border-radius:3px</string>
      <property name="title">
       <string>Resolutions</string>
      </property>
-     <widget class="QToolButton" name="toolButton_7">
+     <widget class="QToolButton" name="downResolutions_toolButton">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -739,7 +739,7 @@ color: rgb(255, 255, 255);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QToolButton" name="toolButton_6">
+     <widget class="QToolButton" name="upResolutions_toolButton">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -756,7 +756,7 @@ color: rgb(255, 255, 255);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QListWidget" name="listWidget_2">
+     <widget class="QListWidget" name="resolutions_listWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -765,11 +765,15 @@ color: rgb(255, 255, 255);</string>
         <height>150</height>
        </rect>
       </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">border: 1px solid rgb(139, 138, 140);
 color: #000;
 height: 20px;
 background-color:rgb(230, 230, 230);
+alternate-background-color:rgb(220, 220, 220);
 border-radius:3px</string>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -883,7 +887,7 @@ border-radius:3px</string>
        </property>
       </item>
      </widget>
-     <widget class="QToolButton" name="toolButton_4">
+     <widget class="QToolButton" name="plusResolutions_toolButton">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -900,7 +904,7 @@ color: rgb(255, 255, 255);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QToolButton" name="toolButton_5">
+     <widget class="QToolButton" name="minusResolutions_toolButton">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -918,7 +922,7 @@ color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </widget>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="notsaved_label">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -937,10 +941,10 @@ color: rgb(255, 255, 255);</string>
       <string>Don't forget to save!</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="executable_lineEdit">
      <property name="geometry">
       <rect>
-       <x>135</x>
+       <x>100</x>
        <y>205</y>
        <width>121</width>
        <height>24</height>
@@ -958,7 +962,7 @@ border-radius:3px</string>
       <string>dsda-doom</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="executable_label">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -968,10 +972,10 @@ border-radius:3px</string>
       </rect>
      </property>
      <property name="text">
-      <string>Executable Name:</string>
+      <string>Executable:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_8">
+    <widget class="QLabel" name="saved_label">
      <property name="enabled">
       <bool>true</bool>
      </property>
