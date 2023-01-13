@@ -119,11 +119,11 @@ Settings::Settings(QWidget *parent) :
     pmainWindow->changeResolutions(ui->resolutions_listWidget);
 
 #ifdef _WIN32
-        ui->listWidget->addItem("Same Folder as the Launcher");
-        ui->listWidget->addItem("%DOOMWADPATH%");
+        ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
+        ui->PWADFolders_listWidget->addItem("%DOOMWADPATH%");
 
-        ui->listWidget_3->addItem("Same Folder as the Launcher");
-        ui->listWidget_3->addItem("%DOOMWADDIR%");
+        ui->IWADFolders_listWidget->addItem("Same Folder as the Launcher");
+        ui->IWADFolders_listWidget->addItem("%DOOMWADDIR%");
 #else
         ui->PWADFolders_listWidget->addItem("$DOOMWADPATH");
         ui->PWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
