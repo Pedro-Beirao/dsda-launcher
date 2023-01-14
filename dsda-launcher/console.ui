@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Console</string>
   </property>
-  <widget class="QPlainTextEdit" name="text">
+  <widget class="QPlainTextEdit" name="console_plainTextEdit">
    <property name="geometry">
     <rect>
      <x>-1</x>
