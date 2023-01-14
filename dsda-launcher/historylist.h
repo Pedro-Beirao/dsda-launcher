@@ -22,8 +22,8 @@ public slots:
     void getHistory();
     void fooo3();
 private slots:
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
+    void on_load_pushButton_clicked();
+    void on_launch_pushButton_clicked();
 };
 
 #endif // HISTORYLIST_H

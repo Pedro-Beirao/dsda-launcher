@@ -47,7 +47,7 @@ QStringList skillT =
 
 void historyList::getHistory()
 {
-    ui->listWidget->clear();
+    ui->history_listWidget->clear();
 
     std::ifstream file;
     file.open(filePath.toStdString());
@@ -214,11 +214,11 @@ void historyList::getHistory()
         if (!slp.isEmpty())
         {
             slp.resize(slp.size()-2);
-            ui->listWidget->insertItem(0,iwad+"\n"+slp+pwads+demo);
+            ui->history_listWidget->insertItem(0,iwad+"\n"+slp+pwads+demo);
         }
         else
         {
-            ui->listWidget->insertItem(0,iwad+pwads+demo);
+            ui->history_listWidget->insertItem(0,iwad+pwads+demo);
         }
     }
 
@@ -231,7 +231,7 @@ void historyList::fooo3() // CTRL+W runs this function close the active window
     currentWindow->close();
 }
 
-void historyList::on_pushButton_2_clicked()
+void historyList::on_load_pushButton_clicked()
 {
     std::ifstream file;
     file.open(filePath.toStdString());
@@ -252,11 +252,11 @@ void historyList::on_pushButton_2_clicked()
             c++;
             std::getline(file, buffer);
         }
-        if (c == ui->listWidget->count()-1-ui->listWidget->currentRow())
+        if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
             text += (buffer+"\n").c_str();
         }
-        else if (c > ui->listWidget->count()-1-ui->listWidget->currentRow())
+        else if (c > ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
             break;
         }
@@ -273,7 +273,7 @@ void historyList::on_pushButton_2_clicked()
 
 
 
-void historyList::on_pushButton_3_clicked()
+void historyList::on_launch_pushButton_clicked()
 {
     QStringList argList;
     QString iwadName;
@@ -296,7 +296,7 @@ void historyList::on_pushButton_3_clicked()
             c++;
             std::getline(file, buffer);
         }
-        if (c == ui->listWidget->count()-1-ui->listWidget->currentRow())
+        if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
             if(buffer.substr(0,5)=="iwad=") // iwad
             {
@@ -522,7 +522,7 @@ void historyList::on_pushButton_3_clicked()
 
             break;
         }
-        else if (c > ui->listWidget->count()-1-ui->listWidget->currentRow())
+        else if (c > ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
             break;
         }

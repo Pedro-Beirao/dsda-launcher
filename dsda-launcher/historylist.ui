@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>History</string>
   </property>
-  <widget class="QListWidget" name="listWidget">
+  <widget class="QListWidget" name="history_listWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -47,7 +47,7 @@
     <number>-1</number>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="load_pushButton">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -63,7 +63,7 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="launch_pushButton">
    <property name="geometry">
     <rect>
      <x>120</x>
