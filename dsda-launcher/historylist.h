@@ -2,6 +2,10 @@
 #define HISTORYLIST_H
 
 #include <QWidget>
+#include "fstream"
+#include <QStandardPaths>
+#include <QSettings>
+#include <QShortcut>
 
 namespace Ui {
 class historyList;
@@ -17,6 +21,12 @@ public:
 
 private:
     Ui::historyList *ui;
+
+#if defined(__APPLE__) || defined(__linux__)
+    QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
+#else
+    QString historyPath;
+#endif
 
 public slots:
     void getHistory();

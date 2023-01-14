@@ -1,18 +1,6 @@
 #include "historylist.h"
 #include "ui_historylist.h"
-#include "fstream"
-#include <QStandardPaths>
-#include <QSettings>
 #include <mainwindow.h>
-#include <QShortcut>
-
-MainWindow * hmainWindow;
-
-#if defined(__APPLE__) || defined(__linux__)
-QString filePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
-#else
-QString filePath;
-#endif
 
 historyList::historyList(QWidget *parent) :
     QWidget(parent),
@@ -20,13 +8,11 @@ historyList::historyList(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    hmainWindow = MainWindow::getMainWin();
-
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
     shortcut3->setAutoRepeat(false);
 
 #ifdef _WIN32
-    filePath = QCoreApplication::applicationDirPath()+"\\history.states";
+    historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
 #endif
 }
 
@@ -50,7 +36,7 @@ void historyList::getHistory()
     ui->history_listWidget->clear();
 
     std::ifstream file;
-    file.open(filePath.toStdString());
+    file.open(historyPath.toStdString());
 
     if (!file.is_open())
     {
@@ -234,7 +220,7 @@ void historyList::fooo3() // CTRL+W runs this function close the active window
 void historyList::on_load_pushButton_clicked()
 {
     std::ifstream file;
-    file.open(filePath.toStdString());
+    file.open(historyPath.toStdString());
     QString text = "#lol\n\n";
 
     if (!file.is_open())
@@ -263,7 +249,7 @@ void historyList::on_load_pushButton_clicked()
     }
 
     file.close();
-    hmainWindow->LoadState(text, 1);
+    MainWindow::pMainWindow->LoadState(text, 1);
 }
 
 
@@ -279,7 +265,7 @@ void historyList::on_launch_pushButton_clicked()
     QString iwadName;
 
     std::ifstream file;
-    file.open(filePath.toStdString());
+    file.open(historyPath.toStdString());
 
     if (!file.is_open())
     {
@@ -530,6 +516,6 @@ void historyList::on_launch_pushButton_clicked()
 
     file.close();
 
-    hmainWindow->Launch(iwadName, argList);
+    MainWindow::pMainWindow->Launch(iwadName, argList);
 }
 

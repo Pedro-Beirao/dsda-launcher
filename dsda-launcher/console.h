@@ -2,6 +2,9 @@
 #define CONSOLE_H
 
 #include <QWidget>
+#include <QShortcut>
+#include <QStandardPaths>
+#include <QProcess>
 
 namespace Ui {
 class Console;

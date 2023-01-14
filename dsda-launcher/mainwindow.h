@@ -1,11 +1,46 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
+#elif __APPLE__
+#include "Mac.h"
+#endif
+
 #include <QMainWindow>
 #include <QSettings>
 #include <QProcess>
 #include <QListWidget>
 #include <QPushButton>
+#include <QDir>
+#include <QFileDialog>
+#include <QListWidgetItem>
+#include <QStandardPaths>
+#include <QShortcut>
+#include <fstream>
+#include <iostream>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDebug>
+#include <vector>
+#include <QNetworkAccessManager>
+#include <QtNetwork>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <iostream>
+#include <QRegularExpression>
+#include <QDesktopServices>
+#include <QtConcurrent>
+#include <QMessageBox>
+#include "settings.h"
+#include <string>
+#include "console.h"
+#include <QClipboard>
+#include <sstream>
+#include <qgraphicseffect.h>
+#include "historylist.h"
 
 const QString version = "v1.2";
 
@@ -17,14 +52,74 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    Ui::MainWindow *ui;
+
+    // If dsda-doom is running
+    bool running = false;
+    void gameIsRunning();
+
+    QString exeName = "dsda-doom";
+
+    #if defined(__APPLE__) || defined(__linux__)
+    QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
+    QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
+    #else
+    QString historyPath;
+    #endif
+
+    QString execPath;
+
+    // These are the parameters with toggles you can customise
+    // These names come from the defaults I created
+    QString fastParam = "-fast";
+    QString nomoParam = "-nomonsters";
+    QString respawnParam = "-respawn";
+    QString solonetParam = "-solo-net";
+
+    QVector<QPair<QString, QString>> iwads_paths;
+
+    // Prevents launching the game twice if the button "Launch" is pressed twice quickly
+    bool canLaunch = true;
+
+    // Create an instance of the settings window
+    Settings *settingsWindow;
+    Console *consoleWindow;
+    historyList *historyListWindow;
+
+    QStringList doom1IWADs = {
+        "doom",
+        "doom1",
+        "doomu",
+        "freedoom",
+        "freedoom1",
+        "bfgdoom",
+        "bfgdoom1",
+
+        "heretic",
+        "heretic1",
+
+        "chex",
+        "hacx",
+        "rekkrsa"
+    };
+
+    QStringList doom2IWADs = {
+        "doom2",
+        "doom2f",
+        "freedoom2",
+        "bfgdoom2",
+
+        "tnt",
+        "plutonia",
+
+        "hexen",
+    };
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    static MainWindow * getMainWin();
-
-private:
-    Ui::MainWindow *ui;
-    static MainWindow * pMainWindow;
+    static MainWindow *pMainWindow;
 
 public slots:
     void addWads(QStringList fileNames);

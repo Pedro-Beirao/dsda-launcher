@@ -1,26 +1,12 @@
 #include "settings.h"
 #include "ui_settings.h"
-#include <QFileDialog>
-#include <qsettings.h>
 #include <mainwindow.h>
-#include "Mac.h"
-#include <qshortcut.h>
-#include <qstandardpaths.h>
-#include <QProcess>
-#include <QStyleFactory>
-#include <QActionGroup>
-#include <QItemDelegate>
-#include <QScreen>
-
-MainWindow * pmainWindow;
 
 Settings::Settings(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
-
-    pmainWindow = MainWindow::getMainWin();
 
     if(settings.value("theme")=="dark")
     {
@@ -116,7 +102,7 @@ Settings::Settings(QWidget *parent) :
         }
     }
     settings.endArray();
-    pmainWindow->changeResolutions(ui->resolutions_listWidget);
+    MainWindow::pMainWindow->changeResolutions(ui->resolutions_listWidget);
 
 #ifdef _WIN32
         ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
@@ -197,7 +183,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
 
 
         settings.setValue("theme","light");
-        pmainWindow->changeButtonColor(false);
+        MainWindow::pMainWindow->changeButtonColor(false);
     }
     else
      {
@@ -266,7 +252,7 @@ QPalette darkPalette;
 
 #endif
         settings.setValue("theme","dark");
-        pmainWindow->changeButtonColor(true);
+        MainWindow::pMainWindow->changeButtonColor(true);
     }
 }
 
@@ -306,13 +292,13 @@ void Settings::on_maxSkillLevel_lineEdit_textChanged(const QString &arg1)
     if(arg1=="")
     {
         settings.setValue("maxskilllevel",5);
-        pmainWindow->changeMaxSkillLevel(5);
+        MainWindow::pMainWindow->changeMaxSkillLevel(5);
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
         settings.setValue("maxskilllevel",arg1.toInt());
-        pmainWindow->changeMaxSkillLevel(arg1.toInt());
+        MainWindow::pMainWindow->changeMaxSkillLevel(arg1.toInt());
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
@@ -323,7 +309,7 @@ void Settings::on_minimalComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings.setValue("complevels", 0);
-        pmainWindow->changeComplevelsList(0);
+        MainWindow::pMainWindow->changeComplevelsList(0);
     }
 }
 
@@ -333,7 +319,7 @@ void Settings::on_fullComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings.setValue("complevels", 1);
-        pmainWindow->changeComplevelsList(1);
+        MainWindow::pMainWindow->changeComplevelsList(1);
     }
 }
 
@@ -419,17 +405,17 @@ void Settings::on_save_pushButton_clicked()
     ui->notsaved_label->hide();
     ui->saved_label->show();
 
-    pmainWindow->changeResolutions(ui->resolutions_listWidget);
+    MainWindow::pMainWindow->changeResolutions(ui->resolutions_listWidget);
 
-    pmainWindow->changeToggles(ui->fastText_lineEdit->text(),ui->fastParam_lineEdit->text(),ui->nomoText_lineEdit->text(),ui->nomoParam_lineEdit->text(),ui->respawnText_lineEdit->text(),ui->respawnParam_lineEdit->text(),ui->solonetText_lineEdit->text(),ui->solonetParam_lineEdit->text());
+    MainWindow::pMainWindow->changeToggles(ui->fastText_lineEdit->text(),ui->fastParam_lineEdit->text(),ui->nomoText_lineEdit->text(),ui->nomoParam_lineEdit->text(),ui->respawnText_lineEdit->text(),ui->respawnParam_lineEdit->text(),ui->solonetText_lineEdit->text(),ui->solonetParam_lineEdit->text());
 
     if (ui->executable_lineEdit->text()=="")
     {
-        pmainWindow->changeExeName("dsda-doom");
+        MainWindow::pMainWindow->changeExeName("dsda-doom");
     }
     else
     {
-        pmainWindow->changeExeName(ui->executable_lineEdit->text());
+        MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
     }
 
     settings.setValue("toggle1t", ui->fastText_lineEdit->text());

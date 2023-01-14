@@ -1,8 +1,5 @@
 #include "console.h"
 #include "ui_console.h"
-#include <QShortcut>
-#include <QStandardPaths>
-#include <QProcess>
 
 Console::Console(QWidget *parent) :
     QWidget(parent),

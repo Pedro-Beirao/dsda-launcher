@@ -3,6 +3,16 @@
 
 #include <QWidget>
 #include <QListWidget>
+#include <QFileDialog>
+#include <qsettings.h>
+#include "Mac.h"
+#include <qshortcut.h>
+#include <qstandardpaths.h>
+#include <QProcess>
+#include <QStyleFactory>
+#include <QActionGroup>
+#include <QItemDelegate>
+#include <QScreen>
 
 namespace Ui {
 class Settings;
