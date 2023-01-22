@@ -861,7 +861,7 @@ border-radius:3px</string>
      <attribute name="title">
       <string>Wads</string>
      </attribute>
-     <widget class="QListWidget" name="wadsOnFolder">
+     <widget class="QListWidget" name="wads_listWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -887,7 +887,7 @@ border-radius:3px</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QToolButton" name="plus">
+     <widget class="QToolButton" name="addWads_toolButton">
       <property name="geometry">
        <rect>
         <x>274</x>
@@ -904,7 +904,7 @@ color: rgb(255, 255, 255);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QToolButton" name="minus">
+     <widget class="QToolButton" name="removeWads_toolButton">
       <property name="geometry">
        <rect>
         <x>274</x>
@@ -939,7 +939,7 @@ color: rgb(255, 255, 255);</string>
        <string>Record</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="recordDemo">
+     <widget class="QLineEdit" name="record_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -960,7 +960,7 @@ border-radius:3px</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="recordDemo_2">
+     <widget class="QLineEdit" name="playback_lineEdit">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -994,7 +994,7 @@ border-radius:3px</string>
        <string>Playback</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="record_pushButton">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -1013,7 +1013,7 @@ border-radius:3px</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="playback_pushButton">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -1032,7 +1032,7 @@ border-radius:3px</string>
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="demoPlayOptions">
+     <widget class="QComboBox" name="playback_comboBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1060,7 +1060,7 @@ border-radius:3px</string>
        </property>
       </item>
      </widget>
-     <widget class="QLineEdit" name="recordDemo_3">
+     <widget class="QLineEdit" name="viddump_lineEdit">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -1084,7 +1084,7 @@ border-radius:3px</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="viddump_pushButton">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -1104,11 +1104,11 @@ border-radius:3px</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="dsdaTab">
      <attribute name="title">
       <string>DSDA</string>
      </attribute>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="dsda_comboBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1271,7 +1271,7 @@ border-radius:3px</string>
        <string/>
       </property>
      </widget>
-     <widget class="QLineEdit" name="wadLName">
+     <widget class="QLineEdit" name="wadDSDA_lineEdit">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -1289,7 +1289,7 @@ background-color:rgb(255, 255, 255);
 border-radius:3px</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="toolButton_5">
+     <widget class="QToolButton" name="showLeaderboard_toolButton">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -1302,7 +1302,7 @@ border-radius:3px</string>
        <string>Leaderboard</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="ReloadLead">
+     <widget class="QToolButton" name="reloadLeaderboard_toolButton">
       <property name="geometry">
        <rect>
         <x>90</x>
@@ -1318,7 +1318,7 @@ border-radius:3px</string>
        <string>Reload</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="wadLName_2">
+     <widget class="QLineEdit" name="levelDSDA_lineEdit">
       <property name="geometry">
        <rect>
         <x>60</x>

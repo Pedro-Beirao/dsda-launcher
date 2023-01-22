@@ -235,7 +235,7 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     setAcceptDrops(true);
 
     // Hide the reload Leaderboard button
-    ui->ReloadLead->hide();
+    ui->reloadLeaderboard_toolButton->hide();
 
     // Add event filter to the "additional arguments" box
     ui->additionalArguments_textEdit->installEventFilter(this);
@@ -307,7 +307,7 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     int pwadCount = settings.value("pwadCount").toInt();
     for(int i=0; i<pwadCount;i++)
     {
-        ui->wadsOnFolder->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
+        ui->wads_listWidget->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
 
     }
     ui->fast_checkBox->setChecked(settings.value("fast").toBool());
@@ -322,24 +322,24 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     ui->solonet_checkBox->setChecked(settings.value("solonet").toBool());
     ui->additionalArguments_textEdit->append(settings.value("argumentText").toString());
 
-    ui->recordDemo->setText(settings.value("recorddemo").toString());
-    ui->recordDemo_2->setText(settings.value("playdemo").toString());
-    ui->recordDemo_3->setText(settings.value("viddump").toString());
+    ui->record_lineEdit->setText(settings.value("recorddemo").toString());
+    ui->playback_lineEdit->setText(settings.value("playdemo").toString());
+    ui->viddump_lineEdit->setText(settings.value("viddump").toString());
     ui->hud_lineEdit->setText(settings.value("hud").toString());
     ui->config_lineEdit->setText(settings.value("config").toString());
 
-    ui->demoPlayOptions->setCurrentIndex(settings.value("demoplaybox").toInt());
+    ui->playback_comboBox->setCurrentIndex(settings.value("demoplaybox").toInt());
 
-    if(ui->demoPlayOptions->currentIndex()!=1)
+    if(ui->playback_comboBox->currentIndex()!=1)
     {
-        ui->recordDemo_3->setHidden(true);
-        ui->pushButton_4->setHidden(true);
+        ui->viddump_lineEdit->setHidden(true);
+        ui->viddump_pushButton->setHidden(true);
     }
 
-    if(ui->recordDemo_3->text()=="")
-        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    if(ui->viddump_lineEdit->text()=="")
+        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     else
-        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
     if(ui->hud_lineEdit->text()=="")
         ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
@@ -539,42 +539,42 @@ void MainWindow::LoadState(QString fileName, bool isString)
                  }
                  std::getline(file, buffer);
              }
-    ui->wadsOnFolder->clear();
+    ui->wads_listWidget->clear();
     if(buffer.substr(0,4)=="pwad")
     {
          while (std::getline(file, buffer))
          {
             if(buffer.substr(0,7)=="endpwad")
                 break;
-            ui->wadsOnFolder->addItem(buffer.c_str());
+            ui->wads_listWidget->addItem(buffer.c_str());
          }
          std::getline(file, buffer);
     }
     if(buffer.substr(0,7)=="record=") // record demo
             {
-                    ui->recordDemo->setText(buffer.substr(7).c_str());
+                    ui->record_lineEdit->setText(buffer.substr(7).c_str());
                     std::getline(file, buffer);
             }
     if(buffer.substr(0,9)=="playback=") // playback demo
             {
-                    ui->recordDemo_2->setText(buffer.substr(9).c_str());
+                    ui->playback_lineEdit->setText(buffer.substr(9).c_str());
                     std::getline(file, buffer);
             }
     if(buffer.substr(0,13)=="demodropdown=") // demo drop down
             {
                 if (buffer.substr(13).length()>0)
                 {
-                    ui->demoPlayOptions->setCurrentIndex(atoi(buffer.substr(13).c_str()));
+                    ui->playback_comboBox->setCurrentIndex(atoi(buffer.substr(13).c_str()));
                 }
                 else
                 {
-                    ui->demoPlayOptions->setCurrentIndex(0);
+                    ui->playback_comboBox->setCurrentIndex(0);
                 }
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,8)=="viddump=") // demo drop down
             {
-                ui->recordDemo_3->setText(buffer.substr(8).c_str());
+                ui->viddump_lineEdit->setText(buffer.substr(8).c_str());
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,11)=="additional=") // additional arguments
@@ -591,9 +591,9 @@ void MainWindow::SaveState(QString fileName)
 {
     std::ofstream file_;
     std::string pwads;
-    for(int i=0; i<ui->wadsOnFolder->count();i++)
+    for(int i=0; i<ui->wads_listWidget->count();i++)
     {
-        pwads += ui->wadsOnFolder->item(i)->text().toStdString()+"\n";
+        pwads += ui->wads_listWidget->item(i)->text().toStdString()+"\n";
     }
     QString level_lineEdit = "";
     if (!ui->level_lineEdit->isHidden())
@@ -610,7 +610,7 @@ void MainWindow::SaveState(QString fileName)
         file_.open(fileName.toStdString(),std::ios_base::app);
         if(file_.is_open())
         {
-            file_ << "-\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
+            file_ << "-\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->record_lineEdit->text().toStdString()+"\nplayback="+ui->playback_lineEdit->text().toStdString()+"\ndemodropdown="+std::to_string(ui->playback_comboBox->currentIndex())+"\nviddump="+ui->viddump_lineEdit->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
         }
 
     }
@@ -619,7 +619,7 @@ void MainWindow::SaveState(QString fileName)
         file_.open(fileName.toStdString());
         if(file_.is_open())
         {
-            file_ << "# Do not edit this file manually\n\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
+            file_ << "# Do not edit this file manually\n\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->record_lineEdit->text().toStdString()+"\nplayback="+ui->playback_lineEdit->text().toStdString()+"\ndemodropdown="+std::to_string(ui->playback_comboBox->currentIndex())+"\nviddump="+ui->viddump_lineEdit->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
         }
     }
 
@@ -638,7 +638,7 @@ void MainWindow::dropFile(QString fileName)
     if(tmp=="lmp")
     {
             ui->tabs->setCurrentIndex(2);
-            ui->recordDemo_2->setText(fileName);
+            ui->playback_lineEdit->setText(fileName);
             std::ifstream file;
             file.open(fileName.toStdString());
             std::string line;
@@ -646,7 +646,7 @@ void MainWindow::dropFile(QString fileName)
             {
                 if(line.substr(0,5)=="-iwad")
                 {
-                    ui->wadsOnFolder->clear();
+                    ui->wads_listWidget->clear();
 
                     QStringList argList;
                     std::string tmp;
@@ -711,7 +711,7 @@ void MainWindow::dropFile(QString fileName)
                                             {
                                                 if(files[i].toStdString() == tmp.toStdString())
                                                 {
-                                                    ui->wadsOnFolder->addItem(folder+"/"+file0);
+                                                    ui->wads_listWidget->addItem(folder+"/"+file0);
                                                     files.remove(i);
                                                     break;
                                                 }
@@ -757,13 +757,13 @@ void MainWindow::dropFile(QString fileName)
                                         if(lowerCase(files[i].toStdString())==lowerCase(files0.at(j).toStdString()))
                                         {
                                             if(j < tilDOOMWADPATH)
-                                                ui->wadsOnFolder->addItem(folder+"/"+files0.at(j));
+                                                ui->wads_listWidget->addItem(folder+"/"+files0.at(j));
                                             else
                                             {
 #ifdef _WIN32
-                                                ui->wadsOnFolder->addItem("%DOOMWADPATH%/"+files0.at(j));
+                                                ui->wads_listWidget->addItem("%DOOMWADPATH%/"+files0.at(j));
 #else
-                                                ui->wadsOnFolder->addItem("$DOOMWADPATH/"+files0.at(j));
+                                                ui->wads_listWidget->addItem("$DOOMWADPATH/"+files0.at(j));
 #endif
                                             }
                                             files.remove(i);
@@ -1047,7 +1047,7 @@ void MainWindow::foo3() // CTRL+W runs this function close the active window
 
 void MainWindow::addWads(QStringList fileNames) // Click the + button to add a wad
 {
-    ui->wadsOnFolder->addItems(fileNames);
+    ui->wads_listWidget->addItems(fileNames);
 }
 
 
@@ -1161,27 +1161,27 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
                 settings.remove("warp2");
             }
 
-            if(ui->recordDemo->text().toStdString()!="")
+            if(ui->record_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("recorddemo",ui->recordDemo->text());
+                settings.setValue("recorddemo",ui->record_lineEdit->text());
             }
             else
             {
                 settings.remove("recorddemo");
             }
 
-            if(ui->recordDemo_2->text().toStdString()!="")
+            if(ui->playback_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("playdemo",ui->recordDemo_2->text());
+                settings.setValue("playdemo",ui->playback_lineEdit->text());
             }
             else
             {
                 settings.remove("playdemo");
             }
 
-            if(ui->recordDemo_3->text().toStdString()!="")
+            if(ui->viddump_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("viddump",ui->recordDemo_3->text());
+                settings.setValue("viddump",ui->viddump_lineEdit->text());
             }
             else
             {
@@ -1206,12 +1206,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
                 settings.remove("config");
             }
 
-            settings.setValue("demoplaybox", ui->demoPlayOptions->currentIndex());
+            settings.setValue("demoplaybox", ui->playback_comboBox->currentIndex());
 
-            settings.setValue("pwadCount", ui->wadsOnFolder->count());
-            for(int i=0; i<ui->wadsOnFolder->count();i++)
+            settings.setValue("pwadCount", ui->wads_listWidget->count());
+            for(int i=0; i<ui->wads_listWidget->count();i++)
             {
-                settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wadsOnFolder->item(i)->text());
+                settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wads_listWidget->item(i)->text());
             }
 
             settings.setValue("exeName", exeName);
@@ -1279,12 +1279,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         *.deh -deh
         *.bex -deh
     */
-    if(ui->wadsOnFolder->count()>0)
+    if(ui->wads_listWidget->count()>0)
     {
         argList.append("-file");
-        for(int item=0;item < ui->wadsOnFolder->count(); item++)
+        for(int item=0;item < ui->wads_listWidget->count(); item++)
         {
-            std::string fileToAdd = ui->wadsOnFolder->item(item)->text().toStdString();
+            std::string fileToAdd = ui->wads_listWidget->item(item)->text().toStdString();
 #ifdef _WIN32
                 for(int i=0; i<fileToAdd.length();i++)
                 {
@@ -1385,48 +1385,48 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     }
 
 
-    if(ui->recordDemo->text()!="")
+    if(ui->record_lineEdit->text()!="")
     {
         argList.append("-record");
         if(returnTooltip)
-            argList.append("\""+ui->recordDemo->text()+"\"");
+            argList.append("\""+ui->record_lineEdit->text()+"\"");
         else
-            argList.append(ui->recordDemo->text());
+            argList.append(ui->record_lineEdit->text());
     }
 
-    if(ui->recordDemo_2->text()!="")
+    if(ui->playback_lineEdit->text()!="")
     {
-        if(ui->demoPlayOptions->currentIndex()==0)
+        if(ui->playback_comboBox->currentIndex()==0)
         {
             argList.append("-playdemo"); // Plays demo at normal speed
             if(returnTooltip)
-                argList.append("\""+ui->recordDemo_2->text()+"\"");
+                argList.append("\""+ui->playback_lineEdit->text()+"\"");
             else
-                argList.append(ui->recordDemo_2->text());
+                argList.append(ui->playback_lineEdit->text());
         }
-        else if(ui->demoPlayOptions->currentIndex()==1)
+        else if(ui->playback_comboBox->currentIndex()==1)
         {
             argList.append("-timedemo"); // Used for viddumping
             if(returnTooltip)
-                argList.append("\""+ui->recordDemo_2->text()+"\"");
+                argList.append("\""+ui->playback_lineEdit->text()+"\"");
             else
-                argList.append(ui->recordDemo_2->text());
-            if(ui->recordDemo_3->text().length()>2)
+                argList.append(ui->playback_lineEdit->text());
+            if(ui->viddump_lineEdit->text().length()>2)
             {
                 argList.append("-viddump");
                 if(returnTooltip)
-                    argList.append("\""+ui->recordDemo_3->text()+"\"");
+                    argList.append("\""+ui->viddump_lineEdit->text()+"\"");
                 else
-                    argList.append(ui->recordDemo_3->text());
+                    argList.append(ui->viddump_lineEdit->text());
             }
         }
-        else if(ui->demoPlayOptions->currentIndex()==2)
+        else if(ui->playback_comboBox->currentIndex()==2)
         {
             argList.append("-fastdemo"); // Used for benchmarks
             if(returnTooltip)
-                argList.append("\""+ui->recordDemo_2->text()+"\"");
+                argList.append("\""+ui->playback_lineEdit->text()+"\"");
             else
-                argList.append(ui->recordDemo_2->text());
+                argList.append(ui->playback_lineEdit->text());
         }
     }
 
@@ -1810,7 +1810,7 @@ void MainWindow::on_console_pushButton_clicked()
 
 void MainWindow::changeWadLName()
 {
-    std::string p = ui->wadsOnFolder->item(0)->text().toStdString();
+    std::string p = ui->wads_listWidget->item(0)->text().toStdString();
     if(p.substr(p.length()-4)==".wad")
     {
         int lastBar=0;
@@ -1821,15 +1821,15 @@ void MainWindow::changeWadLName()
             }
         }
         p = p.substr(lastBar);
-        ui->wadLName->setText(p.substr(0,p.length()-4).c_str());
+        ui->wadDSDA_lineEdit->setText(p.substr(0,p.length()-4).c_str());
     }
 }
 
 // Add pwads to be loaded
-void MainWindow::on_plus_clicked()
+void MainWindow::on_addWads_toolButton_clicked()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex)"));
-    ui->wadsOnFolder->addItems(fileNames);
+    ui->wads_listWidget->addItems(fileNames);
     if(fileNames.length()>0)
     {
         settings.setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
@@ -1837,9 +1837,9 @@ void MainWindow::on_plus_clicked()
 }
 
 // Remove a pwad from the list
-void MainWindow::on_minus_clicked()
+void MainWindow::on_removeWads_toolButton_clicked()
 {
-    ui->wadsOnFolder->takeItem(ui->wadsOnFolder->currentRow());
+    ui->wads_listWidget->takeItem(ui->wads_listWidget->currentRow());
 }
 
 // These are the parameter toggles
@@ -1887,18 +1887,18 @@ void MainWindow::on_tooltip_pushButton_clicked()
         ui->tooltip_textBrowser->hide();
 }
 
-void MainWindow::on_pushButton_2_clicked() // Record demo
+void MainWindow::on_record_pushButton_clicked() // Record demo
 {
     QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
     settings.setValue("demofolder",demoName);
-    ui->recordDemo->setText(demoName);
+    ui->record_lineEdit->setText(demoName);
 }
 
-void MainWindow::on_pushButton_3_clicked() // Play demo
+void MainWindow::on_playback_pushButton_clicked() // Play demo
 {
     QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
     settings.setValue("demofolder",demoName);
-    ui->recordDemo_2->setText(demoName);
+    ui->playback_lineEdit->setText(demoName);
 }
 
 void MainWindow::on_additionalArguments_pushButton_clicked()
@@ -2002,7 +2002,7 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
     reply->deleteLater();
 }
 
-void MainWindow::on_comboBox_currentIndexChanged(int index) // This is the category box (UV speed, UV max, etc)
+void MainWindow::on_dsda_comboBox_currentIndexChanged(int index) // This is the category box (UV speed, UV max, etc)
 {
     reloadLeaderboard(false,false);
 }
@@ -2013,7 +2013,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 {
 
     reloadingLeaderboards=true;
-    std::string arg1 = ui->comboBox->currentText().toStdString();
+    std::string arg1 = ui->dsda_comboBox->currentText().toStdString();
     std::string category;
 
     // We need to change " " with "%20"
@@ -2179,7 +2179,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
     }
     else
     {
-        wad=lowerCase(ui->wadLName->text().toStdString()).toStdString();
+        wad=lowerCase(ui->wadDSDA_lineEdit->text().toStdString()).toStdString();
     }
 
 
@@ -2201,7 +2201,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 
     }
     */
-    if(ui->wadLName_2->text()=="" || changeWad)
+    if(ui->levelDSDA_lineEdit->text()=="" || changeWad)
     {
         if(!ui->level_lineEdit->isHidden())
         {
@@ -2211,10 +2211,10 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
         {
             level = "Map01";
         }
-        ui->wadLName_2->setText(level.c_str());
+        ui->levelDSDA_lineEdit->setText(level.c_str());
     }
 
-    level = ui->wadLName_2->text().toStdString();
+    level = ui->levelDSDA_lineEdit->text().toStdString();
 
     wad.erase(std::remove(wad.begin(), wad.end(), ' '), wad.end());
     level.erase(std::remove(level.begin(), level.end(), ' '), level.end());
@@ -2239,7 +2239,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
         level = "D2All";
     }
 
-    ui->wadLName->setText(wad.c_str());
+    ui->wadDSDA_lineEdit->setText(wad.c_str());
 
     if(callApi)
     {
@@ -2303,11 +2303,11 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
 
 
 
-void MainWindow::on_toolButton_5_clicked()
+void MainWindow::on_showLeaderboard_toolButton_clicked()
 {
-    std::string str = ui->comboBox->currentText().toStdString();
+    std::string str = ui->dsda_comboBox->currentText().toStdString();
     std::replace(str.begin(), str.end(), ' ', '+');
-    std::string lvl = ui->wadLName_2->text().toStdString();
+    std::string lvl = ui->levelDSDA_lineEdit->text().toStdString();
     lvl.erase(std::remove(lvl.begin(), lvl.end(), ' '), lvl.end());
     if(tolower(lvl[0])=='e')
     {
@@ -2320,7 +2320,7 @@ void MainWindow::on_toolButton_5_clicked()
         else
             lvl = "Map%20"+lvl.substr(3);
     }
-    QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/"+ui->wadLName->text()+"/leaderboard?category="+str.c_str()+"&level="+lvl.c_str()));
+    QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/"+ui->wadDSDA_lineEdit->text()+"/leaderboard?category="+str.c_str()+"&level="+lvl.c_str()));
 }
 
 
@@ -2329,67 +2329,65 @@ void MainWindow::clearLeaderboard()
     ui->demoTime->setStyleSheet("color: rgb(150, 150, 150);");
     ui->demoPlayer->setStyleSheet("color: rgb(150, 150, 150);");
     ui->demoPort->setStyleSheet("color: rgb(150, 150, 150);");
-    ui->ReloadLead->show();
+    ui->reloadLeaderboard_toolButton->show();
 }
 
 
 
 
 
-void MainWindow::on_ReloadLead_clicked()
+void MainWindow::on_reloadLeaderboard_toolButton_clicked()
 {
     reloadLeaderboard(false, true);
     ui->demoTime->setStyleSheet("");
     ui->demoPlayer->setStyleSheet("");
     ui->demoPort->setStyleSheet("");
-    ui->ReloadLead->hide();
+    ui->reloadLeaderboard_toolButton->hide();
 }
 
 
-void MainWindow::on_wadLName_textChanged(const QString &arg1)
+void MainWindow::on_wadDSDA_lineEdit_textChanged(const QString &arg1)
 {
     clearLeaderboard();
-    //reloadLeaderboard(false,false);
 }
 
-void MainWindow::on_wadLName_2_textChanged(const QString &arg1)
+void MainWindow::on_levelDSDA_lineEdit_textChanged(const QString &arg1)
 {
     clearLeaderboard();
-    //reloadLeaderboard(false,false);
 }
 
-void MainWindow::on_recordDemo_3_textChanged(const QString &arg1)
+void MainWindow::on_viddump_lineEdit_textChanged(const QString &arg1)
 {
     if(arg1=="")
     {
-        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
-        ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
 
 
-void MainWindow::on_demoPlayOptions_currentIndexChanged(int index)
+void MainWindow::on_playback_comboBox_currentIndexChanged(int index)
 {
     if(index!=1)
     {
-        ui->recordDemo_3->setHidden(true);
-        ui->pushButton_4->setHidden(true);
+        ui->viddump_lineEdit->setHidden(true);
+        ui->viddump_pushButton->setHidden(true);
     }
     else
     {
-        ui->recordDemo_3->setHidden(false);
-        ui->pushButton_4->setHidden(false);
+        ui->viddump_lineEdit->setHidden(false);
+        ui->viddump_pushButton->setHidden(false);
     }
 }
 
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_viddump_pushButton_clicked()
 {
     QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("video files(*.mp4 *.mkv)"));
-    ui->recordDemo_3->setText(vidName);
+    ui->viddump_lineEdit->setText(vidName);
 }
 
 

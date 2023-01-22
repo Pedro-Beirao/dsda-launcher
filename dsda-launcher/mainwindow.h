@@ -132,8 +132,8 @@ public slots:
     void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
     void on_console_pushButton_clicked();
-    void on_plus_clicked();
-    void on_minus_clicked();
+    void on_addWads_toolButton_clicked();
+    void on_removeWads_toolButton_clicked();
     void on_fast_checkBox_toggled(bool checked);
     void on_nomo_checkBox_toggled(bool checked);
     void on_tooltip_pushButton_clicked();
@@ -142,12 +142,12 @@ public slots:
     void on_solonet_checkBox_toggled(bool checked);
     void foo();
     void foo3();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
+    void on_record_pushButton_clicked();
+    void on_playback_pushButton_clicked();
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void on_additionalArguments_pushButton_clicked();
-    void on_comboBox_currentIndexChanged(int index);
+    void on_dsda_comboBox_currentIndexChanged(int index);
     void clearLeaderboard();
     void addToArguments(QString string);
     void on_actionLoad_triggered();
@@ -190,14 +190,14 @@ public Q_SLOTS:
     void started();
 
 private slots:
-    void on_toolButton_5_clicked();
-    void on_ReloadLead_clicked();
-    void on_wadLName_textChanged(const QString &arg1);
-    void on_recordDemo_3_textChanged(const QString &arg1);
-    void on_demoPlayOptions_currentIndexChanged(int index);
-    void on_pushButton_4_clicked();
+    void on_showLeaderboard_toolButton_clicked();
+    void on_reloadLeaderboard_toolButton_clicked();
+    void on_wadDSDA_lineEdit_textChanged(const QString &arg1);
+    void on_viddump_lineEdit_textChanged(const QString &arg1);
+    void on_playback_comboBox_currentIndexChanged(int index);
+    void on_viddump_pushButton_clicked();
     void on_showCommandLine_pushButton_clicked();
-    void on_wadLName_2_textChanged(const QString &arg1);
+    void on_levelDSDA_lineEdit_textChanged(const QString &arg1);
     void on_episode_lineEdit_textChanged(const QString &arg1);
     void on_nextPage_pushButton_clicked();
     void on_previousPage_pushButton_clicked();
