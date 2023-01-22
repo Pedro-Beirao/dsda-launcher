@@ -20,27 +20,27 @@ void MainWindow::showSSLDialog()
 
 void MainWindow::changeMaxSkillLevel(int max)
 {
-    ui->diffBox->clear();
+    ui->difficulty_comboBox->clear();
     for(int i=0; i<=max;i++)
     {
         if(i!=0)
-            ui->diffBox->addItem(std::to_string(i).c_str());
+            ui->difficulty_comboBox->addItem(std::to_string(i).c_str());
         else
-            ui->diffBox->addItem(" ");
+            ui->difficulty_comboBox->addItem(" ");
     }
-    ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
+    ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
 }
 
 void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
 {
-    ui->fastCheck->setText(t1);
-    ui->fastCheck->setToolTip(a1);
-    ui->noCheck->setText(t2);
-    ui->noCheck->setToolTip(a2);
-    ui->noCheck_4->setText(t3);
-    ui->noCheck_4->setToolTip(a3);
-    ui->soloNetCheck->setText(t4);
-    ui->soloNetCheck->setToolTip(a4);
+    ui->fast_checkBox->setText(t1);
+    ui->fast_checkBox->setToolTip(a1);
+    ui->nomo_checkBox->setText(t2);
+    ui->nomo_checkBox->setToolTip(a2);
+    ui->respawn_checkBox->setText(t3);
+    ui->respawn_checkBox->setToolTip(a3);
+    ui->solonet_checkBox->setText(t4);
+    ui->solonet_checkBox->setToolTip(a4);
     fastParam = a1;
     nomoParam = a2;
     respawnParam = a3;
@@ -49,11 +49,11 @@ void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, Q
 
 void MainWindow::changeResolutions(QListWidget *list)
 {
-    ui->comboBox_2->clear();
-    ui->comboBox_2->addItem(" ");
+    ui->resolution_comboBox->clear();
+    ui->resolution_comboBox->addItem(" ");
     for(int i=0;i<list->count();i++)
     {
-        ui->comboBox_2->addItem(list->item(i)->text());
+        ui->resolution_comboBox->addItem(list->item(i)->text());
     }
 }
 
@@ -61,13 +61,13 @@ void MainWindow::changeComplevelsList(int i)
 {
     if(i==0)
     {
-        ui->compLevelSelect->clear();
-        ui->compLevelSelect->addItems({"Default","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","9 - Boom","11 - MBF","21 - MBF 21"});
+        ui->complevel_comboBox->clear();
+        ui->complevel_comboBox->addItems({"Default","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","9 - Boom","11 - MBF","21 - MBF 21"});
     }
     else if(i==1)
     {
-        ui->compLevelSelect->clear();
-        ui->compLevelSelect->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","7 - Boom's comp mode","8 - Boom v2.01","9 - Boom","10 - LxDoom","11 - MBF","12 - PrBoom v2.03beta","13 - PrBoom v2.1.0","14 - PrBoom v2.1.1 - 2.2.6","15 - PrBoom v2.3.x","16 - PrBoom v2.4.0","17 - Current PrBoom","21 - MBF 21"});
+        ui->complevel_comboBox->clear();
+        ui->complevel_comboBox->addItems({"Default","0 - Doom v1.2","1 - Doom v1.666","2 - Doom / Doom 2","3 - Ultimate Doom","4 - Final Doom","5 - DOSDoom","6 - TASDoom","7 - Boom's comp mode","8 - Boom v2.01","9 - Boom","10 - LxDoom","11 - MBF","12 - PrBoom v2.03beta","13 - PrBoom v2.1.0","14 - PrBoom v2.1.1 - 2.2.6","15 - PrBoom v2.3.x","16 - PrBoom v2.4.0","17 - Current PrBoom","21 - MBF 21"});
     }
 }
 
@@ -76,28 +76,28 @@ void MainWindow::changeButtonColor(bool isDark)
 #ifdef __APPLE__
     if(isDark)
     {
-        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+        ui->showCommandLine_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                         "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+        ui->tooltip_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+        ui->additionalArguments_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+        ui->nextPage_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+        ui->previousPage_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                       "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:5px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
     }
     else
     {
-        ui->pushButton_5->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+        ui->showCommandLine_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                         "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        ui->toolButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+        ui->tooltip_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                       "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        ui->toolButton_3->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+        ui->additionalArguments_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                       "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
-        ui->toolButton_4->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+        ui->nextPage_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                       "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
-        ui->toolButton_6->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
+        ui->previousPage_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
                                       "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:5px; background-color: rgb(223,223,223); color: rgb(13, 13, 13)}");
 
     }
@@ -208,7 +208,7 @@ void MainWindow::findIwads(int type)
         {
             if(doomIWADs.at(i) == iwads_paths[j].first)
             {
-                ui->iwadSelect->addItem(iwads_paths[j].first);
+                ui->iwad_comboBox->addItem(iwads_paths[j].first);
                 iwads_paths.swapItemsAt(j, cur);
                 cur++;
                 doomIWADs.replace(i, " ");
@@ -238,10 +238,10 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     ui->ReloadLead->hide();
 
     // Add event filter to the "additional arguments" box
-    ui->argumentText->installEventFilter(this);
+    ui->additionalArguments_textEdit->installEventFilter(this);
 
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
-    ui->LaunchGameButton->installEventFilter(this);
+    ui->launchGame_pushButton->installEventFilter(this);
 
     // set the settings and console windows
     settingsWindow = new Settings;
@@ -252,8 +252,8 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     // This approach also prevents a problem where Qt tried to add spaces to those boxes if no numbers were added
     QRegularExpression rgx("[0-9]{2}");
     QValidator *comValidator = new QRegularExpressionValidator (rgx, this);
-    ui->episodeBox->setValidator(comValidator);
-    ui->levelBox->setValidator(comValidator);
+    ui->episode_lineEdit->setValidator(comValidator);
+    ui->level_lineEdit->setValidator(comValidator);
 
     ui->stackedWidget->setAttribute(Qt::WA_TranslucentBackground);
 
@@ -275,14 +275,14 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
         nomoParam = settings.value("toggle2a").toString();
         respawnParam = settings.value("toggle3a").toString();
         solonetParam = settings.value("toggle4a").toString();
-        ui->fastCheck->setText(settings.value("toggle1t").toString());
-        ui->fastCheck->setToolTip(fastParam);
-        ui->noCheck->setText(settings.value("toggle2t").toString());
-        ui->noCheck->setToolTip(nomoParam);
-        ui->noCheck_4->setText(settings.value("toggle3t").toString());
-        ui->noCheck_4->setToolTip(respawnParam);
-        ui->soloNetCheck->setText(settings.value("toggle4t").toString());
-        ui->soloNetCheck->setToolTip(solonetParam);
+        ui->fast_checkBox->setText(settings.value("toggle1t").toString());
+        ui->fast_checkBox->setToolTip(fastParam);
+        ui->nomo_checkBox->setText(settings.value("toggle2t").toString());
+        ui->nomo_checkBox->setToolTip(nomoParam);
+        ui->respawn_checkBox->setText(settings.value("toggle3t").toString());
+        ui->respawn_checkBox->setToolTip(respawnParam);
+        ui->solonet_checkBox->setText(settings.value("toggle4t").toString());
+        ui->solonet_checkBox->setToolTip(solonetParam);
     }
 
 
@@ -290,43 +290,43 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
 
 
     // If no IWAD found, show a tool tip
-    if(ui->iwadSelect->count()==0)
+    if(ui->iwad_comboBox->count()==0)
     {
-        ui->toolTip->show();
+        ui->tooltip_textBrowser->show();
     }
     else
     {
-        ui->toolTip->hide();
+        ui->tooltip_textBrowser->hide();
     }
 
     // Load settings and apply them
-    ui->compLevelSelect->setCurrentIndex(settings.value("complevel").toInt());
-    ui->diffBox->setCurrentIndex(settings.value("skill").toInt());
-    ui->episodeBox->setText(settings.value("warp1").toString());
-    ui->levelBox->setText(settings.value("warp2").toString());
+    ui->complevel_comboBox->setCurrentIndex(settings.value("complevel").toInt());
+    ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
+    ui->episode_lineEdit->setText(settings.value("warp1").toString());
+    ui->level_lineEdit->setText(settings.value("warp2").toString());
     int pwadCount = settings.value("pwadCount").toInt();
     for(int i=0; i<pwadCount;i++)
     {
         ui->wadsOnFolder->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
 
     }
-    ui->fastCheck->setChecked(settings.value("fast").toBool());
-    ui->noCheck->setChecked(settings.value("nomo").toBool());
-    ui->noCheck_4->setChecked(settings.value("respawn").toBool());
-    ui->noCheck_3->setChecked(settings.value("fullscreen").toBool());
-    ui->comboBox_2->setCurrentIndex(settings.value("geom").toInt());
-    if(ui->iwadSelect->count()>=settings.value("iwad").toInt())
+    ui->fast_checkBox->setChecked(settings.value("fast").toBool());
+    ui->nomo_checkBox->setChecked(settings.value("nomo").toBool());
+    ui->respawn_checkBox->setChecked(settings.value("respawn").toBool());
+    ui->fullscreen_checkBox->setChecked(settings.value("fullscreen").toBool());
+    ui->resolution_comboBox->setCurrentIndex(settings.value("geom").toInt());
+    if(ui->iwad_comboBox->count()>=settings.value("iwad").toInt())
     {
-        ui->iwadSelect->setCurrentIndex(settings.value("iwad").toInt());
+        ui->iwad_comboBox->setCurrentIndex(settings.value("iwad").toInt());
     }
-    ui->soloNetCheck->setChecked(settings.value("solonet").toBool());
-    ui->argumentText->append(settings.value("argumentText").toString());
+    ui->solonet_checkBox->setChecked(settings.value("solonet").toBool());
+    ui->additionalArguments_textEdit->append(settings.value("argumentText").toString());
 
     ui->recordDemo->setText(settings.value("recorddemo").toString());
     ui->recordDemo_2->setText(settings.value("playdemo").toString());
     ui->recordDemo_3->setText(settings.value("viddump").toString());
-    ui->recordDemo_4->setText(settings.value("hud").toString());
-    ui->recordDemo_5->setText(settings.value("config").toString());
+    ui->hud_lineEdit->setText(settings.value("hud").toString());
+    ui->config_lineEdit->setText(settings.value("config").toString());
 
     ui->demoPlayOptions->setCurrentIndex(settings.value("demoplaybox").toInt());
 
@@ -341,28 +341,28 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     else
         ui->recordDemo_3->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
-    if(ui->recordDemo_4->text()=="")
-        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    if(ui->hud_lineEdit->text()=="")
+        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     else
-        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
-    if(ui->recordDemo_5->text()=="")
-        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+    if(ui->config_lineEdit->text()=="")
+        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     else
-        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
 
 
     if(settings.value("maxskilllevel").toString()!="")
         changeMaxSkillLevel(settings.value("maxskilllevel").toInt());
 
-    if(ui->iwadSelect->currentIndex()==-1 && ui->iwadSelect->count()!=0)
-        ui->iwadSelect->setCurrentIndex(0);
+    if(ui->iwad_comboBox->currentIndex()==-1 && ui->iwad_comboBox->count()!=0)
+        ui->iwad_comboBox->setCurrentIndex(0);
 
-    if(ui->episodeBox->text()=="")
+    if(ui->episode_lineEdit->text()=="")
     {
-        ui->diffBox->setEnabled(false);
-        ui->label_5->setEnabled(false);
+        ui->difficulty_comboBox->setEnabled(false);
+        ui->difficulty_label->setEnabled(false);
     }
 
     QStringList arguments = qApp->arguments();
@@ -410,11 +410,11 @@ void MainWindow::LoadState(QString fileName, bool isString)
     std::getline(file, buffer);
     if(buffer.substr(0,5)=="iwad=") // iwad
     {
-        for(int i=0; i<ui->iwadSelect->count();i++)
+        for(int i=0; i<ui->iwad_comboBox->count();i++)
         {
-            if(ui->iwadSelect->itemText(i).toStdString()==buffer.substr(5))
+            if(ui->iwad_comboBox->itemText(i).toStdString()==buffer.substr(5))
             {
-                ui->iwadSelect->setCurrentIndex(i);
+                ui->iwad_comboBox->setCurrentIndex(i);
             }
         }
         std::getline(file, buffer);
@@ -423,16 +423,16 @@ void MainWindow::LoadState(QString fileName, bool isString)
             {
                 if(buffer.substr(10)[0]=='D')
                 {
-                    ui->compLevelSelect->setCurrentIndex(0);
+                    ui->complevel_comboBox->setCurrentIndex(0);
                 }
                 else
                 {
-                    for(int i=0; i<ui->compLevelSelect->count();i++)
+                    for(int i=0; i<ui->complevel_comboBox->count();i++)
                     {
-                        std::string content=ui->compLevelSelect->itemText(i).toStdString().substr(0,2);
+                        std::string content=ui->complevel_comboBox->itemText(i).toStdString().substr(0,2);
                         if(content==buffer.substr(10))
                         {
-                            ui->compLevelSelect->setCurrentIndex(i);
+                            ui->complevel_comboBox->setCurrentIndex(i);
                         }
                     }
                 }
@@ -440,90 +440,90 @@ void MainWindow::LoadState(QString fileName, bool isString)
             }
     if(buffer.substr(0,6)=="warp1=") // warp 1
             {
-                    ui->episodeBox->setText(buffer.substr(6).c_str());
+                    ui->episode_lineEdit->setText(buffer.substr(6).c_str());
                     std::getline(file, buffer);
             }
     if(buffer.substr(0,6)=="warp2=") //warp 2
             {
-                    ui->levelBox->setText(buffer.substr(6).c_str());
+                    ui->level_lineEdit->setText(buffer.substr(6).c_str());
                     std::getline(file, buffer);
             }
     if(buffer.substr(0,6)=="skill=") // skill
             {
                   if (buffer.substr(6).length()>0)
                   {
-                     ui->diffBox->setCurrentIndex(atoi(buffer.substr(6).c_str()));
+                     ui->difficulty_comboBox->setCurrentIndex(atoi(buffer.substr(6).c_str()));
                   }
                   else
                   {
-                      ui->diffBox->setCurrentIndex(0);
+                      ui->difficulty_comboBox->setCurrentIndex(0);
                   }
                   std::getline(file, buffer);
             }
     if(buffer.substr(0,5)=="box1=") // box1
             {
                 if(buffer.substr(5,4)=="true")
-                     ui->fastCheck->setChecked(true);
+                     ui->fast_checkBox->setChecked(true);
                 else
-                    ui->fastCheck->setChecked(false);
+                    ui->fast_checkBox->setChecked(false);
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,5)=="box2=") // box2
             {
                 if(buffer.substr(5,4)=="true")
-                     ui->noCheck->setChecked(true);
+                     ui->nomo_checkBox->setChecked(true);
                 else
-                    ui->noCheck->setChecked(false);
+                    ui->nomo_checkBox->setChecked(false);
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,5)=="box3=") // box3
             {
                 if(buffer.substr(5,4)=="true")
-                     ui->noCheck_4->setChecked(true);
+                     ui->respawn_checkBox->setChecked(true);
                 else
-                    ui->noCheck_4->setChecked(false);
+                    ui->respawn_checkBox->setChecked(false);
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,5)=="box4=") //box4
             {
                 if(buffer.substr(5,4)=="true")
-                     ui->soloNetCheck->setChecked(true);
+                     ui->solonet_checkBox->setChecked(true);
                 else
-                    ui->soloNetCheck->setChecked(false);
+                    ui->solonet_checkBox->setChecked(false);
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,11)=="resolution=") // resolution
             {
-                ui->comboBox_2->setCurrentIndex(ui->comboBox_2->findText(buffer.substr(11).c_str()));
+                ui->resolution_comboBox->setCurrentIndex(ui->resolution_comboBox->findText(buffer.substr(11).c_str()));
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,11)=="fullscreen=") // fullscreen
             {
                 if(buffer.substr(11,4)=="true")
-                     ui->noCheck_3->setChecked(true);
+                     ui->fullscreen_checkBox->setChecked(true);
                 else
-                    ui->noCheck_3->setChecked(false);
+                    ui->fullscreen_checkBox->setChecked(false);
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,4)=="hud=") // hud
             {
-                ui->recordDemo_4->setText(buffer.substr(4).c_str());
+                ui->hud_lineEdit->setText(buffer.substr(4).c_str());
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,7)=="config=") // config
             {
-                ui->recordDemo_5->setText(buffer.substr(7).c_str());
+                ui->config_lineEdit->setText(buffer.substr(7).c_str());
                 std::getline(file, buffer);
             }
     if(buffer.substr(0,6)=="track=") // track
             {
                 if (buffer.substr(6).length()>0)
                 {
-                    ui->comboBox_3->setCurrentIndex(atoi(buffer.substr(6).c_str()));
+                    ui->track_comboBox->setCurrentIndex(atoi(buffer.substr(6).c_str()));
                 }
                 else
                 {
-                    ui->comboBox_3->setCurrentIndex(0);
+                    ui->track_comboBox->setCurrentIndex(0);
                 }
                 std::getline(file, buffer);
             }
@@ -531,11 +531,11 @@ void MainWindow::LoadState(QString fileName, bool isString)
              {
                  if (buffer.substr(5).length()>0)
                  {
-                     ui->comboBox_4->setCurrentIndex(atoi(buffer.substr(5).c_str()));
+                     ui->time_comboBox->setCurrentIndex(atoi(buffer.substr(5).c_str()));
                  }
                  else
                  {
-                     ui->comboBox_4->setCurrentIndex(0);
+                     ui->time_comboBox->setCurrentIndex(0);
                  }
                  std::getline(file, buffer);
              }
@@ -579,7 +579,7 @@ void MainWindow::LoadState(QString fileName, bool isString)
             }
     if(buffer.substr(0,11)=="additional=") // additional arguments
             {
-                ui->argumentText->setText((buffer.substr(11)).c_str());
+                ui->additionalArguments_textEdit->setText((buffer.substr(11)).c_str());
             }
 
 }
@@ -595,22 +595,22 @@ void MainWindow::SaveState(QString fileName)
     {
         pwads += ui->wadsOnFolder->item(i)->text().toStdString()+"\n";
     }
-    QString levelbox = "";
-    if (!ui->levelBox->isHidden())
+    QString level_lineEdit = "";
+    if (!ui->level_lineEdit->isHidden())
     {
-        levelbox = ui->levelBox->text();
+        level_lineEdit = ui->level_lineEdit->text();
     }
     QString skillbox = "";
-    if (ui->diffBox->isEnabled() && ui->diffBox->currentIndex() != 0)
+    if (ui->difficulty_comboBox->isEnabled() && ui->difficulty_comboBox->currentIndex() != 0)
     {
-        skillbox = ui->diffBox->currentText();
+        skillbox = ui->difficulty_comboBox->currentText();
     }
     if (fileName.at(fileName.size()-1)=='s')
     {
         file_.open(fileName.toStdString(),std::ios_base::app);
         if(file_.is_open())
         {
-            file_ << "-\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+levelbox.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+ui->comboBox_2->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\nhud="+ui->recordDemo_4->text().toStdString()+"\nconfig="+ui->recordDemo_5->text().toStdString()+"\ntrack="+std::to_string(ui->comboBox_3->currentIndex())+"\ntime="+std::to_string(ui->comboBox_4->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+            file_ << "-\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
         }
 
     }
@@ -619,7 +619,7 @@ void MainWindow::SaveState(QString fileName)
         file_.open(fileName.toStdString());
         if(file_.is_open())
         {
-            file_ << "# Do not edit this file manually\n\niwad="+ui->iwadSelect->currentText().toStdString()+"\ncomplevel="+ui->compLevelSelect->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episodeBox->text().toStdString()+"\nwarp2="+levelbox.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fastCheck->isChecked())+"\nbox2="+bool_cast(ui->noCheck->isChecked())+"\nbox3="+bool_cast(ui->noCheck_4->isChecked())+"\nbox4="+bool_cast(ui->soloNetCheck->isChecked())+"\nresolution="+ui->comboBox_2->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->noCheck_3->isChecked())+"\nhud="+ui->recordDemo_4->text().toStdString()+"\nconfig="+ui->recordDemo_5->text().toStdString()+"\ntrack="+std::to_string(ui->comboBox_3->currentIndex())+"\ntime="+std::to_string(ui->comboBox_4->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->argumentText->toPlainText().toStdString();
+            file_ << "# Do not edit this file manually\n\niwad="+ui->iwad_comboBox->currentText().toStdString()+"\ncomplevel="+ui->complevel_comboBox->currentText().toStdString().substr(0,2)+"\nwarp1="+ui->episode_lineEdit->text().toStdString()+"\nwarp2="+level_lineEdit.toStdString()+"\nskill="+skillbox.toStdString()+"\nbox1="+bool_cast(ui->fast_checkBox->isChecked())+"\nbox2="+bool_cast(ui->nomo_checkBox->isChecked())+"\nbox3="+bool_cast(ui->respawn_checkBox->isChecked())+"\nbox4="+bool_cast(ui->solonet_checkBox->isChecked())+"\nresolution="+ui->resolution_comboBox->currentText().toStdString()+"\nfullscreen="+bool_cast(ui->fullscreen_checkBox->isChecked())+"\nhud="+ui->hud_lineEdit->text().toStdString()+"\nconfig="+ui->config_lineEdit->text().toStdString()+"\ntrack="+std::to_string(ui->track_comboBox->currentIndex())+"\ntime="+std::to_string(ui->time_comboBox->currentIndex())+"\npwad\n"+pwads+"endpwad\nrecord="+ui->recordDemo->text().toStdString()+"\nplayback="+ui->recordDemo_2->text().toStdString()+"\ndemodropdown="+std::to_string(ui->demoPlayOptions->currentIndex())+"\nviddump="+ui->recordDemo_3->text().toStdString()+"\nadditional="+ui->additionalArguments_textEdit->toPlainText().toStdString();
         }
     }
 
@@ -674,10 +674,10 @@ void MainWindow::dropFile(QString fileName)
                         {
                             dot_pos = argList[i+1].lastIndexOf('.');
 
-                            int iwad_index = ui->iwadSelect->findText(argList[i+1].left(dot_pos));
+                            int iwad_index = ui->iwad_comboBox->findText(argList[i+1].left(dot_pos));
                             if (iwad_index != -1)
                             {
-                                ui->iwadSelect->setCurrentIndex(iwad_index);
+                                ui->iwad_comboBox->setCurrentIndex(iwad_index);
                             }
                         }
                         else if(argList[i]=="-file")
@@ -997,7 +997,7 @@ void MainWindow::on_actionCommand_triggered()
     if(fileName != "")
     {
         settings.setValue("batfile", fileName);
-        on_LaunchGameButton_clicked(false,true,fileName.toStdString());
+        on_launchGame_pushButton_clicked(false,true,fileName.toStdString());
     }
 }
 
@@ -1008,7 +1008,7 @@ void MainWindow::on_actionOpen_IWAD_folder_triggered()
 
 void MainWindow::on_actionOpen_Console_triggered()
 {
-    on_pushButton_clicked();
+    on_console_pushButton_clicked();
 }
 
 void MainWindow::on_actionHistory_triggered()
@@ -1055,10 +1055,10 @@ std::string arguments = " ";
 
 void MainWindow::addToArguments(QString string)
 {
-    if(ui->argumentText->toPlainText().length()>1 && ui->argumentText->toPlainText().back()!=' ')
-        ui->argumentText->setText(ui->argumentText->toPlainText()+" "+string);
+    if(ui->additionalArguments_textEdit->toPlainText().length()>1 && ui->additionalArguments_textEdit->toPlainText().back()!=' ')
+        ui->additionalArguments_textEdit->setText(ui->additionalArguments_textEdit->toPlainText()+" "+string);
     else
-        ui->argumentText->setText(ui->argumentText->toPlainText()+string);
+        ui->additionalArguments_textEdit->setText(ui->additionalArguments_textEdit->toPlainText()+string);
 }
 
 bool isFast=false;
@@ -1109,7 +1109,7 @@ void MainWindow::gameIsRunning()
     msgBox.exec();
 }
 
-void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
@@ -1120,24 +1120,24 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         return;
     }
 
-    int complevelIndex = ui->compLevelSelect->currentIndex();
-    int diffIndex = ui->diffBox->currentIndex();
+    int complevelIndex = ui->complevel_comboBox->currentIndex();
+    int diffIndex = ui->difficulty_comboBox->currentIndex();
 
     if(onExit)
         {
-            settings.setValue("iwad",ui->iwadSelect->currentIndex());
+            settings.setValue("iwad",ui->iwad_comboBox->currentIndex());
 
             // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-            if(ui->argumentText->toPlainText().toStdString()!="")
+            if(ui->additionalArguments_textEdit->toPlainText().toStdString()!="")
             {
-                settings.setValue("argumentText",ui->argumentText->toPlainText().toStdString().c_str());
+                settings.setValue("argumentText",ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
             }
             else
             {
                 settings.remove("argumentText");
             }
-            settings.setValue("fullscreen", ui->noCheck_3->isChecked());
-            settings.setValue("geom",ui->comboBox_2->currentIndex());
+            settings.setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
+            settings.setValue("geom",ui->resolution_comboBox->currentIndex());
 
             settings.setValue("solonet",isSoloNet);
             settings.setValue("respawn",isRespawn);
@@ -1147,16 +1147,16 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             settings.setValue("complevel",complevelIndex);
             settings.setValue("skill",diffIndex);
 
-            settings.setValue("warp1",ui->episodeBox->text().toStdString().c_str());
-            settings.setValue("warp2",ui->levelBox->text().toStdString().c_str());
+            settings.setValue("warp1",ui->episode_lineEdit->text().toStdString().c_str());
+            settings.setValue("warp2",ui->level_lineEdit->text().toStdString().c_str());
 
             // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
             // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-            if(ui->episodeBox->text().toStdString()=="")
+            if(ui->episode_lineEdit->text().toStdString()=="")
             {
                 settings.remove("warp1");
             }
-            if(ui->levelBox->text().toStdString()=="")
+            if(ui->level_lineEdit->text().toStdString()=="")
             {
                 settings.remove("warp2");
             }
@@ -1188,18 +1188,18 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
                 settings.remove("viddump");
             }
 
-            if(ui->recordDemo_4->text().toStdString()!="")
+            if(ui->hud_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("hud",ui->recordDemo_4->text());
+                settings.setValue("hud",ui->hud_lineEdit->text());
             }
             else
             {
                 settings.remove("hud");
             }
 
-            if(ui->recordDemo_5->text().toStdString()!="")
+            if(ui->config_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("config",ui->recordDemo_5->text());
+                settings.setValue("config",ui->config_lineEdit->text());
             }
             else
             {
@@ -1243,7 +1243,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         If the complevel starts with 'D', then dont use the "-complevel" parameter
         Otherwise, run "-complevel *First+Second char of the string*"
     */
-    std::string complevelString = ui->compLevelSelect->currentText().toStdString();
+    std::string complevelString = ui->complevel_comboBox->currentText().toStdString();
     if(complevelString[0]!='D')
     {
         argList.append("-complevel");
@@ -1254,7 +1254,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     }
 
     // Difficulty or Skill
-    if(ui->episodeBox->text().length()>0 && ui->diffBox->currentIndex()!=0)
+    if(ui->episode_lineEdit->text().length()>0 && ui->difficulty_comboBox->currentIndex()!=0)
     {
         argList.append("-skill");
         argList.append((std::to_string(diffIndex)).c_str());
@@ -1262,16 +1262,16 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
 
     // Warping in Doom takes 2 boxes. 1 for the episode, 1 for the mission
     // Warping in Doom 2 takes 1 box, for the map
-    if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
+    if(ui->level_lineEdit->text().toStdString()!= "" && !ui->level_lineEdit->isHidden())
     {
         argList.append("-warp");
-        argList.append(ui->episodeBox->text());
-        argList.append(ui->levelBox->text());
+        argList.append(ui->episode_lineEdit->text());
+        argList.append(ui->level_lineEdit->text());
     }
-    else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
+    else if(ui->episode_lineEdit->text().toStdString()!= "" && ui->level_lineEdit->isHidden())
     {
         argList.append("-warp");
-        argList.append(ui->episodeBox->text());
+        argList.append(ui->episode_lineEdit->text());
     }
 
     /* You can load 3 types of files.
@@ -1367,7 +1367,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         argList.append(tmp);
     }
 
-    if(ui->comboBox_2->currentIndex()==0)
+    if(ui->resolution_comboBox->currentIndex()==0)
     {
         if(isFulscreen=="w")
         {
@@ -1381,7 +1381,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
     else
     {
         argList.append("-geom");
-        argList.append((ui->comboBox_2->currentText().toStdString()+isFulscreen).c_str());
+        argList.append((ui->resolution_comboBox->currentText().toStdString()+isFulscreen).c_str());
     }
 
 
@@ -1430,42 +1430,42 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
     }
 
-    if(ui->recordDemo_4->text()!="")
+    if(ui->hud_lineEdit->text()!="")
     {
         argList.append("-hud");
         if(returnTooltip)
-            argList.append("\""+ui->recordDemo_4->text()+"\"");
+            argList.append("\""+ui->hud_lineEdit->text()+"\"");
         else
-            argList.append(ui->recordDemo_4->text());
+            argList.append(ui->hud_lineEdit->text());
     }
 
-    if(ui->recordDemo_5->text()!="")
+    if(ui->config_lineEdit->text()!="")
     {
         argList.append("-config");
         if(returnTooltip)
-            argList.append("\""+ui->recordDemo_5->text()+"\"");
+            argList.append("\""+ui->config_lineEdit->text()+"\"");
         else
-            argList.append(ui->recordDemo_5->text());
+            argList.append(ui->config_lineEdit->text());
     }
 
-    if (ui->comboBox_3->currentIndex()==1)
+    if (ui->track_comboBox->currentIndex()==1)
         argList.append("-track_pacifist");
-    else if(ui->comboBox_3->currentIndex()==2)
+    else if(ui->track_comboBox->currentIndex()==2)
         argList.append("-track_100k");
 
-    if (ui->comboBox_4->currentIndex()==1)
+    if (ui->time_comboBox->currentIndex()==1)
         argList.append("-time_use");
-    else if(ui->comboBox_4->currentIndex()==2)
+    else if(ui->time_comboBox->currentIndex()==2)
         argList.append("-time_keys");
-    else if(ui->comboBox_4->currentIndex()==3)
+    else if(ui->time_comboBox->currentIndex()==3)
         argList.append("-time_secrets");
-    else if(ui->comboBox_4->currentIndex()==4)
+    else if(ui->time_comboBox->currentIndex()==4)
         argList.append("-time_all");
 
 
-    if (ui->argumentText->toPlainText() != "")
+    if (ui->additionalArguments_textEdit->toPlainText() != "")
     {
-        std::string str = ui->argumentText->toPlainText().toStdString()+" ";
+        std::string str = ui->additionalArguments_textEdit->toPlainText().toStdString()+" ";
 
         std::string strToAdd="";
         for( size_t i=0; i<str.length(); i++){
@@ -1519,12 +1519,12 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
             file_.open(exportCmd);
             std::string pwads;
 #ifdef __APPLE__
-                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #elif __linux__
-                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #else
                 std::replace(execPath.begin(),execPath.end(),'/','\\');
-                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
 #endif
             file_.close();
 
@@ -1532,7 +1532,7 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         }
 
         QMessageBox msgBox;
-        msgBox.setText("Executable: "+exeName+"\nIWAD: "+ui->iwadSelect->currentText()+"\nParameters: "+argStr.c_str());
+        msgBox.setText("Executable: "+exeName+"\nIWAD: "+ui->iwad_comboBox->currentText()+"\nParameters: "+argStr.c_str());
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton* pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
@@ -1542,12 +1542,12 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         {
             QClipboard *clip = QApplication::clipboard();
 #ifdef __APPLE__
-                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
 #elif __linux__
-                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
 #else
                     std::replace(execPath.begin(),execPath.end(),'/','\\');
-                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwadSelect->currentIndex()).second+"\" "+argStrComplete.c_str());
+                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
 #endif
         }
 
@@ -1555,9 +1555,9 @@ void MainWindow::on_LaunchGameButton_clicked(bool onExit, bool returnTooltip, st
         return;
     }
 
-    Launch(ui->iwadSelect->currentText(), argList);
+    Launch(ui->iwad_comboBox->currentText(), argList);
 
-    SaveHistory(ui->iwadSelect->currentText(), argList);
+    SaveHistory(ui->iwad_comboBox->currentText(), argList);
 }
 
 
@@ -1582,7 +1582,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         if(port.exists())
         {
             QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-            argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
+            argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(homePath);
@@ -1599,8 +1599,8 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
 #elif __linux__
         QFile port = QFile(execPath+"/"+exeName);
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-        argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
-        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwadSelect->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
+        argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
+        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwad_comboBox->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
         QStringList apar; apar << exeName;
         QProcess whichProcess;
@@ -1622,7 +1622,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         else QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + exeName + " exists, symlink it to dsda-launcher's folder."));
 #else
     /*
-        std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwadSelect->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
+        std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwad_comboBox->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
         for(int i=0; i<cmd.length();i++)
         {
             if(cmd[i]=='/')
@@ -1647,7 +1647,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         QFile port = QFile(execPath+"/"+exeName+".exe");
         if(port.exists())
         {
-            argList.push_front(iwads_paths.at(ui->iwadSelect->findText(iwadName)).second);
+            argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
             argList.push_front("-iwad");
             QProcess *process = new QProcess;
             process->setWorkingDirectory(execPath);
@@ -1774,9 +1774,9 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
 }
 
 // If the IWAD selected changes
-void MainWindow::on_iwadSelect_currentIndexChanged(int index)
+void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
 {
-    std::string sel = (ui->iwadSelect->currentText()).toStdString();
+    std::string sel = (ui->iwad_comboBox->currentText()).toStdString();
     for (int i = 0; i < int(sel.length()); i++)
         {
             sel[i] = tolower(sel[i]);
@@ -1785,15 +1785,15 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
     // These are episode/mission based. They need both warp boxes
     if(doom1IWADs.contains(sel.c_str()))
     {
-        ui->levelBox->show();
-        ui->levelText->show();
-        ui->episodeText->setText("Episode");
+        ui->level_label->show();
+        ui->level_lineEdit->show();
+        ui->episode_label->setText("Episode");
     }
     else // These are map based. They need 1 warp box
     {
-        ui->levelBox->hide();
-        ui->levelText->hide();
-        ui->episodeText->setText("Level");
+        ui->level_label->hide();
+        ui->level_lineEdit->hide();
+        ui->episode_label->setText("Level");
     }
 
     // Reload the DSDA leaderboards
@@ -1801,7 +1801,7 @@ void MainWindow::on_iwadSelect_currentIndexChanged(int index)
 }
 
 // Show the console
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_console_pushButton_clicked()
 {
     consoleWindow->show();
     consoleWindow->activateWindow();
@@ -1843,28 +1843,28 @@ void MainWindow::on_minus_clicked()
 }
 
 // These are the parameter toggles
-void MainWindow::on_fastCheck_toggled(bool checked)
+void MainWindow::on_fast_checkBox_toggled(bool checked)
 {
     if(checked)
         isFast=true;
     else
         isFast=false;
 }
-void MainWindow::on_noCheck_toggled(bool checked)
+void MainWindow::on_nomo_checkBox_toggled(bool checked)
 {
     if(checked)
         noMo=true;
     else
         noMo=false;
 }
-void MainWindow::on_noCheck_4_toggled(bool checked)
+void MainWindow::on_respawn_checkBox_toggled(bool checked)
 {
     if(checked)
         isRespawn=true;
     else
         isRespawn=false;
 }
-void MainWindow::on_soloNetCheck_toggled(bool checked)
+void MainWindow::on_solonet_checkBox_toggled(bool checked)
 {
     if(checked)
         isSoloNet=true;
@@ -1872,19 +1872,19 @@ void MainWindow::on_soloNetCheck_toggled(bool checked)
         isSoloNet=false;
 }
 
-void MainWindow::on_noCheck_3_toggled(bool checked)
+void MainWindow::on_fullscreen_checkBox_toggled(bool checked)
 {
     if(checked)
         isFulscreen="f";
     else
         isFulscreen="w";
 }
-void MainWindow::on_toolButton_clicked()
+void MainWindow::on_tooltip_pushButton_clicked()
 {
-    if(ui->toolTip->isHidden())
-        ui->toolTip->show();
+    if(ui->tooltip_textBrowser->isHidden())
+        ui->tooltip_textBrowser->show();
     else
-        ui->toolTip->hide();
+        ui->tooltip_textBrowser->hide();
 }
 
 void MainWindow::on_pushButton_2_clicked() // Record demo
@@ -1901,7 +1901,7 @@ void MainWindow::on_pushButton_3_clicked() // Play demo
     ui->recordDemo_2->setText(demoName);
 }
 
-void MainWindow::on_toolButton_3_clicked()
+void MainWindow::on_additionalArguments_pushButton_clicked()
 {
     if (!canLaunch)
         return;
@@ -2017,7 +2017,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
     std::string category;
 
     // We need to change " " with "%20"
-    if(ui->iwadSelect->currentText()=="heretic")
+    if(ui->iwad_comboBox->currentText()=="heretic")
     {
         if(arg1=="SM Speed")
         {
@@ -2068,7 +2068,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
             category = "Collector";
         }
     }
-    else if(ui->iwadSelect->currentText()=="hexen")
+    else if(ui->iwad_comboBox->currentText()=="hexen")
     {
         if(arg1=="Sk4 Speed")
         {
@@ -2171,7 +2171,7 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 
     if(changeWad)
     {
-            wad = lowerCase(ui->iwadSelect->currentText().toStdString()).toStdString();
+            wad = lowerCase(ui->iwad_comboBox->currentText().toStdString()).toStdString();
             if(wad=="doomu"||wad=="doom1")
             {
                 wad="doom";
@@ -2184,26 +2184,26 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 
 
     /*
-    if(ui->levelBox->text().toStdString()!= "" && !ui->levelBox->isHidden())
+    if(ui->level_lineEdit->text().toStdString()!= "" && !ui->level_lineEdit->isHidden())
     {
-        level = "E"+ui->episodeBox->text().toStdString()+"M"+ui->levelBox->text().toStdString();
+        level = "E"+ui->episode_lineEdit->text().toStdString()+"M"+ui->level_lineEdit->text().toStdString();
     }
-    else if(ui->episodeBox->text().toStdString()!= "" && ui->levelBox->isHidden())
+    else if(ui->episode_lineEdit->text().toStdString()!= "" && ui->level_lineEdit->isHidden())
     {
-        if(ui->episodeBox->text().toStdString().length()==1)
+        if(ui->episode_lineEdit->text().toStdString().length()==1)
         {
-            level = "Map0"+ui->episodeBox->text().toStdString();
+            level = "Map0"+ui->episode_lineEdit->text().toStdString();
         }
         else
         {
-            level = "Map"+ui->episodeBox->text().toStdString();
+            level = "Map"+ui->episode_lineEdit->text().toStdString();
         }
 
     }
     */
     if(ui->wadLName_2->text()=="" || changeWad)
     {
-        if(!ui->levelBox->isHidden())
+        if(!ui->level_lineEdit->isHidden())
         {
             level = "E1M1";
         }
@@ -2257,22 +2257,22 @@ void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
 {
     if(event->key()==0x01000005 || event->key()==0x01000004) // Key is either ENTER or RETURN
     {
-        on_LaunchGameButton_clicked(false, false,"");
+        on_launchGame_pushButton_clicked(false, false,"");
     }
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work on the additional parameters box
 {
 
-      if (object == (QObject*)ui->LaunchGameButton) {
+      if (object == (QObject*)ui->launchGame_pushButton) {
             //if (ev->type() == QEvent::Enter)
             //{
-            //    on_LaunchGameButton_clicked(false, true);
+            //    on_launchGame_pushButton_clicked(false, true);
             //    return QWidget::eventFilter(object, ev);
             //}
             if(ev->type() == QEvent::MouseButtonPress)
             {
-                on_LaunchGameButton_clicked(false, false,"");
+                on_launchGame_pushButton_clicked(false, false,"");
                 return QWidget::eventFilter(object, ev);
             }
       }
@@ -2282,7 +2282,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
            if (keyEvent->key() == 0x01000005 || keyEvent->key() == 0x01000004) // Key is either ENTER or RETURN
            {
-                on_LaunchGameButton_clicked(false, false,"");
+                on_launchGame_pushButton_clicked(false, false,"");
                 return true;
            }
     }
@@ -2297,7 +2297,7 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
         event->ignore();
         return;
     }
-    on_LaunchGameButton_clicked(true, false,"");
+    on_launchGame_pushButton_clicked(true, false,"");
     QApplication::quit();
 }
 
@@ -2393,36 +2393,36 @@ void MainWindow::on_pushButton_4_clicked()
 }
 
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_showCommandLine_pushButton_clicked()
 {
-    on_LaunchGameButton_clicked(false,true,"");
+    on_launchGame_pushButton_clicked(false,true,"");
 }
 
 
-void MainWindow::on_episodeBox_textChanged(const QString &arg1)
+void MainWindow::on_episode_lineEdit_textChanged(const QString &arg1)
 {
     if(arg1=="")
     {
-        ui->diffBox->setEnabled(false);
-        ui->label_5->setEnabled(false);
+        ui->difficulty_comboBox->setEnabled(false);
+        ui->difficulty_label->setEnabled(false);
     }
     else
     {
-        ui->diffBox->setEnabled(true);
-        ui->label_5->setEnabled(true);
+        ui->difficulty_comboBox->setEnabled(true);
+        ui->difficulty_label->setEnabled(true);
     }
 
 }
 
-void MainWindow::on_toolButton_4_clicked()
+void MainWindow::on_nextPage_pushButton_clicked()
 {
-   ui->toolButton_4->setText("-");
+   ui->nextPage_pushButton->setText("-");
    nextStackedWidget();
 }
 
-void MainWindow::on_toolButton_6_clicked()
+void MainWindow::on_previousPage_pushButton_clicked()
 {
-    ui->toolButton_6->setText("-");
+    ui->previousPage_pushButton->setText("-");
     previousStackedWidget();
 }
 
@@ -2481,56 +2481,56 @@ void MainWindow::previousStackedWidget()
 void MainWindow::whenAnimationFinishn()
 {
     ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()+1);
-    ui->toolButton_4->setText(">");
+    ui->nextPage_pushButton->setText(">");
 }
 
 void MainWindow::whenAnimationFinishp()
 {
     ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()-1);
-    ui->toolButton_6->setText("<");
+    ui->previousPage_pushButton->setText("<");
 }
 
 
 
-void MainWindow::on_recordDemo_4_textChanged(const QString &arg1)
+void MainWindow::on_hud_lineEdit_textChanged(const QString &arg1)
 {
     if(arg1=="")
     {
-        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
-        ui->recordDemo_4->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
 
 
-void MainWindow::on_recordDemo_5_textChanged(const QString &arg1)
+void MainWindow::on_config_lineEdit_textChanged(const QString &arg1)
 {
     if(arg1=="")
     {
-        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
-        ui->recordDemo_5->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
 
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_hud_pushButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("DSDAHUD.lmp"),settings.value("hudfolder").toString(),tr("DSDAHUD file (*.lmp)"));
     settings.setValue("hudfolder",fileName);
-    ui->recordDemo_4->setText(fileName);
+    ui->hud_lineEdit->setText(fileName);
 }
 
 
-void MainWindow::on_pushButton_7_clicked()
+void MainWindow::on_config_pushButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("dsda-doom.cfg"),settings.value("configfolder").toString(),tr("Config file (*.cfg)"));
     settings.setValue("configfolder",fileName);
-    ui->recordDemo_5->setText(fileName);
+    ui->config_lineEdit->setText(fileName);
 }
 
 

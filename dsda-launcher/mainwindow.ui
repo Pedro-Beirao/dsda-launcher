@@ -29,7 +29,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="LaunchGameButton">
+   <widget class="QPushButton" name="launchGame_pushButton">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -57,7 +57,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="argumentText">
+   <widget class="QTextEdit" name="additionalArguments_textEdit">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -90,7 +90,7 @@ border-radius:3px</string>
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QComboBox" name="compLevelSelect">
+   <widget class="QComboBox" name="complevel_comboBox">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -171,7 +171,7 @@ border-radius:3px</string>
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="iwad_label">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -184,7 +184,7 @@ border-radius:3px</string>
      <string>IWAD</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="iwadSelect">
+   <widget class="QComboBox" name="iwad_comboBox">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -203,7 +203,7 @@ border-radius:3px</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="complevel_label">
     <property name="geometry">
      <rect>
       <x>35</x>
@@ -219,7 +219,7 @@ border-radius:3px</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="episodeText">
+   <widget class="QLabel" name="episode_label">
     <property name="geometry">
      <rect>
       <x>55</x>
@@ -232,7 +232,7 @@ border-radius:3px</string>
      <string>Episode</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="difficulty_label">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -245,7 +245,7 @@ border-radius:3px</string>
      <string>Difficulty</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="diffBox">
+   <widget class="QComboBox" name="difficulty_comboBox">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -288,7 +288,7 @@ border-radius:3px</string>
      </property>
     </item>
    </widget>
-   <widget class="QLineEdit" name="episodeBox">
+   <widget class="QLineEdit" name="episode_lineEdit">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -309,7 +309,7 @@ border-radius:3px</string>
      <set>Qt::ImhFormattedNumbersOnly</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="levelBox">
+   <widget class="QLineEdit" name="level_lineEdit">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -330,7 +330,7 @@ border-radius:3px</string>
      <set>Qt::ImhDigitsOnly</set>
     </property>
    </widget>
-   <widget class="QLabel" name="levelText">
+   <widget class="QLabel" name="level_label">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -343,7 +343,7 @@ border-radius:3px</string>
      <string>Level</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="main_groupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -356,7 +356,7 @@ border-radius:3px</string>
      <string notr="true">alternate-background-color: rgb(37, 37, 37);
 </string>
     </property>
-    <widget class="QPushButton" name="toolButton">
+    <widget class="QPushButton" name="tooltip_pushButton">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -381,7 +381,7 @@ border-radius:3px</string>
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
+   <widget class="QGroupBox" name="additionalArguments_groupBox">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -393,7 +393,7 @@ border-radius:3px</string>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="additionalArguments_label">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -409,7 +409,7 @@ border-radius:3px</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Additional Arguments&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="toolButton_3">
+    <widget class="QPushButton" name="additionalArguments_pushButton">
      <property name="geometry">
       <rect>
        <x>155</x>
@@ -423,7 +423,7 @@ border-radius:3px</string>
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="console_pushButton">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -485,7 +485,7 @@ border-radius:3px</string>
        <number>0</number>
       </property>
       <widget class="QWidget" name="page">
-       <widget class="QPushButton" name="toolButton_4">
+       <widget class="QPushButton" name="nextPage_pushButton">
         <property name="geometry">
          <rect>
           <x>275</x>
@@ -498,7 +498,7 @@ border-radius:3px</string>
          <string>&gt;</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="soloNetCheck">
+       <widget class="QCheckBox" name="solonet_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -511,7 +511,7 @@ border-radius:3px</string>
          <string>Solo Net</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="noCheck_4">
+       <widget class="QCheckBox" name="respawn_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -527,7 +527,7 @@ border-radius:3px</string>
          <string>Respawn Monsters</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="noCheck_3">
+       <widget class="QCheckBox" name="fullscreen_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -540,7 +540,7 @@ border-radius:3px</string>
          <string>Fullscreen</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="noCheck">
+       <widget class="QCheckBox" name="nomo_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -556,7 +556,7 @@ border-radius:3px</string>
          <string>No Monsters</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="resolution_label">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -574,7 +574,7 @@ border-radius:3px</string>
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Resolution&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="fastCheck">
+       <widget class="QCheckBox" name="fast_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -593,7 +593,7 @@ border-radius:3px</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QComboBox" name="comboBox_2">
+       <widget class="QComboBox" name="resolution_comboBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -617,17 +617,17 @@ border-radius:3px</string>
          </property>
         </item>
        </widget>
-       <zorder>soloNetCheck</zorder>
-       <zorder>noCheck_4</zorder>
-       <zorder>noCheck_3</zorder>
-       <zorder>noCheck</zorder>
-       <zorder>label_6</zorder>
-       <zorder>fastCheck</zorder>
-       <zorder>comboBox_2</zorder>
-       <zorder>toolButton_4</zorder>
+       <zorder>solonet_checkBox</zorder>
+       <zorder>respawn_checkBox</zorder>
+       <zorder>fullscreen_checkBox</zorder>
+       <zorder>nomo_checkBox</zorder>
+       <zorder>resolution_label</zorder>
+       <zorder>fast_checkBox</zorder>
+       <zorder>resolution_comboBox</zorder>
+       <zorder>nextPage_pushButton</zorder>
       </widget>
       <widget class="QWidget" name="page_2">
-       <widget class="QPushButton" name="toolButton_6">
+       <widget class="QPushButton" name="previousPage_pushButton">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -640,7 +640,7 @@ border-radius:3px</string>
          <string>&lt;</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_10">
+       <widget class="QLabel" name="hud_label">
         <property name="geometry">
          <rect>
           <x>50</x>
@@ -653,7 +653,7 @@ border-radius:3px</string>
          <string>Hud:</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_11">
+       <widget class="QLabel" name="config_label">
         <property name="geometry">
          <rect>
           <x>35</x>
@@ -666,7 +666,7 @@ border-radius:3px</string>
          <string>Config:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="recordDemo_4">
+       <widget class="QLineEdit" name="hud_lineEdit">
         <property name="geometry">
          <rect>
           <x>85</x>
@@ -690,7 +690,7 @@ border-radius:3px</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="recordDemo_5">
+       <widget class="QLineEdit" name="config_lineEdit">
         <property name="geometry">
          <rect>
           <x>85</x>
@@ -714,7 +714,7 @@ border-radius:3px</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="hud_pushButton">
         <property name="geometry">
          <rect>
           <x>220</x>
@@ -733,7 +733,7 @@ border-radius:3px</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_7">
+       <widget class="QPushButton" name="config_pushButton">
         <property name="geometry">
          <rect>
           <x>220</x>
@@ -752,7 +752,7 @@ border-radius:3px</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QComboBox" name="comboBox_3">
+       <widget class="QComboBox" name="track_comboBox">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -777,7 +777,7 @@ border-radius:3px</string>
          </property>
         </item>
        </widget>
-       <widget class="QComboBox" name="comboBox_4">
+       <widget class="QComboBox" name="time_comboBox">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -812,7 +812,7 @@ border-radius:3px</string>
          </property>
         </item>
        </widget>
-       <widget class="QLabel" name="label_12">
+       <widget class="QLabel" name="track_label">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -825,7 +825,7 @@ border-radius:3px</string>
          <string>Track</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="time_label">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -926,7 +926,7 @@ color: rgb(255, 255, 255);</string>
      <attribute name="title">
       <string>Demos</string>
      </attribute>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="record_label">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -981,7 +981,7 @@ border-radius:3px</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="playback_label">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -1178,7 +1178,7 @@ border-radius:3px</string>
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="wadDSDA_label">
       <property name="geometry">
        <rect>
         <x>24</x>
@@ -1191,7 +1191,7 @@ border-radius:3px</string>
        <string>Wad:</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="levelDSDA_label">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1344,7 +1344,7 @@ border-radius:3px</string>
      </widget>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="showCommandLine_pushButton">
     <property name="geometry">
      <rect>
       <x>225</x>
@@ -1360,7 +1360,7 @@ border-radius:3px</string>
      <string>?</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="toolTip">
+   <widget class="QTextBrowser" name="tooltip_textBrowser">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -1395,24 +1395,24 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Then restart the Launcher&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <zorder>groupBox_4</zorder>
-   <zorder>groupBox</zorder>
-   <zorder>LaunchGameButton</zorder>
-   <zorder>argumentText</zorder>
-   <zorder>compLevelSelect</zorder>
-   <zorder>label</zorder>
-   <zorder>iwadSelect</zorder>
-   <zorder>label_2</zorder>
-   <zorder>episodeText</zorder>
-   <zorder>label_5</zorder>
-   <zorder>diffBox</zorder>
-   <zorder>episodeBox</zorder>
-   <zorder>levelBox</zorder>
-   <zorder>levelText</zorder>
-   <zorder>pushButton</zorder>
+   <zorder>additionalArguments_groupBox</zorder>
+   <zorder>main_groupBox</zorder>
+   <zorder>launchGame_pushButton</zorder>
+   <zorder>additionalArguments_textEdit</zorder>
+   <zorder>complevel_comboBox</zorder>
+   <zorder>iwad_label</zorder>
+   <zorder>iwad_comboBox</zorder>
+   <zorder>complevel_label</zorder>
+   <zorder>episode_label</zorder>
+   <zorder>difficulty_label</zorder>
+   <zorder>difficulty_comboBox</zorder>
+   <zorder>episode_lineEdit</zorder>
+   <zorder>level_lineEdit</zorder>
+   <zorder>level_label</zorder>
+   <zorder>console_pushButton</zorder>
    <zorder>tabs</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>toolTip</zorder>
+   <zorder>showCommandLine_pushButton</zorder>
+   <zorder>tooltip_textBrowser</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
