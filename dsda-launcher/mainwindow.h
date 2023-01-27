@@ -61,6 +61,9 @@ private:
 
     QString exeName = "dsda-doom";
 
+    void enable_disable_skill_comboBox();
+    void enable_disable_complevel_comboBox();
+
     #if defined(__APPLE__) || defined(__linux__)
     QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
     QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
@@ -205,6 +208,7 @@ private slots:
     void on_config_lineEdit_textChanged(const QString &arg1);
     void on_hud_pushButton_clicked();
     void on_config_pushButton_clicked();
+    void on_playback_lineEdit_textChanged(const QString &arg1);
 };
 extern QSettings settings;
 

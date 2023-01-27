@@ -243,6 +243,8 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->launchGame_pushButton->installEventFilter(this);
 
+    enable_disable_skill_comboBox();
+
     // set the settings and console windows
     settingsWindow = new Settings;
     consoleWindow = new Console;
@@ -1244,7 +1246,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         Otherwise, run "-complevel *First+Second char of the string*"
     */
     std::string complevelString = ui->complevel_comboBox->currentText().toStdString();
-    if(complevelString[0]!='D')
+    if(ui->complevel_comboBox->isEnabled() && complevelString[0]!='D')
     {
         argList.append("-complevel");
         QString complevelNum;
@@ -1254,7 +1256,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     }
 
     // Difficulty or Skill
-    if(ui->episode_lineEdit->text().length()>0 && ui->difficulty_comboBox->currentIndex()!=0)
+    if(ui->difficulty_comboBox->isEnabled() && ui->difficulty_comboBox->currentIndex()!=0)
     {
         argList.append("-skill");
         argList.append((std::to_string(diffIndex)).c_str());
@@ -1286,11 +1288,11 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         {
             std::string fileToAdd = ui->wads_listWidget->item(item)->text().toStdString();
 #ifdef _WIN32
-                for(int i=0; i<fileToAdd.length();i++)
-                {
-                    if(fileToAdd[i]=='/')
-                        fileToAdd[i]='\\';
-                }
+            for(int i=0; i<fileToAdd.length();i++)
+            {
+                if(fileToAdd[i]=='/')
+                    fileToAdd[i]='\\';
+            }
 #endif
             if(fileToAdd.substr(0,5) == "$DOOM")
                 fileToAdd = fileToAdd.substr(13);
@@ -2399,17 +2401,7 @@ void MainWindow::on_showCommandLine_pushButton_clicked()
 
 void MainWindow::on_episode_lineEdit_textChanged(const QString &arg1)
 {
-    if(arg1=="")
-    {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-    }
-    else
-    {
-        ui->difficulty_comboBox->setEnabled(true);
-        ui->difficulty_label->setEnabled(true);
-    }
-
+    enable_disable_skill_comboBox();
 }
 
 void MainWindow::on_nextPage_pushButton_clicked()
@@ -2537,4 +2529,49 @@ void MainWindow::on_config_pushButton_clicked()
     }
 }
 
+
+
+void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1)
+{
+    enable_disable_skill_comboBox();
+    enable_disable_complevel_comboBox();
+}
+
+void MainWindow::enable_disable_skill_comboBox()
+{
+    if (ui->episode_lineEdit->text() == "")
+    {
+        ui->difficulty_comboBox->setEnabled(false);
+        ui->difficulty_label->setEnabled(false);
+        ui->difficulty_comboBox->setToolTip("Cannot select a skill level without choosing a map number");
+    }
+    else if (ui->playback_lineEdit->text() != "")
+    {
+        ui->difficulty_comboBox->setEnabled(false);
+        ui->difficulty_label->setEnabled(false);
+        ui->difficulty_comboBox->setToolTip("Cannot select a skill level during demo playback");
+    }
+    else
+    {
+        ui->difficulty_comboBox->setEnabled(true);
+        ui->difficulty_label->setEnabled(true);
+        ui->difficulty_comboBox->setToolTip("");
+    }
+}
+
+void MainWindow::enable_disable_complevel_comboBox()
+{
+    if (ui->playback_lineEdit->text() != "")
+    {
+        ui->complevel_comboBox->setEnabled(false);
+        ui->complevel_label->setEnabled(false);
+        ui->complevel_comboBox->setToolTip("Cannot select a complevel during demo playback");
+    }
+    else
+    {
+        ui->complevel_comboBox->setEnabled(true);
+        ui->complevel_label->setEnabled(true);
+        ui->complevel_comboBox->setToolTip("");
+    }
+}
 
