@@ -41,6 +41,7 @@
 #include <sstream>
 #include <qgraphicseffect.h>
 #include "historylist.h"
+#include "demodialog.h"
 
 const QString version = "v1.2";
 

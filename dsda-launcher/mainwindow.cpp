@@ -644,10 +644,13 @@ void MainWindow::dropFile(QString fileName)
             std::ifstream file;
             file.open(fileName.toStdString());
             std::string line;
+
+            bool found_footer;
             while(getline(file, line, '\n'))
             {
                 if(line.substr(0,5)=="-iwad")
                 {
+                    found_footer = true;
                     ui->wads_listWidget->clear();
 
                     QStringList argList;
@@ -778,7 +781,24 @@ void MainWindow::dropFile(QString fileName)
                     }
                 }
             }
+
             file.close();
+
+            if (!found_footer)
+            {
+                QStringList iwad_list;
+                for (int i = 0; i < ui->iwad_comboBox->count(); i++)
+                {
+                    iwad_list.push_back(ui->iwad_comboBox->itemText(i));
+                }
+                demodialog *demoDialog = new demodialog(iwad_list, this);
+                int res = demoDialog->exec();
+
+                if (res == demoDialog->Accepted)
+                {
+                    ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
+                }
+            }
     }
     else if(tmp=="wad" || tmp=="bex" || tmp=="deh")
     {
@@ -1831,9 +1851,9 @@ void MainWindow::changeWadLName()
 void MainWindow::on_addWads_toolButton_clicked()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex)"));
-    ui->wads_listWidget->addItems(fileNames);
     if(fileNames.length()>0)
     {
+        ui->wads_listWidget->addItems(fileNames);
         settings.setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
     }
 }
