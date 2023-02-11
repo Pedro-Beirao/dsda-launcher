@@ -12,23 +12,22 @@ QString lowerCased(std::string word)
 demodialog::demodialog(QStringList iwad_list, QWidget *parent)
     : QDialog(parent)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QGridLayout *mainLayout = new QGridLayout;
 
     QLabel *description = new QLabel("No footer found on the demo.\nPlease select the correct files.\n");
-    mainLayout->addWidget(description);
+    mainLayout->addWidget(description, 0, 0, 1, 3);
 
     QLabel *iwad_label = new QLabel("IWAD:");
-    mainLayout->addWidget(iwad_label);
+    mainLayout->addWidget(iwad_label, 1, 0);
 
     iwad_comboBox = new QComboBox();
     iwad_comboBox->addItems(iwad_list);
-    mainLayout->addWidget(iwad_comboBox);
+    mainLayout->addWidget(iwad_comboBox, 1, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");
-    mainLayout->addWidget(files_label);
+    mainLayout->addWidget(files_label, 2, 0, 1, 3);
 
-    files_listWidget = new QListWidget();
-
+    files_listWidget = new QTableWidget();
     int size = settings.beginReadArray("pwadfolders");
     if(size!=0)
     {
@@ -47,7 +46,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
                     QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
                     if (tmp == "wad" || tmp == "deh" || tmp == "bex")
                     {
-                        files_paths.push_back({file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))), file0});
+                        files_paths.push_back({lowerCased(file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))).toStdString()), file0});
                     }
                 }
             }
@@ -84,7 +83,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
             QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
             if (tmp == "wad" || tmp == "deh" || tmp == "bex")
             {
-                files_paths.push_back({file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))), file0});
+                files_paths.push_back({lowerCased(file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))).toStdString()), file0});
             }
         }
     }
@@ -92,21 +91,32 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
     {
         return p1.first < p2.first;
     });
-    for (int i = 0; i < files_paths.size(); i++)
+    files_listWidget->setColumnCount(2);
+    files_listWidget->setRowCount(files_paths.size()/2+1);
+    files_listWidget->horizontalHeader()->setVisible(false);
+    files_listWidget->verticalHeader()->setVisible(false);
+    files_listWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    files_listWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    files_listWidget->resizeColumnsToContents();
+    for (int j = 0; j < 2; j++)
     {
-        files_listWidget->addItem(files_paths[i].first);
+        for (int i = 0; i < files_paths.size()/2+j; i++)
+        {
+            QTableWidgetItem *newItem = new QTableWidgetItem(files_paths[i + j*(files_paths.size()/2)].first);
+            files_listWidget->setItem(i, j, newItem);
+        }
     }
     files_listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-    connect(files_listWidget, &QListWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
-    mainLayout->addWidget(files_listWidget);
+    connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
+    mainLayout->addWidget(files_listWidget, 3, 0, 1, 3);
 
     selected_count = new QLabel("0 files selected");
-    mainLayout->addWidget(selected_count);
+    mainLayout->addWidget(selected_count, 4, 0, 1, 3);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    mainLayout->addWidget(buttonBox);
+    mainLayout->addWidget(buttonBox, 5, 0, 1, 3);
 
     setLayout(mainLayout);
 }
@@ -119,4 +129,20 @@ void demodialog::update_selected_count()
 int demodialog::get_iwad_index()
 {
     return iwad_comboBox->currentIndex();
+}
+
+QStringList demodialog::get_files_list()
+{
+    QStringList files_list;
+    for (int j = 0; j < 2; j++)
+    {
+        for (int i = 0; i < files_paths.size()/2+j; i++)
+        {
+            if (files_listWidget->itemAt(j, i)->isSelected())
+            {
+                files_list.push_back(files_paths.at(i + j*(files_paths.size()/2)).second);
+            }
+        }
+    }
+    return files_list;
 }

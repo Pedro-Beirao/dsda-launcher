@@ -797,6 +797,8 @@ void MainWindow::dropFile(QString fileName)
                 if (res == demoDialog->Accepted)
                 {
                     ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
+                    ui->wads_listWidget->clear();
+                    ui->wads_listWidget->addItems(demoDialog->get_files_list());
                 }
             }
     }

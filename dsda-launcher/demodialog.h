@@ -10,6 +10,8 @@
 #include <QSettings>
 #include <mainwindow.h>
 #include <QPair>
+#include <qtablewidget.h>
+#include <QHeaderView>
 
 class demodialog : public QDialog
 {
@@ -18,10 +20,11 @@ class demodialog : public QDialog
 public:
     explicit demodialog(QStringList iwad_list, QWidget *parent = nullptr);
     int get_iwad_index();
+    QStringList get_files_list();
 
 private:
     QComboBox *iwad_comboBox;
-    QListWidget *files_listWidget;
+    QTableWidget *files_listWidget;
     QVector<QPair<QString, QString>> files_paths;
     QLabel *selected_count;
     void update_selected_count();
