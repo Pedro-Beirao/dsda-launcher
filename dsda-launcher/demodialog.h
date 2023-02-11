@@ -9,6 +9,7 @@
 #include <QDialogButtonBox>
 #include <QSettings>
 #include <mainwindow.h>
+#include <QPair>
 
 class demodialog : public QDialog
 {
@@ -21,7 +22,9 @@ public:
 private:
     QComboBox *iwad_comboBox;
     QListWidget *files_listWidget;
-    QStringList files_paths;
+    QVector<QPair<QString, QString>> files_paths;
+    QLabel *selected_count;
+    void update_selected_count();
 };
 
 #endif // DEMODIALOG_H
