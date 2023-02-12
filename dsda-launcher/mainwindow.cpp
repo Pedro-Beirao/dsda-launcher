@@ -645,7 +645,7 @@ void MainWindow::dropFile(QString fileName)
             file.open(fileName.toStdString());
             std::string line;
 
-            bool found_footer;
+            bool found_footer = false;
             while(getline(file, line, '\n'))
             {
                 if(line.substr(0,5)=="-iwad")
@@ -784,22 +784,18 @@ void MainWindow::dropFile(QString fileName)
 
             file.close();
 
-            if (!found_footer)
+            if (!found_footer && !file.is_open())
             {
                 QStringList iwad_list;
                 for (int i = 0; i < ui->iwad_comboBox->count(); i++)
                 {
                     iwad_list.push_back(ui->iwad_comboBox->itemText(i));
                 }
-                demodialog *demoDialog = new demodialog(iwad_list, this);
-                int res = demoDialog->exec();
+                demodialog *demoDialogNew = new demodialog(iwad_list, this);
+                demoDialogNew->open();
 
-                if (res == demoDialog->Accepted)
-                {
-                    ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
-                    ui->wads_listWidget->clear();
-                    ui->wads_listWidget->addItems(demoDialog->get_files_list());
-                }
+                demoDialog = demoDialogNew;
+                connect(demoDialog, SIGNAL(accepted()), this, SLOT(demoDialog_accepted()));
             }
     }
     else if(tmp=="wad" || tmp=="bex" || tmp=="deh")
@@ -813,6 +809,13 @@ void MainWindow::dropFile(QString fileName)
     {
            LoadState(fileName, 0);
     }
+}
+
+void MainWindow::demoDialog_accepted()
+{
+    ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
+    ui->wads_listWidget->clear();
+    ui->wads_listWidget->addItems(demoDialog->get_files_list());
 }
 
 // Drop Event for *.wad *.lmp *gfd

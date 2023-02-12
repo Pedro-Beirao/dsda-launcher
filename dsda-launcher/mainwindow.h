@@ -86,10 +86,11 @@ private:
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
 
-    // Create an instance of the settings window
+    // Create an instance of the windows
     Settings *settingsWindow;
     Console *consoleWindow;
     historyList *historyListWindow;
+    demodialog *demoDialog;
 
     QStringList doom1IWADs = {
         "doom",
@@ -194,6 +195,7 @@ public Q_SLOTS:
     void started();
 
 private slots:
+    void demoDialog_accepted();
     void on_showLeaderboard_toolButton_clicked();
     void on_reloadLeaderboard_toolButton_clicked();
     void on_wadDSDA_lineEdit_textChanged(const QString &arg1);
