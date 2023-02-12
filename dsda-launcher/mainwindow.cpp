@@ -1525,7 +1525,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             int lastBar = 0;
             for(qsizetype i=0; i<p.length(); i++)
             {
-                if(p[i]=='/' || p[i]=='\\')
+                if(p[i]== QDir::separator())
                 {
                     lastBar=i+1;
                 }
@@ -1842,7 +1842,7 @@ void MainWindow::changeWadLName()
     {
         int lastBar=0;
         for( size_t i=0; i<p.length(); i++){
-            if(p[i]=='/' || p[i]=='\\')
+            if(p[i]==QDir::separator())
             {
                 lastBar=i+1;
             }

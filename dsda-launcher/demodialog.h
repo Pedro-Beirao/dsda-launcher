@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 #include <QSettings>
-#include <mainwindow.h>
 #include <QPair>
 #include <qtablewidget.h>
 #include <QHeaderView>

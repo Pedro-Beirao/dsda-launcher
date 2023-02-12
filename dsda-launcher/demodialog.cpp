@@ -1,4 +1,5 @@
 #include "demodialog.h"
+#include "mainwindow.h"
 
 QString lowerCased(std::string word)
 {
@@ -46,7 +47,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
                     QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
                     if (tmp == "wad" || tmp == "deh" || tmp == "bex")
                     {
-                        files_paths.push_back({lowerCased(file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))).toStdString()), file0});
+                        files_paths.push_back({lowerCased(file0.right(file0.lastIndexOf(QDir::separator())).toStdString()), folder + QDir::separator() + file0});
                     }
                 }
             }
@@ -61,6 +62,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
 #endif
         QDir path(folder);
         QStringList files0 = path.entryList(QDir::Files);
+
         QString f = QString(qgetenv("DOOMWADPATH"));
         int prev = 0;
         for(int j = 0; j<f.length(); j++)
@@ -83,7 +85,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
             QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
             if (tmp == "wad" || tmp == "deh" || tmp == "bex")
             {
-                files_paths.push_back({lowerCased(file0.right(std::max(file0.lastIndexOf("\\"), file0.lastIndexOf("/"))).toStdString()), file0});
+                files_paths.push_back({lowerCased(file0.right(file0.lastIndexOf(QDir::separator())).toStdString()), folder + QDir::separator() + file0});
             }
         }
     }
@@ -134,15 +136,9 @@ int demodialog::get_iwad_index()
 QStringList demodialog::get_files_list()
 {
     QStringList files_list;
-    for (int j = 0; j < 2; j++)
+    for (int k = 0; k < files_listWidget->selectedItems().size(); k++)
     {
-        for (int i = 0; i < files_paths.size()/2+j; i++)
-        {
-            if (files_listWidget->itemAt(j, i)->isSelected())
-            {
-                files_list.push_back(files_paths.at(i + j*(files_paths.size()/2)).second);
-            }
-        }
+        files_list.push_back(files_paths.at(files_listWidget->selectedItems().at(k)->row() + files_listWidget->selectedItems().at(k)->column()*(files_paths.size()/2)).second);
     }
     return files_list;
 }
