@@ -56,7 +56,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
 
         QString folder;
 #ifdef _WIN32
-        folder = execPath;
+        folder = QCoreApplication::applicationDirPath();
 #else
         folder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
 #endif
