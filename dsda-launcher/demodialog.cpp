@@ -105,6 +105,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
         for (int i = 0; i < files_paths.size()/2+j; i++)
         {
             QTableWidgetItem *newItem = new QTableWidgetItem(files_paths[i + j*(files_paths.size()/2)].first);
+            newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
         }
     }
