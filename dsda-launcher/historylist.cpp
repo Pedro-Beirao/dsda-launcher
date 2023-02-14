@@ -1,6 +1,7 @@
 #include "historylist.h"
 #include "ui_historylist.h"
-#include <mainwindow.h>
+#include "states.h"
+#include "mainwindow.h"
 
 historyList::historyList(QWidget *parent) :
     QWidget(parent),
@@ -249,7 +250,7 @@ void historyList::on_load_pushButton_clicked()
     }
 
     file.close();
-    MainWindow::pMainWindow->LoadState(text, 1);
+    states::LoadState(text, 1);
 }
 
 

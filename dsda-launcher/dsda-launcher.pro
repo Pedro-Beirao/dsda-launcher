@@ -14,14 +14,16 @@ SOURCES += \
     historylist.cpp \
     main.cpp \
     mainwindow.cpp \
-    settings.cpp
+    settings.cpp \
+    states.cpp
 
 HEADERS += \
     console.h \
     demodialog.h \
     historylist.h \
     mainwindow.h \
-    settings.h
+    settings.h \
+    states.h
 
 FORMS += \
     console.ui \

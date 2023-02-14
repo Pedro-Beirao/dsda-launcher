@@ -42,6 +42,8 @@
 #include <qgraphicseffect.h>
 #include "historylist.h"
 #include "demodialog.h"
+#include "states.h"
+#include <QTextEdit>
 
 const QString version = "v1.2";
 
@@ -125,14 +127,35 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     static MainWindow *pMainWindow;
-
-public slots:
     void addWads(QStringList fileNames);
     void get_leaderboards(std::string wad, std::string level, std::string category);
     void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
     void delayLaunch();
+    QComboBox *iwad_comboBox();
+    QComboBox *complevel_comboBox();
+    QLineEdit *episode_lineEdit();
+    QLineEdit *level_lineEdit();
+    QComboBox *difficulty_comboBox();
+    QCheckBox *fast_checkBox();
+    QCheckBox *nomo_checkBox();
+    QCheckBox *respawn_checkBox();
+    QCheckBox *solonet_checkBox();
+    QComboBox *resolution_comboBox();
+    QCheckBox *fullscreen_checkBox();
+    QLineEdit *hud_lineEdit();
+    QLineEdit *config_lineEdit();
+    QComboBox *track_comboBox();
+    QComboBox *time_comboBox();
+    QListWidget *wads_listWidget();
+    QLineEdit *record_lineEdit();
+    QLineEdit *playback_lineEdit();
+    QLineEdit *viddump_lineEdit();
+    QComboBox *playback_comboBox();
+    QTextEdit *additionalArguments_textEdit();
+
+public slots:
     void closeEvent(QCloseEvent *event);
     void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
@@ -157,7 +180,6 @@ public slots:
     void addToArguments(QString string);
     void on_actionLoad_triggered();
     void on_actionSave_triggered();
-    void LoadState(QString fileName, bool isString);
     void SaveState(QString fileName);
     void on_actionGithub_triggered();
     void on_actionGithub_2_triggered();
