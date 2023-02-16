@@ -180,7 +180,6 @@ public slots:
     void addToArguments(QString string);
     void on_actionLoad_triggered();
     void on_actionSave_triggered();
-    void SaveState(QString fileName);
     void on_actionGithub_triggered();
     void on_actionGithub_2_triggered();
     void on_actionCheck_for_updates_triggered();
