@@ -107,7 +107,6 @@ private:
         "heretic1",
 
         "chex",
-        "hacx",
         "rekkrsa"
     };
 
@@ -121,6 +120,8 @@ private:
         "plutonia",
 
         "hexen",
+
+        "hacx"
     };
 
 public:
