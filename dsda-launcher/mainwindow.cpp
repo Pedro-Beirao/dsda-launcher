@@ -440,7 +440,7 @@ void MainWindow::dropFile(QString fileName)
                                 ui->iwad_comboBox->setCurrentIndex(iwad_index);
                             }
                         }
-                        else if(argList[i]=="-file")
+                        else if(argList[i]=="-file" || argList[i] == "-deh")
                         {
                             QStringList files;
                             for(int ii=i+1; ii < argList.count(); ii++)
