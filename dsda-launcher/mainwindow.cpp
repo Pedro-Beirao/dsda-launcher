@@ -455,7 +455,7 @@ void MainWindow::dropFile(QString fileName)
                             }
 
                             int size = settings.beginReadArray("pwadfolders");
-                            if(size!=0)
+                            if(size!=0 && !files.empty())
                             {
                                 for (int i = 0; i < size; i++) {
                                     settings.setArrayIndex(i);
@@ -539,7 +539,7 @@ void MainWindow::dropFile(QString fileName)
 
             file.close();
 
-            if (!found_footer && !file.is_open())
+            if (!found_footer)
             {
                 QStringList iwad_list;
                 for (int i = 0; i < ui->iwad_comboBox->count(); i++)
@@ -553,7 +553,7 @@ void MainWindow::dropFile(QString fileName)
                 connect(demoDialog, SIGNAL(accepted()), this, SLOT(demoDialog_accepted()));
             }
     }
-    else if(tmp=="wad" || tmp=="bex" || tmp=="deh")
+    else if(tmp=="wad" || tmp=="bex" || tmp=="deh" || tmp=="zip")
     {
         QStringList wadsToAdd;
         wadsToAdd.append(fileName);
@@ -1610,7 +1610,7 @@ void MainWindow::changeWadLName()
 // Add pwads to be loaded
 void MainWindow::on_addWads_toolButton_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex *.zip)"));
     if(fileNames.length()>0)
     {
         ui->wads_listWidget->addItems(fileNames);
