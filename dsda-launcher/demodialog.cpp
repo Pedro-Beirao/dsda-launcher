@@ -100,15 +100,23 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
     files_listWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     files_listWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     files_listWidget->resizeColumnsToContents();
+
     for (int j = 0; j < 2; j++)
     {
+        QTableWidgetItem *newItemTemp = new QTableWidgetItem("");
+        newItemTemp->setFlags(newItemTemp->flags() & ~Qt::ItemIsEditable);
+        files_listWidget->setItem(files_paths.size()/2, j, newItemTemp);
+
         for (int i = 0; i < files_paths.size()/2+j; i++)
         {
+            if (i + j*(files_paths.size()/2) >= files_paths.size()) continue;
+
             QTableWidgetItem *newItem = new QTableWidgetItem(files_paths[i + j*(files_paths.size()/2)].first);
             newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
         }
     }
+
     files_listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
     mainLayout->addWidget(files_listWidget, 3, 0, 1, 3);
