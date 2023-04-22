@@ -844,10 +844,10 @@ void MainWindow::addToArguments(QString string)
 }
 
 bool isFast=false;
-bool noMo =false;
+bool isNoMo =false;
 bool isRespawn=false;
 bool isSoloNet = false;
-std::string isFulscreen="w";
+std::string isFullscreen="w";
 
 void MainWindow::error(QProcess::ProcessError error)
 {
@@ -923,7 +923,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
             settings.setValue("solonet",isSoloNet);
             settings.setValue("respawn",isRespawn);
-            settings.setValue("nomo",noMo);
+            settings.setValue("nomo",isNoMo);
             settings.setValue("fast",isFast);
 
             settings.setValue("complevel",complevelIndex);
@@ -1103,7 +1103,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         }
         argList.append(tmp);
     }
-    if(noMo)
+    if(isNoMo)
     {
         QString tmp = "";
         for (int i = 0; i < nomoParam.length(); i++)
@@ -1151,7 +1151,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
     if(ui->resolution_comboBox->currentIndex()==0)
     {
-        if(isFulscreen=="w")
+        if(isFullscreen=="w")
         {
             argList.append("-window");
         }
@@ -1163,7 +1163,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     else
     {
         argList.append("-geom");
-        argList.append((ui->resolution_comboBox->currentText().toStdString()+isFulscreen).c_str());
+        argList.append((ui->resolution_comboBox->currentText().toStdString()+isFullscreen).c_str());
     }
 
 
@@ -1627,39 +1627,24 @@ void MainWindow::on_removeWads_toolButton_clicked()
 // These are the parameter toggles
 void MainWindow::on_fast_checkBox_toggled(bool checked)
 {
-    if(checked)
-        isFast=true;
-    else
-        isFast=false;
+    isFast = checked;
 }
 void MainWindow::on_nomo_checkBox_toggled(bool checked)
 {
-    if(checked)
-        noMo=true;
-    else
-        noMo=false;
+    isNoMo = checked;
 }
 void MainWindow::on_respawn_checkBox_toggled(bool checked)
 {
-    if(checked)
-        isRespawn=true;
-    else
-        isRespawn=false;
+    isRespawn = checked;
 }
 void MainWindow::on_solonet_checkBox_toggled(bool checked)
 {
-    if(checked)
-        isSoloNet=true;
-    else
-        isSoloNet=false;
+    isSoloNet = checked;
 }
 
 void MainWindow::on_fullscreen_checkBox_toggled(bool checked)
 {
-    if(checked)
-        isFulscreen="f";
-    else
-        isFulscreen="w";
+    isFullscreen = checked ? "f" : "w";
 }
 void MainWindow::on_tooltip_pushButton_clicked()
 {
