@@ -133,7 +133,6 @@ public:
     void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
-    void delayLaunch();
     QComboBox *iwad_comboBox();
     QComboBox *complevel_comboBox();
     QLineEdit *episode_lineEdit();
@@ -157,6 +156,7 @@ public:
     QTextEdit *additionalArguments_textEdit();
 
 public slots:
+    void delayLaunch();
     void closeEvent(QCloseEvent *event);
     void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
