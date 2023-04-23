@@ -72,6 +72,8 @@ private slots:
     void on_minusPWADFolders_toolButton_clicked();
     void on_plusPWADFolders_toolButton_clicked();
 
+    void on_endoom_checkBox_clicked(bool checked);
+
 private:
     Ui::Settings *ui;
 };

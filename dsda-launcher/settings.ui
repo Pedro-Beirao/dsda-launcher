@@ -69,7 +69,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>30</y>
+       <y>25</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -85,7 +85,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>154</y>
+       <y>170</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -106,7 +106,7 @@
      <property name="geometry">
       <rect>
        <x>125</x>
-       <y>150</y>
+       <y>166</y>
        <width>25</width>
        <height>24</height>
       </rect>
@@ -135,7 +135,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>70</y>
+       <y>90</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -148,7 +148,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>90</y>
+       <y>110</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -161,7 +161,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>110</y>
+       <y>130</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -285,7 +285,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>112</x>
-       <y>186</y>
+       <y>202</y>
        <width>31</width>
        <height>24</height>
       </rect>
@@ -314,7 +314,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>190</y>
+       <y>206</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -441,6 +441,22 @@ border-radius:3px</string>
       <string/>
      </property>
     </widget>
+    <widget class="QCheckBox" name="endoom_checkBox">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>50</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Endoom</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
     <zorder>PWADFolders_label</zorder>
     <zorder>darkTheme_checkBox</zorder>
     <zorder>maxSkillLevel_label</zorder>
@@ -461,6 +477,7 @@ border-radius:3px</string>
     <zorder>IWADFolders_pushButton</zorder>
     <zorder>plusIWADFolders_toolButton</zorder>
     <zorder>IWADFolders_textBrowser</zorder>
+    <zorder>endoom_checkBox</zorder>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">

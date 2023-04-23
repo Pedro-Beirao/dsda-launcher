@@ -8,16 +8,10 @@ Settings::Settings(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if(settings.value("theme")=="dark")
-    {
-        ui->darkTheme_checkBox->setChecked(true);
-        on_darkTheme_checkBox_clicked(true);
-    }
-    else
-    {
-        ui->darkTheme_checkBox->setChecked(false);
-        on_darkTheme_checkBox_clicked(false);
-    }
+    ui->darkTheme_checkBox->setChecked(settings.value("theme")=="dark");
+    on_darkTheme_checkBox_clicked(settings.value("theme")=="dark");
+
+    ui->endoom_checkBox->setChecked(settings.value("endoom").toBool());
 
 #ifdef _WIN32
         ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
@@ -552,5 +546,11 @@ void Settings::on_minusIWADFolders_toolButton_clicked()
         settings.setValue("folder", ui->IWADFolders_listWidget->item(i)->text());
     }
     settings.endArray();
+}
+
+
+void Settings::on_endoom_checkBox_clicked(bool checked)
+{
+    settings.setValue("endoom", checked);
 }
 

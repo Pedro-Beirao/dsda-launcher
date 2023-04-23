@@ -869,11 +869,14 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         return;
     }
 
-    endoomWindow->showEndoom(endoomString);
+    if (settings.value("endoom").toBool())
+    {
+        endoomWindow->showEndoom(endoomString);
 
-    endoomWindow->show();
-    endoomWindow->activateWindow();
-    endoomWindow->raise();
+        endoomWindow->show();
+        endoomWindow->activateWindow();
+        endoomWindow->raise();
+    }
 }
 
 void MainWindow::readyReadStandardError()
@@ -1384,6 +1387,11 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     consoleWindow->clearText();
     endoomWindow->clearText();
     endoomString = "";
+
+    if (settings.value("endoom").toBool())
+    {
+        argList.append({"-assign", "ansi_endoom=2"});
+    }
 
 #ifdef __APPLE__
         QFile port = QFile(execPath+"/../Resources/"+exeName+"");
