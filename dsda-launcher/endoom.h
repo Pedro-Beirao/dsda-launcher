@@ -16,24 +16,29 @@ class endoom : public QWidget
 
 private:
     // I am still confussed with what doomwiki says about the colors
-    std::unordered_map<QChar, QString> colors =
+    std::unordered_map<QString, QString> colors =
     {
-        {'0', "black"},
-        {'1', "darkred"},
-        {'2', "green"},
-        {'3', "yellow"},
-        {'4', "blue"},
-        {'5', "purple"},
-        {'6', "cyan"},
-        {'7', "whitesmoke"},
-        {'8', "gray"},
-        {'9', "lightblue"},
-        {'A', "lightgreen"},
-        {'B', "lightcyan"},
-        {'C', "lightred"},
-        {'D', "lightmagenta"},
-        {'E', "yellow"},
-        {'F', "white"},
+        {"0m", "black"},
+        {"1m", "darkred"},
+        {"2m", "green"},
+        {"3m", "yellow"},
+        {"4m", "blue"},
+        {"5m", "purple"},
+        {"6m", "cyan"},
+        {"7m", "whitesmoke"},
+        {"8m", "gray"},
+        {"9m", "white"},
+
+        {"0;", "gray"},
+        {"1;", "indianred "},
+        {"2;", "lawngreen"},
+        {"3;", "gold"},
+        {"4;", "#6871ff"},
+        {"5;", "magenta"},
+        {"6;", "lightcyan"},
+        {"7;", "white"},
+        {"8;", "lightgray"},
+        {"9;", "white"},
     };
 
 public:

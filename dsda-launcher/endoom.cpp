@@ -51,11 +51,11 @@ void endoom::showEndoom(QString qs)
     for (int i = 0; i < qsl.size() - 3; i++)
     {
         if (qsl[i].size() < 4 || qsl[i][1] != '3') continue;
-        QString foreground = colors[qsl[i][2]];
+        QString foreground = colors[qsl[i].mid(2,2)];
 
         i++;
         if (qsl[i].size() < 4 || qsl[i][1] != '4') continue;
-        QString background = colors[qsl[i][2]];
+        QString background = colors[qsl[i].mid(2,2)];
 
         i++;
         if (qsl[i].size() < 3) continue;
