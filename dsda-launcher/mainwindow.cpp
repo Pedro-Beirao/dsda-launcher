@@ -895,7 +895,7 @@ void MainWindow::readyReadStandardOutput()
 
       QString qs = buf;
 
-      if (qs.startsWith("\033"))
+      if (qs.indexOf("\033") != -1)
       {
          endoomString += qs;
       }
