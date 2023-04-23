@@ -859,6 +859,13 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
     QProcess *p = (QProcess *)sender();
     delete p;
     running = false;
+
+    if (exitCode != 0)
+    {
+        consoleWindow->show();
+        consoleWindow->activateWindow();
+        consoleWindow->raise();
+    }
 }
 
 void MainWindow::readyReadStandardError()
@@ -867,7 +874,7 @@ void MainWindow::readyReadStandardError()
     QProcess *p = (QProcess *)sender();
     QByteArray buf = p->readAllStandardError();
 
-    consoleWindow->changeText(buf.toStdString());
+    consoleWindow->changeText("<div style='color: red;'>" + buf.toStdString() + "</div>");
 }
 
 void MainWindow::readyReadStandardOutput()

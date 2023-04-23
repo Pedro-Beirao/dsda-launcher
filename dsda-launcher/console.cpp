@@ -22,8 +22,7 @@ Console::~Console()
 
 void Console::changeText(std::string s)
 {
-    QString previousText = ui->console_plainTextEdit->toPlainText();
-    ui->console_plainTextEdit->setPlainText(previousText + s.c_str());
+    ui->console_plainTextEdit->appendHtml(s.c_str());
 }
 
 void Console::clearText()
