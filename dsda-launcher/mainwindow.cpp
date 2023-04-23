@@ -248,6 +248,7 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     settingsWindow = new Settings;
     consoleWindow = new Console;
     historyListWindow = new historyList;
+    endoomWindow = new endoom;
 
     // The "episode" and "level" boxes can only take 2 numbers
     // This approach also prevents a problem where Qt tried to add spaces to those boxes if no numbers were added
@@ -865,7 +866,14 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         consoleWindow->show();
         consoleWindow->activateWindow();
         consoleWindow->raise();
+        return;
     }
+
+    endoomWindow->showEndoom(endoomString);
+
+    endoomWindow->show();
+    endoomWindow->activateWindow();
+    endoomWindow->raise();
 }
 
 void MainWindow::readyReadStandardError()
@@ -874,15 +882,24 @@ void MainWindow::readyReadStandardError()
     QProcess *p = (QProcess *)sender();
     QByteArray buf = p->readAllStandardError();
 
-    consoleWindow->changeText("<div style='color: red;'>" + buf.toStdString() + "</div>");
+    consoleWindow->changeText("<div style='color: red;'>" + buf + "</div>");
 }
 
 void MainWindow::readyReadStandardOutput()
 {
-  QProcess *p = (QProcess *)sender();
-  QByteArray buf = p->readAllStandardOutput();
+      QProcess *p = (QProcess *)sender();
+      QByteArray buf = p->readAllStandardOutput();
 
-  consoleWindow->changeText(buf.toStdString());
+      QString qs = buf;
+
+      if (qs.startsWith("\033"))
+      {
+         endoomString += qs;
+      }
+      else
+      {
+         consoleWindow->changeText(buf);
+      }
 }
 
 void MainWindow::started()
@@ -1365,6 +1382,8 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     }
 
     consoleWindow->clearText();
+    endoomWindow->clearText();
+    endoomString = "";
 
 #ifdef __APPLE__
         QFile port = QFile(execPath+"/../Resources/"+exeName+"");

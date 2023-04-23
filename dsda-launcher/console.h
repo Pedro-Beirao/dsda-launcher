@@ -5,6 +5,10 @@
 #include <QShortcut>
 #include <QStandardPaths>
 #include <QProcess>
+#include <QTextCharFormat>
+#include <QTextEdit>
+#include <QRegularExpression>
+#include <unordered_map>
 
 namespace Ui {
 class Console;
@@ -21,7 +25,7 @@ public:
 
 public slots:
     void fooo3();
-    void changeText(std::string s);
+    void changeText(QString s);
     void clearText();
 };
 

@@ -11,6 +11,7 @@ DEFINES += "APP_NAME=dsda-launcher"
 SOURCES += \
     console.cpp \
     demodialog.cpp \
+    endoom.cpp \
     historylist.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     console.h \
     demodialog.h \
+    endoom.h \
     historylist.h \
     mainwindow.h \
     settings.h \
@@ -27,6 +29,7 @@ HEADERS += \
 
 FORMS += \
     console.ui \
+    endoom.ui \
     historylist.ui \
     mainwindow.ui \
     settings.ui

@@ -44,6 +44,7 @@
 #include "demodialog.h"
 #include "states.h"
 #include <QTextEdit>
+#include "endoom.h"
 
 const QString version = "v1.2";
 
@@ -93,6 +94,9 @@ private:
     Console *consoleWindow;
     historyList *historyListWindow;
     demodialog *demoDialog;
+    endoom *endoomWindow;
+
+    QString endoomString;
 
     QStringList doom1IWADs = {
         "doom",

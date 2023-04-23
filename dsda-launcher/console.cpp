@@ -13,6 +13,8 @@ Console::Console(QWidget *parent) :
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
     shortcut3->setAutoRepeat(false);
+
+    ui->console_textEdit->setReadOnly(true);
 }
 
 Console::~Console()
@@ -20,14 +22,14 @@ Console::~Console()
     delete ui;
 }
 
-void Console::changeText(std::string s)
+void Console::changeText(QString s)
 {
-    ui->console_plainTextEdit->appendHtml(s.c_str());
+    ui->console_textEdit->append(s);
 }
 
 void Console::clearText()
 {
-    ui->console_plainTextEdit->setPlainText("");
+    ui->console_textEdit->setPlainText("");
 }
 
 
@@ -36,3 +38,4 @@ void Console::fooo3() // CTRL+W runs this function close the active window
     QWidget *currentWindow = QApplication::activeWindow();
     currentWindow->close();
 }
+

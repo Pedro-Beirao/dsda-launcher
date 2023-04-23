@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Console</string>
   </property>
-  <widget class="QPlainTextEdit" name="console_plainTextEdit">
+  <widget class="QTextEdit" name="console_textEdit">
    <property name="geometry">
     <rect>
      <x>-1</x>
@@ -34,17 +34,13 @@
      <height>361</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>.AppleSystemUIFont</family>
+    </font>
+   </property>
    <property name="sizeAdjustPolicy">
     <enum>QAbstractScrollArea::AdjustIgnored</enum>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-   <property name="plainText">
-    <string/>
-   </property>
-   <property name="centerOnScroll">
-    <bool>false</bool>
    </property>
   </widget>
  </widget>
