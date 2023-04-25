@@ -457,6 +457,7 @@ void MainWindow::dropFile(QString fileName)
                                 }
 
                                 QString tmp = lowerCase(argList[ii].toStdString());
+                                if (tmp.size() < 5 || tmp[tmp.size()-4] != '.') tmp += ".wad";
                                 files.append(tmp);
                             }
 
