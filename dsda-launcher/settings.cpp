@@ -24,6 +24,7 @@ Settings::Settings(QWidget *parent) :
     if(settings.value("complevels").toString()=="")
     {
         ui->minimalComplevels_radioButton->setChecked(true);
+        ui->remember_checkBox->setChecked(true);
         settings.setValue("toggle1t", ui->fastText_lineEdit->text());
         settings.setValue("toggle1a", ui->fastParam_lineEdit->text());
         settings.setValue("toggle2t", ui->nomoText_lineEdit->text());
@@ -32,6 +33,7 @@ Settings::Settings(QWidget *parent) :
         settings.setValue("toggle3a", ui->respawnParam_lineEdit->text());
         settings.setValue("toggle4t", ui->solonetText_lineEdit->text());
         settings.setValue("toggle4a", ui->solonetParam_lineEdit->text());
+        settings.setValue("remember", true);
     }
     else
     {
@@ -43,6 +45,7 @@ Settings::Settings(QWidget *parent) :
         ui->respawnParam_lineEdit->setText(settings.value("toggle3a").toString());
         ui->solonetText_lineEdit->setText(settings.value("toggle4t").toString());
         ui->solonetParam_lineEdit->setText(settings.value("toggle4a").toString());
+        ui->remember_checkBox->setChecked(settings.value("remember").toBool());
         if(settings.value("complevels").toInt()==0)
         {
             ui->minimalComplevels_radioButton->setChecked(true);
@@ -552,5 +555,11 @@ void Settings::on_minusIWADFolders_toolButton_clicked()
 void Settings::on_endoom_checkBox_clicked(bool checked)
 {
     settings.setValue("endoom", checked);
+}
+
+
+void Settings::on_remember_checkBox_toggled(bool checked)
+{
+    settings.setValue("remember", checked);
 }
 

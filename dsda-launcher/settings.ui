@@ -69,10 +69,15 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>25</y>
+       <y>20</y>
        <width>101</width>
        <height>22</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>Switching themes may result in
+some UI issues. Restarting the 
+Launcher should fix them.</string>
      </property>
      <property name="text">
       <string>Dark Theme</string>
@@ -85,7 +90,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>170</y>
+       <y>174</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -105,8 +110,8 @@
     <widget class="QLineEdit" name="maxSkillLevel_lineEdit">
      <property name="geometry">
       <rect>
-       <x>125</x>
-       <y>166</y>
+       <x>126</x>
+       <y>170</y>
        <width>25</width>
        <height>24</height>
       </rect>
@@ -135,7 +140,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>90</y>
+       <y>100</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -147,8 +152,8 @@ border-radius:3px</string>
     <widget class="QRadioButton" name="minimalComplevels_radioButton">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>110</y>
+       <x>40</x>
+       <y>120</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -160,8 +165,8 @@ border-radius:3px</string>
     <widget class="QRadioButton" name="fullComplevels_radioButton">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>130</y>
+       <x>40</x>
+       <y>140</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -284,7 +289,7 @@ border-radius:3px</string>
     <widget class="QLineEdit" name="maxHistory_lineEdit">
      <property name="geometry">
       <rect>
-       <x>112</x>
+       <x>120</x>
        <y>202</y>
        <width>31</width>
        <height>24</height>
@@ -445,13 +450,36 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
+       <y>70</y>
        <width>101</width>
        <height>22</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>Show Endoom screen on game exit</string>
+     </property>
      <property name="text">
       <string>Endoom</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="remember_checkBox">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>45</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Remember the selected parameters
+when the Launcher exits</string>
+     </property>
+     <property name="text">
+      <string>Remember selected</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -478,6 +506,7 @@ border-radius:3px</string>
     <zorder>plusIWADFolders_toolButton</zorder>
     <zorder>IWADFolders_textBrowser</zorder>
     <zorder>endoom_checkBox</zorder>
+    <zorder>remember_checkBox</zorder>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">

@@ -119,6 +119,7 @@ QString lowerCase(std::string word)
 QString removeExtension(QString path)
 {
     int dot_pos = path.lastIndexOf('.');
+    dot_pos = dot_pos == -1 ? path.size() : dot_pos;
 
     return lowerCase(path.left(dot_pos).toStdString());
 }
@@ -302,35 +303,38 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     }
 
     // Load settings and apply them
-    ui->complevel_comboBox->setCurrentIndex(settings.value("complevel").toInt());
-    ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
-    ui->episode_lineEdit->setText(settings.value("warp1").toString());
-    ui->level_lineEdit->setText(settings.value("warp2").toString());
-    int pwadCount = settings.value("pwadCount").toInt();
-    for(int i=0; i<pwadCount;i++)
+    if (settings.value("remember").toBool())
     {
-        ui->wads_listWidget->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
+        ui->complevel_comboBox->setCurrentIndex(settings.value("complevel").toInt());
+        ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
+        ui->episode_lineEdit->setText(settings.value("warp1").toString());
+        ui->level_lineEdit->setText(settings.value("warp2").toString());
+        int pwadCount = settings.value("pwadCount").toInt();
+        for(int i=0; i<pwadCount;i++)
+        {
+            ui->wads_listWidget->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
 
+        }
+        ui->fast_checkBox->setChecked(settings.value("fast").toBool());
+        ui->nomo_checkBox->setChecked(settings.value("nomo").toBool());
+        ui->respawn_checkBox->setChecked(settings.value("respawn").toBool());
+        ui->fullscreen_checkBox->setChecked(settings.value("fullscreen").toBool());
+        ui->resolution_comboBox->setCurrentIndex(settings.value("geom").toInt());
+        if(ui->iwad_comboBox->count()>=settings.value("iwad").toInt())
+        {
+            ui->iwad_comboBox->setCurrentIndex(settings.value("iwad").toInt());
+        }
+        ui->solonet_checkBox->setChecked(settings.value("solonet").toBool());
+        ui->additionalArguments_textEdit->append(settings.value("argumentText").toString());
+
+        ui->record_lineEdit->setText(settings.value("recorddemo").toString());
+        ui->playback_lineEdit->setText(settings.value("playdemo").toString());
+        ui->viddump_lineEdit->setText(settings.value("viddump").toString());
+        ui->hud_lineEdit->setText(settings.value("hud").toString());
+        ui->config_lineEdit->setText(settings.value("config").toString());
+
+        ui->playback_comboBox->setCurrentIndex(settings.value("demoplaybox").toInt());
     }
-    ui->fast_checkBox->setChecked(settings.value("fast").toBool());
-    ui->nomo_checkBox->setChecked(settings.value("nomo").toBool());
-    ui->respawn_checkBox->setChecked(settings.value("respawn").toBool());
-    ui->fullscreen_checkBox->setChecked(settings.value("fullscreen").toBool());
-    ui->resolution_comboBox->setCurrentIndex(settings.value("geom").toInt());
-    if(ui->iwad_comboBox->count()>=settings.value("iwad").toInt())
-    {
-        ui->iwad_comboBox->setCurrentIndex(settings.value("iwad").toInt());
-    }
-    ui->solonet_checkBox->setChecked(settings.value("solonet").toBool());
-    ui->additionalArguments_textEdit->append(settings.value("argumentText").toString());
-
-    ui->record_lineEdit->setText(settings.value("recorddemo").toString());
-    ui->playback_lineEdit->setText(settings.value("playdemo").toString());
-    ui->viddump_lineEdit->setText(settings.value("viddump").toString());
-    ui->hud_lineEdit->setText(settings.value("hud").toString());
-    ui->config_lineEdit->setText(settings.value("config").toString());
-
-    ui->playback_comboBox->setCurrentIndex(settings.value("demoplaybox").toInt());
 
     if(ui->playback_comboBox->currentIndex()!=1)
     {
@@ -434,6 +438,7 @@ void MainWindow::dropFile(QString fileName)
                         if(argList[i]=="-iwad")
                         {
                             dot_pos = argList[i+1].lastIndexOf('.');
+                            dot_pos = dot_pos == -1 ? argList[i+1].size() : dot_pos;
 
                             int iwad_index = ui->iwad_comboBox->findText(argList[i+1].left(dot_pos));
                             if (iwad_index != -1)
@@ -451,7 +456,7 @@ void MainWindow::dropFile(QString fileName)
                                     break;
                                 }
 
-                                QString tmp = removeExtension(argList[ii]);
+                                QString tmp = lowerCase(argList[ii].toStdString());
                                 files.append(tmp);
                             }
 
@@ -467,7 +472,7 @@ void MainWindow::dropFile(QString fileName)
                                         QStringList files0 = path.entryList(QDir::Files);
                                         foreach(QString file0, files0)
                                         {
-                                            QString tmp = removeExtension(file0);
+                                            QString tmp = lowerCase(file0.toStdString());
                                             for(int i=0; i<files.count(); i++)
                                             {
                                                 if(files[i].toStdString() == tmp.toStdString())

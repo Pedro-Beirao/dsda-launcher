@@ -74,6 +74,8 @@ private slots:
 
     void on_endoom_checkBox_clicked(bool checked);
 
+    void on_remember_checkBox_toggled(bool checked);
+
 private:
     Ui::Settings *ui;
 };
