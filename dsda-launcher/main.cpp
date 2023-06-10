@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle("dsda-launcher " + version);
-        msgBox.setText("It is recommended that you use dsda-doom v0.25 or later");
+        msgBox.setText("It is recommended that you use dsda-doom v0.26 or later");
         msgBox.setInformativeText(
                     "Here are a few tips you should know:\n"
                     "\n"
