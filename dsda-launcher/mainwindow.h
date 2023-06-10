@@ -46,7 +46,7 @@
 #include <QTextEdit>
 #include "endoom.h"
 
-const QString version = "v1.2";
+const QString version = "v1.3";
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

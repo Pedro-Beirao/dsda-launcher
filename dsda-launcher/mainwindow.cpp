@@ -2348,13 +2348,15 @@ void MainWindow::enable_disable_skill_comboBox()
     {
         ui->difficulty_comboBox->setEnabled(false);
         ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a skill level without choosing a map number");
+        ui->difficulty_comboBox->setToolTip("Cannot select a skill level\n"
+                                            "without choosing a map number");
     }
     else if (ui->playback_lineEdit->text() != "")
     {
         ui->difficulty_comboBox->setEnabled(false);
         ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a skill level during demo playback");
+        ui->difficulty_comboBox->setToolTip("Cannot select a skill level\n"
+                                            "during demo playback");
     }
     else
     {
@@ -2370,7 +2372,8 @@ void MainWindow::enable_disable_complevel_comboBox()
     {
         ui->complevel_comboBox->setEnabled(false);
         ui->complevel_label->setEnabled(false);
-        ui->complevel_comboBox->setToolTip("Cannot select a complevel during demo playback");
+        ui->complevel_comboBox->setToolTip("Cannot select a complevel\n"
+                                           "during demo playback");
     }
     else
     {

@@ -245,6 +245,7 @@ QPalette darkPalette;
                             "QMenu::item:selected {background-color: rgb(55,63,86)}"
                             "QListView {alternate-background-color: rgb(63, 63, 63);}"
                             "QMessageBox QPushButton {padding: 5px 10px;}"
+                            "QToolTip {color: rgb(63, 63, 63);}"
                             );
 
 #endif
