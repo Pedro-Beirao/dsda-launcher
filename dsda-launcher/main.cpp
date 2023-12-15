@@ -9,18 +9,30 @@
 #include <QMessageBox>
 #include <QDebug>
 
+extern QSettings *settings;
+
 int main(int argc, char *argv[])
 {
-    // Settings to be stored
-    QSettings settings("pedrobeirao","dsda-launcher");
-
     QApplication a(argc, argv);
+
+    // Settings to be stored
+    settings = new QSettings(QCoreApplication::applicationDirPath() + "/dsda-launcher.ini", QSettings::IniFormat);
+
+    // Check for previous registry settings and copy it to the new one if needed
+    if (settings->value("version").toString()=="")
+    {
+        QSettings prev_reg_settings("pedrobeirao", "dsda-launcher");
+        Q_FOREACH(QString key, prev_reg_settings.allKeys())
+        {
+          settings->setValue(key, prev_reg_settings.value(key));
+        }
+    }
 
     MainWindow w;
     w.ensurePolished();
     w.show();
 
-    if(settings.value("version").toString()!=version)
+    if(settings->value("version").toString()!=version)
     {
         QMessageBox msgBox;
         msgBox.setWindowTitle("dsda-launcher " + version);

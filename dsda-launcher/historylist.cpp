@@ -44,10 +44,10 @@ void historyList::getHistory()
         return;
     }
 
-    QString box1 = settings.value("toggle1t").toString();
-    QString box2 = settings.value("toggle2t").toString();
-    QString box3 = settings.value("toggle3t").toString();
-    QString box4 = settings.value("toggle4t").toString();
+    QString box1 = settings->value("toggle1t").toString();
+    QString box2 = settings->value("toggle2t").toString();
+    QString box3 = settings->value("toggle3t").toString();
+    QString box4 = settings->value("toggle4t").toString();
 
     std::string buffer;
     while (buffer.substr(0,1) != "-" && !file.eof())
@@ -328,25 +328,25 @@ void historyList::on_launch_pushButton_clicked()
             if(buffer.substr(0,5)=="box1=") // box1
                     {
                         if(buffer.substr(5)=="true")
-                             argList.append(settings.value("toggle1a").toString());
+                             argList.append(settings->value("toggle1a").toString());
                         std::getline(file, buffer);
                     }
             if(buffer.substr(0,5)=="box2=") // box2
                     {
                         if(buffer.substr(5)=="true")
-                             argList.append(settings.value("toggle2a").toString());
+                             argList.append(settings->value("toggle2a").toString());
                         std::getline(file, buffer);
                     }
             if(buffer.substr(0,5)=="box3=") // box3
                     {
                         if(buffer.substr(5)=="true")
-                             argList.append(settings.value("toggle3a").toString());
+                             argList.append(settings->value("toggle3a").toString());
                         std::getline(file, buffer);
                     }
             if(buffer.substr(0,5)=="box4=") //box4
                     {
                         if(buffer.substr(5)=="true")
-                             argList.append(settings.value("toggle4a").toString());
+                             argList.append(settings->value("toggle4a").toString());
                         std::getline(file, buffer);
                     }
             std::string fullscreen = "w";

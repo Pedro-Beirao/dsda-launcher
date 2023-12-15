@@ -239,6 +239,6 @@ private slots:
     void on_config_pushButton_clicked();
     void on_playback_lineEdit_textChanged(const QString &arg1);
 };
-extern QSettings settings;
+extern QSettings *settings;
 
 #endif // MAINWINDOW_H

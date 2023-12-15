@@ -29,13 +29,13 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
     mainLayout->addWidget(files_label, 2, 0, 1, 3);
 
     files_listWidget = new QTableWidget();
-    int size = settings.beginReadArray("pwadfolders");
+    int size = settings->beginReadArray("pwadfolders");
     if(size!=0)
     {
         for (int i = 0; i < size; i++)
         {
-            settings.setArrayIndex(i);
-            QString folder = settings.value("folder").toString();
+            settings->setArrayIndex(i);
+            QString folder = settings->value("folder").toString();
             if(folder!="")
             {
                 QDir path(folder);
@@ -52,7 +52,7 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
                 }
             }
         }
-        settings.endArray();
+        settings->endArray();
 
         QString folder;
 #ifdef _WIN32

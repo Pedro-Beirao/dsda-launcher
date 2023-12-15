@@ -8,10 +8,10 @@ Settings::Settings(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->darkTheme_checkBox->setChecked(settings.value("theme")=="dark");
-    on_darkTheme_checkBox_clicked(settings.value("theme")=="dark");
+    ui->darkTheme_checkBox->setChecked(settings->value("theme")=="dark");
+    on_darkTheme_checkBox_clicked(settings->value("theme")=="dark");
 
-    ui->endoom_checkBox->setChecked(settings.value("endoom").toBool());
+    ui->endoom_checkBox->setChecked(settings->value("endoom").toBool());
 
 #ifdef _WIN32
         ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
@@ -21,42 +21,42 @@ Settings::Settings(QWidget *parent) :
     ui->PWADFolders_textBrowser->setVisible(false);
     ui->IWADFolders_textBrowser->setVisible(false);
 
-    if(settings.value("complevels").toString()=="")
+    if(settings->value("complevels").toString()=="")
     {
         ui->minimalComplevels_radioButton->setChecked(true);
         ui->remember_checkBox->setChecked(true);
-        settings.setValue("toggle1t", ui->fastText_lineEdit->text());
-        settings.setValue("toggle1a", ui->fastParam_lineEdit->text());
-        settings.setValue("toggle2t", ui->nomoText_lineEdit->text());
-        settings.setValue("toggle2a", ui->nomoParam_lineEdit->text());
-        settings.setValue("toggle3t", ui->respawnText_lineEdit->text());
-        settings.setValue("toggle3a", ui->respawnParam_lineEdit->text());
-        settings.setValue("toggle4t", ui->solonetText_lineEdit->text());
-        settings.setValue("toggle4a", ui->solonetParam_lineEdit->text());
-        settings.setValue("remember", true);
+        settings->setValue("toggle1t", ui->fastText_lineEdit->text());
+        settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
+        settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
+        settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
+        settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
+        settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
+        settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
+        settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
+        settings->setValue("remember", true);
     }
     else
     {
-        ui->fastText_lineEdit->setText(settings.value("toggle1t").toString());
-        ui->fastParam_lineEdit->setText(settings.value("toggle1a").toString());
-        ui->nomoText_lineEdit->setText(settings.value("toggle2t").toString());
-        ui->nomoParam_lineEdit->setText(settings.value("toggle2a").toString());
-        ui->respawnText_lineEdit->setText(settings.value("toggle3t").toString());
-        ui->respawnParam_lineEdit->setText(settings.value("toggle3a").toString());
-        ui->solonetText_lineEdit->setText(settings.value("toggle4t").toString());
-        ui->solonetParam_lineEdit->setText(settings.value("toggle4a").toString());
-        ui->remember_checkBox->setChecked(settings.value("remember").toBool());
-        if(settings.value("complevels").toInt()==0)
+        ui->fastText_lineEdit->setText(settings->value("toggle1t").toString());
+        ui->fastParam_lineEdit->setText(settings->value("toggle1a").toString());
+        ui->nomoText_lineEdit->setText(settings->value("toggle2t").toString());
+        ui->nomoParam_lineEdit->setText(settings->value("toggle2a").toString());
+        ui->respawnText_lineEdit->setText(settings->value("toggle3t").toString());
+        ui->respawnParam_lineEdit->setText(settings->value("toggle3a").toString());
+        ui->solonetText_lineEdit->setText(settings->value("toggle4t").toString());
+        ui->solonetParam_lineEdit->setText(settings->value("toggle4a").toString());
+        ui->remember_checkBox->setChecked(settings->value("remember").toBool());
+        if(settings->value("complevels").toInt()==0)
         {
             ui->minimalComplevels_radioButton->setChecked(true);
         }
-        else if(settings.value("complevels").toInt()==1)
+        else if(settings->value("complevels").toInt()==1)
         {
             ui->fullComplevels_radioButton->setChecked(true);
         }
     }
 
-    ui->executable_lineEdit->setText(settings.value("exeName").toString());
+    ui->executable_lineEdit->setText(settings->value("exeName").toString());
 
     ui->maxSkillLevel_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{1}"), this));
     ui->maxHistory_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
@@ -68,20 +68,20 @@ Settings::Settings(QWidget *parent) :
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
     shortcut3->setAutoRepeat(false);
 
-    if(settings.value("maxskilllevel").toString()!="")
-        ui->maxSkillLevel_lineEdit->setText(settings.value("maxskilllevel").toString());
+    if(settings->value("maxskilllevel").toString()!="")
+        ui->maxSkillLevel_lineEdit->setText(settings->value("maxskilllevel").toString());
 
-    if(settings.value("maxhistory").toString()!="")
-        ui->maxHistory_lineEdit->setText(settings.value("maxhistory").toString());
+    if(settings->value("maxhistory").toString()!="")
+        ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 
-    int size = settings.beginReadArray("resolutions");
+    int size = settings->beginReadArray("resolutions");
     if(size!=0)
     {
         ui->resolutions_listWidget->clear();
         for (int i = 0; i < size; i++)
         {
-            settings.setArrayIndex(i);
-            ui->resolutions_listWidget->addItem(settings.value("res").toString());
+            settings->setArrayIndex(i);
+            ui->resolutions_listWidget->addItem(settings->value("res").toString());
             ui->resolutions_listWidget->item(i)->setFlags(QFlags<Qt::ItemFlag>(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled));
         }
     }
@@ -98,7 +98,7 @@ Settings::Settings(QWidget *parent) :
             }
         }
     }
-    settings.endArray();
+    settings->endArray();
     MainWindow::pMainWindow->changeResolutions(ui->resolutions_listWidget);
 
 #ifdef _WIN32
@@ -120,27 +120,27 @@ Settings::Settings(QWidget *parent) :
     ui->IWADFolders_listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
     ui->IWADFolders_listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());
 
-    size = settings.beginReadArray("pwadfolders");
+    size = settings->beginReadArray("pwadfolders");
     if(size!=0)
     {
         for (int i = 0; i < size; i++) {
-            settings.setArrayIndex(i);
-            if(settings.value("folder").toString()!="")
-                ui->PWADFolders_listWidget->addItem(settings.value("folder").toString());
+            settings->setArrayIndex(i);
+            if(settings->value("folder").toString()!="")
+                ui->PWADFolders_listWidget->addItem(settings->value("folder").toString());
         }
     }
-    settings.endArray();
+    settings->endArray();
 
-    size = settings.beginReadArray("iwadfolders");
+    size = settings->beginReadArray("iwadfolders");
     if(size!=0)
     {
         for (int i = 0; i < size; i++) {
-            settings.setArrayIndex(i);
-            if(settings.value("folder").toString()!="")
-                ui->IWADFolders_listWidget->addItem(settings.value("folder").toString());
+            settings->setArrayIndex(i);
+            if(settings->value("folder").toString()!="")
+                ui->IWADFolders_listWidget->addItem(settings->value("folder").toString());
         }
     }
-    settings.endArray();
+    settings->endArray();
 
     ui->saved_label->hide();
     ui->notsaved_label->hide();
@@ -179,7 +179,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
 
 
 
-        settings.setValue("theme","light");
+        settings->setValue("theme","light");
         MainWindow::pMainWindow->changeButtonColor(false);
     }
     else
@@ -249,7 +249,7 @@ QPalette darkPalette;
                             );
 
 #endif
-        settings.setValue("theme","dark");
+        settings->setValue("theme","dark");
         MainWindow::pMainWindow->changeButtonColor(true);
     }
 }
@@ -263,12 +263,12 @@ void Settings::on_plusPWADFolders_toolButton_clicked()
         ui->PWADFolders_listWidget->addItem(dirName);
     }
 
-    settings.beginWriteArray("pwadfolders");
+    settings->beginWriteArray("pwadfolders");
     for (int i = 2; i < ui->PWADFolders_listWidget->count(); i++) {
-        settings.setArrayIndex(i-2);
-        settings.setValue("folder", ui->PWADFolders_listWidget->item(i)->text());
+        settings->setArrayIndex(i-2);
+        settings->setValue("folder", ui->PWADFolders_listWidget->item(i)->text());
     }
-    settings.endArray();
+    settings->endArray();
 }
 
 void Settings::on_minusPWADFolders_toolButton_clicked()
@@ -276,12 +276,12 @@ void Settings::on_minusPWADFolders_toolButton_clicked()
     if(ui->PWADFolders_listWidget->count()>2 && ui->PWADFolders_listWidget->currentRow()>1)
         ui->PWADFolders_listWidget->takeItem(ui->PWADFolders_listWidget->currentRow());
 
-    settings.beginWriteArray("pwadfolders");
+    settings->beginWriteArray("pwadfolders");
     for (int i = 2; i < ui->PWADFolders_listWidget->count(); i++) {
-        settings.setArrayIndex(i-2);
-        settings.setValue("folder", ui->PWADFolders_listWidget->item(i)->text());
+        settings->setArrayIndex(i-2);
+        settings->setValue("folder", ui->PWADFolders_listWidget->item(i)->text());
     }
-    settings.endArray();
+    settings->endArray();
 }
 
 
@@ -289,13 +289,13 @@ void Settings::on_maxSkillLevel_lineEdit_textChanged(const QString &arg1)
 {
     if(arg1=="")
     {
-        settings.setValue("maxskilllevel",5);
+        settings->setValue("maxskilllevel",5);
         MainWindow::pMainWindow->changeMaxSkillLevel(5);
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
-        settings.setValue("maxskilllevel",arg1.toInt());
+        settings->setValue("maxskilllevel",arg1.toInt());
         MainWindow::pMainWindow->changeMaxSkillLevel(arg1.toInt());
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
@@ -306,7 +306,7 @@ void Settings::on_minimalComplevels_radioButton_toggled(bool checked)
 {
     if(checked)
     {
-        settings.setValue("complevels", 0);
+        settings->setValue("complevels", 0);
         MainWindow::pMainWindow->changeComplevelsList(0);
     }
 }
@@ -316,7 +316,7 @@ void Settings::on_fullComplevels_radioButton_toggled(bool checked)
 {
     if(checked)
     {
-        settings.setValue("complevels", 1);
+        settings->setValue("complevels", 1);
         MainWindow::pMainWindow->changeComplevelsList(1);
     }
 }
@@ -416,24 +416,24 @@ void Settings::on_save_pushButton_clicked()
         MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
     }
 
-    settings.setValue("toggle1t", ui->fastText_lineEdit->text());
-    settings.setValue("toggle1a", ui->fastParam_lineEdit->text());
+    settings->setValue("toggle1t", ui->fastText_lineEdit->text());
+    settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
 
-    settings.setValue("toggle2t", ui->nomoText_lineEdit->text());
-    settings.setValue("toggle2a", ui->nomoParam_lineEdit->text());
+    settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
+    settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
 
-    settings.setValue("toggle3t", ui->respawnText_lineEdit->text());
-    settings.setValue("toggle3a", ui->respawnParam_lineEdit->text());
+    settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
+    settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
 
-    settings.setValue("toggle4t", ui->solonetText_lineEdit->text());
-    settings.setValue("toggle4a", ui->solonetParam_lineEdit->text());
+    settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
+    settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
 
-    settings.beginWriteArray("resolutions");
+    settings->beginWriteArray("resolutions");
     for (int i = 0; i < ui->resolutions_listWidget->count(); i++) {
-        settings.setArrayIndex(i);
-        settings.setValue("res", ui->resolutions_listWidget->item(i)->text());
+        settings->setArrayIndex(i);
+        settings->setValue("res", ui->resolutions_listWidget->item(i)->text());
     }
-    settings.endArray();
+    settings->endArray();
 }
 
 void set_placeholder_styleSheet(QLineEdit *l, const QString &arg1)
@@ -512,7 +512,7 @@ void Settings::settingsChanged()
 void Settings::on_maxHistory_lineEdit_textChanged(const QString &arg1)
 {
     set_placeholder_styleSheet(ui->maxHistory_lineEdit, arg1);
-    settings.setValue("maxhistory", arg1);
+    settings->setValue("maxhistory", arg1);
 }
 
 
@@ -530,12 +530,12 @@ void Settings::on_plusIWADFolders_toolButton_clicked()
         ui->IWADFolders_listWidget->addItem(dirName);
     }
 
-    settings.beginWriteArray("iwadfolders");
+    settings->beginWriteArray("iwadfolders");
     for (int i = 2; i < ui->IWADFolders_listWidget->count(); i++) {
-        settings.setArrayIndex(i-2);
-        settings.setValue("folder", ui->IWADFolders_listWidget->item(i)->text());
+        settings->setArrayIndex(i-2);
+        settings->setValue("folder", ui->IWADFolders_listWidget->item(i)->text());
     }
-    settings.endArray();
+    settings->endArray();
 }
 
 
@@ -544,23 +544,23 @@ void Settings::on_minusIWADFolders_toolButton_clicked()
     if(ui->IWADFolders_listWidget->count()>2 && ui->IWADFolders_listWidget->currentRow()>1)
         ui->IWADFolders_listWidget->takeItem(ui->IWADFolders_listWidget->currentRow());
 
-    settings.beginWriteArray("iwadfolders");
+    settings->beginWriteArray("iwadfolders");
     for (int i = 2; i < ui->IWADFolders_listWidget->count(); i++) {
-        settings.setArrayIndex(i-2);
-        settings.setValue("folder", ui->IWADFolders_listWidget->item(i)->text());
+        settings->setArrayIndex(i-2);
+        settings->setValue("folder", ui->IWADFolders_listWidget->item(i)->text());
     }
-    settings.endArray();
+    settings->endArray();
 }
 
 
 void Settings::on_endoom_checkBox_clicked(bool checked)
 {
-    settings.setValue("endoom", checked);
+    settings->setValue("endoom", checked);
 }
 
 
 void Settings::on_remember_checkBox_toggled(bool checked)
 {
-    settings.setValue("remember", checked);
+    settings->setValue("remember", checked);
 }
 

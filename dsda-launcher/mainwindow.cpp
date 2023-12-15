@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-QSettings settings("pedrobeirao","dsda-launcher");
+QSettings * settings;
 MainWindow * MainWindow::pMainWindow = nullptr;
 
 void MainWindow::changeExeName(QString newName)
@@ -28,7 +28,7 @@ void MainWindow::changeMaxSkillLevel(int max)
         else
             ui->difficulty_comboBox->addItem(" ");
     }
-    ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
+    ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
 }
 
 void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
@@ -164,12 +164,12 @@ void MainWindow::findIwads(int type)
     QDir doomwaddir(doomwaddirstr);
     imagesInfo += doomwaddir.entryInfoList(QStringList() << "*.WAD",QDir::Files);
 
-    int size = settings.beginReadArray("iwadfolders");
+    int size = settings->beginReadArray("iwadfolders");
     if(size!=0)
     {
         for (int i = 0; i < size; i++) {
-            settings.setArrayIndex(i);
-            QString folder = settings.value("folder").toString();
+            settings->setArrayIndex(i);
+            QString folder = settings->value("folder").toString();
             if(folder!="")
             {
                 QDir folder0(folder);
@@ -177,7 +177,7 @@ void MainWindow::findIwads(int type)
             }
         }
     }
-    settings.endArray();
+    settings->endArray();
 
     foreach(QFileInfo imageInfo, imagesInfo)
     {
@@ -272,19 +272,19 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     shortcut3->setAutoRepeat(false);
 
     // Set the parameters text correctly
-    if(settings.value("toggle1a").toString()!="")
+    if(settings->value("toggle1a").toString()!="")
     {
-        fastParam = settings.value("toggle1a").toString();
-        nomoParam = settings.value("toggle2a").toString();
-        respawnParam = settings.value("toggle3a").toString();
-        solonetParam = settings.value("toggle4a").toString();
-        ui->fast_checkBox->setText(settings.value("toggle1t").toString());
+        fastParam = settings->value("toggle1a").toString();
+        nomoParam = settings->value("toggle2a").toString();
+        respawnParam = settings->value("toggle3a").toString();
+        solonetParam = settings->value("toggle4a").toString();
+        ui->fast_checkBox->setText(settings->value("toggle1t").toString());
         ui->fast_checkBox->setToolTip(fastParam);
-        ui->nomo_checkBox->setText(settings.value("toggle2t").toString());
+        ui->nomo_checkBox->setText(settings->value("toggle2t").toString());
         ui->nomo_checkBox->setToolTip(nomoParam);
-        ui->respawn_checkBox->setText(settings.value("toggle3t").toString());
+        ui->respawn_checkBox->setText(settings->value("toggle3t").toString());
         ui->respawn_checkBox->setToolTip(respawnParam);
-        ui->solonet_checkBox->setText(settings.value("toggle4t").toString());
+        ui->solonet_checkBox->setText(settings->value("toggle4t").toString());
         ui->solonet_checkBox->setToolTip(solonetParam);
     }
 
@@ -303,37 +303,37 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
     }
 
     // Load settings and apply them
-    if (settings.value("remember").toBool())
+    if (settings->value("remember").toBool())
     {
-        ui->complevel_comboBox->setCurrentIndex(settings.value("complevel").toInt());
-        ui->difficulty_comboBox->setCurrentIndex(settings.value("skill").toInt());
-        ui->episode_lineEdit->setText(settings.value("warp1").toString());
-        ui->level_lineEdit->setText(settings.value("warp2").toString());
-        int pwadCount = settings.value("pwadCount").toInt();
+        ui->complevel_comboBox->setCurrentIndex(settings->value("complevel").toInt());
+        ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
+        ui->episode_lineEdit->setText(settings->value("warp1").toString());
+        ui->level_lineEdit->setText(settings->value("warp2").toString());
+        int pwadCount = settings->value("pwadCount").toInt();
         for(int i=0; i<pwadCount;i++)
         {
-            ui->wads_listWidget->addItem(settings.value(("pwad"+std::to_string(i)).c_str()).toString());
+            ui->wads_listWidget->addItem(settings->value(("pwad"+std::to_string(i)).c_str()).toString());
 
         }
-        ui->fast_checkBox->setChecked(settings.value("fast").toBool());
-        ui->nomo_checkBox->setChecked(settings.value("nomo").toBool());
-        ui->respawn_checkBox->setChecked(settings.value("respawn").toBool());
-        ui->fullscreen_checkBox->setChecked(settings.value("fullscreen").toBool());
-        ui->resolution_comboBox->setCurrentIndex(settings.value("geom").toInt());
-        if(ui->iwad_comboBox->count()>=settings.value("iwad").toInt())
+        ui->fast_checkBox->setChecked(settings->value("fast").toBool());
+        ui->nomo_checkBox->setChecked(settings->value("nomo").toBool());
+        ui->respawn_checkBox->setChecked(settings->value("respawn").toBool());
+        ui->fullscreen_checkBox->setChecked(settings->value("fullscreen").toBool());
+        ui->resolution_comboBox->setCurrentIndex(settings->value("geom").toInt());
+        if(ui->iwad_comboBox->count()>=settings->value("iwad").toInt())
         {
-            ui->iwad_comboBox->setCurrentIndex(settings.value("iwad").toInt());
+            ui->iwad_comboBox->setCurrentIndex(settings->value("iwad").toInt());
         }
-        ui->solonet_checkBox->setChecked(settings.value("solonet").toBool());
-        ui->additionalArguments_textEdit->append(settings.value("argumentText").toString());
+        ui->solonet_checkBox->setChecked(settings->value("solonet").toBool());
+        ui->additionalArguments_textEdit->append(settings->value("argumentText").toString());
 
-        ui->record_lineEdit->setText(settings.value("recorddemo").toString());
-        ui->playback_lineEdit->setText(settings.value("playdemo").toString());
-        ui->viddump_lineEdit->setText(settings.value("viddump").toString());
-        ui->hud_lineEdit->setText(settings.value("hud").toString());
-        ui->config_lineEdit->setText(settings.value("config").toString());
+        ui->record_lineEdit->setText(settings->value("recorddemo").toString());
+        ui->playback_lineEdit->setText(settings->value("playdemo").toString());
+        ui->viddump_lineEdit->setText(settings->value("viddump").toString());
+        ui->hud_lineEdit->setText(settings->value("hud").toString());
+        ui->config_lineEdit->setText(settings->value("config").toString());
 
-        ui->playback_comboBox->setCurrentIndex(settings.value("demoplaybox").toInt());
+        ui->playback_comboBox->setCurrentIndex(settings->value("demoplaybox").toInt());
     }
 
     if(ui->playback_comboBox->currentIndex()!=1)
@@ -359,8 +359,8 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
 
 
 
-    if(settings.value("maxskilllevel").toString()!="")
-        changeMaxSkillLevel(settings.value("maxskilllevel").toInt());
+    if(settings->value("maxskilllevel").toString()!="")
+        changeMaxSkillLevel(settings->value("maxskilllevel").toInt());
 
     if(ui->iwad_comboBox->currentIndex()==-1 && ui->iwad_comboBox->count()!=0)
         ui->iwad_comboBox->setCurrentIndex(0);
@@ -461,12 +461,12 @@ void MainWindow::dropFile(QString fileName)
                                 files.append(tmp);
                             }
 
-                            int size = settings.beginReadArray("pwadfolders");
+                            int size = settings->beginReadArray("pwadfolders");
                             if(size!=0 && !files.empty())
                             {
                                 for (int i = 0; i < size; i++) {
-                                    settings.setArrayIndex(i);
-                                    QString folder = settings.value("folder").toString();
+                                    settings->setArrayIndex(i);
+                                    QString folder = settings->value("folder").toString();
                                     if(folder!="")
                                     {
                                         QDir path(folder);
@@ -487,7 +487,7 @@ void MainWindow::dropFile(QString fileName)
                                     }
                                 }
                             }
-                            settings.endArray();
+                            settings->endArray();
 
 
 
@@ -591,20 +591,20 @@ void MainWindow::dropEvent(QDropEvent *e)
 
 void MainWindow::on_actionLoad_triggered()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Load State"),settings.value("statefile").toString(),tr("state files (*.state)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Load State"),settings->value("statefile").toString(),tr("state files (*.state)"));
     if(fileNames.length()>0)
     {
-        settings.setValue("statefile", fileNames[0]);
+        settings->setValue("statefile", fileNames[0]);
         states::LoadState(fileNames[0], 0);
     }
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"),settings.value("statefile").toString(),tr("state files (*.state)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"),settings->value("statefile").toString(),tr("state files (*.state)"));
     if(fileName != "")
     {
-        settings.setValue("statefile", fileName);
+        settings->setValue("statefile", fileName);
         states::SaveState(fileName);
     }
 }
@@ -782,10 +782,10 @@ void MainWindow::on_actionWhat_is_this_triggered()
 
 void MainWindow::on_actionCommand_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export command line"),settings.value("batfile").toString(),tr("batch files (*.bat *.sh *.zsh *.command)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export command line"),settings->value("batfile").toString(),tr("batch files (*.bat *.sh *.zsh *.command)"));
     if(fileName != "")
     {
-        settings.setValue("batfile", fileName);
+        settings->setValue("batfile", fileName);
         on_launchGame_pushButton_clicked(false,true,fileName.toStdString());
     }
 }
@@ -875,7 +875,7 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         return;
     }
 
-    if (settings.value("endoom").toBool())
+    if (settings->value("endoom").toBool())
     {
         endoomWindow->showEndoom(endoomString);
 
@@ -940,98 +940,98 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
     if(onExit)
         {
-            settings.setValue("iwad",ui->iwad_comboBox->currentIndex());
+            settings->setValue("iwad",ui->iwad_comboBox->currentIndex());
 
             // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
             if(ui->additionalArguments_textEdit->toPlainText().toStdString()!="")
             {
-                settings.setValue("argumentText",ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
+                settings->setValue("argumentText",ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
             }
             else
             {
-                settings.remove("argumentText");
+                settings->remove("argumentText");
             }
-            settings.setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
-            settings.setValue("geom",ui->resolution_comboBox->currentIndex());
+            settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
+            settings->setValue("geom",ui->resolution_comboBox->currentIndex());
 
-            settings.setValue("solonet",isSoloNet);
-            settings.setValue("respawn",isRespawn);
-            settings.setValue("nomo",isNoMo);
-            settings.setValue("fast",isFast);
+            settings->setValue("solonet",isSoloNet);
+            settings->setValue("respawn",isRespawn);
+            settings->setValue("nomo",isNoMo);
+            settings->setValue("fast",isFast);
 
-            settings.setValue("complevel",complevelIndex);
-            settings.setValue("skill",diffIndex);
+            settings->setValue("complevel",complevelIndex);
+            settings->setValue("skill",diffIndex);
 
-            settings.setValue("warp1",ui->episode_lineEdit->text().toStdString().c_str());
-            settings.setValue("warp2",ui->level_lineEdit->text().toStdString().c_str());
+            settings->setValue("warp1",ui->episode_lineEdit->text().toStdString().c_str());
+            settings->setValue("warp2",ui->level_lineEdit->text().toStdString().c_str());
 
             // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
             // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
             if(ui->episode_lineEdit->text().toStdString()=="")
             {
-                settings.remove("warp1");
+                settings->remove("warp1");
             }
             if(ui->level_lineEdit->text().toStdString()=="")
             {
-                settings.remove("warp2");
+                settings->remove("warp2");
             }
 
             if(ui->record_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("recorddemo",ui->record_lineEdit->text());
+                settings->setValue("recorddemo",ui->record_lineEdit->text());
             }
             else
             {
-                settings.remove("recorddemo");
+                settings->remove("recorddemo");
             }
 
             if(ui->playback_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("playdemo",ui->playback_lineEdit->text());
+                settings->setValue("playdemo",ui->playback_lineEdit->text());
             }
             else
             {
-                settings.remove("playdemo");
+                settings->remove("playdemo");
             }
 
             if(ui->viddump_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("viddump",ui->viddump_lineEdit->text());
+                settings->setValue("viddump",ui->viddump_lineEdit->text());
             }
             else
             {
-                settings.remove("viddump");
+                settings->remove("viddump");
             }
 
             if(ui->hud_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("hud",ui->hud_lineEdit->text());
+                settings->setValue("hud",ui->hud_lineEdit->text());
             }
             else
             {
-                settings.remove("hud");
+                settings->remove("hud");
             }
 
             if(ui->config_lineEdit->text().toStdString()!="")
             {
-                settings.setValue("config",ui->config_lineEdit->text());
+                settings->setValue("config",ui->config_lineEdit->text());
             }
             else
             {
-                settings.remove("config");
+                settings->remove("config");
             }
 
-            settings.setValue("demoplaybox", ui->playback_comboBox->currentIndex());
+            settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
 
-            settings.setValue("pwadCount", ui->wads_listWidget->count());
+            settings->setValue("pwadCount", ui->wads_listWidget->count());
             for(int i=0; i<ui->wads_listWidget->count();i++)
             {
-                settings.setValue(("pwad"+std::to_string(i)).c_str(),ui->wads_listWidget->item(i)->text());
+                settings->setValue(("pwad"+std::to_string(i)).c_str(),ui->wads_listWidget->item(i)->text());
             }
 
-            settings.setValue("exeName", exeName);
+            settings->setValue("exeName", exeName);
 
-            settings.setValue("version", version);
+            settings->setValue("version", version);
 
             return;
         }
@@ -1394,7 +1394,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     endoomWindow->clearText();
     endoomString = "";
 
-    if (settings.value("endoom").toBool())
+    if (settings->value("endoom").toBool())
     {
         argList.append({"-assign", "ansi_endoom=2"});
     }
@@ -1545,7 +1545,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         file.close();
     }
 
-    int maxhistory = settings.value("maxhistory").toInt();
+    int maxhistory = settings->value("maxhistory").toInt();
     if (count >= maxhistory)
     {
         needToDelete = count - maxhistory + 1;
@@ -1650,11 +1650,11 @@ void MainWindow::changeWadLName()
 // Add pwads to be loaded
 void MainWindow::on_addWads_toolButton_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings.value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex *.zip)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings->value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex *.zip)"));
     if(fileNames.length()>0)
     {
         ui->wads_listWidget->addItems(fileNames);
-        settings.setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
+        settings->setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
     }
 }
 
@@ -1696,15 +1696,15 @@ void MainWindow::on_tooltip_pushButton_clicked()
 
 void MainWindow::on_record_pushButton_clicked() // Record demo
 {
-    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
-    settings.setValue("demofolder",demoName);
+    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"),settings->value("demofolder").toString(),tr("lmp files (*.lmp)"));
+    settings->setValue("demofolder",demoName);
     ui->record_lineEdit->setText(demoName);
 }
 
 void MainWindow::on_playback_pushButton_clicked() // Play demo
 {
-    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),settings.value("demofolder").toString(),tr("lmp files (*.lmp)"));
-    settings.setValue("demofolder",demoName);
+    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"),settings->value("demofolder").toString(),tr("lmp files (*.lmp)"));
+    settings->setValue("demofolder",demoName);
     ui->playback_lineEdit->setText(demoName);
 }
 
@@ -2315,10 +2315,10 @@ void MainWindow::on_config_lineEdit_textChanged(const QString &arg1)
 
 void MainWindow::on_hud_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("DSDAHUD.lmp"),settings.value("hudfolder").toString(),tr("DSDAHUD file (*.lmp *.txt)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("DSDAHUD.lmp"),settings->value("hudfolder").toString(),tr("DSDAHUD file (*.lmp *.txt)"));
     if (fileName.size() != 0)
     {
-        settings.setValue("hudfolder",fileName);
+        settings->setValue("hudfolder",fileName);
         ui->hud_lineEdit->setText(fileName);
     }
 }
@@ -2326,10 +2326,10 @@ void MainWindow::on_hud_pushButton_clicked()
 
 void MainWindow::on_config_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("dsda-doom.cfg"),settings.value("configfolder").toString(),tr("Config file (*.cfg *.txt)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("dsda-doom.cfg"),settings->value("configfolder").toString(),tr("Config file (*.cfg *.txt)"));
     if (fileName.size() != 0)
     {
-        settings.setValue("configfolder",fileName);
+        settings->setValue("configfolder",fileName);
         ui->config_lineEdit->setText(fileName);
     }
 }
