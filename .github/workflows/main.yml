@@ -34,7 +34,7 @@ jobs:
           aqtversion: '==3.1.*'
           host: 'windows'
           target: 'desktop'
-          arch: 'win64_mingw81'
+          arch: 'win64_mingw'
           setup-python: 'false'
 
         
@@ -77,7 +77,7 @@ jobs:
           host: 'linux'
           target: 'desktop'
           arch: 'gcc_64'
-          tools: 'tools_openssl_x64'
+          tools: 'tools_opensslv3_src'
           
       - name: build
         run: |
