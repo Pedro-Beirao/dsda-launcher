@@ -15,7 +15,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+
     // Settings to be stored
+#ifdef __APPLE__
+    settings = new QSettings("pedrobeirao", "dsda-launcher");
+#else
     settings = new QSettings(QCoreApplication::applicationDirPath() + "/dsda-launcher.ini", QSettings::IniFormat);
 
     // Check for previous registry settings and copy it to the new one if needed
@@ -24,9 +28,10 @@ int main(int argc, char *argv[])
         QSettings prev_reg_settings("pedrobeirao", "dsda-launcher");
         Q_FOREACH(QString key, prev_reg_settings.allKeys())
         {
-          settings->setValue(key, prev_reg_settings.value(key));
+            settings->setValue(key, prev_reg_settings.value(key));
         }
     }
+#endif
 
     MainWindow w;
     w.ensurePolished();
