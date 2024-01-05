@@ -370,7 +370,7 @@ void historyList::on_launch_pushButton_clicked()
                 }
                 else
                 {
-                    argList.append("-nowindow");
+                    argList.append("-fullscreen");
                 }
             }
             else
