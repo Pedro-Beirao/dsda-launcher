@@ -89,10 +89,9 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
             }
         }
     }
-    std::sort(files_paths.begin(), files_paths.end(), [](QPair<QString, QString> p1, QPair<QString, QString> p2)
-    {
-        return p1.first < p2.first;
-    });
+
+    std::sort(files_paths.begin(), files_paths.end(), [](QPair<QString, QString> p1, QPair<QString, QString> p2) { return p1.first < p2.first; });
+
     files_listWidget->setColumnCount(2);
     files_listWidget->setRowCount(files_paths.size()/2+1);
     files_listWidget->horizontalHeader()->setVisible(false);

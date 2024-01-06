@@ -2308,7 +2308,9 @@ void MainWindow::on_config_lineEdit_textChanged(const QString &arg1)
     }
     else
     {
-        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: "
+                                           "20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "
+                                           "border-radius:3px");
     }
 }
 
@@ -2383,8 +2385,8 @@ void MainWindow::enable_disable_complevel_comboBox()
     }
 }
 
-QComboBox *MainWindow::iwad_comboBox() {return ui->iwad_comboBox;}
-QComboBox *MainWindow::complevel_comboBox() {return ui->complevel_comboBox;}
+QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }
+QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }
 QLineEdit *MainWindow::episode_lineEdit() {return ui->episode_lineEdit;}
 QLineEdit *MainWindow::level_lineEdit() {return ui->level_lineEdit;}
 QComboBox *MainWindow::difficulty_comboBox() {return ui->difficulty_comboBox;}

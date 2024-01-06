@@ -50,7 +50,7 @@ void historyList::getHistory()
     QString box4 = settings->value("toggle4t").toString();
 
     std::string buffer;
-    while (buffer.substr(0,1) != "-" && !file.eof())
+    while (buffer != "-" && !file.eof())
     {
         std::getline(file, buffer);
     }
@@ -60,143 +60,132 @@ void historyList::getHistory()
         std::getline(file, buffer);
         QString iwad;
         QString level;
-        std::string l1="";
-        std::string l2="";
+        std::string warp_1 = "";
+        std::string warp_2 = "";
         QString skill;
         QString params="";
         QString pwads="";
-        QString demo="";
-        if(buffer.substr(0,5)=="iwad=") // iwad
-        {
-            iwad = buffer.substr(5).c_str();
-            std::getline(file, buffer);
-        }
-        std::getline(file, buffer);
+        QString demo = "";
 
-        if(buffer.substr(0,6)=="warp1=") // warp 1
-                {
-                        l1=buffer.substr(6);
-                        std::getline(file, buffer);
-                }
-        if(buffer.substr(0,6)=="warp2=") //warp 2
-                {
-                        l2=buffer.substr(6);
-                        std::getline(file, buffer);
-                }
-        if (l2=="" && l1!="")
+        while (buffer != "-" && !file.eof())
         {
-            if (l1.size()==1)
+            std::string buffer_name = buffer;
+            std::string buffer_value = "";
+
+            std::string::size_type pos = buffer.find('=');
+            if (pos != std::string::npos)
             {
-                level = ("MAP0"+l1).c_str();
+                buffer_name = buffer.substr(0, pos);
+                buffer_value = buffer.substr(pos + 1);
             }
-            else
+
+            if (buffer_name == "iwad") // iwad
             {
-                level = ("MAP"+l1).c_str();
+                iwad = QString::fromStdString(buffer_value);
             }
-        }
-        else if (l1!="")
-        {
-            level = ("E"+l1+"M"+l2).c_str();
-        }
-        if (level!="")
-        {
-            level += " - ";
-        }
-        if(buffer.substr(0,6)=="skill=") // skill
+            if (buffer_name == "warp1") // warp 1
+            {
+                warp_1 = buffer_value;
+            }
+            if (buffer_name == "warp2") // warp 2
+            {
+                warp_2 = buffer_value;
+            }
+            qDebug() << buffer_name << buffer_value;
+            if (warp_2 == "" && warp_1 != "")
+            {
+                if (warp_1.size() == 1)
                 {
-                    if (buffer.substr(6).length()>0)
+                    level = QString::fromStdString("MAP0" + warp_1);
+                }
+                else
+                {
+                    level = QString::fromStdString("MAP" + warp_1);
+                }
+            }
+            if (warp_2 != "")
+            {
+                level = QString::fromStdString("E" + warp_1 + "M" + warp_2);
+            }
+            if (level != "")
+            {
+                level += " - ";
+            }
+
+            if (buffer.substr(0, 6) == "skill=") // skill
+            {
+                if (buffer.substr(6).length() > 0)
+                {
+                    int si = atoi(buffer.substr(6).c_str());
+                    if (0 < si && si <= 5)
                     {
-                        int si = atoi(buffer.substr(6).c_str());
-                        qDebug() << si;
-                        if (0 < si && si <= 5)
+                        skill = skillT.at(si);
+                    }
+                    else
+                    {
+                        skill = ("skill=" + buffer.substr(6)).c_str();
+                    }
+                    if (skill != "")
+                    {
+                        skill += " - ";
+                    }
+                }
+            }
+            if (buffer.substr(0, 5) == "box1=") // box1
+            {
+                if (buffer.substr(5, 4) == "true") params += box1 + ", ";
+            }
+            if (buffer.substr(0, 5) == "box2=") // box2
+            {
+                if (buffer.substr(5, 4) == "true") params += box2 + ", ";
+            }
+            if (buffer.substr(0, 5) == "box3=") // box3
+            {
+                if (buffer.substr(5, 4) == "true") params += box3 + ", ";
+            }
+            if (buffer.substr(0, 5) == "box4=") // box4
+            {
+                if (buffer.substr(5, 4) == "true") params += box4 + ", ";
+            }
+
+            if (buffer.substr(0, 4) == "pwad")
+            {
+                while (std::getline(file, buffer) && !file.eof())
+                {
+                    if (buffer.substr(0, 7) == "endpwad") break;
+                    int lastBar = 0;
+                    for (size_t i = 0; i < buffer.length(); i++)
+                    {
+                        if (buffer[i] == '/' || buffer[i] == '\\')
                         {
-                            skill = skillT.at(si);
-                        }
-                        else
-                        {
-                            skill = ("skill="+buffer.substr(6)).c_str();
-                        }
-                        if (skill!="")
-                        {
-                            skill += " - ";
+                            lastBar = i + 1;
                         }
                     }
-                    std::getline(file, buffer);
+                    buffer = buffer.substr(lastBar);
+                    pwads += (buffer + ", ").c_str();
                 }
-        if(buffer.substr(0,5)=="box1=") // box1
+                if (pwads != "")
                 {
-                    if(buffer.substr(5,4)=="true")
-                         params+=box1+", ";
-                    std::getline(file, buffer);
+                    pwads.resize(pwads.size() - 2);
+                    pwads = "\n" + pwads;
                 }
-        if(buffer.substr(0,5)=="box2=") // box2
-                {
-                    if(buffer.substr(5,4)=="true")
-                         params+=box2+", ";
-                    std::getline(file, buffer);
-                }
-        if(buffer.substr(0,5)=="box3=") // box3
-                {
-                    if(buffer.substr(5,4)=="true")
-                         params+=box3+", ";
-                    std::getline(file, buffer);
-                }
-        if(buffer.substr(0,5)=="box4=") //box4
-                {
-                    if(buffer.substr(5,4)=="true")
-                         params+=box4+", ";
-                    std::getline(file, buffer);
-                }
-
-        while (buffer.substr(0,4)!="pwad" && !file.eof())
-        {
-            std::getline(file, buffer);
-        }
-
-        if(buffer.substr(0,4)=="pwad")
-        {
-             while (std::getline(file, buffer) && !file.eof())
-             {
-                if(buffer.substr(0,7)=="endpwad")
-                    break;
+            }
+            if (buffer_name == "record") // record demo
+            {
                 int lastBar = 0;
-                for( size_t i=0; i<buffer.length(); i++)
+                for (size_t i = 0; i < buffer_value.length(); i++)
                 {
-                    if(buffer[i]=='/' || buffer[i]=='\\')
+                    if (buffer_value[i] == '/' || buffer_value[i] == '\\')
                     {
-                        lastBar=i+1;
+                        lastBar = i + 1;
                     }
                 }
-                buffer = buffer.substr(lastBar);
-                pwads+=(buffer+", ").c_str();
-             }
-             if (pwads!="")
-             {
-                 pwads.resize(pwads.size()-2);
-                 pwads = "\n"+pwads;
-             }
-             std::getline(file, buffer);
-        }
-        if(buffer.substr(7).length()>0) // record demo
-                {
-                        int lastBar = 0;
-                        for( size_t i=0; i<buffer.length(); i++)
-                        {
-                            if(buffer[i]=='/' || buffer[i]=='\\')
-                            {
-                                lastBar=i+1;
-                            }
-                        }
-                        demo = buffer.substr(lastBar).c_str();
-                }
-        if (demo!="")
-        {
-            demo="\n"+demo;
-        }
-        while (buffer.substr(0,1)!="-" && !file.eof())
-        {
+                demo = QString::fromStdString("\n" + buffer_value.substr(lastBar));
+            }
+
             std::getline(file, buffer);
         }
+
         QString slp = skill + level + params;
         if (!slp.isEmpty())
         {
@@ -500,7 +489,9 @@ void historyList::on_launch_pushButton_clicked()
                                 }else if(c == '\"' ){
                                     i++;
                                     while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
-                                }else{
+                                }
+                                else
+                                {
                                     strToAdd.push_back(c);
                                 }
                             }
@@ -519,4 +510,3 @@ void historyList::on_launch_pushButton_clicked()
 
     MainWindow::pMainWindow->Launch(iwadName, argList);
 }
-
