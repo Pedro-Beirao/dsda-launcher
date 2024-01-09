@@ -656,7 +656,7 @@ void MainWindow::on_actionCheck_for_updates_triggered()
                             msgBox.exec();
                             if (msgBox.clickedButton()==pButtonYes)
                             {
-                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/"+launcherV));
+                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases" + launcherV));
                             }
                         }
                         else
@@ -939,102 +939,104 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     int diffIndex = ui->difficulty_comboBox->currentIndex();
 
     if(onExit)
+    {
+        settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
+
+        // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
+        if (ui->additionalArguments_textEdit->toPlainText().toStdString() != "")
         {
-            settings->setValue("iwad",ui->iwad_comboBox->currentIndex());
-
-            // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-            if(ui->additionalArguments_textEdit->toPlainText().toStdString()!="")
-            {
-                settings->setValue("argumentText",ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
-            }
-            else
-            {
-                settings->remove("argumentText");
-            }
-            settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
-            settings->setValue("geom",ui->resolution_comboBox->currentIndex());
-
-            settings->setValue("solonet",isSoloNet);
-            settings->setValue("respawn",isRespawn);
-            settings->setValue("nomo",isNoMo);
-            settings->setValue("fast",isFast);
-
-            settings->setValue("complevel",complevelIndex);
-            settings->setValue("skill",diffIndex);
-
-            settings->setValue("warp1",ui->episode_lineEdit->text().toStdString().c_str());
-            settings->setValue("warp2",ui->level_lineEdit->text().toStdString().c_str());
-
-            // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
-            // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-            if(ui->episode_lineEdit->text().toStdString()=="")
-            {
-                settings->remove("warp1");
-            }
-            if(ui->level_lineEdit->text().toStdString()=="")
-            {
-                settings->remove("warp2");
-            }
-
-            if(ui->record_lineEdit->text().toStdString()!="")
-            {
-                settings->setValue("recorddemo",ui->record_lineEdit->text());
-            }
-            else
-            {
-                settings->remove("recorddemo");
-            }
-
-            if(ui->playback_lineEdit->text().toStdString()!="")
-            {
-                settings->setValue("playdemo",ui->playback_lineEdit->text());
-            }
-            else
-            {
-                settings->remove("playdemo");
-            }
-
-            if(ui->viddump_lineEdit->text().toStdString()!="")
-            {
-                settings->setValue("viddump",ui->viddump_lineEdit->text());
-            }
-            else
-            {
-                settings->remove("viddump");
-            }
-
-            if(ui->hud_lineEdit->text().toStdString()!="")
-            {
-                settings->setValue("hud",ui->hud_lineEdit->text());
-            }
-            else
-            {
-                settings->remove("hud");
-            }
-
-            if(ui->config_lineEdit->text().toStdString()!="")
-            {
-                settings->setValue("config",ui->config_lineEdit->text());
-            }
-            else
-            {
-                settings->remove("config");
-            }
-
-            settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
-
-            settings->setValue("pwadCount", ui->wads_listWidget->count());
-            for(int i=0; i<ui->wads_listWidget->count();i++)
-            {
-                settings->setValue(("pwad"+std::to_string(i)).c_str(),ui->wads_listWidget->item(i)->text());
-            }
-
-            settings->setValue("exeName", exeName);
-
-            settings->setValue("version", version);
-
-            return;
+            settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
         }
+        else
+        {
+            settings->remove("argumentText");
+        }
+        settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
+        settings->setValue("geom", ui->resolution_comboBox->currentIndex());
+
+        settings->setValue("solonet", isSoloNet);
+        settings->setValue("respawn", isRespawn);
+        settings->setValue("nomo", isNoMo);
+        settings->setValue("fast", isFast);
+
+        settings->setValue("complevel", complevelIndex);
+        settings->setValue("skill", diffIndex);
+
+        settings->setValue("warp1", ui->episode_lineEdit->text().toStdString().c_str());
+        settings->setValue("warp2", ui->level_lineEdit->text().toStdString().c_str());
+
+        // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
+        // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
+        if (ui->episode_lineEdit->text().toStdString() == "")
+        {
+            settings->remove("warp1");
+        }
+        if (ui->level_lineEdit->text().toStdString() == "")
+        {
+            settings->remove("warp2");
+        }
+
+        if (ui->record_lineEdit->text().toStdString() != "")
+        {
+            settings->setValue("recorddemo", ui->record_lineEdit->text());
+        }
+        else
+        {
+            settings->remove("recorddemo");
+        }
+
+        if (ui->playback_lineEdit->text().toStdString() != "")
+        {
+            settings->setValue("playdemo", ui->playback_lineEdit->text());
+        }
+        else
+        {
+            settings->remove("playdemo");
+        }
+
+        if (ui->viddump_lineEdit->text().toStdString() != "")
+        {
+            settings->setValue("viddump", ui->viddump_lineEdit->text());
+        }
+        else
+        {
+            settings->remove("viddump");
+        }
+
+        if (ui->hud_lineEdit->text().toStdString() != "")
+        {
+            settings->setValue("hud", ui->hud_lineEdit->text());
+        }
+        else
+        {
+            settings->remove("hud");
+        }
+
+        if (ui->config_lineEdit->text().toStdString() != "")
+        {
+            settings->setValue("config", ui->config_lineEdit->text());
+        }
+        else
+        {
+            settings->remove("config");
+        }
+
+        settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
+
+        settings->setValue("pwadCount", ui->wads_listWidget->count());
+        for (int i = 0; i < ui->wads_listWidget->count(); i++)
+        {
+            settings->setValue(("pwad" + std::to_string(i)).c_str(), ui->wads_listWidget->item(i)->text());
+        }
+
+        settings->setValue("exeName", exeName);
+
+        settings->setValue("version", version);
+
+        settings->sync();
+
+        return;
+    }
 
     QStringList argList;
 
