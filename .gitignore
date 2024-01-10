@@ -34,11 +34,10 @@ dsda-launcher/.DS_Store
 dsda-launcher/dsda-launcher.pro.user
 .DS_Store
 dsda-launcher/dsda-doom
-build-dsda-launcher-Desktop_Qt_6_1_1_clang_64bit-Debug
 .vscode
 dsda-launcher/build
 dsda-launcher/.DS_Store
 dsda-launcher/.DS_Store
 dsda-launcher/dsda-doom.wad
 
-build-dsda-launcher-Qt_6_2_2_for_macOS-Debug/
+build*/
