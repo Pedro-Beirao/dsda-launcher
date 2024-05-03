@@ -197,6 +197,8 @@ public slots:
     void changeComplevelsList(int i);
     void changeResolutions(QListWidget *list);
     void dropFile(QString fileName);
+    void dropLmp(QString fileName);
+    QString getFilePath(QString fileName);
     void findIwads(int type);
     void changeExeName(QString newName);
     void on_actionCommand_triggered();

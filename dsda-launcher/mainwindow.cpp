@@ -390,186 +390,190 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     }
 }
 
+QString MainWindow::getFilePath(QString fileName)
+{
+    // Find file in dsda folder
+    QString dsda_folder;
+#ifdef _WIN32
+    dsda_folder = execPath;
+#else
+    dsda_folder = dotfolder;
+#endif
+    QDir dsda_folder_path(dsda_folder);
+    QStringList dsda_folder_files_list = dsda_folder_path.entryList(QDir::Files);
+
+    foreach (QString file_in_dsda_folder, dsda_folder_files_list)
+    {
+        if (fileName == file_in_dsda_folder.toLower())
+        {
+            return (dsda_folder + "/" + file_in_dsda_folder);
+        }
+    }
+
+    // Find file in DOOMWADPATH
+    QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
+#ifdef _WIN32
+    QChar token = ';';
+#else
+    QChar token = ':';
+#endif
+
+    QStringList doomwadpath_folders_list = doomwadpath.split(token);
+    foreach (QString doomwadpath_folder, doomwadpath_folders_list)
+    {
+        QStringList doomwadpath_folder_files_list = QDir(doomwadpath_folder).entryList(QDir::Files);
+        foreach (QString file_in_doomwadpath_folder, doomwadpath_folder_files_list)
+        {
+            if (fileName == file_in_doomwadpath_folder.toLower())
+            {
+                return (doomwadpath_folder + "/" + file_in_doomwadpath_folder);
+            }
+        }
+    }
+
+    // Find file in the pwadfolders
+    int size = settings->beginReadArray("pwadfolders");
+    for (int j = 0; j < size; j++)
+    {
+        settings->setArrayIndex(j);
+        QString folder = settings->value("folder").toString();
+        if (folder != "")
+        {
+            QDir folder_path(folder);
+            QStringList folder_files_list = folder_path.entryList(QDir::Files);
+            foreach (QString file_in_folder, folder_files_list)
+            {
+                if (fileName == file_in_folder.toLower())
+                {
+                    settings->endArray();
+                    return (folder + "/" + file_in_folder);
+                }
+            }
+        }
+    }
+    settings->endArray();
+
+    return "";
+}
+
+void MainWindow::dropLmp(QString fileName)
+{
+    ui->tabs->setCurrentIndex(2);
+    ui->playback_lineEdit->setText(fileName);
+    std::ifstream file;
+    file.open(fileName.toStdString());
+    std::string line;
+
+    bool found_footer = false;
+    while (getline(file, line, '\n'))
+    {
+        if (line.substr(0, 5) == "-iwad")
+        {
+            found_footer = true;
+            ui->wads_listWidget->clear();
+
+            QStringList argList;
+            std::string tmp;
+            for (size_t i = 0; i < line.size(); i++)
+            {
+                if (line[i] != ' ' && line[i] != '\"')
+                {
+                    tmp += line[i];
+                }
+                else if (!tmp.empty())
+                {
+                    argList.push_back(QString::fromStdString(tmp));
+                    tmp.clear();
+                }
+            }
+            if (!tmp.empty())
+            {
+                argList.push_back(QString::fromStdString(tmp));
+                tmp.clear();
+            }
+
+            for (int i = 0; i < argList.count() - 1; i++)
+            {
+                if (argList[i] == "-iwad")
+                {
+                    int iwad_dot_pos = argList[i + 1].lastIndexOf('.');
+                    iwad_dot_pos = iwad_dot_pos == -1 ? argList[i + 1].size() : iwad_dot_pos;
+
+                    int iwad_index = ui->iwad_comboBox->findText(argList[i + 1].left(iwad_dot_pos));
+                    if (iwad_index != -1)
+                    {
+                        ui->iwad_comboBox->setCurrentIndex(iwad_index);
+                    }
+                }
+                else if (argList[i] == "-file" || argList[i] == "-deh")
+                {
+                    QStringList files;
+                    for (int ii = i + 1; ii < argList.count(); ii++)
+                    {
+                        if (argList[ii].size() < 2 || argList[ii][0] == '-')
+                        {
+                            break;
+                        }
+
+                        QString tmp = lowerCase(argList[ii].toStdString());
+
+                        // Some old Woof demos don't have the .wad extension on the footer
+                        int file_dot_pos = tmp.lastIndexOf('.');
+                        if (file_dot_pos == -1) tmp += ".wad";
+
+                        files.append(tmp);
+                    }
+
+                    for (int i = 0; i < files.count(); i++)
+                    {
+                        QString path = getFilePath(files[i]);
+                        if (path.isEmpty()) continue;
+
+                        ui->wads_listWidget->addItem(path);
+                    }
+                }
+            }
+        }
+    }
+
+    file.close();
+
+    if (!found_footer)
+    {
+        QStringList iwad_list;
+        for (int i = 0; i < ui->iwad_comboBox->count(); i++)
+        {
+            iwad_list.push_back(ui->iwad_comboBox->itemText(i));
+        }
+        demodialog *demoDialogNew = new demodialog(iwad_list, this);
+        demoDialogNew->open();
+
+        demoDialog = demoDialogNew;
+        connect(demoDialog, SIGNAL(accepted()), this, SLOT(demoDialog_accepted()));
+    }
+}
+
 void MainWindow::dropFile(QString fileName)
 {
     int dot_pos = fileName.lastIndexOf('.');
     if (dot_pos == -1) return;
 
-    QString tmp = lowerCase(fileName.mid(dot_pos+1).toStdString());
+    QString tmp = lowerCase(fileName.mid(dot_pos + 1).toStdString());
 
-    if(tmp=="lmp")
+    if (tmp == "lmp")
     {
-            ui->tabs->setCurrentIndex(2);
-            ui->playback_lineEdit->setText(fileName);
-            std::ifstream file;
-            file.open(fileName.toStdString());
-            std::string line;
-
-            bool found_footer = false;
-            while(getline(file, line, '\n'))
-            {
-                if(line.substr(0,5)=="-iwad")
-                {
-                    found_footer = true;
-                    ui->wads_listWidget->clear();
-
-                    QStringList argList;
-                    std::string tmp;
-                    for (size_t i = 0; i < line.size(); i++)
-                    {
-                        if (line[i] != ' ' && line[i] != '\"')
-                        {
-                            tmp += line[i];
-                        }
-                        else if (!tmp.empty())
-                        {
-                            argList.push_back(QString::fromStdString(tmp));
-                            tmp.clear();
-                        }
-                    }
-                    if (!tmp.empty())
-                    {
-                        argList.push_back(QString::fromStdString(tmp));
-                        tmp.clear();
-                    }
-
-                    for(int i=0;i<argList.count()-1;i++)
-                    {
-                        if(argList[i]=="-iwad")
-                        {
-                            dot_pos = argList[i+1].lastIndexOf('.');
-                            dot_pos = dot_pos == -1 ? argList[i+1].size() : dot_pos;
-
-                            int iwad_index = ui->iwad_comboBox->findText(argList[i+1].left(dot_pos));
-                            if (iwad_index != -1)
-                            {
-                                ui->iwad_comboBox->setCurrentIndex(iwad_index);
-                            }
-                        }
-                        else if(argList[i]=="-file" || argList[i] == "-deh")
-                        {
-                            QStringList files;
-                            for(int ii=i+1; ii < argList.count(); ii++)
-                            {
-                                if(argList[ii].size() == 0 || argList[ii][0] == '-')
-                                {
-                                    break;
-                                }
-
-                                QString tmp = lowerCase(argList[ii].toStdString());
-                                if (tmp.size() < 5 || tmp[tmp.size()-4] != '.') tmp += ".wad";
-                                files.append(tmp);
-                            }
-
-                            int size = settings->beginReadArray("pwadfolders");
-                            if(size!=0 && !files.empty())
-                            {
-                                for (int i = 0; i < size; i++) {
-                                    settings->setArrayIndex(i);
-                                    QString folder = settings->value("folder").toString();
-                                    if(folder!="")
-                                    {
-                                        QDir path(folder);
-                                        QStringList files0 = path.entryList(QDir::Files);
-                                        foreach(QString file0, files0)
-                                        {
-                                            QString tmp = lowerCase(file0.toStdString());
-                                            for(int i=0; i<files.count(); i++)
-                                            {
-                                                if(files[i].toStdString() == tmp.toStdString())
-                                                {
-                                                    ui->wads_listWidget->addItem(folder+"/"+file0);
-                                                    files.remove(i);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            settings->endArray();
-
-
-
-                            if(files.count()!=0)
-                            {
-                                QString folder;
-#ifdef _WIN32
-                                folder = execPath;
-#else
-                                folder = dotfolder;
-#endif
-                                QDir path(folder);
-                                QStringList files0 = path.entryList(QDir::Files);
-                                QString f = QString(qgetenv("DOOMWADPATH"));
-                                int prev = 0;
-                                int tilDOOMWADPATH = files0.size();
-                                for(int j = 0; j<f.length(); j++)
-                                {
-#ifdef _WIN32
-                                    if (f.at(j) == ';' || j+1 == f.length())
-#else
-                                    if (f.at(j) == ':' || j+1 == f.length())
-#endif
-                                    {
-                                        files0.append(QDir(f.mid(prev, j-prev)).entryList(QDir::Files));
-                                        prev = j+1;
-                                    }
-                                }
-
-                                for(int j=0; j<files0.count(); j++)
-                                {
-                                    for(int i=0; i<files.count(); i++)
-                                    {
-                                        if(lowerCase(files[i].toStdString())==lowerCase(files0.at(j).toStdString()))
-                                        {
-                                            if(j < tilDOOMWADPATH)
-                                                ui->wads_listWidget->addItem(folder+"/"+files0.at(j));
-                                            else
-                                            {
-#ifdef _WIN32
-                                                ui->wads_listWidget->addItem("%DOOMWADPATH%/"+files0.at(j));
-#else
-                                                ui->wads_listWidget->addItem("$DOOMWADPATH/"+files0.at(j));
-#endif
-                                            }
-                                            files.remove(i);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            file.close();
-
-            if (!found_footer)
-            {
-                QStringList iwad_list;
-                for (int i = 0; i < ui->iwad_comboBox->count(); i++)
-                {
-                    iwad_list.push_back(ui->iwad_comboBox->itemText(i));
-                }
-                demodialog *demoDialogNew = new demodialog(iwad_list, this);
-                demoDialogNew->open();
-
-                demoDialog = demoDialogNew;
-                connect(demoDialog, SIGNAL(accepted()), this, SLOT(demoDialog_accepted()));
-            }
+        dropLmp(fileName);
     }
-    else if(tmp=="wad" || tmp=="bex" || tmp=="deh" || tmp=="zip")
+    else if (tmp == "wad" || tmp == "bex" || tmp == "deh" || tmp == "zip")
     {
         QStringList wadsToAdd;
         wadsToAdd.append(fileName);
         addWads(wadsToAdd);
         ui->tabs->setCurrentIndex(1);
     }
-    else if(tmp=="state")
+    else if (tmp == "state")
     {
-           states::LoadState(fileName, 0);
+        states::LoadState(fileName, 0);
     }
 }
 
@@ -583,7 +587,8 @@ void MainWindow::demoDialog_accepted()
 // Drop Event for *.wad *.lmp *gfd
 void MainWindow::dropEvent(QDropEvent *e)
 {
-    foreach (const QUrl &url, e->mimeData()->urls()) {
+    foreach (const QUrl &url, e->mimeData()->urls())
+    {
         QString fileName = url.toLocalFile();
         dropFile(fileName);
     }
@@ -591,8 +596,8 @@ void MainWindow::dropEvent(QDropEvent *e)
 
 void MainWindow::on_actionLoad_triggered()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Load State"),settings->value("statefile").toString(),tr("state files (*.state)"));
-    if(fileNames.length()>0)
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Load State"), settings->value("statefile").toString(), tr("state files (*.state)"));
+    if (fileNames.length() > 0)
     {
         settings->setValue("statefile", fileNames[0]);
         states::LoadState(fileNames[0], 0);
@@ -601,76 +606,71 @@ void MainWindow::on_actionLoad_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"),settings->value("statefile").toString(),tr("state files (*.state)"));
-    if(fileName != "")
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"), settings->value("statefile").toString(), tr("state files (*.state)"));
+    if (fileName != "")
     {
         settings->setValue("statefile", fileName);
         states::SaveState(fileName);
     }
 }
 
-void MainWindow::on_actionGithub_triggered()
-{
-    QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher"));
-}
+void MainWindow::on_actionGithub_triggered() { QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher")); }
 
-void MainWindow::on_actionGithub_2_triggered()
-{
-    QDesktopServices::openUrl(QUrl("https://github.com/kraflab/dsda-doom"));
-}
+void MainWindow::on_actionGithub_2_triggered() { QDesktopServices::openUrl(QUrl("https://github.com/kraflab/dsda-doom")); }
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
-            if (!QSslSocket::supportsSsl())
-            {
-                showSSLDialog();
-                return;
-            }
+    if (!QSslSocket::supportsSsl())
+    {
+        showSSLDialog();
+        return;
+    }
 
-            QString launcherV;
+    QString launcherV;
 
-            QNetworkRequest req(QUrl("https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest"));
-            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-            QJsonObject json;
-            QNetworkAccessManager nam;
-            QNetworkReply *reply = nam.get(req);
-            while (!reply->isFinished())
+    QNetworkRequest req(QUrl("https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest"));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject json;
+    QNetworkAccessManager nam;
+    QNetworkReply *reply = nam.get(req);
+    while (!reply->isFinished())
+    {
+        qApp->processEvents();
+    }
+    QByteArray response_data = reply->readAll();
+    QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
+    QJsonObject jsonobj = jsondoc.object();
+    foreach (const QString &key, jsonobj.keys())
+    {
+        QJsonValue value = jsonobj.value(key);
+        if (key == "name")
+        {
+            if (version != value.toString())
             {
-                qApp->processEvents();
-            }
-            QByteArray response_data = reply->readAll();
-            QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
-            QJsonObject jsonobj = jsondoc.object();
-                foreach(const QString& key, jsonobj.keys()) {
-                    QJsonValue value = jsonobj.value(key);
-                    if(key=="name")
-                    {
-                        if(version!=value.toString())
-                        {
-                            QMessageBox msgBox;
-                            msgBox.setText("DSDA-Launcher "+version);
-                            msgBox.setInformativeText("Available: "+value.toString());
-                            QPushButton* pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
-                            msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
-                            msgBox.setDefaultButton(pButtonYes);
-                            msgBox.exec();
-                            if (msgBox.clickedButton()==pButtonYes)
-                            {
-                                QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases" + launcherV));
-                            }
-                        }
-                        else
-                        {
-                            QMessageBox msgBox;
-                            msgBox.setText("DSDA-Launcher "+version);
-                            msgBox.setInformativeText("Up to Date");
-                            msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
-                            msgBox.exec();
-                        }
-                    }
+                QMessageBox msgBox;
+                msgBox.setText("DSDA-Launcher " + version);
+                msgBox.setInformativeText("Available: " + value.toString());
+                QPushButton *pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
+                msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
+                msgBox.setDefaultButton(pButtonYes);
+                msgBox.exec();
+                if (msgBox.clickedButton() == pButtonYes)
+                {
+                    QDesktopServices::openUrl(QUrl("https://github.com/Pedro-Beirao/dsda-launcher/releases" + launcherV));
                 }
+            }
+            else
+            {
+                QMessageBox msgBox;
+                msgBox.setText("DSDA-Launcher " + version);
+                msgBox.setInformativeText("Up to Date");
+                msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
+                msgBox.exec();
+            }
+        }
+    }
 
-            reply->deleteLater();
+    reply->deleteLater();
 }
 
 void MainWindow::on_actionCheck_for_Updates_triggered()
