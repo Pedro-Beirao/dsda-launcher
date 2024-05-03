@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # building
-	mkdir -p "./dsda-launcher/build"
-	cd "./dsda-launcher/build"
+	mkdir -p "./src/build"
+	cd "./src/build"
 	qmake6 ..
 	make
 	
