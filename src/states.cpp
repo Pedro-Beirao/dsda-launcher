@@ -35,7 +35,7 @@ void states::LoadState(QString fileName, bool isString)
     std::getline(file, buffer);
     if(buffer.substr(0,5)=="iwad=") // iwad
     {
-        for(int i=0; i<ui->iwad_comboBox()->count();i++)
+        for (int i = 0; i < ui->iwad_comboBox()->count(); i++)
         {
             if(ui->iwad_comboBox()->itemText(i).toStdString()==buffer.substr(5))
             {
@@ -169,9 +169,10 @@ void states::LoadState(QString fileName, bool isString)
     {
          while (std::getline(file, buffer))
          {
-            if(buffer.substr(0,7)=="endpwad")
-                break;
-            ui->wads_listWidget()->addItem(buffer.c_str());
+             if (buffer.substr(0, 7) == "endpwad") break;
+
+             ui->wads_listWidget()->addItem(ui->getFileName(buffer.c_str()));
+             ui->wads_listWidget()->item(ui->wads_listWidget()->count() - 1)->setToolTip(buffer.c_str());
          }
          std::getline(file, buffer);
     }
@@ -221,7 +222,7 @@ void states::SaveState(QString fileName)
     std::string pwads;
     for(int i=0; i<ui->wads_listWidget()->count();i++)
     {
-        pwads += ui->wads_listWidget()->item(i)->text().toStdString()+"\n";
+        pwads += ui->wads_listWidget()->item(i)->toolTip().toStdString() + "\n";
     }
     QString level_lineEdit = "";
     if (!ui->level_lineEdit()->isHidden())

@@ -312,8 +312,10 @@ historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
         int pwadCount = settings->value("pwadCount").toInt();
         for(int i=0; i<pwadCount;i++)
         {
-            ui->wads_listWidget->addItem(settings->value(("pwad"+std::to_string(i)).c_str()).toString());
+            QString filePath = settings->value("pwad" + QString::number(i)).toString();
 
+            ui->wads_listWidget->addItem(getFileName(filePath));
+            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
         }
         ui->fast_checkBox->setChecked(settings->value("fast").toBool());
         ui->nomo_checkBox->setChecked(settings->value("nomo").toBool());
@@ -388,6 +390,15 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     if (e->mimeData()->hasUrls()) {
         e->acceptProposedAction();
     }
+}
+
+QString MainWindow::getFileName(QString filePath)
+{
+#ifdef _WIN32
+    return filePath.section("\\", -1, -1);
+#else
+    return filePath.section("/", -1, -1);
+#endif
 }
 
 QString MainWindow::getFilePath(QString fileName)
@@ -526,10 +537,11 @@ void MainWindow::dropLmp(QString fileName)
 
                     for (int i = 0; i < files.count(); i++)
                     {
-                        QString path = getFilePath(files[i]);
-                        if (path.isEmpty()) continue;
+                        QString filePath = getFilePath(files[i]);
+                        if (filePath.isEmpty()) continue;
 
-                        ui->wads_listWidget->addItem(path);
+                        ui->wads_listWidget->addItem(getFileName(filePath));
+                        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
                     }
                 }
             }
@@ -581,7 +593,13 @@ void MainWindow::demoDialog_accepted()
 {
     ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
     ui->wads_listWidget->clear();
-    ui->wads_listWidget->addItems(demoDialog->get_files_list());
+
+    QStringList files_list = demoDialog->get_files_list();
+    foreach (QString filePath, files_list)
+    {
+        ui->wads_listWidget->addItem(getFileName(filePath));
+        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+    }
 }
 
 // Drop Event for *.wad *.lmp *gfd
@@ -834,11 +852,14 @@ void MainWindow::foo3() // CTRL+W runs this function close the active window
     currentWindow->close();
 }
 
-void MainWindow::addWads(QStringList fileNames) // Click the + button to add a wad
+void MainWindow::addWads(QStringList files_list) // Click the + button to add a wad
 {
-    ui->wads_listWidget->addItems(fileNames);
+    foreach (QString filePath, files_list)
+    {
+        ui->wads_listWidget->addItem(getFileName(filePath));
+        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+    }
 }
-
 
 std::string arguments = " ";
 
@@ -1026,7 +1047,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         settings->setValue("pwadCount", ui->wads_listWidget->count());
         for (int i = 0; i < ui->wads_listWidget->count(); i++)
         {
-            settings->setValue(("pwad" + std::to_string(i)).c_str(), ui->wads_listWidget->item(i)->text());
+            settings->setValue("pwad" + QString::number(i), ui->wads_listWidget->item(i)->toolTip());
         }
 
         settings->setValue("exeName", exeName);
@@ -1101,7 +1122,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         argList.append("-file");
         for(int item=0;item < ui->wads_listWidget->count(); item++)
         {
-            std::string fileToAdd = ui->wads_listWidget->item(item)->text().toStdString();
+            std::string fileToAdd = ui->wads_listWidget->item(item)->toolTip().toStdString();
 #ifdef _WIN32
             for(int i=0; i<fileToAdd.length();i++)
             {
@@ -1634,7 +1655,7 @@ void MainWindow::on_console_pushButton_clicked()
 
 void MainWindow::changeWadLName()
 {
-    std::string p = ui->wads_listWidget->item(0)->text().toStdString();
+    std::string p = ui->wads_listWidget->item(0)->toolTip().toStdString();
     if(p.substr(p.length()-4)==".wad")
     {
         int lastBar=0;
@@ -1652,11 +1673,15 @@ void MainWindow::changeWadLName()
 // Add pwads to be loaded
 void MainWindow::on_addWads_toolButton_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select WAD file"),settings->value("primaryPWADFolder").toString(),tr("WAD files (*.wad *.deh *.bex *.zip)"));
-    if(fileNames.length()>0)
+    QStringList files_list = QFileDialog::getOpenFileNames(this, tr("Select WAD file"), settings->value("primaryPWADFolder").toString(), tr("WAD files (*.wad *.deh *.bex *.zip)"));
+    if (files_list.length() > 0)
     {
-        ui->wads_listWidget->addItems(fileNames);
-        settings->setValue("primaryPWADFolder", fileNames[0]); // Make the folder you got this pwad to be the primary folder for pwads
+        foreach (QString filePath, files_list)
+        {
+            ui->wads_listWidget->addItem(getFileName(filePath));
+            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+        }
+        settings->setValue("primaryPWADFolder", files_list[0]); // Make the folder you got this pwad to be the primary folder for pwads
     }
 }
 

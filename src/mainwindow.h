@@ -199,6 +199,7 @@ public slots:
     void dropFile(QString fileName);
     void dropLmp(QString fileName);
     QString getFilePath(QString fileName);
+    QString getFileName(QString filePath);
     void findIwads(int type);
     void changeExeName(QString newName);
     void on_actionCommand_triggered();
