@@ -1,15 +1,6 @@
 #include "demodialog.h"
 #include "mainwindow.h"
 
-QString lowerCased(std::string word)
-{
-    for(size_t i=0;i<word.length();i++)
-    {
-        word[i]=tolower(word[i]);
-    }
-    return word.c_str();
-}
-
 demodialog::demodialog(QStringList iwad_list, QWidget *parent)
     : QDialog(parent)
 {
@@ -44,10 +35,10 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
                 {
                     int dot_pos = file0.lastIndexOf('.');
                     if (dot_pos == -1) continue;
-                    QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
+                    QString tmp = (file0.mid(dot_pos + 1).toLower());
                     if (tmp == "wad" || tmp == "deh" || tmp == "bex")
                     {
-                        files_paths.push_back({lowerCased(file0.right(file0.lastIndexOf(QDir::separator())).toStdString()), folder + QDir::separator() + file0});
+                        files_paths.push_back({(file0.right(file0.lastIndexOf(QDir::separator())).toLower()), folder + QDir::separator() + file0});
                     }
                 }
             }
@@ -82,10 +73,10 @@ demodialog::demodialog(QStringList iwad_list, QWidget *parent)
         {
             int dot_pos = file0.lastIndexOf('.');
             if (dot_pos == -1) continue;
-            QString tmp = lowerCased(file0.mid(dot_pos+1).toStdString());
+            QString tmp = (file0.mid(dot_pos + 1).toLower());
             if (tmp == "wad" || tmp == "deh" || tmp == "bex")
             {
-                files_paths.push_back({lowerCased(file0.right(file0.lastIndexOf(QDir::separator())).toStdString()), folder + QDir::separator() + file0});
+                files_paths.push_back({(file0.right(file0.lastIndexOf(QDir::separator())).toLower()), folder + QDir::separator() + file0});
             }
         }
     }
