@@ -22,13 +22,9 @@ public:
 private:
     Ui::historyList *ui;
 
-#if defined(__APPLE__) || defined(__linux__)
-    QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
-#else
     QString historyPath;
-#endif
 
-public slots:
+  public slots:
     void getHistory();
     void fooo3();
 private slots:

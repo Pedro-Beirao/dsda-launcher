@@ -8,7 +8,7 @@
 class states : public QObject
 {
     Q_OBJECT
-public:
+  public:
     explicit states(QObject *parent = nullptr);
     static void LoadState(QString fileName, bool isString);
     static void SaveState(QString fileName);

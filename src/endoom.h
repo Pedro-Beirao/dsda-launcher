@@ -49,9 +49,9 @@ public slots:
     void fooo3();
     void changeText(QString s);
     void clearText();
-    void showEndoom(QString qs);
+    void showEndoom(QString consoleOutput);
 
-private slots:
+  private slots:
     void on_endoom_textEdit_textChanged();
 
 private:

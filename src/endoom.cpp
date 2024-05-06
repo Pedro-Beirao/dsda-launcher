@@ -39,10 +39,10 @@ void endoom::fooo3() // CTRL+W runs this function close the active window
     currentWindow->close();
 }
 
-void endoom::showEndoom(QString qs)
+void endoom::showEndoom(QString consoleOutput)
 {
     QRegularExpression regex("\033");
-    QStringList qsl = qs.split(regex);
+    QStringList qsl = consoleOutput.split(regex);
 
     QString ret;
 

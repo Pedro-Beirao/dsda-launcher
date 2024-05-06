@@ -14,6 +14,8 @@ historyList::historyList(QWidget *parent) :
 
 #ifdef _WIN32
     historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
+#else
+    historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom/history.states";
 #endif
 }
 
@@ -36,10 +38,8 @@ void historyList::getHistory()
 {
     ui->history_listWidget->clear();
 
-    std::ifstream file;
-    file.open(historyPath.toStdString());
-
-    if (!file.is_open())
+    QFile file(historyPath);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         return;
     }
@@ -49,39 +49,40 @@ void historyList::getHistory()
     QString box3 = settings->value("toggle3t").toString();
     QString box4 = settings->value("toggle4t").toString();
 
-    std::string buffer;
-    while (buffer != "-" && !file.eof())
+    QTextStream stream(&file);
+    QString buffer;
+    while (buffer != "-" && !stream.atEnd())
     {
-        std::getline(file, buffer);
+        stream.readLineInto(&buffer);
     }
 
-    while (!file.eof())
+    while (!stream.atEnd())
     {
-        std::getline(file, buffer);
+        stream.readLineInto(&buffer);
         QString iwad;
         QString level;
-        std::string warp_1 = "";
-        std::string warp_2 = "";
+        QString warp_1 = "";
+        QString warp_2 = "";
         QString skill;
         QString params="";
         QString pwads="";
         QString demo = "";
 
-        while (buffer != "-" && !file.eof())
+        while (buffer != "-" && !stream.atEnd())
         {
-            std::string buffer_name = buffer;
-            std::string buffer_value = "";
+            QString buffer_name = buffer;
+            QString buffer_value = "";
 
-            std::string::size_type pos = buffer.find('=');
-            if (pos != std::string::npos)
+            int pos = buffer.indexOf('=');
+            if (pos != -1)
             {
-                buffer_name = buffer.substr(0, pos);
-                buffer_value = buffer.substr(pos + 1);
+                buffer_name = buffer.mid(0, pos);
+                buffer_value = buffer.mid(pos + 1);
             }
 
             if (buffer_name == "iwad") // iwad
             {
-                iwad = QString::fromStdString(buffer_value);
+                iwad = buffer_value;
             }
             if (buffer_name == "warp1") // warp 1
             {
@@ -91,39 +92,38 @@ void historyList::getHistory()
             {
                 warp_2 = buffer_value;
             }
-            qDebug() << buffer_name << buffer_value;
             if (warp_2 == "" && warp_1 != "")
             {
                 if (warp_1.size() == 1)
                 {
-                    level = QString::fromStdString("MAP0" + warp_1);
+                    level = "MAP0" + warp_1;
                 }
                 else
                 {
-                    level = QString::fromStdString("MAP" + warp_1);
+                    level = "MAP" + warp_1;
                 }
             }
             if (warp_2 != "")
             {
-                level = QString::fromStdString("E" + warp_1 + "M" + warp_2);
+                level = "E" + warp_1 + "M" + warp_2;
             }
             if (level != "")
             {
                 level += " - ";
             }
 
-            if (buffer.substr(0, 6) == "skill=") // skill
+            if (buffer.mid(0, 6) == "skill=") // skill
             {
-                if (buffer.substr(6).length() > 0)
+                if (buffer.mid(6).length() > 0)
                 {
-                    int si = atoi(buffer.substr(6).c_str());
+                    int si = (buffer.mid(6)).toInt();
                     if (0 < si && si <= 5)
                     {
                         skill = skillT.at(si);
                     }
                     else
                     {
-                        skill = ("skill=" + buffer.substr(6)).c_str();
+                        skill = "skill=" + buffer.mid(6);
                     }
                     if (skill != "")
                     {
@@ -131,38 +131,38 @@ void historyList::getHistory()
                     }
                 }
             }
-            if (buffer.substr(0, 5) == "box1=") // box1
+            if (buffer.mid(0, 5) == "box1=") // box1
             {
-                if (buffer.substr(5, 4) == "true") params += box1 + ", ";
+                if (buffer.mid(5, 4) == "true") params += box1 + ", ";
             }
-            if (buffer.substr(0, 5) == "box2=") // box2
+            if (buffer.mid(0, 5) == "box2=") // box2
             {
-                if (buffer.substr(5, 4) == "true") params += box2 + ", ";
+                if (buffer.mid(5, 4) == "true") params += box2 + ", ";
             }
-            if (buffer.substr(0, 5) == "box3=") // box3
+            if (buffer.mid(0, 5) == "box3=") // box3
             {
-                if (buffer.substr(5, 4) == "true") params += box3 + ", ";
+                if (buffer.mid(5, 4) == "true") params += box3 + ", ";
             }
-            if (buffer.substr(0, 5) == "box4=") // box4
+            if (buffer.mid(0, 5) == "box4=") // box4
             {
-                if (buffer.substr(5, 4) == "true") params += box4 + ", ";
+                if (buffer.mid(5, 4) == "true") params += box4 + ", ";
             }
 
-            if (buffer.substr(0, 4) == "pwad")
+            if (buffer.mid(0, 4) == "pwad")
             {
-                while (std::getline(file, buffer) && !file.eof())
+                while (stream.readLineInto(&buffer) && !stream.atEnd())
                 {
-                    if (buffer.substr(0, 7) == "endpwad") break;
+                    if (buffer.mid(0, 7) == "endpwad") break;
                     int lastBar = 0;
-                    for (size_t i = 0; i < buffer.length(); i++)
+                    for (qsizetype i = 0; i < buffer.length(); i++)
                     {
                         if (buffer[i] == '/' || buffer[i] == '\\')
                         {
                             lastBar = i + 1;
                         }
                     }
-                    buffer = buffer.substr(lastBar);
-                    pwads += (buffer + ", ").c_str();
+                    buffer = buffer.mid(lastBar);
+                    pwads += buffer + ", ";
                 }
                 if (pwads != "")
                 {
@@ -173,17 +173,17 @@ void historyList::getHistory()
             if (buffer_name == "record") // record demo
             {
                 int lastBar = 0;
-                for (size_t i = 0; i < buffer_value.length(); i++)
+                for (qsizetype i = 0; i < buffer_value.length(); i++)
                 {
                     if (buffer_value[i] == '/' || buffer_value[i] == '\\')
                     {
                         lastBar = i + 1;
                     }
                 }
-                demo = QString::fromStdString("\n" + buffer_value.substr(lastBar));
+                demo = "\n" + buffer_value.mid(lastBar);
             }
 
-            std::getline(file, buffer);
+            stream.readLineInto(&buffer);
         }
 
         QString slp = skill + level + params;
@@ -209,28 +209,28 @@ void historyList::fooo3() // CTRL+W runs this function close the active window
 
 void historyList::on_load_pushButton_clicked()
 {
-    std::ifstream file;
-    file.open(historyPath.toStdString());
-    QString text = "#lol\n\n";
-
-    if (!file.is_open())
+    QFile file(historyPath);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         return;
     }
 
     int c = -1;
-    std::string buffer;
-    while (!file.eof())
+    QString text = "#lol\n\n";
+
+    QTextStream stream(&file);
+    QString buffer;
+    while (!stream.atEnd())
     {
-        std::getline(file, buffer);
+        stream.readLineInto(&buffer);
         if (buffer == "-")
         {
             c++;
-            std::getline(file, buffer);
+            stream.readLineInto(&buffer);
         }
         if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
-            text += (buffer+"\n").c_str();
+            text += buffer + "\n";
         }
         else if (c > ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
@@ -242,115 +242,102 @@ void historyList::on_load_pushButton_clicked()
     states::LoadState(text, 1);
 }
 
-
-
-
-
-
-
-
 void historyList::on_launch_pushButton_clicked()
 {
     QStringList argList;
     QString iwadName;
 
-    std::ifstream file;
-    file.open(historyPath.toStdString());
-
-    if (!file.is_open())
+    QFile file(historyPath);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         return;
     }
 
     int c = -1;
-    std::string buffer;
-    while (!file.eof())
+    QTextStream stream(&file);
+    QString buffer;
+    while (!stream.atEnd())
     {
-        std::getline(file, buffer);
+        stream.readLineInto(&buffer);
         if (buffer == "-")
         {
             c++;
-            std::getline(file, buffer);
+            stream.readLineInto(&buffer);
         }
         if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
-            if(buffer.substr(0,5)=="iwad=") // iwad
+            if (buffer.mid(0, 5) == "iwad=") // iwad
             {
-                iwadName = buffer.substr(5).c_str();
-                std::getline(file, buffer);
+                iwadName = buffer.mid(5);
+                stream.readLineInto(&buffer);
             }
-            if(buffer.substr(0,10)=="complevel=") // complevel
-                    {
-                        if(buffer.substr(10)[0]!='D')
-                        {
-                            argList.append("-complevel");
-                            argList.append(buffer.substr(10).c_str());
-                        }
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,6)=="warp1=") // warp 1
-                    {
-                            if (!buffer.substr(6).empty())
-                            {
-                                argList.append("-warp");
-                                argList.append(buffer.substr(6).c_str());
-                            }
-                            std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,6)=="warp2=") //warp 2
-                    {
-                            if (!buffer.substr(6).empty())
-                            {
-                                argList.append(buffer.substr(6).c_str());
-                            }
-                            std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,6)=="skill=") // skill
-                    {
-                            if (buffer.substr(6).length()>0 && buffer.substr(6)!="0")
-                            {
-                                 argList.append("-skill");
-                                 argList.append(buffer.substr(6).c_str());
-                            }
-                             std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,5)=="box1=") // box1
-                    {
-                        if(buffer.substr(5)=="true")
-                             argList.append(settings->value("toggle1a").toString());
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,5)=="box2=") // box2
-                    {
-                        if(buffer.substr(5)=="true")
-                             argList.append(settings->value("toggle2a").toString());
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,5)=="box3=") // box3
-                    {
-                        if(buffer.substr(5)=="true")
-                             argList.append(settings->value("toggle3a").toString());
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,5)=="box4=") //box4
-                    {
-                        if(buffer.substr(5)=="true")
-                             argList.append(settings->value("toggle4a").toString());
-                        std::getline(file, buffer);
-                    }
-            std::string fullscreen = "w";
-            std::string resBox = "0";
-            if(buffer.substr(0,11)=="resolution=") // resolution
-                    {
-                        resBox = buffer.substr(11);
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,11)=="fullscreen=") // fullscreen
-                    {
-                        if(buffer.substr(11)=="true")
-                             fullscreen = "f";
-                        std::getline(file, buffer);
-                    }
+            if (buffer.mid(0, 10) == "complevel=") // complevel
+            {
+                if (buffer.mid(10)[0] != 'D')
+                {
+                    argList.append("-complevel");
+                    argList.append(buffer.mid(10));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 6) == "warp1=") // warp 1
+            {
+                if (!buffer.mid(6).isEmpty())
+                {
+                    argList.append("-warp");
+                    argList.append(buffer.mid(6));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 6) == "warp2=") // warp 2
+            {
+                if (!buffer.mid(6).isEmpty())
+                {
+                    argList.append(buffer.mid(6));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 6) == "skill=") // skill
+            {
+                if (buffer.mid(6).length() > 0 && buffer.mid(6) != "0")
+                {
+                    argList.append("-skill");
+                    argList.append(buffer.mid(6));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 5) == "box1=") // box1
+            {
+                if (buffer.mid(5) == "true") argList.append(settings->value("toggle1a").toString());
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 5) == "box2=") // box2
+            {
+                if (buffer.mid(5) == "true") argList.append(settings->value("toggle2a").toString());
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 5) == "box3=") // box3
+            {
+                if (buffer.mid(5) == "true") argList.append(settings->value("toggle3a").toString());
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 5) == "box4=") // box4
+            {
+                if (buffer.mid(5) == "true") argList.append(settings->value("toggle4a").toString());
+                stream.readLineInto(&buffer);
+            }
+            QString fullscreen = "w";
+            QString resBox = "0";
+            if (buffer.mid(0, 11) == "resolution=") // resolution
+            {
+                resBox = buffer.mid(11);
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 11) == "fullscreen=") // fullscreen
+            {
+                if (buffer.mid(11) == "true") fullscreen = "f";
+                stream.readLineInto(&buffer);
+            }
             if(resBox.size() < 2)
             {
                 if(fullscreen=="w")
@@ -365,138 +352,139 @@ void historyList::on_launch_pushButton_clicked()
             else
             {
                 argList.append("-geom");
-                argList.append((resBox+fullscreen).c_str());
+                argList.append((resBox + fullscreen));
             }
 
-            if(buffer.substr(0,4)=="hud=") // hud
-                    {
-                        if (!buffer.substr(4).empty())
-                        {
-                             argList.append("-hud");
-                             argList.append(buffer.substr(4).c_str());
-                        }
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,7)=="config=") // config
-                    {
-                        if (!buffer.substr(7).empty())
-                        {
-                             argList.append("-config");
-                             argList.append(buffer.substr(7).c_str());
-                        }
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,6)=="track=") // track
-                    {
-                        QString tmp = buffer.substr(6).c_str();
-                        if (tmp=="1")
-                            argList.append("-track_pacifist");
-                        else if(tmp=="2")
-                            argList.append("-track_100k");
-                        std::getline(file, buffer);
-                    }
-             if(buffer.substr(0,5)=="time=") // time
-                     {
-                         QString tmp = buffer.substr(5).c_str();
-                         if (tmp=="1")
-                             argList.append("-time_use");
-                         else if(tmp=="2")
-                             argList.append("-time_keys");
-                         else if(tmp=="3")
-                             argList.append("-time_secrets");
-                         else if(tmp=="4")
-                             argList.append("-time_all");
-                         std::getline(file, buffer);
-                     }
-             QStringList files;
-            if(buffer.substr(0,4)=="pwad")
+            if (buffer.mid(0, 4) == "hud=") // hud
             {
-                 while (std::getline(file, buffer))
-                 {
-                    if(buffer.substr(0,7)=="endpwad")
-                        break;
-                    files.append(buffer.c_str());
-                 }
-                 std::getline(file, buffer);
+                if (!buffer.mid(4).isEmpty())
+                {
+                    argList.append("-hud");
+                    argList.append(buffer.mid(4));
+                }
+                stream.readLineInto(&buffer);
             }
+            if (buffer.mid(0, 7) == "config=") // config
+            {
+                if (!buffer.mid(7).isEmpty())
+                {
+                    argList.append("-config");
+                    argList.append(buffer.mid(7));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 6) == "track=") // track
+            {
+                QString tmp = buffer.mid(6);
+                if (tmp == "1") argList.append("-track_pacifist");
+                else if (tmp == "2") argList.append("-track_100k");
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 5) == "time=") // time
+            {
+                QString tmp = buffer.mid(5);
+                if (tmp == "1") argList.append("-time_use");
+                else if (tmp == "2") argList.append("-time_keys");
+                else if (tmp == "3") argList.append("-time_secrets");
+                else if (tmp == "4") argList.append("-time_all");
+                stream.readLineInto(&buffer);
+            }
+             QStringList files;
+             if (buffer.mid(0, 4) == "pwad")
+             {
+                 while (stream.readLineInto(&buffer))
+                 {
+                     if (buffer.mid(0, 7) == "endpwad") break;
+                     files.append(buffer);
+                 }
+                 stream.readLineInto(&buffer);
+             }
             if (files.size()>0)
             {
                 argList.append("-file");
                 argList.append(files);
             }
-            if(buffer.substr(0,7)=="record=") // record demo
-                    {
-                            if (!buffer.substr(7).empty())
-                            {
-                                 argList.append("-record");
-                                 argList.append(buffer.substr(7).c_str());
-                            }
-                            std::getline(file, buffer);
-                    }
+            if (buffer.mid(0, 7) == "record=") // record demo
+            {
+                if (!buffer.mid(7).isEmpty())
+                {
+                    argList.append("-record");
+                    argList.append(buffer.mid(7));
+                }
+                stream.readLineInto(&buffer);
+            }
             QString demo="";
-            if(buffer.substr(0,9)=="playback=") // playback demo
-                    {
-                            if (!buffer.substr(9).empty())
-                            {
-                                 demo = buffer.substr(9).c_str();
-                            }
-                            std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,13)=="demodropdown=") // demo drop down
-                    {
-                        if (buffer.substr(13)=="1")
-                        {
-                             argList.append("-playdemo");
-                             argList.append(demo);
-                        }
-                        else if (buffer.substr(13)=="2")
-                        {
-                             argList.append("-timedemo");
-                             argList.append(demo);
-                        }
-                        else if (buffer.substr(13)=="3")
-                        {
-                             argList.append("-fastdemo");
-                             argList.append(demo);
-                        }
-                        std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,8)=="viddump=") // record demo
-                    {
-                            if (!buffer.substr(8).empty())
-                            {
-                                 argList.append("-viddump");
-                                 argList.append(buffer.substr(8).c_str());
-                            }
-                            std::getline(file, buffer);
-                    }
-            if(buffer.substr(0,11)=="additional=") // additional arguments
-                    {
-                        if (buffer.substr(11) != "")
-                        {
-                            std::string str = buffer.substr(11)+" ";
+            if (buffer.mid(0, 9) == "playback=") // playback demo
+            {
+                if (!buffer.mid(9).isEmpty())
+                {
+                    demo = buffer.mid(9);
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 13) == "demodropdown=") // demo drop down
+            {
+                if (buffer.mid(13) == "1")
+                {
+                    argList.append("-playdemo");
+                    argList.append(demo);
+                }
+                else if (buffer.mid(13) == "2")
+                {
+                    argList.append("-timedemo");
+                    argList.append(demo);
+                }
+                else if (buffer.mid(13) == "3")
+                {
+                    argList.append("-fastdemo");
+                    argList.append(demo);
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 8) == "viddump=") // record demo
+            {
+                if (!buffer.mid(8).isEmpty())
+                {
+                    argList.append("-viddump");
+                    argList.append(buffer.mid(8));
+                }
+                stream.readLineInto(&buffer);
+            }
+            if (buffer.mid(0, 11) == "additional=") // additional arguments
+            {
+                if (buffer.mid(11) != "")
+                {
+                    QString str = buffer.mid(11) + " ";
 
-                            std::string strToAdd="";
-                            for( size_t i=0; i<str.length(); i++){
+                    QString strToAdd = "";
+                    for (qsizetype i = 0; i < str.length(); i++)
+                    {
 
-                                char c = str[i];
-                                if( c == ' '){
-                                    if (strToAdd != "")
-                                    {
-                                        argList.append(strToAdd.c_str());
-                                        strToAdd="";
-                                    }
-                                }else if(c == '\"' ){
-                                    i++;
-                                    while( str[i] != '\"' ){ strToAdd.push_back(str[i]); i++; }
-                                }
-                                else
-                                {
-                                    strToAdd.push_back(c);
-                                }
+                        QChar c = str[i];
+                        if (c == ' ')
+                        {
+                            if (strToAdd != "")
+                            {
+                                argList.append(strToAdd);
+                                strToAdd = "";
                             }
                         }
+                        else if (c == '\"')
+                        {
+                            i++;
+                            while (str[i] != '\"')
+                            {
+                                strToAdd.push_back(str[i]);
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            strToAdd.push_back(c);
+                        }
                     }
+                }
+            }
 
             break;
         }
