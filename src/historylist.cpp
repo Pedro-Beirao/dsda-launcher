@@ -239,7 +239,7 @@ void historyList::on_load_pushButton_clicked()
     }
 
     file.close();
-    states::LoadState(text, 1);
+    states::loadStateFromString(text);
 }
 
 void historyList::on_launch_pushButton_clicked()

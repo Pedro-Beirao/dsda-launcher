@@ -585,7 +585,7 @@ void MainWindow::dropFile(QString fileName)
     }
     else if (tmp == "state")
     {
-        states::LoadState(fileName, 0);
+        states::loadStateFromFile(fileName);
     }
 }
 
@@ -618,7 +618,7 @@ void MainWindow::on_actionLoad_triggered()
     if (fileNames.length() > 0)
     {
         settings->setValue("statefile", fileNames[0]);
-        states::LoadState(fileNames[0], 0);
+        states::loadStateFromFile(fileNames[0]);
     }
 }
 
@@ -628,7 +628,7 @@ void MainWindow::on_actionSave_triggered()
     if (fileName != "")
     {
         settings->setValue("statefile", fileName);
-        states::SaveState(fileName);
+        states::saveStateToFile(fileName);
     }
 }
 
@@ -1610,7 +1610,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         out << h;
     }
     out.close();
-    states::SaveState((historyPath.toStdString()+"s").c_str());
+    states::saveStateToFile((historyPath.toStdString() + "s").c_str());
     remove((historyPath.toStdString()).c_str());
     rename((historyPath.toStdString()+"s").c_str(),historyPath.toStdString().c_str());
     // QProcess::startDetached("chmod", {"a-w", historyPath}); windows doesnt have chmod :(
