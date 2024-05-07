@@ -133,7 +133,7 @@ public:
     ~MainWindow();
     static MainWindow *pMainWindow;
     void addWads(QStringList fileNames);
-    void get_leaderboards(std::string wad, std::string level, std::string category);
+    void get_leaderboards(QString wad, QString level, QString category);
     void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
@@ -162,7 +162,7 @@ public:
 public slots:
     void delayLaunch();
     void closeEvent(QCloseEvent *event);
-    void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd);
+    void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, QString exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
     void on_console_pushButton_clicked();
     void on_addWads_toolButton_clicked();
@@ -197,7 +197,7 @@ public slots:
     void changeComplevelsList(int i);
     void changeResolutions(QListWidget *list);
     void dropFile(QString fileName);
-    void dropLmp(QString fileName);
+    void dropLmp(QString filePath);
     QString getFilePath(QString fileName);
     QString getFileName(QString filePath);
     void findIwads(int type);

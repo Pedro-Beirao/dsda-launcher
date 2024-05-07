@@ -23,8 +23,7 @@ void MainWindow::changeMaxSkillLevel(int max)
     ui->difficulty_comboBox->clear();
     for(int i=0; i<=max;i++)
     {
-        if(i!=0)
-            ui->difficulty_comboBox->addItem(std::to_string(i).c_str());
+        if (i != 0) ui->difficulty_comboBox->addItem(QString::number(i));
         else
             ui->difficulty_comboBox->addItem(" ");
     }
@@ -105,23 +104,13 @@ void MainWindow::changeButtonColor(bool isDark)
 
 }
 
-// Lower case all letters of a string
-QString lowerCase(std::string word)
-{
-    for(size_t i=0;i<word.length();i++)
-    {
-        word[i]=tolower(word[i]);
-    }
-    return word.c_str();
-}
-
 // Remove file extension
 QString removeExtension(QString path)
 {
     int dot_pos = path.lastIndexOf('.');
     dot_pos = dot_pos == -1 ? path.size() : dot_pos;
 
-    return lowerCase(path.left(dot_pos).toStdString());
+    return path.left(dot_pos).toLower();
 }
 
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
@@ -467,39 +456,45 @@ QString MainWindow::getFilePath(QString fileName)
     return "";
 }
 
-void MainWindow::dropLmp(QString fileName)
+void MainWindow::dropLmp(QString filePath)
 {
     ui->tabs->setCurrentIndex(2);
-    ui->playback_lineEdit->setText(fileName);
-    std::ifstream file;
-    file.open(fileName.toStdString());
-    std::string line;
+    ui->playback_lineEdit->setText(filePath);
+
+    QFile file(filePath);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        return;
+    }
+
+    QTextStream stream(&file);
+    QString buffer;
 
     bool found_footer = false;
-    while (getline(file, line, '\n'))
+    while (stream.readLineInto(&buffer))
     {
-        if (line.substr(0, 5) == "-iwad")
+        if (buffer.mid(0, 5) == "-iwad")
         {
             found_footer = true;
             ui->wads_listWidget->clear();
 
             QStringList argList;
-            std::string tmp;
-            for (size_t i = 0; i < line.size(); i++)
+            QString tmp;
+            for (qsizetype i = 0; i < buffer.size(); i++)
             {
-                if (line[i] != ' ' && line[i] != '\"')
+                if (buffer[i] != ' ' && buffer[i] != '\"')
                 {
-                    tmp += line[i];
+                    tmp += buffer[i];
                 }
-                else if (!tmp.empty())
+                else if (!tmp.isEmpty())
                 {
-                    argList.push_back(QString::fromStdString(tmp));
+                    argList.push_back(tmp);
                     tmp.clear();
                 }
             }
-            if (!tmp.empty())
+            if (!tmp.isEmpty())
             {
-                argList.push_back(QString::fromStdString(tmp));
+                argList.push_back(tmp);
                 tmp.clear();
             }
 
@@ -526,7 +521,7 @@ void MainWindow::dropLmp(QString fileName)
                             break;
                         }
 
-                        QString tmp = lowerCase(argList[ii].toStdString());
+                        QString tmp = argList[ii].toLower();
 
                         // Some old Woof demos don't have the .wad extension on the footer
                         int file_dot_pos = tmp.lastIndexOf('.');
@@ -570,7 +565,7 @@ void MainWindow::dropFile(QString fileName)
     int dot_pos = fileName.lastIndexOf('.');
     if (dot_pos == -1) return;
 
-    QString tmp = lowerCase(fileName.mid(dot_pos + 1).toStdString());
+    QString tmp = fileName.mid(dot_pos + 1).toLower();
 
     if (tmp == "lmp")
     {
@@ -717,14 +712,14 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
         process->setWorkingDirectory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         process->start(path, {"-v"});
         process->waitForStarted();
-        std::string data;
+        QString data;
 
         while(process->waitForReadyRead())
             data.append(process->readAll());
 
-        std::stringstream  stream(data);
+        QTextStream stream(&data);
         stream >> data >> data;
-        portversion = data.c_str();
+        portversion = data;
     }
 
     QNetworkRequest req0(QUrl("https://api.github.com/repos/kraflab/dsda-doom/releases/latest"));
@@ -804,7 +799,7 @@ void MainWindow::on_actionCommand_triggered()
     if(fileName != "")
     {
         settings->setValue("batfile", fileName);
-        on_launchGame_pushButton_clicked(false,true,fileName.toStdString());
+        on_launchGame_pushButton_clicked(false, true, fileName);
     }
 }
 
@@ -861,8 +856,6 @@ void MainWindow::addWads(QStringList files_list) // Click the + button to add a 
     }
 }
 
-std::string arguments = " ";
-
 void MainWindow::addToArguments(QString string)
 {
     if(ui->additionalArguments_textEdit->toPlainText().length()>1 && ui->additionalArguments_textEdit->toPlainText().back()!=' ')
@@ -871,16 +864,13 @@ void MainWindow::addToArguments(QString string)
         ui->additionalArguments_textEdit->setText(ui->additionalArguments_textEdit->toPlainText()+string);
 }
 
-bool isFast=false;
-bool isNoMo =false;
-bool isRespawn=false;
+bool isFast = false;
+bool isNoMo = false;
+bool isRespawn = false;
 bool isSoloNet = false;
-std::string isFullscreen="w";
+QString isFullscreen = "w";
 
-void MainWindow::error(QProcess::ProcessError error)
-{
-  qDebug() << "Error: " << error;
-}
+void MainWindow::error(QProcess::ProcessError error) { qDebug() << "Error: " << error; }
 
 void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
@@ -945,7 +935,7 @@ void MainWindow::gameIsRunning()
     msgBox.exec();
 }
 
-void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, std::string exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, QString exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
 {
     if(!canLaunch) // Dont allow 2 launchs in the time of 2 sec
         return;
@@ -964,9 +954,9 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
 
         // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-        if (ui->additionalArguments_textEdit->toPlainText().toStdString() != "")
+        if (ui->additionalArguments_textEdit->toPlainText() != "")
         {
-            settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText().toStdString().c_str());
+            settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
         }
         else
         {
@@ -983,21 +973,21 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         settings->setValue("complevel", complevelIndex);
         settings->setValue("skill", diffIndex);
 
-        settings->setValue("warp1", ui->episode_lineEdit->text().toStdString().c_str());
-        settings->setValue("warp2", ui->level_lineEdit->text().toStdString().c_str());
+        settings->setValue("warp1", ui->episode_lineEdit->text());
+        settings->setValue("warp2", ui->level_lineEdit->text());
 
         // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
         // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-        if (ui->episode_lineEdit->text().toStdString() == "")
+        if (ui->episode_lineEdit->text() == "")
         {
             settings->remove("warp1");
         }
-        if (ui->level_lineEdit->text().toStdString() == "")
+        if (ui->level_lineEdit->text() == "")
         {
             settings->remove("warp2");
         }
 
-        if (ui->record_lineEdit->text().toStdString() != "")
+        if (ui->record_lineEdit->text() != "")
         {
             settings->setValue("recorddemo", ui->record_lineEdit->text());
         }
@@ -1006,7 +996,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             settings->remove("recorddemo");
         }
 
-        if (ui->playback_lineEdit->text().toStdString() != "")
+        if (ui->playback_lineEdit->text() != "")
         {
             settings->setValue("playdemo", ui->playback_lineEdit->text());
         }
@@ -1015,7 +1005,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             settings->remove("playdemo");
         }
 
-        if (ui->viddump_lineEdit->text().toStdString() != "")
+        if (ui->viddump_lineEdit->text() != "")
         {
             settings->setValue("viddump", ui->viddump_lineEdit->text());
         }
@@ -1024,7 +1014,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             settings->remove("viddump");
         }
 
-        if (ui->hud_lineEdit->text().toStdString() != "")
+        if (ui->hud_lineEdit->text() != "")
         {
             settings->setValue("hud", ui->hud_lineEdit->text());
         }
@@ -1033,7 +1023,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             settings->remove("hud");
         }
 
-        if (ui->config_lineEdit->text().toStdString() != "")
+        if (ui->config_lineEdit->text() != "")
         {
             settings->setValue("config", ui->config_lineEdit->text());
         }
@@ -1081,7 +1071,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         If the complevel starts with 'D', then dont use the "-complevel" parameter
         Otherwise, run "-complevel *First+Second char of the string*"
     */
-    std::string complevelString = ui->complevel_comboBox->currentText().toStdString();
+    QString complevelString = ui->complevel_comboBox->currentText();
     if(ui->complevel_comboBox->isEnabled() && complevelString[0]!='D')
     {
         argList.append("-complevel");
@@ -1095,18 +1085,18 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     if(ui->difficulty_comboBox->isEnabled() && ui->difficulty_comboBox->currentIndex()!=0)
     {
         argList.append("-skill");
-        argList.append((std::to_string(diffIndex)).c_str());
+        argList.append(QString::number(diffIndex));
     }
 
     // Warping in Doom takes 2 boxes. 1 for the episode, 1 for the mission
     // Warping in Doom 2 takes 1 box, for the map
-    if(ui->level_lineEdit->text().toStdString()!= "" && !ui->level_lineEdit->isHidden())
+    if (ui->level_lineEdit->text() != "" && !ui->level_lineEdit->isHidden())
     {
         argList.append("-warp");
         argList.append(ui->episode_lineEdit->text());
         argList.append(ui->level_lineEdit->text());
     }
-    else if(ui->episode_lineEdit->text().toStdString()!= "" && ui->level_lineEdit->isHidden())
+    else if (ui->episode_lineEdit->text() != "" && ui->level_lineEdit->isHidden())
     {
         argList.append("-warp");
         argList.append(ui->episode_lineEdit->text());
@@ -1122,7 +1112,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         argList.append("-file");
         for(int item=0;item < ui->wads_listWidget->count(); item++)
         {
-            std::string fileToAdd = ui->wads_listWidget->item(item)->toolTip().toStdString();
+            QString fileToAdd = ui->wads_listWidget->item(item)->toolTip();
 #ifdef _WIN32
             for(int i=0; i<fileToAdd.length();i++)
             {
@@ -1130,15 +1120,11 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
                     fileToAdd[i]='\\';
             }
 #endif
-            if(fileToAdd.substr(0,5) == "$DOOM")
-                fileToAdd = fileToAdd.substr(13);
-            else if (fileToAdd.substr(0,5) == "%DOOM")
-                fileToAdd = fileToAdd.substr(14);
+            if (fileToAdd.mid(0, 5) == "$DOOM") fileToAdd = fileToAdd.mid(13);
+            else if (fileToAdd.mid(0, 5) == "%DOOM") fileToAdd = fileToAdd.mid(14);
 
-            if(returnTooltip)
-                argList.append(("\""+fileToAdd+"\"").c_str());
-            else
-                argList.append((fileToAdd).c_str());
+            if (returnTooltip) argList.append("\"" + fileToAdd + "\"");
+            else argList.append(fileToAdd);
         }
     }
 
@@ -1219,7 +1205,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     else
     {
         argList.append("-geom");
-        argList.append((ui->resolution_comboBox->currentText().toStdString()+isFullscreen).c_str());
+        argList.append(ui->resolution_comboBox->currentText() + isFullscreen);
     }
 
 
@@ -1303,16 +1289,17 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
     if (ui->additionalArguments_textEdit->toPlainText() != "")
     {
-        std::string str = ui->additionalArguments_textEdit->toPlainText().toStdString()+" ";
+        QString str = ui->additionalArguments_textEdit->toPlainText() + " ";
 
-        std::string strToAdd="";
-        for( size_t i=0; i<str.length(); i++){
+        QString strToAdd = "";
+        for (qsizetype i = 0; i < str.length(); i++)
+        {
 
-            char c = str[i];
+            QChar c = str[i];
             if( c == ' '){
                 if (strToAdd != "")
                 {
-                    argList.append(strToAdd.c_str());
+                    argList.append(strToAdd);
                     strToAdd="";
                 }
             }else if(c == '\"' ){
@@ -1327,11 +1314,11 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
     if(returnTooltip)
     {
-        std::string argStr;
-        std::string argStrComplete;
+        QString argStr;
+        QString argStrComplete;
         foreach(QString p, argList)
         {
-            argStrComplete.append((p+" ").toStdString());
+            argStrComplete.append((p + " "));
 
             int lastBar = 0;
             for(qsizetype i=0; i<p.length(); i++)
@@ -1341,36 +1328,40 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
                     lastBar=i+1;
                 }
             }
-            p = p.toStdString().substr(lastBar).c_str();
+            p = p.mid(lastBar);
 
             if(p.length()>1 && p[0]!='"' && p[p.length()-1]=='"')
             {
-                p = p.toStdString().substr(0,p.length()-1).c_str();
+                p = p.mid(0, p.length() - 1);
             }
 
-            argStr.append((p+" ").toStdString());
+            argStr.append((p + " "));
         }
 
         if(exportCmd!="")
         {
-            std::ofstream file_;
-            file_.open(exportCmd);
-            std::string pwads;
+            QFile file(exportCmd);
+            if (!file.open(QFile::WriteOnly | QFile::Text))
+            {
+                return;
+            }
+            QTextStream out(&file);
+
 #ifdef __APPLE__
-                file_ << ("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+            out << "\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
 #elif __linux__
-                file_ << ("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+            out << "\"" + execPath + "/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
 #else
-                std::replace(execPath.begin(),execPath.end(),'/','\\');
-                file_ << ("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" ").toStdString()+argStrComplete;
+            std::replace(execPath.begin(), execPath.end(), '/', '\\');
+            out << "\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
 #endif
-            file_.close();
+            file.close();
 
             return;
         }
 
         QMessageBox msgBox;
-        msgBox.setText("Executable: "+exeName+"\nIWAD: "+ui->iwad_comboBox->currentText()+"\nParameters: "+argStr.c_str());
+        msgBox.setText("Executable: " + exeName + "\nIWAD: " + ui->iwad_comboBox->currentText() + "\nParameters: " + argStr);
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton* pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
@@ -1380,12 +1371,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         {
             QClipboard *clip = QApplication::clipboard();
 #ifdef __APPLE__
-                    clip->setText("\""+execPath+"/../Resources/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
+            clip->setText("\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
 #elif __linux__
-                    clip->setText("\""+execPath+"/"+exeName+"\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
+            clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
 #else
-                    std::replace(execPath.begin(),execPath.end(),'/','\\');
-                    clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete.c_str());
+            std::replace(execPath.begin(), execPath.end(), '/', '\\');
+            clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete;
 #endif
         }
 
@@ -1445,7 +1436,6 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         QFile port = QFile(execPath+"/"+exeName);
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
         argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
-        //system(("cd ~/ && " + execPath+"/dsda-doom -iwad '"+homePath+"/.dsda-doom/"+ui->iwad_comboBox->currentText().toStdString()+".wad' "+arguments+" >> "+homePath+"/.dsda-doom/LogFile.txt &").c_str());
         // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
         QStringList apar; apar << exeName;
         QProcess whichProcess;
@@ -1466,45 +1456,22 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
         }
         else QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that "+ exeName+" is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + exeName + " exists, symlink it to dsda-launcher's folder."));
 #else
-    /*
-        std::string cmd = "\"" + execPath + "\\dsda-doom.exe \" -iwad \"" + execPath + "\\" + ui->iwad_comboBox->currentText().toStdString()+".wad\"" + arguments + " >> \""+ execPath+"\\LogFile.txt\" ";
-        for(int i=0; i<cmd.length();i++)
-        {
-            if(cmd[i]=='/')
-                cmd[i]='\\';
-        }
-
-        STARTUPINFO si={sizeof(si), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
-        PROCESS_INFORMATION pi={};
-        std::wstring cmdline = std::wstring(cmd.begin(), cmd.end());
-        if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.c_str()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS|CREATE_UNICODE_ENVIRONMENT|CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-                CloseHandle(pi.hProcess);
-                CloseHandle(pi.hThread);
-        } else {
-                QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as dsda-doom.exe");
-        }
-
-        // system() also works fine, but leaves a cmd window in the background, so CreateProcess() is better
-        // system(("cmd /c \""+gamePath+"\"").c_str());
-
-        arguments=" ";
-    */
-        QFile port = QFile(execPath+"/"+exeName+".exe");
-        if(port.exists())
-        {
-            argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
-            argList.push_front("-iwad");
-            QProcess *process = new QProcess;
-            process->setWorkingDirectory(execPath);
-            process->start(execPath+"/"+exeName+".exe", argList);
-            connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
-            connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
-            connect(process, SIGNAL(started()), this, SLOT(started()));
-        }
-        else
-        {
-            QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as "+exeName+".exe");
-        }
+    QFile port = QFile(execPath + "/" + exeName + ".exe");
+    if (port.exists())
+    {
+        argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
+        argList.push_front("-iwad");
+        QProcess *process = new QProcess;
+        process->setWorkingDirectory(execPath);
+        process->start(execPath + "/" + exeName + ".exe", argList);
+        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+        connect(process, SIGNAL(started()), this, SLOT(started()));
+    }
+    else
+    {
+        QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + exeName + ".exe");
+    }
 #endif
 
         // Again, don't allow the launch button to work twice in the space of 2 secs
@@ -1526,47 +1493,42 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     QByteArray arr = t.toLatin1();
     checksum = qChecksum(arr.data(), arr.length());
 
-    std::ostringstream stream;
-    if (QFileInfo::exists(historyPath))
-    {
-        std::ifstream file;
-        file.open(historyPath.toStdString());
+    QFile file(historyPath);
 
-        if (!file.is_open())
+    if (!file.isOpen())
+    {
+        return;
+    }
+
+    QTextStream stream(&file);
+
+    QString buffer;
+
+    while (!file.atEnd())
+    {
+        stream.readLineInto(&buffer);
+        if (buffer[0] == '-')
         {
+            count++;
+        }
+    }
+    stream.seek(0);
+
+    while (buffer.mid(0, 9) != "checksum=" && !file.atEnd())
+    {
+        stream.readLineInto(&buffer);
+    }
+
+    if (buffer.mid(0, 9) == "checksum=" && buffer.mid(9).length() > 0)
+    {
+        if (checksum == buffer.mid(9).toInt())
+        {
+            file.close();
             return;
         }
-
-        std::string buffer;
-
-        while (!file.eof())
-        {
-            std::getline(file, buffer);
-            if (buffer[0]=='-')
-            {
-                count++;
-            }
-        }
-        file.seekg(0);
-
-        while (buffer.substr(0,9)!="checksum=" && !file.eof())
-        {
-            std::getline(file, buffer);
-        }
-
-        if (buffer.substr(0,9)=="checksum=" && buffer.substr(9).length()>0)
-        {
-            if (checksum==std::atoi(buffer.substr(9).c_str()))
-            {
-                file.close();
-                return;
-            }
-        }
-
-        stream << file.rdbuf();
-
-        file.close();
     }
+
+    file.close();
 
     int maxhistory = settings->value("maxhistory").toInt();
     if (count >= maxhistory)
@@ -1574,10 +1536,18 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         needToDelete = count - maxhistory + 1;
     }
 
-    std::string h = "# Do not edit this file manually\n\nchecksum="+std::to_string(checksum)+"\n";
-    std::string streamstr = stream.str();
+    QString h = "# Do not edit this file manually\n\nchecksum=" + QString::number(checksum) + "\n";
+    QString streamstr = stream.readAll();
 
-    std::ofstream out(historyPath.toStdString()+"s");
+    QFile file_out(historyPath);
+
+    if (!file_out.isOpen())
+    {
+        return;
+    }
+
+    QTextStream out(&file_out);
+
     if (!needToDelete)
     {
         if (streamstr!="")
@@ -1591,13 +1561,13 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         if (streamstr!="")
         {
             int past = 0;
-            for (size_t i = 0; i < streamstr.length(); i++)
+            for (qsizetype i = 0; i < streamstr.length(); i++)
             {
-                if (streamstr.substr(i,2) == "-\n")
+                if (streamstr.mid(i, 2) == "-\n")
                 {
                     if (past == needToDelete)
                     {
-                        streamstr = streamstr.substr(i);
+                        streamstr = streamstr.mid(i);
                     }
                     else
                     {
@@ -1609,26 +1579,23 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         }
         out << h;
     }
-    out.close();
-    states::saveStateToFile((historyPath.toStdString() + "s").c_str());
-    remove((historyPath.toStdString()).c_str());
-    rename((historyPath.toStdString()+"s").c_str(),historyPath.toStdString().c_str());
-    // QProcess::startDetached("chmod", {"a-w", historyPath}); windows doesnt have chmod :(
-
-
+    file_out.close();
+    states::saveStateToFile(historyPath + "s");
+    QFile::remove(historyPath);
+    QFile::rename(historyPath + "s", historyPath);
 }
 
 // If the IWAD selected changes
 void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
 {
-    std::string sel = (ui->iwad_comboBox->currentText()).toStdString();
+    QString sel = ui->iwad_comboBox->currentText();
     for (int i = 0; i < int(sel.length()); i++)
-        {
-            sel[i] = tolower(sel[i]);
-        }
+    {
+        sel[i] = sel[i].toLower();
+    }
 
     // These are episode/mission based. They need both warp boxes
-    if(doom1IWADs.contains(sel.c_str()))
+    if (doom1IWADs.contains(sel))
     {
         ui->level_label->show();
         ui->level_lineEdit->show();
@@ -1655,18 +1622,19 @@ void MainWindow::on_console_pushButton_clicked()
 
 void MainWindow::changeWadLName()
 {
-    std::string p = ui->wads_listWidget->item(0)->toolTip().toStdString();
-    if(p.substr(p.length()-4)==".wad")
+    QString p = ui->wads_listWidget->item(0)->toolTip();
+    if (p.mid(p.length() - 4) == ".wad")
     {
         int lastBar=0;
-        for( size_t i=0; i<p.length(); i++){
+        for (qsizetype i = 0; i < p.length(); i++)
+        {
             if(p[i]==QDir::separator())
             {
                 lastBar=i+1;
             }
         }
-        p = p.substr(lastBar);
-        ui->wadDSDA_lineEdit->setText(p.substr(0,p.length()-4).c_str());
+        p = p.mid(lastBar);
+        ui->wadDSDA_lineEdit->setText(p.mid(0, p.length() - 4));
     }
 }
 
@@ -1770,7 +1738,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 }
 
 QString demoFile;
-void MainWindow::get_leaderboards(std::string wad, std::string level, std::string category) // Get the WR for a run from dsdarchive.com
+void MainWindow::get_leaderboards(QString wad, QString level, QString category) // Get the WR for a run from dsdarchive.com
 {
     if (!QSslSocket::supportsSsl())
     {
@@ -1783,7 +1751,7 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
     QString engine;
     QString date;
 
-    QNetworkRequest req(QUrl(QString(("https://dsdarchive.com/api/demos/records?wad="+wad+"&level="+level+"&category="+category).c_str())));
+    QNetworkRequest req(QUrl("https://dsdarchive.com/api/demos/records?wad=" + wad + "&level=" + level + "&category=" + category));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
@@ -1819,10 +1787,9 @@ void MainWindow::get_leaderboards(std::string wad, std::string level, std::strin
             }
             else if(key=="date")
             {
-                std::string dateString = value.toString().toStdString();
-                dateString=dateString.substr(0,dateString.find("T"));
-                date=dateString.c_str();
-
+                QString dateString = value.toString();
+                dateString = dateString.mid(0, dateString.indexOf("T"));
+                date = dateString;
             }
             else if(key=="file")
             {
@@ -1847,8 +1814,8 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
 {
 
     reloadingLeaderboards=true;
-    std::string arg1 = ui->dsda_comboBox->currentText().toStdString();
-    std::string category;
+    QString arg1 = ui->dsda_comboBox->currentText();
+    QString category;
 
     // We need to change " " with "%20"
     if(ui->iwad_comboBox->currentText()=="heretic")
@@ -1997,45 +1964,23 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
         }
     }
 
+    QString wad;
+    QString level;
 
-    std::string wad;
-    std::string level;
-
-
-
-    if(changeWad)
+    if (changeWad)
     {
-            wad = lowerCase(ui->iwad_comboBox->currentText().toStdString()).toStdString();
-            if(wad=="doomu"||wad=="doom1")
-            {
-                wad="doom";
-            }
+        wad = ui->iwad_comboBox->currentText().toLower();
+        if (wad == "doomu" || wad == "doom1")
+        {
+            wad = "doom";
+        }
     }
     else
     {
-        wad=lowerCase(ui->wadDSDA_lineEdit->text().toStdString()).toStdString();
+        wad = ui->wadDSDA_lineEdit->text().toLower();
     }
 
-
-    /*
-    if(ui->level_lineEdit->text().toStdString()!= "" && !ui->level_lineEdit->isHidden())
-    {
-        level = "E"+ui->episode_lineEdit->text().toStdString()+"M"+ui->level_lineEdit->text().toStdString();
-    }
-    else if(ui->episode_lineEdit->text().toStdString()!= "" && ui->level_lineEdit->isHidden())
-    {
-        if(ui->episode_lineEdit->text().toStdString().length()==1)
-        {
-            level = "Map0"+ui->episode_lineEdit->text().toStdString();
-        }
-        else
-        {
-            level = "Map"+ui->episode_lineEdit->text().toStdString();
-        }
-
-    }
-    */
-    if(ui->levelDSDA_lineEdit->text()=="" || changeWad)
+    if (ui->levelDSDA_lineEdit->text() == "" || changeWad)
     {
         if(!ui->level_lineEdit->isHidden())
         {
@@ -2045,35 +1990,33 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
         {
             level = "Map01";
         }
-        ui->levelDSDA_lineEdit->setText(level.c_str());
+        ui->levelDSDA_lineEdit->setText(level);
     }
 
-    level = ui->levelDSDA_lineEdit->text().toStdString();
+    level = ui->levelDSDA_lineEdit->text();
 
     wad.erase(std::remove(wad.begin(), wad.end(), ' '), wad.end());
     level.erase(std::remove(level.begin(), level.end(), ' '), level.end());
 
-    if(lowerCase(level.substr(0,2))=="ep")
+    if (level.mid(0, 2).toLower() == "ep")
     {
-        level = "Episode%20"+level.substr(2);
+        level = "Episode%20" + level.mid(2);
     }
-    else if(tolower(level[0])=='e')
+    else if (level[0].toLower() == 'e')
     {
-        level = "E"+level.substr(1,1)+"M"+level.substr(3);
+        level = "E" + level.mid(1, 1) + "M" + level.mid(3);
     }
-    else if(lowerCase(level.substr(0,3))=="map")
+    else if (level.mid(0, 3).toLower() == "map")
     {
-        if(level.substr(3).length()==1)
-            level = "Map%200"+level.substr(3);
-        else
-            level = "Map%20"+level.substr(3);
+        if (level.mid(3).length() == 1) level = "Map%200" + level.mid(3);
+        else level = "Map%20" + level.mid(3);
     }
-    else if(lowerCase(level)=="d2all")
+    else if (level.toLower() == "d2all")
     {
         level = "D2All";
     }
 
-    ui->wadDSDA_lineEdit->setText(wad.c_str());
+    ui->wadDSDA_lineEdit->setText(wad);
 
     if(callApi)
     {
@@ -2084,7 +2027,6 @@ void MainWindow::reloadLeaderboard(bool changeWad, bool callApi)
     {
         clearLeaderboard();
     }
-
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
@@ -2139,22 +2081,20 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
 
 void MainWindow::on_showLeaderboard_toolButton_clicked()
 {
-    std::string str = ui->dsda_comboBox->currentText().toStdString();
+    QString str = ui->dsda_comboBox->currentText();
     std::replace(str.begin(), str.end(), ' ', '+');
-    std::string lvl = ui->levelDSDA_lineEdit->text().toStdString();
+    QString lvl = ui->levelDSDA_lineEdit->text();
     lvl.erase(std::remove(lvl.begin(), lvl.end(), ' '), lvl.end());
-    if(tolower(lvl[0])=='e')
+    if (lvl[0].toLower() == 'e')
     {
-        lvl = "E"+lvl.substr(1,1)+"M"+lvl.substr(3);
+        lvl = "E" + lvl.mid(1, 1) + "M" + lvl.mid(3);
     }
-    else if(lowerCase(lvl.substr(0,3))=="map")
+    else if (lvl.mid(0, 3).toLower() == "map")
     {
-        if(lvl.substr(3).length()==1)
-            lvl = "Map%200"+lvl.substr(3);
-        else
-            lvl = "Map%20"+lvl.substr(3);
+        if (lvl.mid(3).length() == 1) lvl = "Map%200" + lvl.mid(3);
+        else lvl = "Map%20" + lvl.mid(3);
     }
-    QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/"+ui->wadDSDA_lineEdit->text()+"/leaderboard?category="+str.c_str()+"&level="+lvl.c_str()));
+    QDesktopServices::openUrl(QUrl("https://dsdarchive.com/wads/" + ui->wadDSDA_lineEdit->text() + "/leaderboard?category=" + str + "&level=" + lvl));
 }
 
 
@@ -2220,7 +2160,7 @@ void MainWindow::on_playback_comboBox_currentIndexChanged(int index)
 
 void MainWindow::on_viddump_pushButton_clicked()
 {
-    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"),QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).toStdString().c_str(),tr("video files(*.mp4 *.mkv)"));
+    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("video files(*.mp4 *.mkv)"));
     ui->viddump_lineEdit->setText(vidName);
 }
 
