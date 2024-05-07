@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // Settings to be stored
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     settings = new QSettings(QCoreApplication::applicationDirPath() + "/dsda-launcher.ini", QSettings::IniFormat);
 
     // Check for previous registry settings and copy it to the new one if needed

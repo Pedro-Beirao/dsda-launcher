@@ -9,42 +9,37 @@
 #include "Mac.h"
 #endif
 
-#include <QMainWindow>
-#include <QSettings>
-#include <QProcess>
-#include <QListWidget>
-#include <QPushButton>
-#include <QDir>
-#include <QFileDialog>
-#include <QListWidgetItem>
-#include <QStandardPaths>
-#include <QShortcut>
-#include <fstream>
-#include <iostream>
-#include <QDragEnterEvent>
-#include <QMimeData>
-#include <QDebug>
-#include <vector>
-#include <QNetworkAccessManager>
-#include <QtNetwork>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <iostream>
-#include <QRegularExpression>
-#include <QDesktopServices>
-#include <QtConcurrent>
-#include <QMessageBox>
-#include "settings.h"
-#include <string>
 #include "console.h"
-#include <QClipboard>
-#include <sstream>
-#include <qgraphicseffect.h>
-#include "historylist.h"
+#include "constants.h"
 #include "demodialog.h"
-#include "states.h"
-#include <QTextEdit>
 #include "endoom.h"
+#include "historylist.h"
+#include "settings.h"
+#include "states.h"
+#include <QClipboard>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QDir>
+#include <QDragEnterEvent>
+#include <QFileDialog>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QProcess>
+#include <QPushButton>
+#include <QRegularExpression>
+#include <QSettings>
+#include <QShortcut>
+#include <QStandardPaths>
+#include <QTextEdit>
+#include <QtConcurrent>
+#include <QtNetwork>
+#include <qgraphicseffect.h>
 
 const QString version = "v1.3.1";
 
@@ -98,37 +93,7 @@ private:
 
     QString endoomString;
 
-    QStringList doom1IWADs = {
-        "doom",
-        "doom1",
-        "doomu",
-        "freedoom",
-        "freedoom1",
-        "bfgdoom",
-        "bfgdoom1",
-
-        "heretic",
-        "heretic1",
-
-        "chex",
-        "rekkrsa"
-    };
-
-    QStringList doom2IWADs = {
-        "doom2",
-        "doom2f",
-        "freedoom2",
-        "bfgdoom2",
-
-        "tnt",
-        "plutonia",
-
-        "hexen",
-
-        "hacx"
-    };
-
-public:
+  public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     static MainWindow *pMainWindow;

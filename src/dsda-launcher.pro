@@ -16,16 +16,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     settings.cpp \
-    states.cpp
+    states.cpp \
+    theme.cpp
 
 HEADERS += \
     console.h \
+    constants.h \
     demodialog.h \
     endoom.h \
     historylist.h \
     mainwindow.h \
     settings.h \
-    states.h
+    states.h \
+    theme.h
 
 FORMS += \
     console.ui \
