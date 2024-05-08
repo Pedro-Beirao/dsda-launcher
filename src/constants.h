@@ -36,4 +36,16 @@ const QStringList full_complevels = {"Default", "0 - Doom v1.2", "1 - Doom v1.66
 
 const QStringList skills_list = {"", "ITYTD", "HNTR", "HMP", "UV", "Nightmare!"};
 
+const QString DEFAULT_TOGGLE1TEXT = "Fast";
+const QString DEFAULT_TOGGLE1ARG = "-fast";
+
+const QString DEFAULT_TOGGLE2TEXT = "No Monsters";
+const QString DEFAULT_TOGGLE2ARG = "-nomo";
+
+const QString DEFAULT_TOGGLE3TEXT = "Respawn Monsters";
+const QString DEFAULT_TOGGLE3ARG = "-respawn";
+
+const QString DEFAULT_TOGGLE4TEXT = "Solo-Net";
+const QString DEFAULT_TOGGLE4ARG = "-solo-net";
+
 #endif // CONSTANTS_H

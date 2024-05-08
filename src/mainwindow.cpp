@@ -14,22 +14,6 @@ void MainWindow::showSSLDialog()
     msgBox.exec();
 }
 
-void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
-{
-    ui->fast_checkBox->setText(t1);
-    ui->fast_checkBox->setToolTip(a1);
-    ui->nomo_checkBox->setText(t2);
-    ui->nomo_checkBox->setToolTip(a2);
-    ui->respawn_checkBox->setText(t3);
-    ui->respawn_checkBox->setToolTip(a3);
-    ui->solonet_checkBox->setText(t4);
-    ui->solonet_checkBox->setToolTip(a4);
-    fastParam = a1;
-    nomoParam = a2;
-    respawnParam = a3;
-    solonetParam = a4;
-}
-
 void MainWindow::changeResolutions(QListWidget *list)
 {
     ui->resolution_comboBox->clear();
@@ -129,20 +113,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     shortcut3->setAutoRepeat(false);
 
     // Set the parameters text correctly
-    if (settings->value("toggle1a").toString() != "")
+    if (!settings->value("toggle1a").isNull())
     {
-        fastParam = settings->value("toggle1a").toString();
-        nomoParam = settings->value("toggle2a").toString();
-        respawnParam = settings->value("toggle3a").toString();
-        solonetParam = settings->value("toggle4a").toString();
-        ui->fast_checkBox->setText(settings->value("toggle1t").toString());
-        ui->fast_checkBox->setToolTip(fastParam);
-        ui->nomo_checkBox->setText(settings->value("toggle2t").toString());
-        ui->nomo_checkBox->setToolTip(nomoParam);
-        ui->respawn_checkBox->setText(settings->value("toggle3t").toString());
-        ui->respawn_checkBox->setToolTip(respawnParam);
-        ui->solonet_checkBox->setText(settings->value("toggle4t").toString());
-        ui->solonet_checkBox->setToolTip(solonetParam);
+        changeToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString(), )
+    }
+    else
+    {
+        changeToggles(DEFAULT_TOGGLE1ARG, DEFAULT_TOGGLE1TEXT, DEFAULT_TOGGLE2ARG, DEFAULT_TOGGLE2TEXT, DEFAULT_TOGGLE3ARG, DEFAULT_TOGGLE3TEXT, DEFAULT_TOGGLE4ARG, DEFAULT_TOGGLE4TEXT);
     }
 
     findIwads();
@@ -172,16 +149,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             ui->wads_listWidget->addItem(getFileName(filePath));
             ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
         }
-        ui->fast_checkBox->setChecked(settings->value("fast").toBool());
-        ui->nomo_checkBox->setChecked(settings->value("nomo").toBool());
-        ui->respawn_checkBox->setChecked(settings->value("respawn").toBool());
+        ui->toggle1_checkBox->setChecked(settings->value("fast").toBool());
+        ui->toggle2_checkBox->setChecked(settings->value("nomo").toBool());
+        ui->toggle3_checkBox->setChecked(settings->value("respawn").toBool());
         ui->fullscreen_checkBox->setChecked(settings->value("fullscreen").toBool());
         ui->resolution_comboBox->setCurrentIndex(settings->value("geom").toInt());
         if (ui->iwad_comboBox->count() >= settings->value("iwad").toInt())
         {
             ui->iwad_comboBox->setCurrentIndex(settings->value("iwad").toInt());
         }
-        ui->solonet_checkBox->setChecked(settings->value("solonet").toBool());
+        ui->toggle4_checkBox->setChecked(settings->value("solonet").toBool());
         ui->additionalArguments_textEdit->append(settings->value("argumentText").toString());
 
         ui->record_lineEdit->setText(settings->value("recorddemo").toString());
@@ -1454,10 +1431,10 @@ void MainWindow::on_addWads_toolButton_clicked()
 void MainWindow::on_removeWads_toolButton_clicked() { ui->wads_listWidget->takeItem(ui->wads_listWidget->currentRow()); }
 
 // These are the parameter toggles
-void MainWindow::on_fast_checkBox_toggled(bool checked) { isFast = checked; }
-void MainWindow::on_nomo_checkBox_toggled(bool checked) { isNoMo = checked; }
-void MainWindow::on_respawn_checkBox_toggled(bool checked) { isRespawn = checked; }
-void MainWindow::on_solonet_checkBox_toggled(bool checked) { isSoloNet = checked; }
+void MainWindow::on_toggle1_checkBox_toggled(bool checked) { isFast = checked; }
+void MainWindow::on_toggle2_checkBox_toggled(bool checked) { isNoMo = checked; }
+void MainWindow::on_toggle3_checkBox_toggled(bool checked) { isRespawn = checked; }
+void MainWindow::on_toggle4_checkBox_toggled(bool checked) { isSoloNet = checked; }
 
 void MainWindow::on_fullscreen_checkBox_toggled(bool checked) { isFullscreen = checked ? "f" : "w"; }
 void MainWindow::on_tooltip_pushButton_clicked()
@@ -2061,10 +2038,10 @@ QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }
 QLineEdit *MainWindow::episode_lineEdit() { return ui->episode_lineEdit; }
 QLineEdit *MainWindow::level_lineEdit() { return ui->level_lineEdit; }
 QComboBox *MainWindow::difficulty_comboBox() { return ui->difficulty_comboBox; }
-QCheckBox *MainWindow::fast_checkBox() { return ui->fast_checkBox; }
-QCheckBox *MainWindow::nomo_checkBox() { return ui->nomo_checkBox; }
-QCheckBox *MainWindow::respawn_checkBox() { return ui->respawn_checkBox; }
-QCheckBox *MainWindow::solonet_checkBox() { return ui->solonet_checkBox; }
+QCheckBox *MainWindow::toggle1_checkBox() { return ui->toggle1_checkBox; }
+QCheckBox *MainWindow::toggle2_checkBox() { return ui->toggle2_checkBox; }
+QCheckBox *MainWindow::toggle3_checkBox() { return ui->toggle3_checkBox; }
+QCheckBox *MainWindow::toggle4_checkBox() { return ui->toggle4_checkBox; }
 QComboBox *MainWindow::resolution_comboBox() { return ui->resolution_comboBox; }
 QCheckBox *MainWindow::fullscreen_checkBox() { return ui->fullscreen_checkBox; }
 QLineEdit *MainWindow::hud_lineEdit() { return ui->hud_lineEdit; }

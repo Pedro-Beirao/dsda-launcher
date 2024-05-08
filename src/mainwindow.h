@@ -66,13 +66,6 @@ private:
 
     QString execPath;
 
-    // These are the parameters with toggles you can customise
-    // These names come from the defaults I created
-    QString fastParam = "-fast";
-    QString nomoParam = "-nomonsters";
-    QString respawnParam = "-respawn";
-    QString solonetParam = "-solo-net";
-
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
 
@@ -99,10 +92,10 @@ private:
     QLineEdit *episode_lineEdit();
     QLineEdit *level_lineEdit();
     QComboBox *difficulty_comboBox();
-    QCheckBox *fast_checkBox();
-    QCheckBox *nomo_checkBox();
-    QCheckBox *respawn_checkBox();
-    QCheckBox *solonet_checkBox();
+    QCheckBox *toggle1_checkBox();
+    QCheckBox *toggle2_checkBox();
+    QCheckBox *toggle3_checkBox();
+    QCheckBox *toggle4_checkBox();
     QComboBox *resolution_comboBox();
     QCheckBox *fullscreen_checkBox();
     QLineEdit *hud_lineEdit();
@@ -124,12 +117,12 @@ public slots:
     void on_console_pushButton_clicked();
     void on_addWads_toolButton_clicked();
     void on_removeWads_toolButton_clicked();
-    void on_fast_checkBox_toggled(bool checked);
-    void on_nomo_checkBox_toggled(bool checked);
+    void on_toggle1_checkBox_toggled(bool checked);
+    void on_toggle2_checkBox_toggled(bool checked);
     void on_tooltip_pushButton_clicked();
-    void on_respawn_checkBox_toggled(bool checked);
+    void on_toggle3_checkBox_toggled(bool checked);
     void on_fullscreen_checkBox_toggled(bool checked);
-    void on_solonet_checkBox_toggled(bool checked);
+    void on_toggle4_checkBox_toggled(bool checked);
     void foo();
     void foo3();
     void on_record_pushButton_clicked();

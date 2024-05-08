@@ -15,6 +15,7 @@ SOURCES += \
     historylist.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindow_options.cpp \
     mainwindow_top.cpp \
     settings.cpp \
     states.cpp \
