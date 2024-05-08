@@ -18,11 +18,11 @@ class historyList : public QWidget
 public:
     explicit historyList(QWidget *parent = nullptr);
     ~historyList();
-
-private:
-    Ui::historyList *ui;
-
     QString historyPath;
+
+  private:
+    Ui::historyList *ui;
+    void init_historyPath();
 
   public slots:
     void getHistory();

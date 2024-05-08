@@ -9,6 +9,7 @@
 #include "Mac.h"
 #endif
 
+#include "./ui_mainwindow.h"
 #include "console.h"
 #include "constants.h"
 #include "demodialog.h"
@@ -63,13 +64,6 @@ private:
     void enable_disable_skill_comboBox();
     void enable_disable_complevel_comboBox();
 
-    #if defined(__APPLE__) || defined(__linux__)
-    QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
-    QString historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom/history.states";
-    #else
-    QString historyPath;
-    #endif
-
     QString execPath;
 
     // These are the parameters with toggles you can customise
@@ -78,8 +72,6 @@ private:
     QString nomoParam = "-nomonsters";
     QString respawnParam = "-respawn";
     QString solonetParam = "-solo-net";
-
-    QVector<QPair<QString, QString>> iwads_paths;
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
@@ -165,7 +157,7 @@ public slots:
     void dropLmp(QString filePath);
     QString getFilePath(QString fileName);
     QString getFileName(QString filePath);
-    void findIwads(int type);
+    void findIwads();
     void changeExeName(QString newName);
     void on_actionCommand_triggered();
     void on_actionOpen_IWAD_folder_triggered();
@@ -206,6 +198,7 @@ private slots:
     void on_hud_pushButton_clicked();
     void on_config_pushButton_clicked();
     void on_playback_lineEdit_textChanged(const QString &arg1);
+    QFileInfoList findIwads_possibleFiles();
 };
 extern QSettings *settings;
 

@@ -12,27 +12,19 @@ historyList::historyList(QWidget *parent) :
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
     shortcut3->setAutoRepeat(false);
 
-#ifdef _WIN32
-    historyPath = QCoreApplication::applicationDirPath()+"\\history.states";
+    init_historyPath();
+}
+
+historyList::~historyList() { delete ui; }
+
+void historyList::init_historyPath()
+{
+#ifdef Q_OS_WIN
+    historyPath = QCoreApplication::applicationDirPath() + "\\history.states";
 #else
     historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom/history.states";
 #endif
 }
-
-historyList::~historyList()
-{
-    delete ui;
-}
-
-QStringList skillT =
-{
-    "",
-    "ITYTD",
-    "HNTR",
-    "HMP",
-    "UV",
-    "Nightmare!"
-};
 
 void historyList::getHistory()
 {
@@ -119,7 +111,7 @@ void historyList::getHistory()
                     int si = (buffer.mid(6)).toInt();
                     if (0 < si && si <= 5)
                     {
-                        skill = skillT.at(si);
+                        skill = skills_list.at(si);
                     }
                     else
                     {

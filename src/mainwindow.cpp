@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
 
 QSettings *settings;
 MainWindow *MainWindow::pMainWindow = nullptr;
@@ -98,105 +97,8 @@ void MainWindow::changeButtonColor(bool isDark)
 #endif
 }
 
-// Remove file extension
-QString removeExtension(QString path)
-{
-    int dot_pos = path.lastIndexOf('.');
-    dot_pos = dot_pos == -1 ? path.size() : dot_pos;
-
-    return path.left(dot_pos).toLower();
-}
-
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 void MainWindow::delayLaunch() { canLaunch = true; }
-
-void MainWindow::findIwads(int type)
-{
-    QFileInfoList imagesInfo;
-    QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
-
-    // Find the IWADs in the correct folder depending on the OS
-#ifdef __APPLE__
-    if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
-
-    QProcess::startDetached("cp", {execPath + "/../Resources/" + exeName + ".wad", dotfolder});
-
-    QDir directory(dotfolder);
-    imagesInfo = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
-
-    doomwaddirstr = doomwaddirstr.split(":")[0];
-#elif __linux__
-    if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
-
-    QDir directory(dotfolder);
-    imagesInfo = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
-
-    doomwaddirstr = doomwaddirstr.split(":")[0];
-#else
-    QDir directory = execPath;
-    imagesInfo = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
-
-    doomwaddirstr = doomwaddirstr.split(";")[0];
-#endif
-
-    QDir doomwaddir(doomwaddirstr);
-    imagesInfo += doomwaddir.entryInfoList(QStringList() << "*.WAD", QDir::Files);
-
-    int size = settings->beginReadArray("iwadfolders");
-    if (size != 0)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            settings->setArrayIndex(i);
-            QString folder = settings->value("folder").toString();
-            if (folder != "")
-            {
-                QDir folder0(folder);
-                imagesInfo += folder0.entryInfoList(QStringList() << "*.WAD", QDir::Files);
-            }
-        }
-    }
-    settings->endArray();
-
-    foreach (QFileInfo imageInfo, imagesInfo)
-    {
-        QString toLow = imageInfo.baseName().toLower();
-
-        bool found = false;
-        for (QPair<QString, QString> l : iwads_paths)
-        {
-            if (l.first == toLow)
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            iwads_paths.push_back({toLow, imageInfo.absoluteFilePath()});
-        }
-    }
-
-    // This makes sure that a logical order to display the IWADs is followed
-    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
-    QStringList doomIWADs = exmxIWADS + mapxxIWADS;
-
-    int cur = 0;
-    for (int i = 0; i < doomIWADs.size(); i++)
-    {
-        for (int j = 0; j < iwads_paths.size(); j++)
-        {
-            if (doomIWADs.at(i) == iwads_paths[j].first)
-            {
-                ui->iwad_comboBox->addItem(iwads_paths[j].first);
-                iwads_paths.swapItemsAt(j, cur);
-                cur++;
-                doomIWADs.replace(i, " ");
-                break;
-            }
-        }
-    }
-}
 
 // MainWindow
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -268,7 +170,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->solonet_checkBox->setToolTip(solonetParam);
     }
 
-    findIwads(0);
+    findIwads();
 
     // If no IWAD found, show a tool tip
     if (ui->iwad_comboBox->count() == 0)
@@ -1298,12 +1200,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             QTextStream out(&file);
 
 #ifdef __APPLE__
-            out << "\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
+            out << "\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #elif __linux__
-            out << "\"" + execPath + "/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
+            out << "\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #else
             std::replace(execPath.begin(), execPath.end(), '/', '\\');
-            out << "\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete;
+            out << "\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #endif
             file.close();
 
@@ -1321,12 +1223,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         {
             QClipboard *clip = QApplication::clipboard();
 #ifdef __APPLE__
-            clip->setText("\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
+            clip->setText("\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #elif __linux__
-            clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
+            clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #else
             std::replace(execPath.begin(), execPath.end(), '/', '\\');
-            clip->setText("\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
+            clip->setText("\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #endif
         }
 
@@ -1364,7 +1266,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     if (port.exists())
     {
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-        argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
+        argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
         argList.push_front("-iwad");
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
@@ -1381,7 +1283,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
 #elif __linux__
     QFile port = QFile(execPath + "/" + exeName);
     QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
+    argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
     // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
     QStringList apar;
     apar << exeName;
@@ -1406,7 +1308,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     QFile port = QFile(execPath + "/" + exeName + ".exe");
     if (port.exists())
     {
-        argList.push_front(iwads_paths.at(ui->iwad_comboBox->findText(iwadName)).second);
+        argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
         argList.push_front("-iwad");
         QProcess *process = new QProcess;
         process->setWorkingDirectory(execPath);
@@ -1440,7 +1342,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     QByteArray arr = t.toLatin1();
     checksum = qChecksum(arr.data(), arr.length());
 
-    QFile file(historyPath);
+    QFile file(historyListWindow->historyPath);
 
     if (!file.isOpen())
     {
@@ -1486,7 +1388,7 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     QString h = "# Do not edit this file manually\n\nchecksum=" + QString::number(checksum) + "\n";
     QString streamstr = stream.readAll();
 
-    QFile file_out(historyPath);
+    QFile file_out(historyListWindow->historyPath);
 
     if (!file_out.isOpen())
     {
@@ -1527,9 +1429,9 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
         out << h;
     }
     file_out.close();
-    states::saveStateToFile(historyPath + "s");
-    QFile::remove(historyPath);
-    QFile::rename(historyPath + "s", historyPath);
+    states::saveStateToFile(historyListWindow->historyPath + "s");
+    QFile::remove(historyListWindow->historyPath);
+    QFile::rename(historyListWindow->historyPath + "s", historyListWindow->historyPath);
 }
 
 // If the IWAD selected changes
