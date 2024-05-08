@@ -1326,7 +1326,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
 #else
             std::replace(execPath.begin(), execPath.end(), '/', '\\');
-            clip->setText("\""+execPath+"\\"+exeName+".exe\" -iwad \""+iwads_paths.at(ui->iwad_comboBox->currentIndex()).second+"\" "+argStrComplete;
+            clip->setText("\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + iwads_paths.at(ui->iwad_comboBox->currentIndex()).second + "\" " + argStrComplete);
 #endif
         }
 
