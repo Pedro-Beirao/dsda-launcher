@@ -14,17 +14,6 @@ void MainWindow::showSSLDialog()
     msgBox.exec();
 }
 
-void MainWindow::changeMaxSkillLevel(int max)
-{
-    ui->difficulty_comboBox->clear();
-    for (int i = 0; i <= max; i++)
-    {
-        if (i != 0) ui->difficulty_comboBox->addItem(QString::number(i));
-        else ui->difficulty_comboBox->addItem(" ");
-    }
-    ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
-}
-
 void MainWindow::changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
 {
     ui->fast_checkBox->setText(t1);
@@ -48,20 +37,6 @@ void MainWindow::changeResolutions(QListWidget *list)
     for (int i = 0; i < list->count(); i++)
     {
         ui->resolution_comboBox->addItem(list->item(i)->text());
-    }
-}
-
-void MainWindow::changeComplevelsList(int i)
-{
-    if (i == 0)
-    {
-        ui->complevel_comboBox->clear();
-        ui->complevel_comboBox->addItems(minimal_complevels);
-    }
-    else if (i == 1)
-    {
-        ui->complevel_comboBox->clear();
-        ui->complevel_comboBox->addItems(full_complevels);
     }
 }
 
@@ -233,7 +208,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     if (ui->config_lineEdit->text() == "") ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     else ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
 
-    if (settings->value("maxskilllevel").toString() != "") changeMaxSkillLevel(settings->value("maxskilllevel").toInt());
+    if (settings->value("maxskilllevel").toString() != "") setMaxSkillLevel(settings->value("maxskilllevel").toInt());
 
     if (ui->iwad_comboBox->currentIndex() == -1 && ui->iwad_comboBox->count() != 0) ui->iwad_comboBox->setCurrentIndex(0);
 
@@ -1434,33 +1409,6 @@ void MainWindow::SaveHistory(QString iwad, QStringList args)
     QFile::rename(historyListWindow->historyPath + "s", historyListWindow->historyPath);
 }
 
-// If the IWAD selected changes
-void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
-{
-    QString sel = ui->iwad_comboBox->currentText();
-    for (int i = 0; i < int(sel.length()); i++)
-    {
-        sel[i] = sel[i].toLower();
-    }
-
-    // These are episode/mission based. They need both warp boxes
-    if (exmxIWADS.contains(sel))
-    {
-        ui->level_label->show();
-        ui->level_lineEdit->show();
-        ui->episode_label->setText("Episode");
-    }
-    else // These are map based. They need 1 warp box
-    {
-        ui->level_label->hide();
-        ui->level_lineEdit->hide();
-        ui->episode_label->setText("Level");
-    }
-
-    // Reload the DSDA leaderboards
-    reloadLeaderboard(true, false);
-}
-
 // Show the console
 void MainWindow::on_console_pushButton_clicked()
 {
@@ -2106,47 +2054,6 @@ void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1)
 {
     enable_disable_skill_comboBox();
     enable_disable_complevel_comboBox();
-}
-
-void MainWindow::enable_disable_skill_comboBox()
-{
-    if (ui->episode_lineEdit->text() == "")
-    {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a skill level\n"
-                                            "without choosing a map number");
-    }
-    else if (ui->playback_lineEdit->text() != "")
-    {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a skill level\n"
-                                            "during demo playback");
-    }
-    else
-    {
-        ui->difficulty_comboBox->setEnabled(true);
-        ui->difficulty_label->setEnabled(true);
-        ui->difficulty_comboBox->setToolTip("");
-    }
-}
-
-void MainWindow::enable_disable_complevel_comboBox()
-{
-    if (ui->playback_lineEdit->text() != "")
-    {
-        ui->complevel_comboBox->setEnabled(false);
-        ui->complevel_label->setEnabled(false);
-        ui->complevel_comboBox->setToolTip("Cannot select a complevel\n"
-                                           "during demo playback");
-    }
-    else
-    {
-        ui->complevel_comboBox->setEnabled(true);
-        ui->complevel_label->setEnabled(true);
-        ui->complevel_comboBox->setToolTip("");
-    }
 }
 
 QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }

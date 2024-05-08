@@ -149,9 +149,9 @@ public slots:
     void on_actionTips_triggered();
     void on_actionWhat_is_this_triggered();
     void on_actionCheck_for_Updates_triggered();
-    void changeMaxSkillLevel(int max);
+    void setMaxSkillLevel(int max);
     void changeButtonColor(bool isDark);
-    void changeComplevelsList(int i);
+    void setComplevelsList(QStringList list);
     void changeResolutions(QListWidget *list);
     void dropFile(QString fileName);
     void dropLmp(QString filePath);

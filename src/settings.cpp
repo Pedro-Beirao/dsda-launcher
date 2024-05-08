@@ -290,13 +290,13 @@ void Settings::on_maxSkillLevel_lineEdit_textChanged(const QString &arg1)
     if(arg1=="")
     {
         settings->setValue("maxskilllevel",5);
-        MainWindow::pMainWindow->changeMaxSkillLevel(5);
+        MainWindow::pMainWindow->setMaxSkillLevel(5);
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
     }
     else
     {
         settings->setValue("maxskilllevel",arg1.toInt());
-        MainWindow::pMainWindow->changeMaxSkillLevel(arg1.toInt());
+        MainWindow::pMainWindow->setMaxSkillLevel(arg1.toInt());
         ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
     }
 }
@@ -307,7 +307,7 @@ void Settings::on_minimalComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings->setValue("complevels", 0);
-        MainWindow::pMainWindow->changeComplevelsList(0);
+        MainWindow::pMainWindow->setComplevelsList(minimal_complevels);
     }
 }
 
@@ -317,7 +317,7 @@ void Settings::on_fullComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings->setValue("complevels", 1);
-        MainWindow::pMainWindow->changeComplevelsList(1);
+        MainWindow::pMainWindow->setComplevelsList(full_complevels);
     }
 }
 
