@@ -16,6 +16,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mainwindow_actions.cpp \
+    mainwindow_demos.cpp \
     mainwindow_options.cpp \
     mainwindow_top.cpp \
     mainwindow_wads.cpp \

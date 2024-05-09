@@ -1177,23 +1177,6 @@ void MainWindow::changeWadLName()
     }
 }
 
-// Remove a pwad from the list
-void MainWindow::on_removeWads_toolButton_clicked() { ui->wads_listWidget->takeItem(ui->wads_listWidget->currentRow()); }
-
-void MainWindow::on_record_pushButton_clicked() // Record demo
-{
-    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("lmp files (*.lmp)"));
-    settings->setValue("demofolder", demoName);
-    ui->record_lineEdit->setText(demoName);
-}
-
-void MainWindow::on_playback_pushButton_clicked() // Play demo
-{
-    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("lmp files (*.lmp)"));
-    settings->setValue("demofolder", demoName);
-    ui->playback_lineEdit->setText(demoName);
-}
-
 void MainWindow::on_additionalArguments_pushButton_clicked()
 {
     if (!canLaunch) return;
@@ -1608,45 +1591,7 @@ void MainWindow::on_wadDSDA_lineEdit_textChanged(const QString &arg1) { clearLea
 
 void MainWindow::on_levelDSDA_lineEdit_textChanged(const QString &arg1) { clearLeaderboard(); }
 
-void MainWindow::on_viddump_lineEdit_textChanged(const QString &arg1)
-{
-    if (arg1 == "")
-    {
-        ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
-    }
-    else
-    {
-        ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-    }
-}
-
-void MainWindow::on_playback_comboBox_currentIndexChanged(int index)
-{
-    if (index != 1)
-    {
-        ui->viddump_lineEdit->setHidden(true);
-        ui->viddump_pushButton->setHidden(true);
-    }
-    else
-    {
-        ui->viddump_lineEdit->setHidden(false);
-        ui->viddump_pushButton->setHidden(false);
-    }
-}
-
-void MainWindow::on_viddump_pushButton_clicked()
-{
-    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"), QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), tr("video files(*.mp4 *.mkv)"));
-    ui->viddump_lineEdit->setText(vidName);
-}
-
 void MainWindow::on_showCommandLine_pushButton_clicked() { on_launchGame_pushButton_clicked(false, true, ""); }
-
-void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1)
-{
-    enable_disable_skill_comboBox();
-    enable_disable_complevel_comboBox();
-}
 
 QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }
 QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }

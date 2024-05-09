@@ -19,3 +19,6 @@ void MainWindow::on_addPwads_toolButton_clicked()
         settings->setValue("primaryPWADFolder", files_list[0]); // Make the folder you got this pwad to be the primary folder for pwads
     }
 }
+
+// Remove a pwad from the list
+void MainWindow::on_removeWads_toolButton_clicked() { ui->wads_listWidget->takeItem(ui->wads_listWidget->currentRow()); }
