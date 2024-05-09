@@ -127,15 +127,22 @@ public slots:
     void on_dsda_comboBox_currentIndexChanged(int index);
     void clearLeaderboard();
     void addToArguments(QString string);
-    void on_actionLoad_triggered();
-    void on_actionSave_triggered();
-    void on_actionGithub_triggered();
-    void on_actionGithub_2_triggered();
-    void on_actionCheck_for_updates_triggered();
-    void on_actionSet_triggered();
+
+    // Actions
+    void on_actionLoadState_triggered();
+    void on_actionSaveState_triggered();
+    void on_actionWhatIsThisState_triggered();
+    void on_actionGithubDsdalauncher_triggered();
+    void on_actionCheckForUpdatesDsdalauncher_triggered();
+    void on_actionGithubDsdadoom_triggered();
+    void on_actionCheckForUpdatesDsdadoom_triggered();
+    void on_actionOpenSettings_triggered();
     void on_actionTips_triggered();
-    void on_actionWhat_is_this_triggered();
-    void on_actionCheck_for_Updates_triggered();
+    void on_actionOpenHistory_triggered();
+    void on_actionExportCommand_triggered();
+    void on_actionOpenIWADsFolder_triggered();
+    void on_actionOpenConsole_triggered();
+
     void setMaxSkillLevel(int max);
     void changeButtonColor(bool isDark);
     void setComplevelsList(QStringList list);
@@ -146,16 +153,12 @@ public slots:
     QString getFileName(QString filePath);
     void findIwads();
     void changeExeName(QString newName);
-    void on_actionCommand_triggered();
-    void on_actionOpen_IWAD_folder_triggered();
-    void on_actionOpen_Console_triggered();
     void setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
     void changeWadLName();
     void whenAnimationFinishNext();
     void whenAnimationFinishPrevious();
     void nextStackedWidget();
     void previousStackedWidget();
-    void on_actionHistory_triggered();
     void SaveHistory(QString iwad, QStringList args);
     void Launch(QString iwadName, QStringList argList);
     void showSSLDialog();

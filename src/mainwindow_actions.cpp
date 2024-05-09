@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-void MainWindow::on_actionLoad_triggered()
+void MainWindow::on_actionLoadState_triggered()
 {
     QString fileNames = QFileDialog::getOpenFileName(this, tr("Load State"), settings->value("statefile").toString(), tr("state files (*.state)"));
     if (!fileNames.isEmpty())
@@ -10,7 +10,7 @@ void MainWindow::on_actionLoad_triggered()
     }
 }
 
-void MainWindow::on_actionSave_triggered()
+void MainWindow::on_actionSaveState_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"), settings->value("statefile").toString(), tr("state files (*.state)"));
     if (!fileName.isEmpty())
@@ -20,11 +20,11 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-void MainWindow::on_actionGithub_triggered() { QDesktopServices::openUrl(QUrl(DSDALAUNCHER_URL)); }
+void MainWindow::on_actionGithubDsdalauncher_triggered() { QDesktopServices::openUrl(QUrl(DSDALAUNCHER_URL)); }
 
-void MainWindow::on_actionGithub_2_triggered() { QDesktopServices::openUrl(QUrl(DSDADOOM_URL)); }
+void MainWindow::on_actionGithubDsdadoom_triggered() { QDesktopServices::openUrl(QUrl(DSDADOOM_URL)); }
 
-void MainWindow::on_actionCheck_for_updates_triggered()
+void MainWindow::on_actionCheckForUpdatesDsdalauncher_triggered()
 {
     if (!QSslSocket::supportsSsl())
     {
@@ -77,7 +77,7 @@ void MainWindow::on_actionCheck_for_updates_triggered()
     reply->deleteLater();
 }
 
-void MainWindow::on_actionCheck_for_Updates_triggered()
+void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
 {
     if (!QSslSocket::supportsSsl())
     {
@@ -102,17 +102,11 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
         QProcess *process = new QProcess;
         process->setWorkingDirectory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         process->start(path, {"-v"});
-        process->waitForStarted();
-        QString data;
+        process->waitForFinished();
 
-        while (process->waitForReadyRead())
-            data.append(process->readAll());
+        QList output = process->readAll().split(' ');
 
-        QTextStream stream(&data);
-        stream >> data >> data;
-        portversion = data;
-
-        qDebug() << portversion;
+        if (output.size() >= 2) portversion = output[1];
     }
 
     QNetworkRequest req0((QUrl(DSDADOOM_API_URL)));
@@ -161,7 +155,7 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
     reply0->deleteLater();
 }
 
-void MainWindow::on_actionSet_triggered()
+void MainWindow::on_actionOpenSettings_triggered()
 {
     settingsWindow->show();
     settingsWindow->activateWindow();
@@ -177,7 +171,7 @@ void MainWindow::on_actionTips_triggered()
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.exec();
 }
-void MainWindow::on_actionWhat_is_this_triggered()
+void MainWindow::on_actionWhatIsThisState_triggered()
 {
     QMessageBox msgBox;
     msgBox.setText("State files");
@@ -187,7 +181,7 @@ void MainWindow::on_actionWhat_is_this_triggered()
     msgBox.exec();
 }
 
-void MainWindow::on_actionCommand_triggered()
+void MainWindow::on_actionExportCommand_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export command line"), settings->value("batfile").toString(), tr("batch files (*.bat *.sh *.zsh *.command)"));
     if (fileName != "")
@@ -197,11 +191,11 @@ void MainWindow::on_actionCommand_triggered()
     }
 }
 
-void MainWindow::on_actionOpen_IWAD_folder_triggered() { foo(); }
+void MainWindow::on_actionOpenIWADsFolder_triggered() { foo(); }
 
-void MainWindow::on_actionOpen_Console_triggered() { on_console_pushButton_clicked(); }
+void MainWindow::on_actionOpenConsole_triggered() { on_console_pushButton_clicked(); }
 
-void MainWindow::on_actionHistory_triggered()
+void MainWindow::on_actionOpenHistory_triggered()
 {
     if (historyListWindow->isHidden())
     {

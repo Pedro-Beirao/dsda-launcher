@@ -1423,48 +1423,48 @@ li.checked::marker { content: &quot;\2612&quot;; }
      <x>0</x>
      <y>0</y>
      <width>350</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuState">
     <property name="title">
      <string>State</string>
     </property>
-    <addaction name="actionSave"/>
-    <addaction name="actionLoad"/>
-    <addaction name="actionWhat_is_this"/>
+    <addaction name="actionSaveState"/>
+    <addaction name="actionLoadState"/>
+    <addaction name="actionWhatIsThisState"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
      <string>About</string>
     </property>
-    <addaction name="actionSet"/>
-    <addaction name="actionCheck_for_updates"/>
-    <addaction name="actionGithub"/>
+    <addaction name="actionOpenSettings"/>
+    <addaction name="actionCheckForUpdatesDsdalauncher"/>
+    <addaction name="actionGithubDsdalauncher"/>
     <addaction name="actionTips"/>
    </widget>
    <widget class="QMenu" name="menudsda_doom">
     <property name="title">
      <string>dsda-doom</string>
     </property>
-    <addaction name="actionCheck_for_Updates"/>
-    <addaction name="actionGithub_2"/>
+    <addaction name="actionCheckForUpdatesDsdadoom"/>
+    <addaction name="actionGithubDsdadoom"/>
    </widget>
    <widget class="QMenu" name="menuAdvanced">
     <property name="title">
      <string>Advanced</string>
     </property>
-    <addaction name="actionOpen_IWAD_folder"/>
-    <addaction name="actionOpen_Console"/>
-    <addaction name="actionHistory"/>
-    <addaction name="actionCommand"/>
+    <addaction name="actionOpenIWADsFolder"/>
+    <addaction name="actionOpenConsole"/>
+    <addaction name="actionOpenHistory"/>
+    <addaction name="actionExportCommand"/>
    </widget>
    <addaction name="menuAbout"/>
    <addaction name="menudsda_doom"/>
    <addaction name="menuAdvanced"/>
    <addaction name="menuState"/>
   </widget>
-  <action name="actionSave">
+  <action name="actionSaveState">
    <property name="text">
     <string>Save</string>
    </property>
@@ -1472,7 +1472,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionLoad">
+  <action name="actionLoadState">
    <property name="text">
     <string>Load</string>
    </property>
@@ -1485,12 +1485,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Version</string>
    </property>
   </action>
-  <action name="actionGithub">
+  <action name="actionGithubDsdalauncher">
    <property name="text">
     <string>Github</string>
    </property>
   </action>
-  <action name="actionCheck_for_updates">
+  <action name="actionCheckForUpdatesDsdalauncher">
    <property name="text">
     <string>Check for Updates</string>
    </property>
@@ -1500,7 +1500,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Settings</string>
    </property>
   </action>
-  <action name="actionSet">
+  <action name="actionOpenSettings">
    <property name="text">
     <string>Settings</string>
    </property>
@@ -1510,22 +1510,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Tips</string>
    </property>
   </action>
-  <action name="actionWhat_is_this">
+  <action name="actionWhatIsThisState">
    <property name="text">
     <string>What is this?</string>
    </property>
   </action>
-  <action name="actionCheck_for_Updates">
+  <action name="actionCheckForUpdatesDsdadoom">
    <property name="text">
     <string>Check for Updates</string>
    </property>
   </action>
-  <action name="actionGithub_2">
+  <action name="actionGithubDsdadoom">
    <property name="text">
     <string>Github</string>
    </property>
   </action>
-  <action name="actionOpen_IWAD_folder">
+  <action name="actionOpenIWADsFolder">
    <property name="text">
     <string>Open IWAD folder</string>
    </property>
@@ -1543,7 +1543,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>.sh file</string>
    </property>
   </action>
-  <action name="actionCommand">
+  <action name="actionExportCommand">
    <property name="text">
     <string>Export Command</string>
    </property>
@@ -1551,7 +1551,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="actionOpen_Console">
+  <action name="actionOpenConsole">
    <property name="text">
     <string>Open Console</string>
    </property>
@@ -1559,7 +1559,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Ctrl+T</string>
    </property>
   </action>
-  <action name="actionHistory">
+  <action name="actionOpenHistory">
    <property name="text">
     <string>History</string>
    </property>
