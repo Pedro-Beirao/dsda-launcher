@@ -307,7 +307,7 @@ void Settings::on_minimalComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings->setValue("complevels", 0);
-        MainWindow::pMainWindow->setComplevelsList(minimal_complevels);
+        MainWindow::pMainWindow->setComplevelsList(MINIMAL_COMPLEVELS);
     }
 }
 
@@ -317,7 +317,7 @@ void Settings::on_fullComplevels_radioButton_toggled(bool checked)
     if(checked)
     {
         settings->setValue("complevels", 1);
-        MainWindow::pMainWindow->setComplevelsList(full_complevels);
+        MainWindow::pMainWindow->setComplevelsList(FULL_COMPLEVELS);
     }
 }
 

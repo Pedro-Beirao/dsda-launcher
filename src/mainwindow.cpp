@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set the parameters text correctly
     if (!settings->value("toggle1a").isNull())
     {
-        changeToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString(), )
+        changeToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString());
     }
     else
     {
@@ -218,9 +218,9 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 QString MainWindow::getFileName(QString filePath)
 {
 #ifdef _WIN32
-    return filePath.section(folder_separator, -1, -1);
+    return filePath.section(FOLDER_SEPARATOR, -1, -1);
 #else
-    return filePath.section(folder_separator, -1, -1);
+    return filePath.section(FOLDER_SEPARATOR, -1, -1);
 #endif
 }
 
@@ -461,9 +461,9 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-void MainWindow::on_actionGithub_triggered() { QDesktopServices::openUrl(QUrl(dsdalauncher_url)); }
+void MainWindow::on_actionGithub_triggered() { QDesktopServices::openUrl(QUrl(DSDALAUNCHER_URL)); }
 
-void MainWindow::on_actionGithub_2_triggered() { QDesktopServices::openUrl(QUrl(dsdadoom_url)); }
+void MainWindow::on_actionGithub_2_triggered() { QDesktopServices::openUrl(QUrl(DSDADOOM_URL)); }
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
@@ -951,60 +951,60 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     if (isFast)
     {
         QString tmp = "";
-        for (int i = 0; i < fastParam.length(); i++)
+        for (int i = 0; i < ui->toggle1_checkBox->toolTip().length(); i++)
         {
-            if (fastParam.at(i) == ';')
+            if (ui->toggle1_checkBox->toolTip().at(i) == ';')
             {
                 argList.append(tmp);
                 tmp = "";
                 continue;
             }
-            tmp += fastParam.at(i);
+            tmp += ui->toggle1_checkBox->toolTip().at(i);
         }
         argList.append(tmp);
     }
     if (isNoMo)
     {
         QString tmp = "";
-        for (int i = 0; i < nomoParam.length(); i++)
+        for (int i = 0; i < ui->toggle2_checkBox->toolTip().length(); i++)
         {
-            if (nomoParam.at(i) == ';')
+            if (ui->toggle2_checkBox->toolTip().at(i) == ';')
             {
                 argList.append(tmp);
                 tmp = "";
                 continue;
             }
-            tmp += nomoParam.at(i);
+            tmp += ui->toggle2_checkBox->toolTip().at(i);
         }
         argList.append(tmp);
     }
     if (isRespawn)
     {
         QString tmp = "";
-        for (int i = 0; i < respawnParam.length(); i++)
+        for (int i = 0; i < ui->toggle3_checkBox->toolTip().length(); i++)
         {
-            if (respawnParam.at(i) == ';')
+            if (ui->toggle3_checkBox->toolTip().at(i) == ';')
             {
                 argList.append(tmp);
                 tmp = "";
                 continue;
             }
-            tmp += respawnParam.at(i);
+            tmp += ui->toggle3_checkBox->toolTip().at(i);
         }
         argList.append(tmp);
     }
     if (isSoloNet)
     {
         QString tmp = "";
-        for (int i = 0; i < solonetParam.length(); i++)
+        for (int i = 0; i < ui->toggle4_checkBox->toolTip().length(); i++)
         {
-            if (solonetParam.at(i) == ';')
+            if (ui->toggle4_checkBox->toolTip().at(i) == ';')
             {
                 argList.append(tmp);
                 tmp = "";
                 continue;
             }
-            tmp += solonetParam.at(i);
+            tmp += ui->toggle4_checkBox->toolTip().at(i);
         }
         argList.append(tmp);
     }

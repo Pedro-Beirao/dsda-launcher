@@ -111,7 +111,7 @@ void historyList::getHistory()
                     int si = (buffer.mid(6)).toInt();
                     if (0 < si && si <= 5)
                     {
-                        skill = skills_list.at(si);
+                        skill = SKILLS_LIST.at(si);
                     }
                     else
                     {
