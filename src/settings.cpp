@@ -184,13 +184,13 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
     }
     else
      {
-        #ifdef __APPLE__
-        macSetToDarkTheme();
+#ifdef __APPLE__
+         macSetToDarkTheme();
 
-        ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-        ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+         ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                                   "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+         ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
+                                                   "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
 #elif __linux__
 QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53,53,53));
@@ -291,13 +291,13 @@ void Settings::on_maxSkillLevel_lineEdit_textChanged(const QString &arg1)
     {
         settings->setValue("maxskilllevel",5);
         MainWindow::pMainWindow->setMaxSkillLevel(5);
-        ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->maxSkillLevel_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     }
     else
     {
         settings->setValue("maxskilllevel",arg1.toInt());
         MainWindow::pMainWindow->setMaxSkillLevel(arg1.toInt());
-        ui->maxSkillLevel_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->maxSkillLevel_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
     }
 }
 
@@ -389,11 +389,11 @@ void Settings::on_executable_lineEdit_textChanged(const QString &arg1)
     settingsChanged();
     if(arg1=="")
     {
-        ui->executable_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->executable_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     }
     else
     {
-        ui->executable_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->executable_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
     }
 }
 
@@ -440,11 +440,11 @@ void set_placeholder_styleSheet(QLineEdit *l, const QString &arg1)
 {
     if(arg1=="")
     {
-        l->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        l->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     }
     else
     {
-        l->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        l->setStyleSheet(STYLE_TEXT_NORMAL);
     }
 }
 

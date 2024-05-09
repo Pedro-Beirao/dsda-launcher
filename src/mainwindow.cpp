@@ -166,14 +166,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->viddump_pushButton->setHidden(true);
     }
 
-    if (ui->viddump_lineEdit->text() == "") ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    else ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    if (ui->viddump_lineEdit->text() == "") ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
 
-    if (ui->hud_lineEdit->text() == "") ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    else ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    if (ui->hud_lineEdit->text() == "") ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
 
-    if (ui->config_lineEdit->text() == "") ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    else ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+    if (ui->config_lineEdit->text() == "") ui->config_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->config_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
 
     if (settings->value("maxskilllevel").toString() != "") setMaxSkillLevel(settings->value("maxskilllevel").toInt());
 
@@ -1636,11 +1636,11 @@ void MainWindow::on_viddump_lineEdit_textChanged(const QString &arg1)
 {
     if (arg1 == "")
     {
-        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     }
     else
     {
-        ui->viddump_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
+        ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
     }
 }
 
