@@ -89,6 +89,14 @@ void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
     reloadLeaderboard(true, false);
 }
 
+void MainWindow::on_tooltip_pushButton_clicked()
+{
+    if (ui->tooltip_textBrowser->isHidden()) ui->tooltip_textBrowser->show();
+    else ui->tooltip_textBrowser->hide();
+}
+
+void MainWindow::on_episode_lineEdit_textChanged(const QString &arg1) { enable_disable_skill_comboBox(); }
+
 void MainWindow::setComplevelsList(QStringList list)
 {
     ui->complevel_comboBox->clear();

@@ -117,12 +117,6 @@ public slots:
     void on_console_pushButton_clicked();
     void on_addWads_toolButton_clicked();
     void on_removeWads_toolButton_clicked();
-    void on_toggle1_checkBox_toggled(bool checked);
-    void on_toggle2_checkBox_toggled(bool checked);
-    void on_tooltip_pushButton_clicked();
-    void on_toggle3_checkBox_toggled(bool checked);
-    void on_fullscreen_checkBox_toggled(bool checked);
-    void on_toggle4_checkBox_toggled(bool checked);
     void foo();
     void foo3();
     void on_record_pushButton_clicked();
@@ -145,7 +139,7 @@ public slots:
     void setMaxSkillLevel(int max);
     void changeButtonColor(bool isDark);
     void setComplevelsList(QStringList list);
-    void changeResolutions(QListWidget *list);
+    void setResolutionsList(QListWidget *list);
     void dropFile(QString fileName);
     void dropLmp(QString filePath);
     QString getFilePath(QString fileName);
@@ -155,18 +149,19 @@ public slots:
     void on_actionCommand_triggered();
     void on_actionOpen_IWAD_folder_triggered();
     void on_actionOpen_Console_triggered();
-    void changeToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
+    void setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
     void changeWadLName();
-    void whenAnimationFinishn();
-    void whenAnimationFinishp();
+    void whenAnimationFinishNext();
+    void whenAnimationFinishPrevious();
     void nextStackedWidget();
     void previousStackedWidget();
     void on_actionHistory_triggered();
     void SaveHistory(QString iwad, QStringList args);
     void Launch(QString iwadName, QStringList argList);
     void showSSLDialog();
+    void on_tooltip_pushButton_clicked();
 
-public Q_SLOTS:
+  public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
     void error(QProcess::ProcessError error);
     void readyReadStandardError();

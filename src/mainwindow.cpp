@@ -14,16 +14,6 @@ void MainWindow::showSSLDialog()
     msgBox.exec();
 }
 
-void MainWindow::changeResolutions(QListWidget *list)
-{
-    ui->resolution_comboBox->clear();
-    ui->resolution_comboBox->addItem(" ");
-    for (int i = 0; i < list->count(); i++)
-    {
-        ui->resolution_comboBox->addItem(list->item(i)->text());
-    }
-}
-
 void MainWindow::changeButtonColor(bool isDark)
 {
 #ifdef __APPLE__
@@ -115,11 +105,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set the parameters text correctly
     if (!settings->value("toggle1a").isNull())
     {
-        changeToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString());
+        setToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString());
     }
     else
     {
-        changeToggles(DEFAULT_TOGGLE1ARG, DEFAULT_TOGGLE1TEXT, DEFAULT_TOGGLE2ARG, DEFAULT_TOGGLE2TEXT, DEFAULT_TOGGLE3ARG, DEFAULT_TOGGLE3TEXT, DEFAULT_TOGGLE4ARG, DEFAULT_TOGGLE4TEXT);
+        setToggles(DEFAULT_TOGGLE1ARG, DEFAULT_TOGGLE1TEXT, DEFAULT_TOGGLE2ARG, DEFAULT_TOGGLE2TEXT, DEFAULT_TOGGLE3ARG, DEFAULT_TOGGLE3TEXT, DEFAULT_TOGGLE4ARG, DEFAULT_TOGGLE4TEXT);
     }
 
     findIwads();
@@ -687,12 +677,6 @@ void MainWindow::addToArguments(QString string)
     else ui->additionalArguments_textEdit->setText(ui->additionalArguments_textEdit->toPlainText() + string);
 }
 
-bool isFast = false;
-bool isNoMo = false;
-bool isRespawn = false;
-bool isSoloNet = false;
-QString isFullscreen = "w";
-
 void MainWindow::error(QProcess::ProcessError error) { qDebug() << "Error: " << error; }
 
 void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -785,10 +769,10 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
         settings->setValue("geom", ui->resolution_comboBox->currentIndex());
 
-        settings->setValue("solonet", isSoloNet);
-        settings->setValue("respawn", isRespawn);
-        settings->setValue("nomo", isNoMo);
-        settings->setValue("fast", isFast);
+        settings->setValue("fast", ui->toggle1_checkBox->isChecked());
+        settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
+        settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
+        settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
 
         settings->setValue("complevel", complevelIndex);
         settings->setValue("skill", diffIndex);
@@ -948,7 +932,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
     }
 
     // Again, these are the parameters available on toggles
-    if (isFast)
+    if (ui->toggle1_checkBox->isChecked())
     {
         QString tmp = "";
         for (int i = 0; i < ui->toggle1_checkBox->toolTip().length(); i++)
@@ -963,7 +947,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         }
         argList.append(tmp);
     }
-    if (isNoMo)
+    if (ui->toggle2_checkBox->isChecked())
     {
         QString tmp = "";
         for (int i = 0; i < ui->toggle2_checkBox->toolTip().length(); i++)
@@ -978,7 +962,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         }
         argList.append(tmp);
     }
-    if (isRespawn)
+    if (ui->toggle3_checkBox->isChecked())
     {
         QString tmp = "";
         for (int i = 0; i < ui->toggle3_checkBox->toolTip().length(); i++)
@@ -993,7 +977,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
         }
         argList.append(tmp);
     }
-    if (isSoloNet)
+    if (ui->toggle4_checkBox->isChecked())
     {
         QString tmp = "";
         for (int i = 0; i < ui->toggle4_checkBox->toolTip().length(); i++)
@@ -1011,19 +995,21 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
 
     if (ui->resolution_comboBox->currentIndex() == 0)
     {
-        if (isFullscreen == "w")
+        if (ui->fullscreen_checkBox->isChecked())
         {
-            argList.append("-window");
+            argList.append("-fullscreen");
         }
         else
         {
-            argList.append("-fullscreen");
+            argList.append("-window");
         }
     }
     else
     {
+        QString geom_char = ui->fullscreen_checkBox->isChecked() ? "f" : "w";
+
         argList.append("-geom");
-        argList.append(ui->resolution_comboBox->currentText() + isFullscreen);
+        argList.append(ui->resolution_comboBox->currentText() + geom_char);
     }
 
     if (ui->record_lineEdit->text() != "")
@@ -1429,19 +1415,6 @@ void MainWindow::on_addWads_toolButton_clicked()
 
 // Remove a pwad from the list
 void MainWindow::on_removeWads_toolButton_clicked() { ui->wads_listWidget->takeItem(ui->wads_listWidget->currentRow()); }
-
-// These are the parameter toggles
-void MainWindow::on_toggle1_checkBox_toggled(bool checked) { isFast = checked; }
-void MainWindow::on_toggle2_checkBox_toggled(bool checked) { isNoMo = checked; }
-void MainWindow::on_toggle3_checkBox_toggled(bool checked) { isRespawn = checked; }
-void MainWindow::on_toggle4_checkBox_toggled(bool checked) { isSoloNet = checked; }
-
-void MainWindow::on_fullscreen_checkBox_toggled(bool checked) { isFullscreen = checked ? "f" : "w"; }
-void MainWindow::on_tooltip_pushButton_clicked()
-{
-    if (ui->tooltip_textBrowser->isHidden()) ui->tooltip_textBrowser->show();
-    else ui->tooltip_textBrowser->hide();
-}
 
 void MainWindow::on_record_pushButton_clicked() // Record demo
 {
@@ -1904,128 +1877,6 @@ void MainWindow::on_viddump_pushButton_clicked()
 }
 
 void MainWindow::on_showCommandLine_pushButton_clicked() { on_launchGame_pushButton_clicked(false, true, ""); }
-
-void MainWindow::on_episode_lineEdit_textChanged(const QString &arg1) { enable_disable_skill_comboBox(); }
-
-void MainWindow::on_nextPage_pushButton_clicked()
-{
-    ui->nextPage_pushButton->setText("-");
-    nextStackedWidget();
-}
-
-void MainWindow::on_previousPage_pushButton_clicked()
-{
-    ui->previousPage_pushButton->setText("-");
-    previousStackedWidget();
-}
-
-void MainWindow::nextStackedWidget()
-{
-    ui->stackedWidget->widget(ui->stackedWidget->currentIndex() + 1)->show();
-
-    QPropertyAnimation *anim = new QPropertyAnimation(ui->stackedWidget->currentWidget(), "pos");
-    anim->setDuration(350);
-    anim->setEasingCurve(QEasingCurve::OutQuart);
-    anim->setStartValue(QPoint(0, 0));
-    anim->setEndValue(QPoint(-265, 0));
-
-    QPropertyAnimation *animn = new QPropertyAnimation(ui->stackedWidget->widget(ui->stackedWidget->currentIndex() + 1), "pos");
-    animn->setDuration(350);
-    animn->setEasingCurve(QEasingCurve::OutQuart);
-    animn->setStartValue(QPoint(265, 0));
-    animn->setEndValue(QPoint(0, 0));
-
-    QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
-    animgroup->addAnimation(anim);
-    animgroup->addAnimation(animn);
-
-    animgroup->start(QAbstractAnimation::DeleteWhenStopped);
-
-    connect(animgroup, SIGNAL(finished()), this, SLOT(whenAnimationFinishn()));
-}
-
-void MainWindow::previousStackedWidget()
-{
-    ui->stackedWidget->widget(ui->stackedWidget->currentIndex() - 1)->show();
-
-    QPropertyAnimation *anim = new QPropertyAnimation(ui->stackedWidget->currentWidget(), "pos");
-    anim->setDuration(350);
-    anim->setEasingCurve(QEasingCurve::OutQuart);
-    anim->setStartValue(QPoint(0, 0));
-    anim->setEndValue(QPoint(265, 0));
-
-    QPropertyAnimation *animn = new QPropertyAnimation(ui->stackedWidget->widget(ui->stackedWidget->currentIndex() - 1), "pos");
-    animn->setDuration(350);
-    animn->setEasingCurve(QEasingCurve::OutQuart);
-    animn->setStartValue(QPoint(-265, 0));
-    animn->setEndValue(QPoint(0, 0));
-
-    QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
-    animgroup->addAnimation(anim);
-    animgroup->addAnimation(animn);
-
-    animgroup->start(QAbstractAnimation::DeleteWhenStopped);
-
-    connect(animgroup, SIGNAL(finished()), this, SLOT(whenAnimationFinishp()));
-}
-
-void MainWindow::whenAnimationFinishn()
-{
-    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex() + 1);
-    ui->nextPage_pushButton->setText(">");
-}
-
-void MainWindow::whenAnimationFinishp()
-{
-    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex() - 1);
-    ui->previousPage_pushButton->setText("<");
-}
-
-void MainWindow::on_hud_lineEdit_textChanged(const QString &arg1)
-{
-    if (arg1 == "")
-    {
-        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->hud_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-}
-
-void MainWindow::on_config_lineEdit_textChanged(const QString &arg1)
-{
-    if (arg1 == "")
-    {
-        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: 20px; color: rgb(150, 150, 150); background-color: rgb(255, 255, 255); border-radius:3px");
-    }
-    else
-    {
-        ui->config_lineEdit->setStyleSheet("border: 1px solid rgb(180, 180, 180); padding-left: 6px;height: "
-                                           "20px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "
-                                           "border-radius:3px");
-    }
-}
-
-void MainWindow::on_hud_pushButton_clicked()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("DSDAHUD.lmp"), settings->value("hudfolder").toString(), tr("DSDAHUD file (*.lmp *.txt)"));
-    if (fileName.size() != 0)
-    {
-        settings->setValue("hudfolder", fileName);
-        ui->hud_lineEdit->setText(fileName);
-    }
-}
-
-void MainWindow::on_config_pushButton_clicked()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("dsda-doom.cfg"), settings->value("configfolder").toString(), tr("Config file (*.cfg *.txt)"));
-    if (fileName.size() != 0)
-    {
-        settings->setValue("configfolder", fileName);
-        ui->config_lineEdit->setText(fileName);
-    }
-}
 
 void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1)
 {

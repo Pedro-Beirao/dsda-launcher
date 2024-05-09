@@ -99,7 +99,7 @@ Settings::Settings(QWidget *parent) :
         }
     }
     settings->endArray();
-    MainWindow::pMainWindow->changeResolutions(ui->resolutions_listWidget);
+    MainWindow::pMainWindow->setResolutionsList(ui->resolutions_listWidget);
 
 #ifdef _WIN32
         ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
@@ -403,9 +403,9 @@ void Settings::on_save_pushButton_clicked()
     ui->notsaved_label->hide();
     ui->saved_label->show();
 
-    MainWindow::pMainWindow->changeResolutions(ui->resolutions_listWidget);
+    MainWindow::pMainWindow->setResolutionsList(ui->resolutions_listWidget);
 
-    MainWindow::pMainWindow->changeToggles(ui->fastText_lineEdit->text(),ui->fastParam_lineEdit->text(),ui->nomoText_lineEdit->text(),ui->nomoParam_lineEdit->text(),ui->respawnText_lineEdit->text(),ui->respawnParam_lineEdit->text(),ui->solonetText_lineEdit->text(),ui->solonetParam_lineEdit->text());
+    MainWindow::pMainWindow->setToggles(ui->fastText_lineEdit->text(), ui->fastParam_lineEdit->text(), ui->nomoText_lineEdit->text(), ui->nomoParam_lineEdit->text(), ui->respawnText_lineEdit->text(), ui->respawnParam_lineEdit->text(), ui->solonetText_lineEdit->text(), ui->solonetParam_lineEdit->text());
 
     if (ui->executable_lineEdit->text()=="")
     {
