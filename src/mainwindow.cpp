@@ -399,7 +399,7 @@ void MainWindow::dropFile(QString fileName)
     {
         QStringList wadsToAdd;
         wadsToAdd.append(fileName);
-        addWads(wadsToAdd);
+        addPwads(wadsToAdd);
         ui->tabs->setCurrentIndex(1);
     }
     else if (tmp == "state")
@@ -448,15 +448,6 @@ void MainWindow::foo3() // CTRL+W runs this function close the active window
 {
     QWidget *currentWindow = QApplication::activeWindow();
     currentWindow->close();
-}
-
-void MainWindow::addWads(QStringList files_list) // Click the + button to add a wad
-{
-    foreach (QString filePath, files_list)
-    {
-        ui->wads_listWidget->addItem(getFileName(filePath));
-        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
-    }
 }
 
 void MainWindow::addToArguments(QString string)
@@ -1183,21 +1174,6 @@ void MainWindow::changeWadLName()
         }
         p = p.mid(lastBar);
         ui->wadDSDA_lineEdit->setText(p.mid(0, p.length() - 4));
-    }
-}
-
-// Add pwads to be loaded
-void MainWindow::on_addWads_toolButton_clicked()
-{
-    QStringList files_list = QFileDialog::getOpenFileNames(this, tr("Select WAD file"), settings->value("primaryPWADFolder").toString(), tr("WAD files (*.wad *.deh *.bex *.zip)"));
-    if (files_list.length() > 0)
-    {
-        foreach (QString filePath, files_list)
-        {
-            ui->wads_listWidget->addItem(getFileName(filePath));
-            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
-        }
-        settings->setValue("primaryPWADFolder", files_list[0]); // Make the folder you got this pwad to be the primary folder for pwads
     }
 }
 

@@ -82,7 +82,7 @@ private:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     static MainWindow *pMainWindow;
-    void addWads(QStringList fileNames);
+    void addPwads(QStringList fileNames);
     void get_leaderboards(QString wad, QString level, QString category);
     void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
@@ -115,7 +115,7 @@ public slots:
     void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, QString exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
     void on_console_pushButton_clicked();
-    void on_addWads_toolButton_clicked();
+    void on_addPwads_toolButton_clicked();
     void on_removeWads_toolButton_clicked();
     void foo();
     void foo3();

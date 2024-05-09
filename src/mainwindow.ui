@@ -887,7 +887,7 @@ border-radius:3px</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QToolButton" name="addWads_toolButton">
+     <widget class="QToolButton" name="addPwads_toolButton">
       <property name="geometry">
        <rect>
         <x>274</x>

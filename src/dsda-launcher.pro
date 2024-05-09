@@ -18,6 +18,7 @@ SOURCES += \
     mainwindow_actions.cpp \
     mainwindow_options.cpp \
     mainwindow_top.cpp \
+    mainwindow_wads.cpp \
     settings.cpp \
     states.cpp \
     theme.cpp
