@@ -58,6 +58,8 @@ void MainWindow::previousStackedWidget()
     animgroup->addAnimation(anim2);
 
     animgroup->start(QAbstractAnimation::DeleteWhenStopped);
+
+    connect(animgroup, SIGNAL(finished()), this, SLOT(whenAnimationFinishPrevious()));
 }
 
 void MainWindow::whenAnimationFinishNext()
