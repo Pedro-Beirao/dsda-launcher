@@ -61,7 +61,6 @@ class MainWindow : public QMainWindow
     QString exeName = "dsda-doom";
 
     void enable_disable_skill_comboBox();
-    void enable_disable_complevel_comboBox();
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
@@ -117,7 +116,6 @@ public slots:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void on_additionalArguments_pushButton_clicked();
-    void addToArguments(QString string);
 
     // Actions
     void on_actionLoadState_triggered();

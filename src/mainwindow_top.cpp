@@ -134,20 +134,3 @@ void MainWindow::enable_disable_skill_comboBox()
         ui->difficulty_comboBox->setToolTip("");
     }
 }
-
-void MainWindow::enable_disable_complevel_comboBox()
-{
-    if (ui->playback_lineEdit->text().isEmpty())
-    {
-        ui->complevel_comboBox->setEnabled(false);
-        ui->complevel_label->setEnabled(false);
-        ui->complevel_comboBox->setToolTip("Cannot select a Complevel\n"
-                                           "during Demo playback");
-    }
-    else
-    {
-        ui->complevel_comboBox->setEnabled(true);
-        ui->complevel_label->setEnabled(true);
-        ui->complevel_comboBox->setToolTip("");
-    }
-}

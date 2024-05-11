@@ -35,11 +35,7 @@ void MainWindow::on_playback_comboBox_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1)
-{
-    enable_disable_skill_comboBox();
-    enable_disable_complevel_comboBox();
-}
+void MainWindow::on_playback_lineEdit_textChanged(const QString &arg1) { enable_disable_skill_comboBox(); }
 
 void MainWindow::on_viddump_lineEdit_textChanged(const QString &arg1)
 {
