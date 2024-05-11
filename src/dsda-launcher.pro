@@ -12,6 +12,7 @@ SOURCES += \
     console.cpp \
     demodialog.cpp \
     endoom.cpp \
+    funcs.cpp \
     historylist.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     constants.h \
     demodialog.h \
     endoom.h \
+    funcs.h \
     historylist.h \
     mainwindow.h \
     settings.h \

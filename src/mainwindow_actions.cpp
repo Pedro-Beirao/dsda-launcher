@@ -191,7 +191,7 @@ void MainWindow::on_actionExportCommand_triggered()
     }
 }
 
-void MainWindow::on_actionOpenIWADsFolder_triggered() { foo(); }
+void MainWindow::on_actionOpenIWADsFolder_triggered() { openIWADsFolder(); }
 
 void MainWindow::on_actionOpenConsole_triggered() { on_console_pushButton_clicked(); }
 

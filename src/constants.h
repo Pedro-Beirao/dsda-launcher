@@ -4,6 +4,8 @@
 #include <QStandardPaths>
 #include <QStringList>
 
+const QString version = "v1.3.1";
+
 const QString DSDALAUNCHER_URL = "https://github.com/Pedro-Beirao/dsda-launcher";
 const QString DSDALAUNCHER_API_URL = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
 const QString DSDALAUNCHER_DOWNLOAD_URL = "https://github.com/Pedro-Beirao/dsda-launcher/releases/latest";
@@ -21,6 +23,8 @@ const QChar FOLDER_SEPARATOR = '/';
 #if defined Q_OS_MAC || defined Q_OS_LINUX
 const QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
 #endif
+
+static QString execPath;
 
 const QStringList exmxIWADS = {"doom",    "doom1",    "doomu", "freedoom", "freedoom1", "bfgdoom", "bfgdoom1",
 
@@ -45,7 +49,7 @@ const QString DEFAULT_TOGGLE1TEXT = "Fast";
 const QString DEFAULT_TOGGLE1ARG = "-fast";
 
 const QString DEFAULT_TOGGLE2TEXT = "No Monsters";
-const QString DEFAULT_TOGGLE2ARG = "-nomo";
+const QString DEFAULT_TOGGLE2ARG = "-nomonsters";
 
 const QString DEFAULT_TOGGLE3TEXT = "Respawn Monsters";
 const QString DEFAULT_TOGGLE3ARG = "-respawn";

@@ -14,6 +14,7 @@
 #include "constants.h"
 #include "demodialog.h"
 #include "endoom.h"
+#include "funcs.h"
 #include "historylist.h"
 #include "settings.h"
 #include "states.h"
@@ -42,8 +43,6 @@
 #include <QtNetwork>
 #include <qgraphicseffect.h>
 
-const QString version = "v1.3.1";
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -52,7 +51,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-private:
+  private:
     Ui::MainWindow *ui;
 
     // If dsda-doom is running
@@ -63,8 +62,6 @@ private:
 
     void enable_disable_skill_comboBox();
     void enable_disable_complevel_comboBox();
-
-    QString execPath;
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
@@ -117,8 +114,6 @@ public slots:
     void on_console_pushButton_clicked();
     void on_addPwads_toolButton_clicked();
     void on_removeWads_toolButton_clicked();
-    void foo();
-    void foo3();
     void on_record_pushButton_clicked();
     void on_playback_pushButton_clicked();
     void dragEnterEvent(QDragEnterEvent *e);

@@ -99,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
 
     // Closes the active window
-    QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(foo3()));
+    QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
     // Set the parameters text correctly
@@ -432,23 +432,6 @@ void MainWindow::dropEvent(QDropEvent *e)
 }
 
 MainWindow::~MainWindow() { delete ui; }
-
-void MainWindow::foo() // CTRL+O runs this function to open the folder where the IWADs should be placed in
-{
-#ifdef __APPLE__
-    QProcess::startDetached("open", {dotfolder});
-#elif __linux__
-    QProcess::startDetached("xdg-open", {dotfolder});
-#else
-    QProcess::startDetached("explorer.exe", {execPath});
-#endif
-}
-
-void MainWindow::foo3() // CTRL+W runs this function close the active window
-{
-    QWidget *currentWindow = QApplication::activeWindow();
-    currentWindow->close();
-}
 
 void MainWindow::addToArguments(QString string)
 {
