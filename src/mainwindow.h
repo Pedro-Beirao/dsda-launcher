@@ -80,8 +80,6 @@ class MainWindow : public QMainWindow
     ~MainWindow();
     static MainWindow *pMainWindow;
     void addPwads(QStringList fileNames);
-    void get_leaderboards(QString wad, QString level, QString category);
-    void reloadLeaderboard(bool changeWad, bool callApi);
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *object, QEvent *ev);
     QComboBox *iwad_comboBox();
@@ -119,8 +117,6 @@ public slots:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void on_additionalArguments_pushButton_clicked();
-    void on_dsda_comboBox_currentIndexChanged(int index);
-    void clearLeaderboard();
     void addToArguments(QString string);
 
     // Actions
@@ -147,7 +143,6 @@ public slots:
     void findIwads();
     void changeExeName(QString newName);
     void setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
-    void changeWadLName();
     void whenAnimationFinishNext();
     void whenAnimationFinishPrevious();
     void nextStackedWidget();
@@ -165,24 +160,20 @@ public slots:
     void started();
 
 private slots:
-    void demoDialog_accepted();
-    void on_showLeaderboard_toolButton_clicked();
-    void on_reloadLeaderboard_toolButton_clicked();
-    void on_wadDSDA_lineEdit_textChanged(const QString &arg1);
-    void on_viddump_lineEdit_textChanged(const QString &arg1);
-    void on_playback_comboBox_currentIndexChanged(int index);
-    void on_viddump_pushButton_clicked();
-    void on_showCommandLine_pushButton_clicked();
-    void on_levelDSDA_lineEdit_textChanged(const QString &arg1);
-    void on_episode_lineEdit_textChanged(const QString &arg1);
-    void on_nextPage_pushButton_clicked();
-    void on_previousPage_pushButton_clicked();
-    void on_hud_lineEdit_textChanged(const QString &arg1);
-    void on_config_lineEdit_textChanged(const QString &arg1);
-    void on_hud_pushButton_clicked();
-    void on_config_pushButton_clicked();
-    void on_playback_lineEdit_textChanged(const QString &arg1);
-    QFileInfoList findIwads_possibleFiles();
+  void demoDialog_accepted();
+  void on_viddump_lineEdit_textChanged(const QString &arg1);
+  void on_playback_comboBox_currentIndexChanged(int index);
+  void on_viddump_pushButton_clicked();
+  void on_showCommandLine_pushButton_clicked();
+  void on_episode_lineEdit_textChanged(const QString &arg1);
+  void on_nextPage_pushButton_clicked();
+  void on_previousPage_pushButton_clicked();
+  void on_hud_lineEdit_textChanged(const QString &arg1);
+  void on_config_lineEdit_textChanged(const QString &arg1);
+  void on_hud_pushButton_clicked();
+  void on_config_pushButton_clicked();
+  void on_playback_lineEdit_textChanged(const QString &arg1);
+  QFileInfoList findIwads_possibleFiles();
 };
 extern QSettings *settings;
 

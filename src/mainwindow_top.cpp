@@ -84,9 +84,6 @@ void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
         ui->level_lineEdit->hide();
         ui->episode_label->setText("Level");
     }
-
-    // Reload the DSDA leaderboards
-    reloadLeaderboard(true, false);
 }
 
 void MainWindow::on_tooltip_pushButton_clicked()
