@@ -56,9 +56,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     MainWindow::pMainWindow = this;
 
     execPath = QCoreApplication::applicationDirPath();
-#ifdef _WIN32
-    historyPath = QCoreApplication::applicationDirPath() + "\\history.states";
-#endif
 
     // Allow files to be droped in the launcher (*.wad *.lmp *.deh *.bex)
     setAcceptDrops(true);
