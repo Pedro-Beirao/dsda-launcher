@@ -164,7 +164,7 @@ void states::loadState(QTextStream &stream)
         {
             if (buffer.mid(0, 7) == "endpwad") break;
 
-            ui->wads_listWidget()->addItem(ui->getFileName(buffer));
+            ui->wads_listWidget()->addItem(getFileName(buffer));
             ui->wads_listWidget()->item(ui->wads_listWidget()->count() - 1)->setToolTip(buffer);
         }
         stream.readLineInto(&buffer);

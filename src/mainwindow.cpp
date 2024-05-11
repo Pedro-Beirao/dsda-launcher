@@ -196,6 +196,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
 }
 
+MainWindow::~MainWindow() { delete ui; }
+
 // Drag Event for *.wad *.lmp *.state *.deh *.bex
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
@@ -203,81 +205,6 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     {
         e->acceptProposedAction();
     }
-}
-
-QString MainWindow::getFileName(QString filePath)
-{
-#ifdef _WIN32
-    return filePath.section(FOLDER_SEPARATOR, -1, -1);
-#else
-    return filePath.section(FOLDER_SEPARATOR, -1, -1);
-#endif
-}
-
-QString MainWindow::getFilePath(QString fileName)
-{
-    // Find file in dsda folder
-    QString dsda_folder;
-#ifdef _WIN32
-    dsda_folder = execPath;
-#else
-    dsda_folder = dotfolder;
-#endif
-    QDir dsda_folder_path(dsda_folder);
-    QStringList dsda_folder_files_list = dsda_folder_path.entryList(QDir::Files);
-
-    foreach (QString file_in_dsda_folder, dsda_folder_files_list)
-    {
-        if (fileName == file_in_dsda_folder.toLower())
-        {
-            return (dsda_folder + "/" + file_in_dsda_folder);
-        }
-    }
-
-    // Find file in DOOMWADPATH
-    QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
-#ifdef _WIN32
-    QChar token = ';';
-#else
-    QChar token = ':';
-#endif
-
-    QStringList doomwadpath_folders_list = doomwadpath.split(token);
-    foreach (QString doomwadpath_folder, doomwadpath_folders_list)
-    {
-        QStringList doomwadpath_folder_files_list = QDir(doomwadpath_folder).entryList(QDir::Files);
-        foreach (QString file_in_doomwadpath_folder, doomwadpath_folder_files_list)
-        {
-            if (fileName == file_in_doomwadpath_folder.toLower())
-            {
-                return (doomwadpath_folder + "/" + file_in_doomwadpath_folder);
-            }
-        }
-    }
-
-    // Find file in the pwadfolders
-    int size = settings->beginReadArray("pwadfolders");
-    for (int j = 0; j < size; j++)
-    {
-        settings->setArrayIndex(j);
-        QString folder = settings->value("folder").toString();
-        if (folder != "")
-        {
-            QDir folder_path(folder);
-            QStringList folder_files_list = folder_path.entryList(QDir::Files);
-            foreach (QString file_in_folder, folder_files_list)
-            {
-                if (fileName == file_in_folder.toLower())
-                {
-                    settings->endArray();
-                    return (folder + "/" + file_in_folder);
-                }
-            }
-        }
-    }
-    settings->endArray();
-
-    return "";
 }
 
 void MainWindow::dropLmp(QString filePath)
@@ -430,8 +357,6 @@ void MainWindow::dropEvent(QDropEvent *e)
         dropFile(fileName);
     }
 }
-
-MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::addToArguments(QString string)
 {
