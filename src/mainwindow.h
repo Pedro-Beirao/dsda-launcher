@@ -106,7 +106,7 @@ class MainWindow : public QMainWindow
 public slots:
     void delayLaunch();
     void closeEvent(QCloseEvent *event);
-    void on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, QString exportCmd);
+    void on_launchGame_pushButton_clicked(bool returnTooltip, QString exportCmd);
     void on_iwad_comboBox_currentIndexChanged(int index);
     void on_console_pushButton_clicked();
     void on_addPwads_toolButton_clicked();
@@ -173,7 +173,9 @@ private slots:
   void on_playback_lineEdit_textChanged(const QString &arg1);
   QFileInfoList findIwads_possibleFiles();
   void loadSettings();
+  void saveSettings();
   void setStyles();
+  QStringList getArguments();
 };
 extern QSettings *settings;
 

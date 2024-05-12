@@ -187,7 +187,7 @@ void MainWindow::on_actionExportCommand_triggered()
     if (!fileName.isEmpty())
     {
         settings->setValue("batfile", fileName);
-        on_launchGame_pushButton_clicked(false, true, fileName);
+        on_launchGame_pushButton_clicked(true, fileName);
     }
 }
 

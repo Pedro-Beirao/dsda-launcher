@@ -412,340 +412,178 @@ void MainWindow::gameIsRunning()
     msgBox.exec();
 }
 
-void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnTooltip, QString exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+void MainWindow::saveSettings()
 {
-    if (!canLaunch) // Dont allow 2 launchs in the time of 2 sec
-        return;
+    // Top
+    settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
+    settings->setValue("complevel", ui->complevel_comboBox->currentIndex());
+    settings->setValue("skill", ui->difficulty_comboBox->currentIndex());
+    settings->setValue("warp1", ui->episode_lineEdit->text());
+    settings->setValue("warp2", ui->level_lineEdit->text());
 
-    if (running && !returnTooltip)
+    // Bottom
+    settings->setValue("fast", ui->toggle1_checkBox->isChecked());
+    settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
+    settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
+    settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
+    settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
+    settings->setValue("geom", ui->resolution_comboBox->currentIndex());
+    settings->setValue("hud", ui->hud_lineEdit->text());
+    settings->setValue("config", ui->config_lineEdit->text());
+    settings->setValue("track", ui->track_comboBox->currentIndex());
+    settings->setValue("time", ui->time_comboBox->currentIndex());
+
+    // Wads
+    settings->beginWriteArray("pwads");
+    for (int i = 0; i < ui->wads_listWidget->count(); i++)
     {
-        gameIsRunning();
-        return;
+        settings->setArrayIndex(i);
+        settings->setValue("pwad", ui->wads_listWidget->item(i)->toolTip());
+    }
+    settings->endArray();
+
+    // Demos
+    settings->setValue("recorddemo", ui->record_lineEdit->text());
+    settings->setValue("playdemo", ui->playback_lineEdit->text());
+    settings->setValue("viddump", ui->viddump_lineEdit->text());
+    settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
+
+    // Bottom
+    settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
+
+    settings->setValue("exeName", exeName);
+
+    settings->setValue("version", version);
+
+    settings->sync();
+}
+
+QStringList MainWindow::getArguments()
+{
+    QStringList arguments;
+
+    // Top
+    arguments.append("-iwad");
+    arguments.append(ui->iwad_comboBox->currentData(Qt::ToolTipRole).toString());
+
+    QString complevel_string = ui->complevel_comboBox->currentText();
+    if (complevel_string != "Default")
+    {
+        arguments.append("-complevel");
+        arguments.append(complevel_string.left(2));
     }
 
-    int complevelIndex = ui->complevel_comboBox->currentIndex();
-    int diffIndex = ui->difficulty_comboBox->currentIndex();
-
-    if (onExit)
-    {
-        settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
-
-        // Again, we need to remove the setting if the additional parameters box is empty so that it does not appear when we open the launcher again
-        if (ui->additionalArguments_textEdit->toPlainText() != "")
-        {
-            settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
-        }
-        else
-        {
-            settings->remove("argumentText");
-        }
-        settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
-        settings->setValue("geom", ui->resolution_comboBox->currentIndex());
-
-        settings->setValue("fast", ui->toggle1_checkBox->isChecked());
-        settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
-        settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
-        settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
-
-        settings->setValue("complevel", complevelIndex);
-        settings->setValue("skill", diffIndex);
-
-        settings->setValue("warp1", ui->episode_lineEdit->text());
-        settings->setValue("warp2", ui->level_lineEdit->text());
-
-        // We need to remove the setting if the warp number is deleted so that it does not appear when we open the launcher again
-        // gzdoom does not do this for the arguments box (at the time of writing, at least) and it drives me nuts
-        if (ui->episode_lineEdit->text() == "")
-        {
-            settings->remove("warp1");
-        }
-        if (ui->level_lineEdit->text() == "")
-        {
-            settings->remove("warp2");
-        }
-
-        if (ui->record_lineEdit->text() != "")
-        {
-            settings->setValue("recorddemo", ui->record_lineEdit->text());
-        }
-        else
-        {
-            settings->remove("recorddemo");
-        }
-
-        if (ui->playback_lineEdit->text() != "")
-        {
-            settings->setValue("playdemo", ui->playback_lineEdit->text());
-        }
-        else
-        {
-            settings->remove("playdemo");
-        }
-
-        if (ui->viddump_lineEdit->text() != "")
-        {
-            settings->setValue("viddump", ui->viddump_lineEdit->text());
-        }
-        else
-        {
-            settings->remove("viddump");
-        }
-
-        if (ui->hud_lineEdit->text() != "")
-        {
-            settings->setValue("hud", ui->hud_lineEdit->text());
-        }
-        else
-        {
-            settings->remove("hud");
-        }
-
-        if (ui->config_lineEdit->text() != "")
-        {
-            settings->setValue("config", ui->config_lineEdit->text());
-        }
-        else
-        {
-            settings->remove("config");
-        }
-
-        settings->setValue("track", ui->track_comboBox->currentIndex());
-        settings->setValue("time", ui->time_comboBox->currentIndex());
-
-        settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
-
-        settings->beginWriteArray("pwads");
-        for (int i = 0; i < ui->wads_listWidget->count(); i++)
-        {
-            settings->setArrayIndex(i);
-            settings->setValue("pwad", ui->wads_listWidget->item(i)->toolTip());
-        }
-        settings->endArray();
-
-        settings->setValue("exeName", exeName);
-
-        settings->setValue("version", version);
-
-        settings->sync();
-
-        return;
-    }
-
-    QStringList argList;
-
-    /* Complevels:
-        Default
-        1 - Doom v1.666
-        2 - Doom v1.9
-        3 - Ultimate Doom & Doom95
-        4 - Final Doom
-        5 - DOSDoom
-        6 - TASDOOM
-        7 - Boom's inaccurate vanilla compatibility mode
-        8 - Boom v2.01
-        9 - Boom v2.02
-        10 - LxDoom
-        11 - MBF
-     12—16 - PrBoom (old versions)
-        17 - Current PrBoom
-        21 - MBF 21
-
-        If the complevel starts with 'D', then dont use the "-complevel" parameter
-        Otherwise, run "-complevel *First+Second char of the string*"
-    */
-    QString complevelString = ui->complevel_comboBox->currentText();
-    if (ui->complevel_comboBox->isEnabled() && complevelString[0] != 'D')
-    {
-        argList.append("-complevel");
-        QString complevelNum;
-        complevelNum.push_back(complevelString[0]);
-        complevelNum.push_back(complevelString[1]);
-        argList.append(complevelNum);
-    }
-
-    // Difficulty or Skill
     if (ui->difficulty_comboBox->isEnabled() && ui->difficulty_comboBox->currentIndex() != 0)
     {
-        argList.append("-skill");
-        argList.append(QString::number(diffIndex));
+        arguments.append("-skill");
+        arguments.append(QString::number(ui->difficulty_comboBox->currentIndex()));
     }
 
     // Warping in Doom takes 2 boxes. 1 for the episode, 1 for the mission
     // Warping in Doom 2 takes 1 box, for the map
-    if (ui->level_lineEdit->text() != "" && !ui->level_lineEdit->isHidden())
+    if (!ui->level_lineEdit->text().isEmpty() && !ui->level_lineEdit->isHidden())
     {
-        argList.append("-warp");
-        argList.append(ui->episode_lineEdit->text());
-        argList.append(ui->level_lineEdit->text());
+        arguments.append("-warp");
+        arguments.append(ui->episode_lineEdit->text());
+        arguments.append(ui->level_lineEdit->text());
     }
-    else if (ui->episode_lineEdit->text() != "" && ui->level_lineEdit->isHidden())
+    else if (!ui->episode_lineEdit->text().isEmpty() && ui->level_lineEdit->isHidden())
     {
-        argList.append("-warp");
-        argList.append(ui->episode_lineEdit->text());
-    }
-
-    /* You can load 3 types of files.
-     *.wad -file
-     *.deh -deh
-     *.bex -deh
-     */
-    if (ui->wads_listWidget->count() > 0)
-    {
-        argList.append("-file");
-        for (int item = 0; item < ui->wads_listWidget->count(); item++)
-        {
-            QString fileToAdd = ui->wads_listWidget->item(item)->toolTip();
-#ifdef _WIN32
-            for (int i = 0; i < fileToAdd.length(); i++)
-            {
-                if (fileToAdd[i] == '/') fileToAdd[i] = '\\';
-            }
-#endif
-            if (fileToAdd.mid(0, 5) == "$DOOM") fileToAdd = fileToAdd.mid(13);
-            else if (fileToAdd.mid(0, 5) == "%DOOM") fileToAdd = fileToAdd.mid(14);
-
-            if (returnTooltip) argList.append("\"" + fileToAdd + "\"");
-            else argList.append(fileToAdd);
-        }
+        arguments.append("-warp");
+        arguments.append(ui->episode_lineEdit->text());
     }
 
-    // Again, these are the parameters available on toggles
-    if (ui->toggle1_checkBox->isChecked())
-    {
-        QString tmp = "";
-        for (int i = 0; i < ui->toggle1_checkBox->toolTip().length(); i++)
-        {
-            if (ui->toggle1_checkBox->toolTip().at(i) == ';')
-            {
-                argList.append(tmp);
-                tmp = "";
-                continue;
-            }
-            tmp += ui->toggle1_checkBox->toolTip().at(i);
-        }
-        argList.append(tmp);
-    }
-    if (ui->toggle2_checkBox->isChecked())
-    {
-        QString tmp = "";
-        for (int i = 0; i < ui->toggle2_checkBox->toolTip().length(); i++)
-        {
-            if (ui->toggle2_checkBox->toolTip().at(i) == ';')
-            {
-                argList.append(tmp);
-                tmp = "";
-                continue;
-            }
-            tmp += ui->toggle2_checkBox->toolTip().at(i);
-        }
-        argList.append(tmp);
-    }
-    if (ui->toggle3_checkBox->isChecked())
-    {
-        QString tmp = "";
-        for (int i = 0; i < ui->toggle3_checkBox->toolTip().length(); i++)
-        {
-            if (ui->toggle3_checkBox->toolTip().at(i) == ';')
-            {
-                argList.append(tmp);
-                tmp = "";
-                continue;
-            }
-            tmp += ui->toggle3_checkBox->toolTip().at(i);
-        }
-        argList.append(tmp);
-    }
-    if (ui->toggle4_checkBox->isChecked())
-    {
-        QString tmp = "";
-        for (int i = 0; i < ui->toggle4_checkBox->toolTip().length(); i++)
-        {
-            if (ui->toggle4_checkBox->toolTip().at(i) == ';')
-            {
-                argList.append(tmp);
-                tmp = "";
-                continue;
-            }
-            tmp += ui->toggle4_checkBox->toolTip().at(i);
-        }
-        argList.append(tmp);
-    }
+    // Options
+    if (ui->toggle1_checkBox->isChecked()) arguments.append(ui->toggle1_checkBox->toolTip().split(';'));
+
+    if (ui->toggle2_checkBox->isChecked()) arguments.append(ui->toggle2_checkBox->toolTip().split(';'));
+
+    if (ui->toggle3_checkBox->isChecked()) arguments.append(ui->toggle3_checkBox->toolTip().split(';'));
+
+    if (ui->toggle4_checkBox->isChecked()) arguments.append(ui->toggle4_checkBox->toolTip().split(';'));
 
     if (ui->resolution_comboBox->currentIndex() == 0)
     {
-        if (ui->fullscreen_checkBox->isChecked())
-        {
-            argList.append("-fullscreen");
-        }
-        else
-        {
-            argList.append("-window");
-        }
+        if (ui->fullscreen_checkBox->isChecked()) arguments.append("-fullscreen");
+        else arguments.append("-window");
     }
     else
     {
         QString geom_char = ui->fullscreen_checkBox->isChecked() ? "f" : "w";
 
-        argList.append("-geom");
-        argList.append(ui->resolution_comboBox->currentText() + geom_char);
-    }
-
-    if (ui->record_lineEdit->text() != "")
-    {
-        argList.append("-record");
-        if (returnTooltip) argList.append("\"" + ui->record_lineEdit->text() + "\"");
-        else argList.append(ui->record_lineEdit->text());
-    }
-
-    if (ui->playback_lineEdit->text() != "")
-    {
-        if (ui->playback_comboBox->currentIndex() == 0)
-        {
-            argList.append("-playdemo"); // Plays demo at normal speed
-            if (returnTooltip) argList.append("\"" + ui->playback_lineEdit->text() + "\"");
-            else argList.append(ui->playback_lineEdit->text());
-        }
-        else if (ui->playback_comboBox->currentIndex() == 1)
-        {
-            argList.append("-timedemo"); // Used for viddumping
-            if (returnTooltip) argList.append("\"" + ui->playback_lineEdit->text() + "\"");
-            else argList.append(ui->playback_lineEdit->text());
-            if (ui->viddump_lineEdit->text().length() > 2)
-            {
-                argList.append("-viddump");
-                if (returnTooltip) argList.append("\"" + ui->viddump_lineEdit->text() + "\"");
-                else argList.append(ui->viddump_lineEdit->text());
-            }
-        }
-        else if (ui->playback_comboBox->currentIndex() == 2)
-        {
-            argList.append("-fastdemo"); // Used for benchmarks
-            if (returnTooltip) argList.append("\"" + ui->playback_lineEdit->text() + "\"");
-            else argList.append(ui->playback_lineEdit->text());
-        }
+        arguments.append("-geom");
+        arguments.append(ui->resolution_comboBox->currentText() + geom_char);
     }
 
     if (ui->hud_lineEdit->text() != "")
     {
-        argList.append("-hud");
-        if (returnTooltip) argList.append("\"" + ui->hud_lineEdit->text() + "\"");
-        else argList.append(ui->hud_lineEdit->text());
+        arguments.append("-hud");
+        arguments.append(ui->hud_lineEdit->text());
     }
 
     if (ui->config_lineEdit->text() != "")
     {
-        argList.append("-config");
-        if (returnTooltip) argList.append("\"" + ui->config_lineEdit->text() + "\"");
-        else argList.append(ui->config_lineEdit->text());
+        arguments.append("-config");
+        arguments.append(ui->config_lineEdit->text());
     }
 
-    if (ui->track_comboBox->currentIndex() == 1) argList.append("-track_pacifist");
-    else if (ui->track_comboBox->currentIndex() == 2) argList.append("-track_100k");
+    if (ui->track_comboBox->currentIndex() == 1) arguments.append("-track_pacifist");
+    else if (ui->track_comboBox->currentIndex() == 2) arguments.append("-track_100k");
 
-    if (ui->time_comboBox->currentIndex() == 1) argList.append("-time_use");
-    else if (ui->time_comboBox->currentIndex() == 2) argList.append("-time_keys");
-    else if (ui->time_comboBox->currentIndex() == 3) argList.append("-time_secrets");
-    else if (ui->time_comboBox->currentIndex() == 4) argList.append("-time_all");
+    if (ui->time_comboBox->currentIndex() == 1) arguments.append("-time_use");
+    else if (ui->time_comboBox->currentIndex() == 2) arguments.append("-time_keys");
+    else if (ui->time_comboBox->currentIndex() == 3) arguments.append("-time_secrets");
+    else if (ui->time_comboBox->currentIndex() == 4) arguments.append("-time_all");
+
+    // Wads
+    if (ui->wads_listWidget->count() > 0)
+    {
+        arguments.append("-file");
+        for (int i = 0; i < ui->wads_listWidget->count(); i++)
+        {
+            /*
+#ifdef _WIN32
+            for (int i = 0; i < file.length(); i++)
+            {
+                if (file[i] == '/') file[i] = '\\';
+            }
+#endif
+            */
+            arguments.append(ui->wads_listWidget->item(i)->toolTip());
+        }
+    }
+
+    // Demos
+    if (!ui->record_lineEdit->text().isEmpty())
+    {
+        arguments.append("-record");
+        arguments.append(ui->record_lineEdit->text());
+    }
+
+    if (!ui->playback_lineEdit->text().isEmpty())
+    {
+        if (ui->playback_comboBox->currentIndex() == 0)
+        {
+            arguments.append("-playdemo"); // Plays demo at normal speed
+            arguments.append(ui->playback_lineEdit->text());
+        }
+        else if (ui->playback_comboBox->currentIndex() == 1)
+        {
+            arguments.append("-timedemo"); // Used for viddumping
+            arguments.append(ui->playback_lineEdit->text());
+
+            if (!ui->viddump_lineEdit->text().isEmpty())
+            {
+                arguments.append("-viddump");
+                arguments.append(ui->viddump_lineEdit->text());
+            }
+        }
+        else if (ui->playback_comboBox->currentIndex() == 2)
+        {
+            arguments.append("-fastdemo"); // Used for benchmarks
+            arguments.append(ui->playback_lineEdit->text());
+        }
+    }
 
     if (ui->additionalArguments_textEdit->toPlainText() != "")
     {
@@ -760,7 +598,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             {
                 if (strToAdd != "")
                 {
-                    argList.append(strToAdd);
+                    arguments.append(strToAdd);
                     strToAdd = "";
                 }
             }
@@ -779,6 +617,25 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             }
         }
     }
+
+    return arguments;
+}
+
+void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString exportCmd) // Runs when you click the launch button or when you close the launcher (When closing, it will not run the game, but actually just save the settings)
+{
+    if (!canLaunch) // Dont allow 2 launchs in the time of 2 sec
+        return;
+
+    if (running && !returnTooltip)
+    {
+        gameIsRunning();
+        return;
+    }
+
+    int complevelIndex = ui->complevel_comboBox->currentIndex();
+    int diffIndex = ui->difficulty_comboBox->currentIndex();
+
+    QStringList argList = getArguments();
 
     if (returnTooltip)
     {
@@ -1056,7 +913,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
 {
     if (event->key() == 0x01000005 || event->key() == 0x01000004) // Key is either ENTER or RETURN
     {
-        on_launchGame_pushButton_clicked(false, false, "");
+        on_launchGame_pushButton_clicked(false, "");
     }
 }
 
@@ -1072,7 +929,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
         // }
         if (ev->type() == QEvent::MouseButtonPress)
         {
-            on_launchGame_pushButton_clicked(false, false, "");
+            on_launchGame_pushButton_clicked(false, "");
             return QWidget::eventFilter(object, ev);
         }
     }
@@ -1082,7 +939,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work
 
         if (keyEvent->key() == 0x01000005 || keyEvent->key() == 0x01000004) // Key is either ENTER or RETURN
         {
-            on_launchGame_pushButton_clicked(false, false, "");
+            on_launchGame_pushButton_clicked(false, "");
             return true;
         }
     }
@@ -1097,11 +954,12 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
         event->ignore();
         return;
     }
-    on_launchGame_pushButton_clicked(true, false, "");
+
+    saveSettings();
     QApplication::quit();
 }
 
-void MainWindow::on_showCommandLine_pushButton_clicked() { on_launchGame_pushButton_clicked(false, true, ""); }
+void MainWindow::on_showCommandLine_pushButton_clicked() { on_launchGame_pushButton_clicked(true, ""); }
 
 QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }
 QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }

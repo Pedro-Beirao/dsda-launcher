@@ -15,16 +15,16 @@ QFileInfoList MainWindow::findIwads_possibleFiles()
 #endif
 
     QDir directory(dotfolder);
-    possible_files = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
 
     doomwaddirstr = doomwaddirstr.split(":")[0];
 
 #elif defined(Q_OS_WIN)
-    QDir directory = execPath;
-    imagesInfo = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
+    QDir directory(execPath);
 
     doomwaddirstr = doomwaddirstr.split(";")[0];
 #endif
+
+    possible_files = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
 
     QDir doomwaddir(doomwaddirstr);
     possible_files += doomwaddir.entryInfoList(QStringList() << "*.WAD", QDir::Files);
