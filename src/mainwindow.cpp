@@ -66,8 +66,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Add event filter to the Launch button. This will allow you to see the current parameters when you hover your mouse
     ui->launchGame_pushButton->installEventFilter(this);
 
-    enable_disable_skill_comboBox();
-
     // set the settings and console windows
     settingsWindow = new Settings;
     consoleWindow = new Console;
@@ -101,47 +99,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     loadSettings();
 
-    // If no IWAD found, show a tool tip
-    if (ui->iwad_comboBox->count() == 0)
-    {
-        ui->tooltip_textBrowser->show();
-    }
-    else
-    {
-        ui->tooltip_textBrowser->hide();
-    }
-
-    if (ui->playback_comboBox->currentIndex() != 1)
-    {
-        ui->viddump_lineEdit->setHidden(true);
-        ui->viddump_pushButton->setHidden(true);
-    }
-
-    if (ui->viddump_lineEdit->text() == "") ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
-    else ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-
-    if (ui->hud_lineEdit->text() == "") ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
-    else ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-
-    if (ui->config_lineEdit->text() == "") ui->config_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
-    else ui->config_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-
-    if (ui->iwad_comboBox->currentIndex() == -1 && ui->iwad_comboBox->count() != 0) ui->iwad_comboBox->setCurrentIndex(0);
-
-    if (ui->episode_lineEdit->text() == "")
-    {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-    }
+    setStyles();
 
     QStringList arguments = qApp->arguments();
-    if (arguments.count() > 1)
+    for (int i = 1; i < arguments.count(); i++)
     {
-        for (int i = 1; i < arguments.count(); i++)
-        {
-            QString absPath = arguments.at(i);
-            dropFile(absPath);
-        }
+        dropFile(arguments.at(i));
     }
 }
 
@@ -205,6 +168,28 @@ void MainWindow::loadSettings()
     }
 }
 
+void MainWindow::setStyles()
+{
+    // Top
+    enable_disable_skill_comboBox();
+
+    // Options
+    if (ui->hud_lineEdit->text().isEmpty()) ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->hud_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
+
+    if (ui->config_lineEdit->text().isEmpty()) ui->config_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->config_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
+
+    // Demos
+    if (ui->viddump_lineEdit->text().isEmpty()) ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
+    else ui->viddump_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
+
+    if (ui->playback_comboBox->currentIndex() != 1)
+    {
+        ui->viddump_lineEdit->setHidden(true);
+        ui->viddump_pushButton->setHidden(true);
+    }
+}
 // Drag Event for *.wad *.lmp *.state *.deh *.bex
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {

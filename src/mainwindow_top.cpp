@@ -65,6 +65,10 @@ void MainWindow::findIwads()
             }
         }
     }
+
+    // If no IWAD found, show a tool tip
+    if (ui->iwad_comboBox->count() == 0) ui->tooltip_textBrowser->show();
+    else ui->tooltip_textBrowser->hide();
 }
 
 // If the IWAD selected changes
