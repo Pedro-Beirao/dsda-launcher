@@ -104,10 +104,10 @@ void MainWindow::setComplevelsList(QStringList list)
 void MainWindow::setMaxSkillLevel(int max)
 {
     ui->difficulty_comboBox->clear();
-    for (int i = 0; i <= max; i++)
+    ui->difficulty_comboBox->addItem(" ");
+    for (int i = 1; i <= max; i++)
     {
-        if (i != 0) ui->difficulty_comboBox->addItem(QString::number(i));
-        else ui->difficulty_comboBox->addItem(" ");
+        ui->difficulty_comboBox->addItem(QString::number(i));
     }
     ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
 }

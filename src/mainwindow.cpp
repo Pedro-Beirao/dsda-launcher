@@ -97,17 +97,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
-    // Set the parameters text correctly
-    if (!settings->value("toggle1a").isNull())
-    {
-        setToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString());
-    }
-    else
-    {
-        setToggles(DEFAULT_TOGGLE1ARG, DEFAULT_TOGGLE1TEXT, DEFAULT_TOGGLE2ARG, DEFAULT_TOGGLE2TEXT, DEFAULT_TOGGLE3ARG, DEFAULT_TOGGLE3TEXT, DEFAULT_TOGGLE4ARG, DEFAULT_TOGGLE4TEXT);
-    }
-
     findIwads();
+
+    loadSettings();
 
     // If no IWAD found, show a tool tip
     if (ui->iwad_comboBox->count() == 0)
@@ -117,42 +109,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     else
     {
         ui->tooltip_textBrowser->hide();
-    }
-
-    // Load settings and apply them
-    if (settings->value("remember").toBool())
-    {
-        ui->complevel_comboBox->setCurrentIndex(settings->value("complevel").toInt());
-        ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
-        ui->episode_lineEdit->setText(settings->value("warp1").toString());
-        ui->level_lineEdit->setText(settings->value("warp2").toString());
-        int pwadCount = settings->value("pwadCount").toInt();
-        for (int i = 0; i < pwadCount; i++)
-        {
-            QString filePath = settings->value("pwad" + QString::number(i)).toString();
-
-            ui->wads_listWidget->addItem(getFileName(filePath));
-            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
-        }
-        ui->toggle1_checkBox->setChecked(settings->value("fast").toBool());
-        ui->toggle2_checkBox->setChecked(settings->value("nomo").toBool());
-        ui->toggle3_checkBox->setChecked(settings->value("respawn").toBool());
-        ui->fullscreen_checkBox->setChecked(settings->value("fullscreen").toBool());
-        ui->resolution_comboBox->setCurrentIndex(settings->value("geom").toInt());
-        if (ui->iwad_comboBox->count() >= settings->value("iwad").toInt())
-        {
-            ui->iwad_comboBox->setCurrentIndex(settings->value("iwad").toInt());
-        }
-        ui->toggle4_checkBox->setChecked(settings->value("solonet").toBool());
-        ui->additionalArguments_textEdit->append(settings->value("argumentText").toString());
-
-        ui->record_lineEdit->setText(settings->value("recorddemo").toString());
-        ui->playback_lineEdit->setText(settings->value("playdemo").toString());
-        ui->viddump_lineEdit->setText(settings->value("viddump").toString());
-        ui->hud_lineEdit->setText(settings->value("hud").toString());
-        ui->config_lineEdit->setText(settings->value("config").toString());
-
-        ui->playback_comboBox->setCurrentIndex(settings->value("demoplaybox").toInt());
     }
 
     if (ui->playback_comboBox->currentIndex() != 1)
@@ -169,8 +125,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     if (ui->config_lineEdit->text() == "") ui->config_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     else ui->config_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-
-    if (settings->value("maxskilllevel").toString() != "") setMaxSkillLevel(settings->value("maxskilllevel").toInt());
 
     if (ui->iwad_comboBox->currentIndex() == -1 && ui->iwad_comboBox->count() != 0) ui->iwad_comboBox->setCurrentIndex(0);
 
@@ -192,6 +146,64 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::loadSettings()
+{
+    // Set the parameters text correctly
+    if (!settings->value("toggle1a").isNull())
+    {
+        setToggles(settings->value("toggle1t").toString(), settings->value("toggle1a").toString(), settings->value("toggle2t").toString(), settings->value("toggle2a").toString(), settings->value("toggle3t").toString(), settings->value("toggle3a").toString(), settings->value("toggle4t").toString(), settings->value("toggle4a").toString());
+    }
+    else
+    {
+        setToggles(DEFAULT_TOGGLE1ARG, DEFAULT_TOGGLE1TEXT, DEFAULT_TOGGLE2ARG, DEFAULT_TOGGLE2TEXT, DEFAULT_TOGGLE3ARG, DEFAULT_TOGGLE3TEXT, DEFAULT_TOGGLE4ARG, DEFAULT_TOGGLE4TEXT);
+    }
+
+    // Load settings and apply them
+    if (settings->value("remember").toBool())
+    {
+        // Top
+        ui->iwad_comboBox->setCurrentIndex(settings->value("iwad").toInt());
+        ui->complevel_comboBox->setCurrentIndex(settings->value("complevel").toInt());
+        ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
+        ui->episode_lineEdit->setText(settings->value("warp1").toString());
+        ui->level_lineEdit->setText(settings->value("warp2").toString());
+        if (!settings->value("maxskilllevel").isNull()) setMaxSkillLevel(settings->value("maxskilllevel").toInt());
+
+        // Options
+        ui->toggle1_checkBox->setChecked(settings->value("fast").toBool());
+        ui->toggle2_checkBox->setChecked(settings->value("nomo").toBool());
+        ui->toggle3_checkBox->setChecked(settings->value("respawn").toBool());
+        ui->toggle4_checkBox->setChecked(settings->value("solonet").toBool());
+        ui->fullscreen_checkBox->setChecked(settings->value("fullscreen").toBool());
+        ui->resolution_comboBox->setCurrentIndex(settings->value("geom").toInt());
+        ui->hud_lineEdit->setText(settings->value("hud").toString());
+        ui->config_lineEdit->setText(settings->value("config").toString());
+        ui->track_comboBox->setCurrentIndex(settings->value("track").toInt());
+        ui->time_comboBox->setCurrentIndex(settings->value("time").toInt());
+
+        // Wads
+        int pwadCount = settings->beginReadArray("pwads");
+        for (int i = 0; i < pwadCount; i++)
+        {
+            settings->setArrayIndex(i);
+            QString filePath = settings->value("pwad").toString();
+
+            ui->wads_listWidget->addItem(getFileName(filePath));
+            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+        }
+        settings->endArray();
+
+        // Demos
+        ui->record_lineEdit->setText(settings->value("recorddemo").toString());
+        ui->playback_lineEdit->setText(settings->value("playdemo").toString());
+        ui->viddump_lineEdit->setText(settings->value("viddump").toString());
+        ui->playback_comboBox->setCurrentIndex(settings->value("demoplaybox").toInt());
+
+        // Bottom
+        ui->additionalArguments_textEdit->append(settings->value("argumentText").toString());
+    }
+}
 
 // Drag Event for *.wad *.lmp *.state *.deh *.bex
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -512,13 +524,18 @@ void MainWindow::on_launchGame_pushButton_clicked(bool onExit, bool returnToolti
             settings->remove("config");
         }
 
+        settings->setValue("track", ui->track_comboBox->currentIndex());
+        settings->setValue("time", ui->time_comboBox->currentIndex());
+
         settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
 
-        settings->setValue("pwadCount", ui->wads_listWidget->count());
+        settings->beginWriteArray("pwads");
         for (int i = 0; i < ui->wads_listWidget->count(); i++)
         {
-            settings->setValue("pwad" + QString::number(i), ui->wads_listWidget->item(i)->toolTip());
+            settings->setArrayIndex(i);
+            settings->setValue("pwad", ui->wads_listWidget->item(i)->toolTip());
         }
+        settings->endArray();
 
         settings->setValue("exeName", exeName);
 

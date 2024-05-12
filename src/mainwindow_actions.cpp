@@ -184,7 +184,7 @@ void MainWindow::on_actionWhatIsThisState_triggered()
 void MainWindow::on_actionExportCommand_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export command line"), settings->value("batfile").toString(), tr("batch files (*.bat *.sh *.zsh *.command)"));
-    if (fileName != "")
+    if (!fileName.isEmpty())
     {
         settings->setValue("batfile", fileName);
         on_launchGame_pushButton_clicked(false, true, fileName);
