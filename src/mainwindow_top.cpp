@@ -6,11 +6,11 @@ QFileInfoList MainWindow::findIwads_possibleFiles()
     QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
 // Find the IWADs in the correct folder depending on the OS
-#if defined Q_OS_MAC || defined Q_OS_LINUX
+#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
 
 // Copies dsda-doom.wad to the dotfolder
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
     QProcess::startDetached("cp", {execPath + "/../Resources/" + exeName + ".wad", dotfolder});
 #endif
 
@@ -18,7 +18,8 @@ QFileInfoList MainWindow::findIwads_possibleFiles()
     possible_files = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
 
     doomwaddirstr = doomwaddirstr.split(":")[0];
-#elif Q_OS_WIN
+
+#elif defined(Q_OS_WIN)
     QDir directory = execPath;
     imagesInfo = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
 
