@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     findIwads();
 
-    loadSettings();
+    loadSelected();
 
     setStyles();
 
@@ -110,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::loadSettings()
+void MainWindow::loadSelected()
 {
     // Set the parameters text correctly
     if (!settings->value("toggle1a").isNull())
@@ -168,6 +168,52 @@ void MainWindow::loadSettings()
     }
 }
 
+void MainWindow::saveSelected()
+{
+    // Top
+    settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
+    settings->setValue("complevel", ui->complevel_comboBox->currentIndex());
+    settings->setValue("skill", ui->difficulty_comboBox->currentIndex());
+    settings->setValue("warp1", ui->episode_lineEdit->text());
+    settings->setValue("warp2", ui->level_lineEdit->text());
+
+    // Bottom
+    settings->setValue("fast", ui->toggle1_checkBox->isChecked());
+    settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
+    settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
+    settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
+    settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
+    settings->setValue("geom", ui->resolution_comboBox->currentIndex());
+    settings->setValue("hud", ui->hud_lineEdit->text());
+    settings->setValue("config", ui->config_lineEdit->text());
+    settings->setValue("track", ui->track_comboBox->currentIndex());
+    settings->setValue("time", ui->time_comboBox->currentIndex());
+
+    // Wads
+    settings->beginWriteArray("pwads");
+    for (int i = 0; i < ui->wads_listWidget->count(); i++)
+    {
+        settings->setArrayIndex(i);
+        settings->setValue("pwad", ui->wads_listWidget->item(i)->toolTip());
+    }
+    settings->endArray();
+
+    // Demos
+    settings->setValue("recorddemo", ui->record_lineEdit->text());
+    settings->setValue("playdemo", ui->playback_lineEdit->text());
+    settings->setValue("viddump", ui->viddump_lineEdit->text());
+    settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
+
+    // Bottom
+    settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
+
+    settings->setValue("exeName", exeName);
+
+    settings->setValue("version", version);
+
+    settings->sync();
+}
+
 void MainWindow::setStyles()
 {
     // Top
@@ -190,6 +236,7 @@ void MainWindow::setStyles()
         ui->viddump_pushButton->setHidden(true);
     }
 }
+
 // Drag Event for *.wad *.lmp *.state *.deh *.bex
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
@@ -412,52 +459,6 @@ void MainWindow::gameIsRunning()
     msgBox.exec();
 }
 
-void MainWindow::saveSettings()
-{
-    // Top
-    settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
-    settings->setValue("complevel", ui->complevel_comboBox->currentIndex());
-    settings->setValue("skill", ui->difficulty_comboBox->currentIndex());
-    settings->setValue("warp1", ui->episode_lineEdit->text());
-    settings->setValue("warp2", ui->level_lineEdit->text());
-
-    // Bottom
-    settings->setValue("fast", ui->toggle1_checkBox->isChecked());
-    settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
-    settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
-    settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
-    settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
-    settings->setValue("geom", ui->resolution_comboBox->currentIndex());
-    settings->setValue("hud", ui->hud_lineEdit->text());
-    settings->setValue("config", ui->config_lineEdit->text());
-    settings->setValue("track", ui->track_comboBox->currentIndex());
-    settings->setValue("time", ui->time_comboBox->currentIndex());
-
-    // Wads
-    settings->beginWriteArray("pwads");
-    for (int i = 0; i < ui->wads_listWidget->count(); i++)
-    {
-        settings->setArrayIndex(i);
-        settings->setValue("pwad", ui->wads_listWidget->item(i)->toolTip());
-    }
-    settings->endArray();
-
-    // Demos
-    settings->setValue("recorddemo", ui->record_lineEdit->text());
-    settings->setValue("playdemo", ui->playback_lineEdit->text());
-    settings->setValue("viddump", ui->viddump_lineEdit->text());
-    settings->setValue("demoplaybox", ui->playback_comboBox->currentIndex());
-
-    // Bottom
-    settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
-
-    settings->setValue("exeName", exeName);
-
-    settings->setValue("version", version);
-
-    settings->sync();
-}
-
 QStringList MainWindow::getArguments()
 {
     QStringList arguments;
@@ -585,37 +586,11 @@ QStringList MainWindow::getArguments()
         }
     }
 
-    if (ui->additionalArguments_textEdit->toPlainText() != "")
+    if (!ui->additionalArguments_textEdit->toPlainText().isEmpty())
     {
-        QString str = ui->additionalArguments_textEdit->toPlainText() + " ";
+        QStringList parsed = parseStringIntoArguments(ui->additionalArguments_textEdit->toPlainText());
 
-        QString strToAdd = "";
-        for (qsizetype i = 0; i < str.length(); i++)
-        {
-
-            QChar c = str[i];
-            if (c == ' ')
-            {
-                if (strToAdd != "")
-                {
-                    arguments.append(strToAdd);
-                    strToAdd = "";
-                }
-            }
-            else if (c == '\"')
-            {
-                i++;
-                while (str[i] != '\"')
-                {
-                    strToAdd.push_back(str[i]);
-                    i++;
-                }
-            }
-            else
-            {
-                strToAdd.push_back(c);
-            }
-        }
+        arguments.append(parsed);
     }
 
     return arguments;
@@ -955,7 +930,7 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
         return;
     }
 
-    saveSettings();
+    saveSelected();
     QApplication::quit();
 }
 

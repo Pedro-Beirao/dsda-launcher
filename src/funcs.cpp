@@ -67,7 +67,7 @@ QString getFilePath(QString fileName)
     {
         settings->setArrayIndex(j);
         QString folder = settings->value("folder").toString();
-        if (folder != "")
+        if (!folder.isEmpty())
         {
             QDir folder_path(folder);
             QStringList folder_files_list = folder_path.entryList(QDir::Files);
@@ -85,3 +85,5 @@ QString getFilePath(QString fileName)
 
     return "";
 }
+
+QStringList parseStringIntoArguments(QString line) { return QProcess::splitCommand(line); }

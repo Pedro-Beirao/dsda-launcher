@@ -172,8 +172,8 @@ private slots:
   void on_config_pushButton_clicked();
   void on_playback_lineEdit_textChanged(const QString &arg1);
   QFileInfoList findIwads_possibleFiles();
-  void loadSettings();
-  void saveSettings();
+  void loadSelected();
+  void saveSelected();
   void setStyles();
   QStringList getArguments();
 };
