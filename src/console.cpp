@@ -22,10 +22,7 @@ Console::~Console()
     delete ui;
 }
 
-void Console::changeText(QString s)
-{
-    ui->console_textEdit->append(s);
-}
+void Console::appendText(QString s) { ui->console_textEdit->append(s); }
 
 void Console::clearText()
 {

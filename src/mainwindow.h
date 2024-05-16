@@ -56,7 +56,7 @@ class MainWindow : public QMainWindow
 
     // If dsda-doom is running
     bool running = false;
-    void gameIsRunning();
+    void gameIsRunningDialog();
 
     QString exeName = "dsda-doom";
 
@@ -145,8 +145,8 @@ public slots:
     void whenAnimationFinishPrevious();
     void nextStackedWidget();
     void previousStackedWidget();
-    void SaveHistory(QString iwad, QStringList args);
-    void Launch(QString iwadName, QStringList argList);
+    void SaveHistory(QStringList args);
+    void Launch(QStringList arguments);
     void showSSLDialog();
     void on_tooltip_pushButton_clicked();
 

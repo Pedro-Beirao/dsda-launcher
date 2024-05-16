@@ -237,7 +237,6 @@ void historyList::on_load_pushButton_clicked()
 void historyList::on_launch_pushButton_clicked()
 {
     QStringList argList;
-    QString iwadName;
 
     QFile file(historyPath);
     if (!file.open(QFile::ReadOnly | QFile::Text))
@@ -260,7 +259,8 @@ void historyList::on_launch_pushButton_clicked()
         {
             if (buffer.mid(0, 5) == "iwad=") // iwad
             {
-                iwadName = buffer.mid(5);
+                argList.append("-complevel");
+                argList.append(buffer.mid(5));
                 stream.readLineInto(&buffer);
             }
             if (buffer.mid(0, 10) == "complevel=") // complevel
@@ -488,5 +488,5 @@ void historyList::on_launch_pushButton_clicked()
 
     file.close();
 
-    MainWindow::pMainWindow->Launch(iwadName, argList);
+    MainWindow::pMainWindow->Launch(argList);
 }

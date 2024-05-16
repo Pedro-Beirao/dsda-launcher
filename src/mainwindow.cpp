@@ -387,7 +387,6 @@ void MainWindow::demoDialog_accepted()
     }
 }
 
-// Drop Event for *.wad *.lmp *gfd
 void MainWindow::dropEvent(QDropEvent *e)
 {
     foreach (const QUrl &url, e->mimeData()->urls())
@@ -397,7 +396,7 @@ void MainWindow::dropEvent(QDropEvent *e)
     }
 }
 
-void MainWindow::error(QProcess::ProcessError error) { qDebug() << "Error: " << error; }
+void MainWindow::error(QProcess::ProcessError error) {}
 
 void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
@@ -429,7 +428,7 @@ void MainWindow::readyReadStandardError()
     QProcess *p = (QProcess *)sender();
     QByteArray buf = p->readAllStandardError();
 
-    consoleWindow->changeText("<div style='color: red;'>" + buf + "</div>");
+    consoleWindow->appendText("<div style='color: red;'>" + buf + "</div>");
 }
 
 void MainWindow::readyReadStandardOutput()
@@ -439,19 +438,19 @@ void MainWindow::readyReadStandardOutput()
 
     QString qs = buf;
 
-    if (qs.indexOf("\033") != -1 || endoomString != "")
+    if (qs.indexOf("\033") != -1 || !endoomString.isEmpty())
     {
         endoomString += qs;
     }
     else
     {
-        consoleWindow->changeText(buf);
+        consoleWindow->appendText(buf);
     }
 }
 
 void MainWindow::started() { running = true; }
 
-void MainWindow::gameIsRunning()
+void MainWindow::gameIsRunningDialog()
 {
     QMessageBox msgBox;
     msgBox.setText(exeName + " is still running.");
@@ -603,20 +602,17 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
 
     if (running && !returnTooltip)
     {
-        gameIsRunning();
+        gameIsRunningDialog();
         return;
     }
 
-    int complevelIndex = ui->complevel_comboBox->currentIndex();
-    int diffIndex = ui->difficulty_comboBox->currentIndex();
-
-    QStringList argList = getArguments();
+    QStringList arguments = getArguments();
 
     if (returnTooltip)
     {
         QString argStr;
         QString argStrComplete;
-        foreach (QString p, argList)
+        foreach (QString p, arguments)
         {
             argStrComplete.append((p + " "));
 
@@ -683,30 +679,27 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         return;
     }
 
-    Launch(ui->iwad_comboBox->currentText(), argList);
+    Launch(arguments);
 
-    SaveHistory(ui->iwad_comboBox->currentText(), argList);
+    SaveHistory(arguments);
 }
 
-void MainWindow::Launch(QString iwadName, QStringList argList)
+void MainWindow::Launch(QStringList arguments)
 {
     if (!canLaunch) return;
 
-    for (int i = 0; i < argList.count(); i++)
+    if (running)
     {
-        if (argList.at(i) == "")
-        {
-            argList.removeAt(i);
-        }
+        gameIsRunningDialog();
+        return;
     }
 
     consoleWindow->clearText();
-    endoomWindow->clearText();
     endoomString = "";
 
     if (settings->value("endoom").toBool())
     {
-        argList.append({"-assign", "ansi_endoom=2"});
+        arguments.append({"-assign", "ansi_endoom=2"});
     }
 
 #ifdef __APPLE__
@@ -714,11 +707,9 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     if (port.exists())
     {
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-        argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
-        argList.push_front("-iwad");
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
-        process->start(execPath + "/../Resources/" + exeName, argList);
+        process->start(execPath + "/../Resources/" + exeName, arguments);
         connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
@@ -728,10 +719,9 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     {
         QMessageBox::warning(this, "dsda-launcher", exeName + " was not found in dsda-launcher.app/Contents/Resources/" + exeName);
     }
-#elif __linux__
+#elif __LINUX__
     QFile port = QFile(execPath + "/" + exeName);
     QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
     // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
     QStringList apar;
     apar << exeName;
@@ -746,7 +736,7 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     {
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
-        process->start(processPath, argList);
+        process->start(processPath, arguments);
         connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -756,11 +746,9 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     QFile port = QFile(execPath + "/" + exeName + ".exe");
     if (port.exists())
     {
-        argList.push_front(ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString());
-        argList.push_front("-iwad");
         QProcess *process = new QProcess;
         process->setWorkingDirectory(execPath);
-        process->start(execPath + "/" + exeName + ".exe", argList);
+        process->start(execPath + "/" + exeName + ".exe", arguments);
         connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -776,18 +764,18 @@ void MainWindow::Launch(QString iwadName, QStringList argList)
     QTimer::singleShot(1000, this, SLOT(delayLaunch()));
 }
 
-void MainWindow::SaveHistory(QString iwad, QStringList args)
+void MainWindow::SaveHistory(QStringList args)
 {
     int checksum = 0;
     int count = 0;
     int needToDelete = 0;
 
-    QString t = iwad;
+    QString checkString = "";
     for (qsizetype i = 0; i < args.size(); i++)
     {
-        t += args.at(i);
+        checkString += args.at(i);
     }
-    QByteArray arr = t.toLatin1();
+    QByteArray arr = checkString.toLatin1();
     checksum = qChecksum(arr.data(), arr.length());
 
     QFile file(historyListWindow->historyPath);
@@ -925,7 +913,7 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
 {
     if (running)
     {
-        gameIsRunning();
+        gameIsRunningDialog();
         event->ignore();
         return;
     }

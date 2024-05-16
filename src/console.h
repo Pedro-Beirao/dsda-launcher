@@ -24,7 +24,7 @@ public:
 
 public slots:
     void ctrlw();
-    void changeText(QString s);
+    void appendText(QString s);
     void clearText();
 };
 
