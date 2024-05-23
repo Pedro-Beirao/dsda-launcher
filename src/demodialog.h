@@ -28,7 +28,6 @@ private:
     QVector<QPair<QString, QString>> files_paths;
     QLabel *selected_count;
     void update_selected_count();
-    void findFiles();
 };
 
 #endif // DEMODIALOG_H

@@ -59,6 +59,7 @@ class MainWindow : public QMainWindow
     void gameIsRunningDialog();
 
     void enable_disable_skill_comboBox();
+    void enable_disable_complevel_comboBox();
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
