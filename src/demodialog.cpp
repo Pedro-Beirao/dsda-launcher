@@ -33,71 +33,12 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     mainLayout->addWidget(files_label, 2, 0, 1, 3);
 
     files_listWidget = new QTableWidget();
-    int size = settings->beginReadArray("pwadfolders");
-    if(size!=0)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            settings->setArrayIndex(i);
-            QString folder = settings->value("folder").toString();
-            if(folder!="")
-            {
-                QDir path(folder);
-                QStringList files0 = path.entryList(QDir::Files);
-                foreach(QString file0, files0)
-                {
-                    int dot_pos = file0.lastIndexOf('.');
-                    if (dot_pos == -1) continue;
-                    QString tmp = (file0.mid(dot_pos + 1).toLower());
-                    if (tmp == "wad" || tmp == "deh" || tmp == "bex")
-                    {
-                        files_paths.push_back({(file0.right(file0.lastIndexOf(QDir::separator())).toLower()), folder + QDir::separator() + file0});
-                    }
-                }
-            }
-        }
-        settings->endArray();
+    files = getFilePath_possibleFiles();
 
-        QString folder;
-#ifdef _WIN32
-        folder = QCoreApplication::applicationDirPath();
-#else
-        folder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom";
-#endif
-        QDir path(folder);
-        QStringList files0 = path.entryList(QDir::Files);
-
-        QString f = QString(qgetenv("DOOMWADPATH"));
-        int prev = 0;
-        for(int j = 0; j<f.length(); j++)
-        {
-#ifdef _WIN32
-            if (f.at(j) == ';' || j+1 == f.length())
-#else
-            if (f.at(j) == ':' || j+1 == f.length())
-#endif
-            {
-                files0.append(QDir(f.mid(prev, j-prev)).entryList(QDir::Files));
-                prev = j+1;
-            }
-        }
-
-        foreach(QString file0, files0)
-        {
-            int dot_pos = file0.lastIndexOf('.');
-            if (dot_pos == -1) continue;
-            QString tmp = (file0.mid(dot_pos + 1).toLower());
-            if (tmp == "wad" || tmp == "deh" || tmp == "bex")
-            {
-                files_paths.push_back({(file0.right(file0.lastIndexOf(QDir::separator())).toLower()), folder + QDir::separator() + file0});
-            }
-        }
-    }
-
-    std::sort(files_paths.begin(), files_paths.end(), [](QPair<QString, QString> p1, QPair<QString, QString> p2) { return p1.first < p2.first; });
+    std::sort(files.begin(), files.end(), [](QFileInfo p1, QFileInfo p2) { return p1.baseName().toLower() < p2.baseName().toLower(); });
 
     files_listWidget->setColumnCount(2);
-    files_listWidget->setRowCount(files_paths.size()/2+1);
+    files_listWidget->setRowCount(files.size() / 2 + 1);
     files_listWidget->horizontalHeader()->setVisible(false);
     files_listWidget->verticalHeader()->setVisible(false);
     files_listWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -108,13 +49,14 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     {
         QTableWidgetItem *newItemTemp = new QTableWidgetItem("");
         newItemTemp->setFlags(newItemTemp->flags() & ~Qt::ItemIsEditable);
-        files_listWidget->setItem(files_paths.size()/2, j, newItemTemp);
+        files_listWidget->setItem(files.size() / 2, j, newItemTemp);
 
-        for (int i = 0; i < files_paths.size()/2+j; i++)
+        for (int i = 0; i < files.size() / 2 + j; i++)
         {
-            if (i + j*(files_paths.size()/2) >= files_paths.size()) continue;
+            if (i + j * (files.size() / 2) >= files.size()) continue;
 
-            QTableWidgetItem *newItem = new QTableWidgetItem(files_paths[i + j*(files_paths.size()/2)].first);
+            QTableWidgetItem *newItem = new QTableWidgetItem(files[i + j * (files.size() / 2)].fileName());
+            newItem->setToolTip(files[i + j * (files.size() / 2)].absoluteFilePath());
             newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
         }
@@ -150,7 +92,7 @@ QStringList demodialog::get_files_list()
     QStringList files_list;
     for (int k = 0; k < files_listWidget->selectedItems().size(); k++)
     {
-        files_list.push_back(files_paths.at(files_listWidget->selectedItems().at(k)->row() + files_listWidget->selectedItems().at(k)->column()*(files_paths.size()/2)).second);
+        files_list.push_back(files.at(files_listWidget->selectedItems().at(k)->row() + files_listWidget->selectedItems().at(k)->column() * (files.size() / 2)).absoluteFilePath());
     }
     return files_list;
 }

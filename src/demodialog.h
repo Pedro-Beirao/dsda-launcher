@@ -25,9 +25,9 @@ public:
 private:
     QComboBox *iwad_comboBox;
     QTableWidget *files_listWidget;
-    QVector<QPair<QString, QString>> files_paths;
     QLabel *selected_count;
     void update_selected_count();
+    QFileInfoList files;
 };
 
 #endif // DEMODIALOG_H
