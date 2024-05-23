@@ -2,9 +2,7 @@
 #include "ui_settings.h"
 #include <mainwindow.h>
 
-Settings::Settings(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Settings)
+Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 {
     ui->setupUi(this);
 

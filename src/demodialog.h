@@ -1,25 +1,26 @@
 #ifndef DEMODIALOG_H
 #define DEMODIALOG_H
 
-#include <QDialog>
-#include <QVBoxLayout>
-#include <QLabel>
+#include "funcs.h"
 #include <QComboBox>
-#include <QPushButton>
+#include <QDialog>
 #include <QDialogButtonBox>
-#include <QSettings>
-#include <QPair>
-#include <qtablewidget.h>
 #include <QHeaderView>
+#include <QLabel>
+#include <QPair>
+#include <QPushButton>
+#include <QSettings>
+#include <QVBoxLayout>
+#include <qtablewidget.h>
 
 class demodialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit demodialog(QStringList iwad_list, QWidget *parent = nullptr);
-    int get_iwad_index();
-    QStringList get_files_list();
+  explicit demodialog(QString missing_iwad, QStringList missing_files, QWidget *parent = nullptr);
+  int get_iwad_index();
+  QStringList get_files_list();
 
 private:
     QComboBox *iwad_comboBox;

@@ -15,5 +15,8 @@ void openIWADsFolder();
 QString getFileName(QString filePath);
 QString getFilePath(QString fileName);
 QStringList parseStringIntoArguments(QString line);
+QString removeExtension(QString fileName);
+QString getExtension(QString fileName);
+QFileInfoList findIwads();
 
 #endif // FUNCS_H

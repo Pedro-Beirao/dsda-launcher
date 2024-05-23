@@ -1,19 +1,32 @@
 #include "demodialog.h"
 #include "mainwindow.h"
 
-demodialog::demodialog(QStringList iwad_list, QWidget *parent)
-    : QDialog(parent)
+demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget *parent) : QDialog(parent)
 {
     QGridLayout *mainLayout = new QGridLayout;
 
-    QLabel *description = new QLabel("No footer found on the demo.\nPlease select the correct files.\n");
+    QLabel *description;
+    if (missing_iwad.isEmpty() && missing_files.isEmpty())
+    {
+        description = new QLabel("No footer found on the demo.\n");
+    }
+    else
+    {
+        description = new QLabel("");
+        if (!missing_iwad.isEmpty()) description->setText("Demo IWAD not found.\n");
+        if (!missing_files.isEmpty()) description->setText(description->text() + "Demo PWADs/DEHs not found.\n");
+    }
     mainLayout->addWidget(description, 0, 0, 1, 3);
 
     QLabel *iwad_label = new QLabel("IWAD:");
     mainLayout->addWidget(iwad_label, 1, 0);
 
     iwad_comboBox = new QComboBox();
-    iwad_comboBox->addItems(iwad_list);
+    QFileInfoList IWADs = findIwads();
+    for (int i = 0; i < IWADs.count(); i++)
+    {
+        iwad_comboBox->addItem(IWADs[i].baseName().toLower());
+    }
     mainLayout->addWidget(iwad_comboBox, 1, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");

@@ -136,7 +136,6 @@ public slots:
     void setResolutionsList(QListWidget *list);
     void dropFile(QString fileName);
     void dropLmp(QString filePath);
-    void findIwads();
     void changeExeName(QString newName);
     void setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
     void whenAnimationFinishNext();
@@ -169,7 +168,6 @@ private slots:
   void on_hud_pushButton_clicked();
   void on_config_pushButton_clicked();
   void on_playback_lineEdit_textChanged(const QString &arg1);
-  QFileInfoList findIwads_possibleFiles();
   void loadSelected();
   void saveSelected();
   void setStyles();

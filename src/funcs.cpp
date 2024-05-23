@@ -22,6 +22,8 @@ QString getFileName(QString filePath)
 
 QString getFilePath(QString fileName)
 {
+    fileName = fileName.toLower();
+
     // Find file in dsda folder
     QString dsda_folder;
 #ifdef _WIN32
@@ -84,6 +86,91 @@ QString getFilePath(QString fileName)
     settings->endArray();
 
     return "";
+}
+
+QString removeExtension(QString fileName)
+{
+    int dot_pos = fileName.lastIndexOf('.');
+    if (dot_pos == -1) return fileName;
+
+    return fileName.left(dot_pos);
+}
+
+QString getExtension(QString fileName)
+{
+    int dot_pos = fileName.lastIndexOf('.');
+    if (dot_pos == -1) return "";
+
+    return fileName.mid(dot_pos + 1);
+}
+
+QFileInfoList findIwads_possibleFiles()
+{
+    QFileInfoList possible_files;
+    QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
+
+// Find the IWADs in the correct folder depending on the OS
+#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
+    if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
+
+// Copies dsda-doom.wad to the dotfolder
+#if defined(Q_OS_MAC)
+    QProcess::startDetached("cp", {launcherFolderPath + "/../Resources/" + gameName + ".wad", dotfolder});
+#endif
+
+    QDir directory(dotfolder);
+
+    doomwaddirstr = doomwaddirstr.split(":")[0];
+
+#elif defined(Q_OS_WIN)
+    QDir directory(execPath);
+
+    doomwaddirstr = doomwaddirstr.split(";")[0];
+#endif
+
+    possible_files = directory.entryInfoList(QStringList() << "*.WAD", QDir::Files);
+
+    QDir doomwaddir(doomwaddirstr);
+    possible_files += doomwaddir.entryInfoList(QStringList() << "*.WAD", QDir::Files);
+
+    int size = settings->beginReadArray("iwadfolders");
+    for (int i = 0; i < size; i++)
+    {
+        settings->setArrayIndex(i);
+        QString folder = settings->value("folder").toString();
+        if (!folder.isEmpty())
+        {
+            possible_files += QDir(folder).entryInfoList(QStringList() << "*.WAD", QDir::Files);
+        }
+    }
+    settings->endArray();
+
+    return possible_files;
+}
+
+QFileInfoList findIwads()
+{
+    QFileInfoList ret;
+    QFileInfoList possible_files = findIwads_possibleFiles();
+
+    // This makes sure that a logical order to display the IWADs is followed
+    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
+    QStringList IWADS = exmxIWADS + mapxxIWADS;
+
+    for (int i = 0; i < IWADS.size(); i++)
+    {
+        for (QFileInfo &fileInfo : possible_files)
+        {
+            QString file_name = fileInfo.baseName().toLower();
+            if (IWADS[i] == file_name)
+            {
+                ret.append(fileInfo);
+                break;
+            }
+        }
+    }
+
+    return ret;
 }
 
 QStringList parseStringIntoArguments(QString line) { return QProcess::splitCommand(line); }

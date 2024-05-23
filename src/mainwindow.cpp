@@ -95,7 +95,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
-    findIwads();
+    QFileInfoList IWADs = findIwads();
+    for (int i = 0; i < IWADs.count(); i++)
+    {
+        ui->iwad_comboBox->addItem(IWADs[i].baseName().toLower());
+        ui->iwad_comboBox->setItemData(ui->iwad_comboBox->count() - 1, IWADs[i].absoluteFilePath(), Qt::ToolTipRole);
+    }
+
+    // If no IWAD found, show a tool tip
+    if (ui->iwad_comboBox->count() == 0) ui->tooltip_textBrowser->show();
+    else ui->tooltip_textBrowser->hide();
 
     loadSelected();
 
@@ -258,73 +267,59 @@ void MainWindow::dropLmp(QString filePath)
     QTextStream stream(&file);
     QString buffer;
 
-    bool found_footer = false;
+    bool openDemoDialog = true;
+    QString missing_iwad = "";
+    QStringList missing_files;
+
     while (stream.readLineInto(&buffer))
     {
-        if (buffer.mid(0, 5) == "-iwad")
+        if (buffer.left(5) == "-iwad")
         {
-            found_footer = true;
+            openDemoDialog = false;
             ui->wads_listWidget->clear();
 
-            QStringList argList;
-            QString tmp;
-            for (qsizetype i = 0; i < buffer.size(); i++)
-            {
-                if (buffer[i] != ' ' && buffer[i] != '\"')
-                {
-                    tmp += buffer[i];
-                }
-                else if (!tmp.isEmpty())
-                {
-                    argList.push_back(tmp);
-                    tmp.clear();
-                }
-            }
-            if (!tmp.isEmpty())
-            {
-                argList.push_back(tmp);
-                tmp.clear();
-            }
+            QStringList args = QProcess::splitCommand(buffer);
 
-            for (int i = 0; i < argList.count() - 1; i++)
+            for (int i = 0; i < args.count() - 1; i++)
             {
-                if (argList[i] == "-iwad")
+                if (args[i] == "-iwad")
                 {
-                    int iwad_dot_pos = argList[i + 1].lastIndexOf('.');
-                    iwad_dot_pos = iwad_dot_pos == -1 ? argList[i + 1].size() : iwad_dot_pos;
-
-                    int iwad_index = ui->iwad_comboBox->findText(argList[i + 1].left(iwad_dot_pos));
+                    int iwad_index = ui->iwad_comboBox->findText(removeExtension(args[i + 1]).toLower());
                     if (iwad_index != -1)
                     {
                         ui->iwad_comboBox->setCurrentIndex(iwad_index);
                     }
-                }
-                else if (argList[i] == "-file" || argList[i] == "-deh")
-                {
-                    QStringList files;
-                    for (int ii = i + 1; ii < argList.count(); ii++)
+                    else
                     {
-                        if (argList[ii].size() < 2 || argList[ii][0] == '-')
+                        missing_iwad = args[i + 1];
+                        openDemoDialog = true;
+                    }
+                }
+                else if (args[i] == "-file" || args[i] == "-deh")
+                {
+                    for (i = i + 1; i < args.count(); i++)
+                    {
+                        qDebug() << 1 << args[i];
+                        if (args[i].size() < 2 || args[i][0] == '-')
                         {
                             break;
                         }
 
-                        QString tmp = argList[ii].toLower();
-
                         // Some old Woof demos don't have the .wad extension on the footer
-                        int file_dot_pos = tmp.lastIndexOf('.');
-                        if (file_dot_pos == -1) tmp += ".wad";
+                        int file_dot_pos = args[i].lastIndexOf('.');
+                        if (file_dot_pos == -1) args[i] += ".wad";
 
-                        files.append(tmp);
-                    }
-
-                    for (int i = 0; i < files.count(); i++)
-                    {
-                        QString filePath = getFilePath(files[i]);
-                        if (filePath.isEmpty()) continue;
-
-                        ui->wads_listWidget->addItem(getFileName(filePath));
-                        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+                        QString filePath = getFilePath(args[i]);
+                        if (filePath.isEmpty())
+                        {
+                            missing_files.append(args[i]);
+                            openDemoDialog = true;
+                        }
+                        else
+                        {
+                            ui->wads_listWidget->addItem(getFileName(filePath));
+                            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
+                        }
                     }
                 }
             }
@@ -333,14 +328,9 @@ void MainWindow::dropLmp(QString filePath)
 
     file.close();
 
-    if (!found_footer)
+    if (openDemoDialog)
     {
-        QStringList iwad_list;
-        for (int i = 0; i < ui->iwad_comboBox->count(); i++)
-        {
-            iwad_list.push_back(ui->iwad_comboBox->itemText(i));
-        }
-        demodialog *demoDialogNew = new demodialog(iwad_list, this);
+        demodialog *demoDialogNew = new demodialog(missing_iwad, missing_files, this);
         demoDialogNew->open();
 
         demoDialog = demoDialogNew;
