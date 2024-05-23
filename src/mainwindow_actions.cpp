@@ -90,11 +90,11 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
     QString path;
 
 #ifdef __APPLE__
-    path = execPath + "/../Resources/" + exeName;
+    path = launcherFolderPath + "/../Resources/" + gameName;
 #elif __linux__
-    path = execPath + "/" + exeName;
+    path = execPath + "/" + gameName;
 #else
-    path = execPath + "/" + exeName + ".exe";
+    path = execPath + "\\" + gameName + ".exe";
 #endif
     QFile port = QFile(path);
     if (port.exists())

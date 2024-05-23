@@ -6,6 +6,8 @@
 
 const QString version = "v1.3.1";
 
+static QString gameName = "";
+
 const QString DSDALAUNCHER_URL = "https://github.com/Pedro-Beirao/dsda-launcher";
 const QString DSDALAUNCHER_API_URL = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
 const QString DSDALAUNCHER_DOWNLOAD_URL = "https://github.com/Pedro-Beirao/dsda-launcher/releases/latest";
@@ -24,7 +26,7 @@ const QChar FOLDER_SEPARATOR = '/';
 const QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
 #endif
 
-static QString execPath;
+static QString launcherFolderPath = "";
 
 const QStringList exmxIWADS = {"doom",    "doom1",    "doomu", "freedoom", "freedoom1", "bfgdoom", "bfgdoom1",
 

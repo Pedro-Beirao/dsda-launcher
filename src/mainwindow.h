@@ -58,8 +58,6 @@ class MainWindow : public QMainWindow
     bool running = false;
     void gameIsRunningDialog();
 
-    QString exeName = "dsda-doom";
-
     void enable_disable_skill_comboBox();
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly

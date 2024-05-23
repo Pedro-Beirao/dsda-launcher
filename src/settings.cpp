@@ -21,7 +21,7 @@ Settings::Settings(QWidget *parent) :
     ui->PWADFolders_textBrowser->setVisible(false);
     ui->IWADFolders_textBrowser->setVisible(false);
 
-    if(settings->value("complevels").toString()=="")
+    if (settings->value("complevels").isNull())
     {
         ui->minimalComplevels_radioButton->setChecked(true);
         ui->remember_checkBox->setChecked(true);
@@ -407,7 +407,7 @@ void Settings::on_save_pushButton_clicked()
 
     MainWindow::pMainWindow->setToggles(ui->fastText_lineEdit->text(), ui->fastParam_lineEdit->text(), ui->nomoText_lineEdit->text(), ui->nomoParam_lineEdit->text(), ui->respawnText_lineEdit->text(), ui->respawnParam_lineEdit->text(), ui->solonetText_lineEdit->text(), ui->solonetParam_lineEdit->text());
 
-    if (ui->executable_lineEdit->text()=="")
+    if (ui->executable_lineEdit->text().isEmpty())
     {
         MainWindow::pMainWindow->changeExeName("dsda-doom");
     }
@@ -415,6 +415,8 @@ void Settings::on_save_pushButton_clicked()
     {
         MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
     }
+
+    settings->setValue("exeName", ui->executable_lineEdit->text());
 
     settings->setValue("toggle1t", ui->fastText_lineEdit->text());
     settings->setValue("toggle1a", ui->fastParam_lineEdit->text());

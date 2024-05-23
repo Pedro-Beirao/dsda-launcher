@@ -3,7 +3,7 @@
 QSettings *settings;
 MainWindow *MainWindow::pMainWindow = nullptr;
 
-void MainWindow::changeExeName(QString newName) { exeName = newName; }
+void MainWindow::changeExeName(QString newName) { gameName = newName; }
 
 void MainWindow::showSSLDialog()
 {
@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     MainWindow::pMainWindow = this;
 
-    execPath = QCoreApplication::applicationDirPath();
+    launcherFolderPath = QCoreApplication::applicationDirPath();
 
     // Allow files to be droped in the launcher (*.wad *.lmp *.deh *.bex)
     setAcceptDrops(true);
@@ -206,8 +206,6 @@ void MainWindow::saveSelected()
 
     // Bottom
     settings->setValue("argumentText", ui->additionalArguments_textEdit->toPlainText());
-
-    settings->setValue("exeName", exeName);
 
     settings->setValue("version", version);
 
@@ -453,7 +451,7 @@ void MainWindow::started() { running = true; }
 void MainWindow::gameIsRunningDialog()
 {
     QMessageBox msgBox;
-    msgBox.setText(exeName + " is still running.");
+    msgBox.setText("dsda-doom is still running.");
     msgBox.addButton("Ok", QMessageBox::YesRole);
     msgBox.exec();
 }
@@ -644,7 +642,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
             QTextStream out(&file);
 
 #ifdef __APPLE__
-            out << "\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            out << "\"" + launcherFolderPath + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #elif __linux__
             out << "\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #else
@@ -657,7 +655,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         }
 
         QMessageBox msgBox;
-        msgBox.setText("Executable: " + exeName + "\nIWAD: " + ui->iwad_comboBox->currentText() + "\nParameters: " + argStr);
+        msgBox.setText("Executable: " + gameName + "\nIWAD: " + ui->iwad_comboBox->currentText() + "\nParameters: " + argStr);
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton *pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
@@ -667,7 +665,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         {
             QClipboard *clip = QApplication::clipboard();
 #ifdef __APPLE__
-            clip->setText("\"" + execPath + "/../Resources/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            clip->setText("\"" + launcherFolderPath + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #elif __linux__
             clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #else
@@ -703,13 +701,13 @@ void MainWindow::Launch(QStringList arguments)
     }
 
 #ifdef __APPLE__
-    QFile port = QFile(execPath + "/../Resources/" + exeName + "");
+    QFile port = QFile(launcherFolderPath + "/../Resources/" + gameName + "");
     if (port.exists())
     {
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
-        process->start(execPath + "/../Resources/" + exeName, arguments);
+        process->start(launcherFolderPath + "/../Resources/" + gameName, arguments);
         connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
@@ -717,7 +715,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, "dsda-launcher", exeName + " was not found in dsda-launcher.app/Contents/Resources/" + exeName);
+        QMessageBox::warning(this, "dsda-launcher", gameName + " was not found in dsda-launcher.app/Contents/Resources/" + gameName);
     }
 #elif __LINUX__
     QFile port = QFile(execPath + "/" + exeName);
