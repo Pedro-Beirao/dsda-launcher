@@ -297,9 +297,9 @@ void MainWindow::dropLmp(QString filePath)
                 }
                 else if (args[i] == "-file" || args[i] == "-deh")
                 {
+                    QFileInfoList files = getFilePath_possibleFiles();
                     for (i = i + 1; i < args.count(); i++)
                     {
-                        qDebug() << 1 << args[i];
                         if (args[i].size() < 2 || args[i][0] == '-')
                         {
                             break;
@@ -309,16 +309,21 @@ void MainWindow::dropLmp(QString filePath)
                         int file_dot_pos = args[i].lastIndexOf('.');
                         if (file_dot_pos == -1) args[i] += ".wad";
 
-                        QString filePath = getFilePath(args[i]);
-                        if (filePath.isEmpty())
+                        bool found = false;
+                        for (QFileInfo &file : files)
+                        {
+                            if (file.fileName().toLower() == args[i].toLower())
+                            {
+                                ui->wads_listWidget->addItem(file.fileName());
+                                ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(file.absoluteFilePath());
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
                         {
                             missing_files.append(args[i]);
                             openDemoDialog = true;
-                        }
-                        else
-                        {
-                            ui->wads_listWidget->addItem(getFileName(filePath));
-                            ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
                         }
                     }
                 }

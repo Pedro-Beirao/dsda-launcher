@@ -20,8 +20,61 @@ QString getFileName(QString filePath)
 #endif
 }
 
+QFileInfoList getFilePath_possibleFiles()
+{
+    QFileInfoList files;
+
+    // Find file in dsda folder
+#ifdef Q_OS_WIN
+    QDir dsda_folder(execPath);
+#else
+    QDir dsda_folder(dotfolder);
+#endif
+
+    files.append(dsda_folder.entryInfoList(QStringList() << "*.WAD"
+                                                         << "*.DEH"
+                                                         << "*.BEX",
+                                           QDir::Files));
+
+    // Find file in DOOMWADPATH
+    QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
+#ifdef _WIN32
+    QChar token = ';';
+#else
+    QChar token = ':';
+#endif
+    QStringList doomwadpath_folders_list = doomwadpath.split(token);
+    foreach (QString doomwadpath_folder, doomwadpath_folders_list)
+    {
+        files.append(QDir(doomwadpath_folder)
+                         .entryInfoList(QStringList() << "*.WAD"
+                                                      << "*.DEH"
+                                                      << "*.BEX",
+                                        QDir::Files));
+    }
+
+    // Find file in the pwadfolders
+    int size = settings->beginReadArray("pwadfolders");
+    for (int j = 0; j < size; j++)
+    {
+        settings->setArrayIndex(j);
+        QString folder = settings->value("folder").toString();
+        if (!folder.isEmpty())
+        {
+            files.append(QDir(folder).entryInfoList(QStringList() << "*.WAD"
+                                                                  << "*.DEH"
+                                                                  << "*.BEX",
+                                                    QDir::Files));
+        }
+    }
+    settings->endArray();
+
+    return files;
+}
+
 QString getFilePath(QString fileName)
 {
+    getFilePath_possibleFiles();
     fileName = fileName.toLower();
 
     // Find file in dsda folder
