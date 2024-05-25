@@ -68,7 +68,6 @@ class MainWindow : public QMainWindow
     Settings *settingsWindow;
     Console *consoleWindow;
     historyList *historyListWindow;
-    demodialog *demoDialog;
     endoom *endoomWindow;
 
     QString endoomString;
@@ -155,24 +154,23 @@ public slots:
     void readyReadStandardOutput();
     void started();
 
-private slots:
-  void demoDialog_accepted();
-  void on_viddump_lineEdit_textChanged(const QString &arg1);
-  void on_playback_comboBox_currentIndexChanged(int index);
-  void on_viddump_pushButton_clicked();
-  void on_showCommandLine_pushButton_clicked();
-  void on_episode_lineEdit_textChanged(const QString &arg1);
-  void on_nextPage_pushButton_clicked();
-  void on_previousPage_pushButton_clicked();
-  void on_hud_lineEdit_textChanged(const QString &arg1);
-  void on_config_lineEdit_textChanged(const QString &arg1);
-  void on_hud_pushButton_clicked();
-  void on_config_pushButton_clicked();
-  void on_playback_lineEdit_textChanged(const QString &arg1);
-  void loadSelected();
-  void saveSelected();
-  void setStyles();
-  QStringList getArguments();
+  private slots:
+    void on_viddump_lineEdit_textChanged(const QString &arg1);
+    void on_playback_comboBox_currentIndexChanged(int index);
+    void on_viddump_pushButton_clicked();
+    void on_showCommandLine_pushButton_clicked();
+    void on_episode_lineEdit_textChanged(const QString &arg1);
+    void on_nextPage_pushButton_clicked();
+    void on_previousPage_pushButton_clicked();
+    void on_hud_lineEdit_textChanged(const QString &arg1);
+    void on_config_lineEdit_textChanged(const QString &arg1);
+    void on_hud_pushButton_clicked();
+    void on_config_pushButton_clicked();
+    void on_playback_lineEdit_textChanged(const QString &arg1);
+    void loadSelected();
+    void saveSelected();
+    void setStyles();
+    QStringList getArguments();
 };
 extern QSettings *settings;
 

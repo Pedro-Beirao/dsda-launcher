@@ -336,10 +336,8 @@ void MainWindow::dropLmp(QString filePath)
     if (openDemoDialog)
     {
         demodialog *demoDialogNew = new demodialog(missing_iwad, missing_files, this);
+        demoDialogNew->setAttribute(Qt::WA_DeleteOnClose);
         demoDialogNew->open();
-
-        demoDialog = demoDialogNew;
-        connect(demoDialog, SIGNAL(accepted()), this, SLOT(demoDialog_accepted()));
     }
 }
 
@@ -364,19 +362,6 @@ void MainWindow::dropFile(QString fileName)
     else if (tmp == "state")
     {
         states::loadStateFromFile(fileName);
-    }
-}
-
-void MainWindow::demoDialog_accepted()
-{
-    ui->iwad_comboBox->setCurrentIndex(demoDialog->get_iwad_index());
-    ui->wads_listWidget->clear();
-
-    QStringList files_list = demoDialog->get_files_list();
-    foreach (QString filePath, files_list)
-    {
-        ui->wads_listWidget->addItem(getFileName(filePath));
-        ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(filePath);
     }
 }
 

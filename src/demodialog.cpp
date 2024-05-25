@@ -106,3 +106,18 @@ QStringList demodialog::get_files_list()
     }
     return files_list;
 }
+
+void demodialog::accept()
+{
+    MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(get_iwad_index());
+    MainWindow::pMainWindow->wads_listWidget()->clear();
+
+    QStringList files_list = get_files_list();
+    foreach (QString filePath, files_list)
+    {
+        MainWindow::pMainWindow->wads_listWidget()->addItem(getFileName(filePath));
+        MainWindow::pMainWindow->wads_listWidget()->item(MainWindow::pMainWindow->wads_listWidget()->count() - 1)->setToolTip(filePath);
+    }
+
+    this->close();
+}

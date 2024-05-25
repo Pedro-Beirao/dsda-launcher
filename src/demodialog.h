@@ -28,6 +28,9 @@ private:
     QLabel *selected_count;
     void update_selected_count();
     QFileInfoList files;
+
+  private slots:
+    void accept();
 };
 
 #endif // DEMODIALOG_H
