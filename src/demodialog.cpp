@@ -1,5 +1,5 @@
 #include "demodialog.h"
-#include "mainwindow.h"
+#include <mainwindow.h>
 
 demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget *parent) : QDialog(parent)
 {
@@ -22,11 +22,12 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     mainLayout->addWidget(iwad_label, 1, 0);
 
     iwad_comboBox = new QComboBox();
-    QFileInfoList IWADs = findIwads();
-    for (int i = 0; i < IWADs.count(); i++)
+    for (int i = 0; i < MainWindow::pMainWindow->iwad_comboBox()->count(); i++)
     {
-        iwad_comboBox->addItem(IWADs[i].baseName().toLower());
+        iwad_comboBox->addItem(MainWindow::pMainWindow->iwad_comboBox()->itemText(i));
+        iwad_comboBox->setItemData(iwad_comboBox->count() - 1, MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::ToolTipRole), Qt::ToolTipRole);
     }
+    iwad_comboBox->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->currentIndex());
     mainLayout->addWidget(iwad_comboBox, 1, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");
@@ -44,6 +45,7 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     files_listWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     files_listWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     files_listWidget->resizeColumnsToContents();
+    files_listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
 
     for (int j = 0; j < 2; j++)
     {
@@ -59,15 +61,23 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
             newItem->setToolTip(files[i + j * (files.size() / 2)].absoluteFilePath());
             newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
+
+            for (int a = 0; a < MainWindow::pMainWindow->wads_listWidget()->count(); a++)
+            {
+                if (MainWindow::pMainWindow->wads_listWidget()->item(a)->data(Qt::ToolTipRole) == newItem->data(Qt::ToolTipRole))
+                {
+                    newItem->setSelected(true);
+                }
+            }
         }
     }
-
-    files_listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-    connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
     mainLayout->addWidget(files_listWidget, 3, 0, 1, 3);
 
     selected_count = new QLabel("0 files selected");
     mainLayout->addWidget(selected_count, 4, 0, 1, 3);
+
+    update_selected_count();
+    connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
