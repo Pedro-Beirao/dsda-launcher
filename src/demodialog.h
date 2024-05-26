@@ -10,6 +10,7 @@
 #include <QPair>
 #include <QPushButton>
 #include <QSettings>
+#include <QSplitter>
 #include <QVBoxLayout>
 #include <qtablewidget.h>
 

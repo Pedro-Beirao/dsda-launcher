@@ -13,13 +13,26 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     else
     {
         description = new QLabel("");
-        if (!footer_iwad.isEmpty()) description->setText("Demo IWAD not found.\n");
-        if (!footer_files.isEmpty()) description->setText(description->text() + "Demo PWADs/DEHs not found.\n");
+        if (!footer_iwad.isEmpty()) description->setText("IWAD: " + footer_iwad + "\n");
+        if (!footer_files.isEmpty())
+        {
+            QString footer_files_string;
+            foreach (QString file_string, footer_files)
+                footer_files_string += file_string + " ";
+
+            description->setText(description->text() + "Files: " + footer_files_string + "\n");
+        }
     }
     mainLayout->addWidget(description, 0, 0, 1, 3);
 
+    QFrame *splitter;
+    splitter = new QFrame();
+    splitter->setFrameShape(QFrame::HLine);
+    splitter->setFrameShadow(QFrame::Sunken);
+    mainLayout->addWidget(splitter, 1, 0, 1, 3);
+
     QLabel *iwad_label = new QLabel("IWAD:");
-    mainLayout->addWidget(iwad_label, 1, 0);
+    mainLayout->addWidget(iwad_label, 2, 0);
 
     iwad_comboBox = new QComboBox();
     for (int i = 0; i < MainWindow::pMainWindow->iwad_comboBox()->count(); i++)
@@ -27,12 +40,11 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
         iwad_comboBox->addItem(MainWindow::pMainWindow->iwad_comboBox()->itemText(i));
         iwad_comboBox->setItemData(iwad_comboBox->count() - 1, MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::ToolTipRole), Qt::ToolTipRole);
     }
-    qDebug() << footer_iwad;
     iwad_comboBox->setCurrentIndex(iwad_comboBox->findText(removeExtension(footer_iwad).toLower()));
-    mainLayout->addWidget(iwad_comboBox, 1, 1, 1, 2);
+    mainLayout->addWidget(iwad_comboBox, 2, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");
-    mainLayout->addWidget(files_label, 2, 0, 1, 3);
+    mainLayout->addWidget(files_label, 3, 0, 1, 3);
 
     files_listWidget = new QTableWidget();
     files = getFilePath_possibleFiles();
@@ -80,17 +92,17 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
             }
         }
     }
-    mainLayout->addWidget(files_listWidget, 3, 0, 1, 3);
+    mainLayout->addWidget(files_listWidget, 4, 0, 1, 3);
 
     selected_count = new QLabel("0 files selected");
-    mainLayout->addWidget(selected_count, 4, 0, 1, 3);
+    mainLayout->addWidget(selected_count, 5, 0, 1, 3);
 
     update_selected_count();
     connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    mainLayout->addWidget(buttonBox, 5, 0, 1, 3);
+    mainLayout->addWidget(buttonBox, 6, 0, 1, 3);
 
     setLayout(mainLayout);
 
