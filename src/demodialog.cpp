@@ -1,20 +1,20 @@
 #include "demodialog.h"
 #include <mainwindow.h>
 
-demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget *parent) : QDialog(parent)
+demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *parent) : QDialog(parent)
 {
     QGridLayout *mainLayout = new QGridLayout;
 
     QLabel *description;
-    if (missing_iwad.isEmpty() && missing_files.isEmpty())
+    if (footer_iwad.isEmpty() && footer_files.isEmpty())
     {
         description = new QLabel("No footer found on the demo.\n");
     }
     else
     {
         description = new QLabel("");
-        if (!missing_iwad.isEmpty()) description->setText("Demo IWAD not found.\n");
-        if (!missing_files.isEmpty()) description->setText(description->text() + "Demo PWADs/DEHs not found.\n");
+        if (!footer_iwad.isEmpty()) description->setText("Demo IWAD not found.\n");
+        if (!footer_files.isEmpty()) description->setText(description->text() + "Demo PWADs/DEHs not found.\n");
     }
     mainLayout->addWidget(description, 0, 0, 1, 3);
 
@@ -27,7 +27,8 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
         iwad_comboBox->addItem(MainWindow::pMainWindow->iwad_comboBox()->itemText(i));
         iwad_comboBox->setItemData(iwad_comboBox->count() - 1, MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::ToolTipRole), Qt::ToolTipRole);
     }
-    iwad_comboBox->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->currentIndex());
+    qDebug() << footer_iwad;
+    iwad_comboBox->setCurrentIndex(iwad_comboBox->findText(removeExtension(footer_iwad).toLower()));
     mainLayout->addWidget(iwad_comboBox, 1, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");
@@ -36,7 +37,14 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     files_listWidget = new QTableWidget();
     files = getFilePath_possibleFiles();
 
+    for (int i = 0; i < MainWindow::pMainWindow->wads_listWidget()->count(); i++)
+    {
+        files.append(QFileInfo(MainWindow::pMainWindow->wads_listWidget()->item(i)->data(Qt::ToolTipRole).toString()));
+    }
+    MainWindow::pMainWindow->wads_listWidget()->clear();
+
     std::sort(files.begin(), files.end(), [](QFileInfo p1, QFileInfo p2) { return p1.baseName().toLower() < p2.baseName().toLower(); });
+    files.erase(std::unique(files.begin(), files.end()), files.end());
 
     files_listWidget->setColumnCount(2);
     files_listWidget->setRowCount(files.size() / 2 + 1);
@@ -62,11 +70,12 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
             newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
 
-            for (int a = 0; a < MainWindow::pMainWindow->wads_listWidget()->count(); a++)
+            for (int a = 0; a < footer_files.count(); a++)
             {
-                if (MainWindow::pMainWindow->wads_listWidget()->item(a)->data(Qt::ToolTipRole) == newItem->data(Qt::ToolTipRole))
+                if (footer_files[a].toLower() == newItem->text().toLower())
                 {
                     newItem->setSelected(true);
+                    break;
                 }
             }
         }
@@ -79,12 +88,20 @@ demodialog::demodialog(QString missing_iwad, QStringList missing_files, QWidget 
     update_selected_count();
     connect(files_listWidget, &QTableWidget::itemSelectionChanged, this, &demodialog::update_selected_count);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     mainLayout->addWidget(buttonBox, 5, 0, 1, 3);
 
     setLayout(mainLayout);
+
+    if (iwad_comboBox->currentIndex() == -1 || files_listWidget->selectedItems().count() != footer_files.count())
+    {
+        this->open();
+    }
+    else
+    {
+        this->accept();
+    }
 }
 
 void demodialog::update_selected_count()

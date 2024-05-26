@@ -18,7 +18,7 @@ class demodialog : public QDialog
     Q_OBJECT
 
 public:
-  explicit demodialog(QString missing_iwad, QStringList missing_files, QWidget *parent = nullptr);
+  explicit demodialog(QString footer_iwad, QStringList footer_files, QWidget *parent = nullptr);
   int get_iwad_index();
   QStringList get_files_list();
 

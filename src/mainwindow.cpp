@@ -267,37 +267,23 @@ void MainWindow::dropLmp(QString filePath)
     QTextStream stream(&file);
     QString buffer;
 
-    bool openDemoDialog = true;
-    QString missing_iwad = "";
-    QStringList missing_files;
+    QString footer_iwad = "";
+    QStringList footer_files;
 
     while (stream.readLineInto(&buffer))
     {
         if (buffer.left(5) == "-iwad")
         {
-            openDemoDialog = false;
-            ui->wads_listWidget->clear();
-
             QStringList args = QProcess::splitCommand(buffer);
 
             for (int i = 0; i < args.count() - 1; i++)
             {
                 if (args[i] == "-iwad")
                 {
-                    int iwad_index = ui->iwad_comboBox->findText(removeExtension(args[i + 1]).toLower());
-                    if (iwad_index != -1)
-                    {
-                        ui->iwad_comboBox->setCurrentIndex(iwad_index);
-                    }
-                    else
-                    {
-                        missing_iwad = args[i + 1];
-                        openDemoDialog = true;
-                    }
+                    footer_iwad = args[i + 1];
                 }
                 else if (args[i] == "-file" || args[i] == "-deh")
                 {
-                    QFileInfoList files = getFilePath_possibleFiles();
                     for (i = i + 1; i < args.count(); i++)
                     {
                         if (args[i].size() < 2 || args[i][0] == '-')
@@ -309,22 +295,7 @@ void MainWindow::dropLmp(QString filePath)
                         int file_dot_pos = args[i].lastIndexOf('.');
                         if (file_dot_pos == -1) args[i] += ".wad";
 
-                        bool found = false;
-                        for (QFileInfo &file : files)
-                        {
-                            if (file.fileName().toLower() == args[i].toLower())
-                            {
-                                ui->wads_listWidget->addItem(file.fileName());
-                                ui->wads_listWidget->item(ui->wads_listWidget->count() - 1)->setToolTip(file.absoluteFilePath());
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found)
-                        {
-                            missing_files.append(args[i]);
-                            openDemoDialog = true;
-                        }
+                        footer_files.append(args[i]);
                     }
                 }
             }
@@ -333,12 +304,8 @@ void MainWindow::dropLmp(QString filePath)
 
     file.close();
 
-    if (openDemoDialog)
-    {
-        demodialog *demoDialogNew = new demodialog(missing_iwad, missing_files, this);
-        demoDialogNew->setAttribute(Qt::WA_DeleteOnClose);
-        demoDialogNew->open();
-    }
+    demodialog *demoDialogNew = new demodialog(footer_iwad, footer_files, this);
+    demoDialogNew->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void MainWindow::dropFile(QString fileName)
