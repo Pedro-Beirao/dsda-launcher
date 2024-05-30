@@ -53,7 +53,6 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     {
         files.append(QFileInfo(MainWindow::pMainWindow->wads_listWidget()->item(i)->data(Qt::ToolTipRole).toString()));
     }
-    MainWindow::pMainWindow->wads_listWidget()->clear();
 
     std::sort(files.begin(), files.end(), [](QFileInfo p1, QFileInfo p2) { return p1.baseName().toLower() < p2.baseName().toLower(); });
     files.erase(std::unique(files.begin(), files.end()), files.end());

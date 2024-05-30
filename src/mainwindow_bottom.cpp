@@ -46,13 +46,12 @@ void MainWindow::initializeIndicators()
     // ui->wadsSelected_indicator->setPixmap(QPixmap(":/pngs/pngs/wadsSelected_indicator.png").scaled(20, 20, Qt::KeepAspectRatio));
     connect(ui->wads_listWidget->model(), SIGNAL(rowsInserted(QModelIndex, int, int)), this, SLOT(show_hide_wadsSelected_indicator()));
     connect(ui->wads_listWidget->model(), SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SLOT(show_hide_wadsSelected_indicator()));
+    connect(ui->wads_listWidget->model(), SIGNAL(modelReset()), this, SLOT(show_hide_wadsSelected_indicator()));
     show_hide_wadsSelected_indicator();
 
     connect(ui->record_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(show_hide_recordingDemo_indicator()));
-    connect(ui->record_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(show_hide_recordingDemo_indicator()));
     show_hide_recordingDemo_indicator();
 
-    connect(ui->playback_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(show_hide_playingDemo_indicator()));
     connect(ui->playback_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(show_hide_playingDemo_indicator()));
     show_hide_playingDemo_indicator();
 }
