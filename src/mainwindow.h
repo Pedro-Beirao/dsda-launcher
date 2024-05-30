@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow
 
     void enable_disable_skill_comboBox();
     void enable_disable_complevel_comboBox();
+    void initializeIndicators();
 
     // Prevents launching the game twice if the button "Launch" is pressed twice quickly
     bool canLaunch = true;
@@ -153,6 +154,9 @@ public slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void started();
+    void show_hide_wadsSelected_indicator();
+    void show_hide_recordingDemo_indicator();
+    void show_hide_playingDemo_indicator();
 
   private slots:
     void on_viddump_lineEdit_textChanged(const QString &arg1);

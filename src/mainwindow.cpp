@@ -110,6 +110,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     setStyles();
 
+    initializeIndicators();
+
     QStringList arguments = qApp->arguments();
     for (int i = 1; i < arguments.count(); i++)
     {
