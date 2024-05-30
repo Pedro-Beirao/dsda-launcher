@@ -723,7 +723,7 @@ void MainWindow::SaveHistory(QStringList args)
         checkString += args.at(i);
     }
     QByteArray arr = checkString.toLatin1();
-    checksum = qChecksum(arr.data(), arr.length());
+    checksum = qChecksum(arr.data());
 
     QFile file(historyListWindow->historyPath);
 

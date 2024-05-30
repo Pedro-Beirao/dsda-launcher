@@ -14,9 +14,9 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 
     QString path;
 
-#ifdef __APPLE__
+#ifdef Q_OS_MAC
     path = launcherFolderPath + "/../Resources/" + gameName;
-#elif __linux__
+#elif Q_OS_LINUX
     path = execPath + "/" + gameName;
 #else
     path = execPath + "\\" + gameName + ".exe";
