@@ -54,7 +54,15 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
         }
     }
 
-    ui->executable_lineEdit->setText(settings->value("exeName").toString());
+    if (settings->value("exeName").isNull())
+    {
+        ui->executable_lineEdit->setText("dsda-doom");
+    }
+    else
+    {
+        ui->executable_lineEdit->setText(settings->value("exeName").toString());
+    }
+    MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
 
     ui->maxSkillLevel_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{1}"), this));
     ui->maxHistory_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
