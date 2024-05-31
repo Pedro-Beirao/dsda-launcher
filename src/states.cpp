@@ -16,7 +16,11 @@ void states::loadStateFromFile(QString filePath)
     }
     QTextStream stream(&file);
 
-    loadStateOld(stream);
+    QString header;
+    stream.readLineInto(&header);
+
+    if (header == "dsdalauncherstatev1.4") loadStateNew(stream);
+    else loadStateOld(stream);
 
     file.close();
 }
@@ -29,12 +33,11 @@ void states::loadStateFromString(QString string)
 
 void states::loadStateOld(QTextStream &stream)
 {
-    QString buffer;
-
     MainWindow::pMainWindow->wads_listWidget()->clear();
 
     while (!stream.atEnd())
     {
+        QString buffer;
         stream.readLineInto(&buffer);
 
         QString buffer_name;
@@ -190,6 +193,159 @@ void states::loadStateOld(QTextStream &stream)
     }
 }
 
+void states::loadStateNew(QTextStream &stream)
+{
+    MainWindow::pMainWindow->wads_listWidget()->clear();
+
+    while (!stream.atEnd())
+    {
+        QString buffer;
+        stream.readLineInto(&buffer);
+
+        QString buffer_name;
+        QString buffer_value;
+
+        int pos = buffer.indexOf(' ');
+        buffer_name = buffer.mid(0, pos).trimmed();
+        buffer_value = buffer.mid(pos + 1).trimmed();
+
+        if (buffer_name == "iwad") // iwad
+        {
+            MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->findText(buffer_value));
+        }
+        else if (buffer_name == "complevel") // complevel
+        {
+            if (buffer_value.isEmpty()) continue;
+
+            int index = MainWindow::pMainWindow->complevel_comboBox()->findText(buffer_value);
+            if (index != -1)
+            {
+                MainWindow::pMainWindow->complevel_comboBox()->setCurrentIndex(index);
+            }
+            else
+            {
+                MainWindow::pMainWindow->complevel_comboBox()->addItem(buffer_value);
+                MainWindow::pMainWindow->complevel_comboBox()->setCurrentIndex(MainWindow::pMainWindow->complevel_comboBox()->count() - 1);
+            }
+        }
+        if (buffer_name == "warp1") // warp 1
+        {
+            MainWindow::pMainWindow->episode_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "warp2") // warp 2
+        {
+            MainWindow::pMainWindow->level_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "skill") // skill
+        {
+            if (buffer_value.length() > 0)
+            {
+                MainWindow::pMainWindow->difficulty_comboBox()->setCurrentIndex((buffer_value.toInt()));
+            }
+            else
+            {
+                MainWindow::pMainWindow->difficulty_comboBox()->setCurrentIndex(0);
+            }
+        }
+        if (buffer_name == "box1") // box1
+        {
+            if (buffer_value == "true") MainWindow::pMainWindow->toggle1_checkBox()->setChecked(true);
+            else MainWindow::pMainWindow->toggle1_checkBox()->setChecked(false);
+        }
+        if (buffer_name == "box2") // box2
+        {
+            if (buffer_value == "true") MainWindow::pMainWindow->toggle2_checkBox()->setChecked(true);
+            else MainWindow::pMainWindow->toggle2_checkBox()->setChecked(false);
+        }
+        if (buffer_name == "box3") // box3
+        {
+            if (buffer_value == "true") MainWindow::pMainWindow->toggle3_checkBox()->setChecked(true);
+            else MainWindow::pMainWindow->toggle3_checkBox()->setChecked(false);
+        }
+        if (buffer_name == "box4") // box4
+        {
+            if (buffer_value == "true") MainWindow::pMainWindow->toggle4_checkBox()->setChecked(true);
+            else MainWindow::pMainWindow->toggle4_checkBox()->setChecked(false);
+        }
+        if (buffer_name == "resolution") // resolution
+        {
+            MainWindow::pMainWindow->resolution_comboBox()->setCurrentIndex(MainWindow::pMainWindow->resolution_comboBox()->findText(buffer_value));
+        }
+        if (buffer_name == "fullscreen") // fullscreen
+        {
+            if (buffer_value == "true") MainWindow::pMainWindow->fullscreen_checkBox()->setChecked(true);
+            else MainWindow::pMainWindow->fullscreen_checkBox()->setChecked(false);
+        }
+        if (buffer_name == "hud") // hud
+        {
+            MainWindow::pMainWindow->hud_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "config") // config
+        {
+            MainWindow::pMainWindow->config_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "track") // track
+        {
+            if (buffer_value.length() > 0)
+            {
+                MainWindow::pMainWindow->track_comboBox()->setCurrentIndex(buffer_value.toInt());
+            }
+            else
+            {
+                MainWindow::pMainWindow->track_comboBox()->setCurrentIndex(0);
+            }
+        }
+        if (buffer_name == "time") // time
+        {
+            if (buffer_value.length() > 0)
+            {
+                MainWindow::pMainWindow->time_comboBox()->setCurrentIndex(buffer_value.toInt());
+            }
+            else
+            {
+                MainWindow::pMainWindow->time_comboBox()->setCurrentIndex(0);
+            }
+        }
+        /*if (buffer_name == "pwad")
+        {
+            while (stream.readLineInto(&buffer))
+            {
+                if (buffer.mid(0, 7) == "endpwad") break;
+
+                MainWindow::pMainWindow->wads_listWidget()->addItem(getFileName(buffer));
+                MainWindow::pMainWindow->wads_listWidget()->item(MainWindow::pMainWindow->wads_listWidget()->count() - 1)->setToolTip(buffer);
+            }
+        }*/
+        if (buffer_name == "record") // record demo
+        {
+            MainWindow::pMainWindow->record_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "playback") // playback demo
+        {
+            MainWindow::pMainWindow->playback_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "demodropdown") // demo drop down
+        {
+            if (buffer_value.length() > 0)
+            {
+                MainWindow::pMainWindow->playback_comboBox()->setCurrentIndex(buffer_value.toInt());
+            }
+            else
+            {
+                MainWindow::pMainWindow->playback_comboBox()->setCurrentIndex(0);
+            }
+        }
+        if (buffer_name == "viddump") // demo drop down
+        {
+            MainWindow::pMainWindow->viddump_lineEdit()->setText(buffer_value);
+        }
+        if (buffer_name == "additional") // additional arguments
+        {
+            MainWindow::pMainWindow->additionalArguments_textEdit()->setText(buffer_value);
+        }
+    }
+}
+
 QString bool_cast(bool b) { return b ? "true" : "false"; }
 
 void states::saveStateToFile(QString filePath)
@@ -197,16 +353,16 @@ void states::saveStateToFile(QString filePath)
     MainWindow *ui = MainWindow::pMainWindow;
 
     QFile file(filePath);
-    if (!file.open(QFile::ReadWrite | QFile::Text))
+    if (!file.open(QFile::ReadWrite | QFile::Text | QFile::Truncate))
     {
         return;
     }
     QTextStream out(&file);
 
-    out << "version " + version + "\n\n";
+    out << STATE_HEADER + "\n\n";
 
     out << "iwad " + ui->iwad_comboBox()->currentText() + "\n";
-    out << "complevel " + ui->complevel_comboBox()->currentText().mid(0, 2) + "\n";
+    out << "complevel " + ui->complevel_comboBox()->currentText() + "\n";
     out << "warp1 " + ui->episode_lineEdit()->text() + "\n";
     out << "warp2 " + ui->level_lineEdit()->text() + "\n";
     out << "skill " + ui->difficulty_comboBox()->currentText() + "\n";

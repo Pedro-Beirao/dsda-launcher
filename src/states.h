@@ -17,6 +17,7 @@ class states : public QObject
 
   private:
     static void loadStateOld(QTextStream &stream);
+    static void loadStateNew(QTextStream &stream);
 
   signals:
 };
