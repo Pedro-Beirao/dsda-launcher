@@ -726,41 +726,39 @@ void MainWindow::SaveHistory(QStringList args)
     checksum = qChecksum(arr.data());
 
     QFile file(historyListWindow->historyPath);
-
-    if (!file.isOpen())
-    {
-        return;
-    }
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
 
     QTextStream stream(&file);
-
-    QString buffer;
-
-    while (!file.atEnd())
+    if (file.isOpen())
     {
-        stream.readLineInto(&buffer);
-        if (buffer[0] == '-')
+        QString buffer;
+
+        while (!file.atEnd())
         {
-            count++;
+            stream.readLineInto(&buffer);
+            if (buffer[0] == '-')
+            {
+                count++;
+            }
         }
-    }
-    stream.seek(0);
+        stream.seek(0);
 
-    while (buffer.mid(0, 9) != "checksum=" && !file.atEnd())
-    {
-        stream.readLineInto(&buffer);
-    }
-
-    if (buffer.mid(0, 9) == "checksum=" && buffer.mid(9).length() > 0)
-    {
-        if (checksum == buffer.mid(9).toInt())
+        while (buffer.mid(0, 9) != "checksum=" && !file.atEnd())
         {
-            file.close();
-            return;
+            stream.readLineInto(&buffer);
         }
-    }
 
-    file.close();
+        if (buffer.mid(0, 9) == "checksum=" && buffer.mid(9).length() > 0)
+        {
+            if (checksum == buffer.mid(9).toInt())
+            {
+                file.close();
+                return;
+            }
+        }
+
+        file.close();
+    }
 
     int maxhistory = settings->value("maxhistory").toInt();
     if (count >= maxhistory)
@@ -772,7 +770,7 @@ void MainWindow::SaveHistory(QStringList args)
     QString streamstr = stream.readAll();
 
     QFile file_out(historyListWindow->historyPath);
-
+    file_out.open(QIODevice::WriteOnly | QIODevice::Text);
     if (!file_out.isOpen())
     {
         return;
@@ -827,9 +825,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) // ENTER makes the game start
     }
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *ev) // ENTER does not work on the additional parameters box
+bool MainWindow::eventFilter(QObject *object, QEvent *ev) // Make ENTER not work on the additional parameters box
 {
-
     if (object == (QObject *)ui->launchGame_pushButton)
     {
         // if (ev->type() == QEvent::Enter)

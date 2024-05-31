@@ -1,11 +1,9 @@
 #include "historylist.h"
-#include "ui_historylist.h"
-#include "states.h"
 #include "mainwindow.h"
+#include "states.h"
+#include "ui_historylist.h"
 
-historyList::historyList(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::historyList)
+historyList::historyList(QWidget *parent) : QWidget(parent), ui(new Ui::historyList)
 {
     ui->setupUi(this);
 
@@ -104,18 +102,18 @@ void historyList::getHistory()
                 level += " - ";
             }
 
-            if (buffer.mid(0, 6) == "skill=") // skill
+            if (buffer_name == "skill") // skill
             {
-                if (buffer.mid(6).length() > 0)
+                if (!buffer_value.isEmpty())
                 {
-                    int si = (buffer.mid(6)).toInt();
+                    int si = buffer_value.toInt();
                     if (0 < si && si <= 5)
                     {
                         skill = SKILLS_LIST.at(si);
                     }
                     else
                     {
-                        skill = "skill=" + buffer.mid(6);
+                        skill = "skill=" + buffer_value;
                     }
                     if (skill != "")
                     {
@@ -123,24 +121,24 @@ void historyList::getHistory()
                     }
                 }
             }
-            if (buffer.mid(0, 5) == "box1=") // box1
+            if (buffer_name == "box1") // box1
             {
-                if (buffer.mid(5, 4) == "true") params += box1 + ", ";
+                if (buffer_value == "true") params += box1 + ", ";
             }
-            if (buffer.mid(0, 5) == "box2=") // box2
+            if (buffer_name == "box2") // box2
             {
-                if (buffer.mid(5, 4) == "true") params += box2 + ", ";
+                if (buffer_value == "true") params += box2 + ", ";
             }
-            if (buffer.mid(0, 5) == "box3=") // box3
+            if (buffer_name == "box3") // box3
             {
-                if (buffer.mid(5, 4) == "true") params += box3 + ", ";
+                if (buffer_value == "true") params += box3 + ", ";
             }
-            if (buffer.mid(0, 5) == "box4=") // box4
+            if (buffer_name == "box4") // box4
             {
-                if (buffer.mid(5, 4) == "true") params += box4 + ", ";
+                if (buffer_value == "true") params += box4 + ", ";
             }
 
-            if (buffer.mid(0, 4) == "pwad")
+            if (buffer_name == "pwad")
             {
                 while (stream.readLineInto(&buffer) && !stream.atEnd())
                 {
@@ -173,6 +171,10 @@ void historyList::getHistory()
                     }
                 }
                 demo = "\n" + buffer_value.mid(lastBar);
+            }
+            if (buffer_name == "timestamp")
+            {
+                ui->timestamp_label->setText(buffer_value);
             }
 
             stream.readLineInto(&buffer);
