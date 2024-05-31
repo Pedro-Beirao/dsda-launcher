@@ -16,7 +16,7 @@ class states : public QObject
     static void saveStateToFile(QString filePath);
 
   private:
-    static void loadState(QTextStream &stream);
+    static void loadStateOld(QTextStream &stream);
 
   signals:
 };
