@@ -142,7 +142,6 @@ void MainWindow::loadSelected()
         ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
         ui->episode_lineEdit->setText(settings->value("warp1").toString());
         ui->level_lineEdit->setText(settings->value("warp2").toString());
-        if (!settings->value("maxskilllevel").isNull()) setMaxSkillLevel(settings->value("maxskilllevel").toInt());
 
         // Options
         ui->toggle1_checkBox->setChecked(settings->value("fast").toBool());

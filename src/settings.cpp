@@ -64,7 +64,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     }
     MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
 
-    ui->maxSkillLevel_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{1}"), this));
     ui->maxHistory_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
     
     // Keyboard shortcut
@@ -73,9 +72,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     // Closes the active window
     QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
     shortcut3->setAutoRepeat(false);
-
-    if(settings->value("maxskilllevel").toString()!="")
-        ui->maxSkillLevel_lineEdit->setText(settings->value("maxskilllevel").toString());
 
     if(settings->value("maxhistory").toString()!="")
         ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
@@ -289,24 +285,6 @@ void Settings::on_minusPWADFolders_toolButton_clicked()
     }
     settings->endArray();
 }
-
-
-void Settings::on_maxSkillLevel_lineEdit_textChanged(const QString &arg1)
-{
-    if(arg1=="")
-    {
-        settings->setValue("maxskilllevel",5);
-        MainWindow::pMainWindow->setMaxSkillLevel(5);
-        ui->maxSkillLevel_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
-    }
-    else
-    {
-        settings->setValue("maxskilllevel",arg1.toInt());
-        MainWindow::pMainWindow->setMaxSkillLevel(arg1.toInt());
-        ui->maxSkillLevel_lineEdit->setStyleSheet(STYLE_TEXT_NORMAL);
-    }
-}
-
 
 void Settings::on_minimalComplevels_radioButton_toggled(bool checked)
 {

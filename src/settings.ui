@@ -86,56 +86,6 @@ Launcher should fix them.</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="maxSkillLevel_label">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>174</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>13</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Max skill level:</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="maxSkillLevel_lineEdit">
-     <property name="geometry">
-      <rect>
-       <x>126</x>
-       <y>170</y>
-       <width>25</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 1px solid rgb(160, 160, 160);
-color: #000;
-height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
-     </property>
-     <property name="text">
-      <string>5</string>
-     </property>
-     <property name="maxLength">
-      <number>2</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="placeholderText">
-      <string>5</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="cpmplevels_label">
      <property name="geometry">
       <rect>
@@ -293,7 +243,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>202</y>
+       <y>178</y>
        <width>31</width>
        <height>24</height>
       </rect>
@@ -322,7 +272,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>206</y>
+       <y>180</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -493,8 +443,6 @@ when the Launcher exits</string>
     </widget>
     <zorder>PWADFolders_label</zorder>
     <zorder>darkTheme_checkBox</zorder>
-    <zorder>maxSkillLevel_label</zorder>
-    <zorder>maxSkillLevel_lineEdit</zorder>
     <zorder>cpmplevels_label</zorder>
     <zorder>minimalComplevels_radioButton</zorder>
     <zorder>fullComplevels_radioButton</zorder>

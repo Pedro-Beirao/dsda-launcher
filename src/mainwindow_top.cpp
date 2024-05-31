@@ -34,17 +34,6 @@ void MainWindow::setComplevelsList(QStringList list)
     ui->complevel_comboBox->addItems(list);
 }
 
-void MainWindow::setMaxSkillLevel(int max)
-{
-    ui->difficulty_comboBox->clear();
-    ui->difficulty_comboBox->addItem(" ");
-    for (int i = 1; i <= max; i++)
-    {
-        ui->difficulty_comboBox->addItem(QString::number(i));
-    }
-    ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
-}
-
 void MainWindow::enable_disable_skill_comboBox()
 {
     if (ui->episode_lineEdit->text().isEmpty())

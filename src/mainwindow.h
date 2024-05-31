@@ -131,7 +131,6 @@ public slots:
     void on_actionOpenIWADsFolder_triggered();
     void on_actionOpenConsole_triggered();
 
-    void setMaxSkillLevel(int max);
     void changeButtonColor(bool isDark);
     void setComplevelsList(QStringList list);
     void setResolutionsList(QListWidget *list);

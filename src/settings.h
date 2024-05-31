@@ -32,8 +32,6 @@ private slots:
     void fooo3();
     void on_darkTheme_checkBox_clicked(bool checked);
 
-    void on_maxSkillLevel_lineEdit_textChanged(const QString &arg1);
-
     void on_minimalComplevels_radioButton_toggled(bool checked);
     void on_fullComplevels_radioButton_toggled(bool checked);
 
