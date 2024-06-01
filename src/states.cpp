@@ -201,6 +201,7 @@ void states::loadStateNew(QTextStream &stream)
     {
         QString buffer;
         stream.readLineInto(&buffer);
+        buffer = buffer.trimmed();
 
         QString buffer_name;
         QString buffer_value;
@@ -317,13 +318,17 @@ void states::saveStateToFile(QString filePath)
     MainWindow *ui = MainWindow::pMainWindow;
 
     QFile file(filePath);
-    if (!file.open(QFile::ReadWrite | QFile::Text | QFile::Truncate))
-    {
-        return;
-    }
     QTextStream out(&file);
-
-    out << STATE_HEADER + "\n\n";
+    if (getExtension(filePath) == "states_tmp")
+    {
+        if (!file.open(QFile::ReadWrite | QFile::Text | QIODevice::Append)) return;
+        out << "-\n";
+    }
+    else
+    {
+        if (!file.open(QFile::ReadWrite | QFile::Text | QFile::Truncate)) return;
+        out << STATE_HEADER + "\n\n";
+    }
 
     out << "iwad " + ui->iwad_comboBox()->currentText() + "\n";
     out << "complevel " + ui->complevel_comboBox()->currentText() + "\n";
