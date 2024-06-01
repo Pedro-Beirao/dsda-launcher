@@ -227,3 +227,6 @@ QFileInfoList findIwads()
 }
 
 QStringList parseStringIntoArguments(QString line) { return QProcess::splitCommand(line); }
+
+QString bool_to_string(bool b) { return b ? "true" : "false"; }
+bool string_to_bool(QString s) { return s == "true" ? true : false; }

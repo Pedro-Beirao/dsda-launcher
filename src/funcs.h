@@ -20,5 +20,7 @@ QString removeExtension(QString fileName);
 QString getExtension(QString fileName);
 QFileInfoList findIwads_possibleFiles();
 QFileInfoList findIwads();
+QString bool_to_string(bool b);
+bool string_to_bool(QString s);
 
 #endif // FUNCS_H
