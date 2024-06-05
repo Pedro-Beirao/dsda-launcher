@@ -7,7 +7,7 @@
 	<key>CFBundleIconFile</key>
 	<string>dsda-launcher.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>p.dsda-launcher</string>
+        <string>com.pedro-beirao.dsda-launcher</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
