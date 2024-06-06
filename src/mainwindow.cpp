@@ -276,28 +276,27 @@ void MainWindow::dropLmp(QString filePath)
         if (buffer.left(5) == "-iwad")
         {
             QStringList args = QProcess::splitCommand(buffer);
-
+            bool searching_files = false;
             for (int i = 0; i < args.count() - 1; i++)
             {
+                if (args[i][0] == '-') searching_files = false;
+
+                if (searching_files)
+                {
+                    // Some old Woof demos don't have the .wad extension on the footer
+                    int file_dot_pos = args[i].lastIndexOf('.');
+                    if (file_dot_pos == -1) args[i] += ".wad";
+
+                    footer_files.append(args[i]);
+                }
+
                 if (args[i] == "-iwad")
                 {
                     footer_iwad = args[i + 1];
                 }
                 else if (args[i] == "-file" || args[i] == "-deh")
                 {
-                    for (i = i + 1; i < args.count(); i++)
-                    {
-                        if (args[i].size() < 2 || args[i][0] == '-')
-                        {
-                            break;
-                        }
-
-                        // Some old Woof demos don't have the .wad extension on the footer
-                        int file_dot_pos = args[i].lastIndexOf('.');
-                        if (file_dot_pos == -1) args[i] += ".wad";
-
-                        footer_files.append(args[i]);
-                    }
+                    searching_files = true;
                 }
             }
         }
