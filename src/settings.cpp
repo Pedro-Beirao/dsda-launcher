@@ -11,7 +11,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 
     ui->endoom_checkBox->setChecked(settings->value("endoom").toBool());
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
     ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
                                          "text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
     ui->IWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
@@ -105,7 +105,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     settings->endArray();
     MainWindow::pMainWindow->setResolutionsList(ui->resolutions_listWidget);
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
     ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
     ui->PWADFolders_listWidget->addItem("%DOOMWADPATH%");
 
@@ -169,7 +169,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
                             "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
                             );
 
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
         macSetToLightTheme();
 
         ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
@@ -188,7 +188,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
     }
     else
      {
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
          macSetToDarkTheme();
 
          ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"

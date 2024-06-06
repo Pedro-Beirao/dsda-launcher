@@ -16,7 +16,7 @@ void MainWindow::showSSLDialog()
 
 void MainWindow::changeButtonColor(bool isDark)
 {
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
     if (isDark)
     {
         ui->showCommandLine_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->stackedWidget->setAttribute(Qt::WA_TranslucentBackground);
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
     ui->tooltip_textBrowser->setHtml(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
         "font-size:8pt;\">Don't see any IWAD?     ^</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Go to the settings and add the folder you have your IWADs in, to the </span><span style=\" font-size:9pt; "
@@ -487,7 +487,7 @@ QStringList MainWindow::getArguments()
         for (int i = 0; i < ui->wads_listWidget->count(); i++)
         {
             /*
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
             for (int i = 0; i < file.length(); i++)
             {
                 if (file[i] == '/') file[i] = '\\';
@@ -588,7 +588,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
             }
             QTextStream out(&file);
 
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
             out << "\"" + launcherfolder + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #elif Q_OS_LINUX
             out << "\"" + launcherfolder + "/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
@@ -611,7 +611,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         if (msgBox.clickedButton() != pButtonYes)
         {
             QClipboard *clip = QApplication::clipboard();
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
             clip->setText("\"" + launcherfolder + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #elif Q_OS_LINUX
             clip->setText("\"" + launcherfolder + "/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
@@ -647,7 +647,7 @@ void MainWindow::Launch(QStringList arguments)
         arguments.append({"-assign", "ansi_endoom=2"});
     }
 
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
     QFile port = QFile(launcherfolder + "/../Resources/" + gameName + "");
     if (port.exists())
     {

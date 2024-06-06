@@ -17,7 +17,7 @@ historyList::~historyList() { delete ui; }
 
 void historyList::init_historyPath()
 {
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
     historyPath = QCoreApplication::applicationDirPath() + "\\history.states";
 #else
     historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom/history.states";

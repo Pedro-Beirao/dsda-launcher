@@ -16,7 +16,7 @@ const QString DSDADOOM_URL = "https://github.com/kraflab/dsda-doom";
 const QString DSDADOOM_API_URL = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";
 const QString DSDADOOM_DOWNLOAD_URL = "https://github.com/kraflab/dsda-doom/";
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
 const QChar FOLDER_SEPARATOR = '\\';
 #else
 const QChar FOLDER_SEPARATOR = '/';

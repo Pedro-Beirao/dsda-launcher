@@ -14,7 +14,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 
     QString path;
 
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
     path = launcherfolder + "/../Resources/" + gameName;
 #elif Q_OS_LINUX
     path = launcherfolder + "/" + gameName;
@@ -25,7 +25,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
     QFile port = QFile(path);
     if (port.exists())
     {
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS
         QProcess *process = new QProcess;
         process->startDetached("sh", {"-c", "echo \"" + path + " --help ; rm /tmp/dsda-doom-params.sh\" > /tmp/dsda-doom-params.sh ; chmod +x /tmp/dsda-doom-params.sh ; open -a Terminal /tmp/dsda-doom-params.sh"});
         process->deleteLater();
