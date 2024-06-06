@@ -11,9 +11,11 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 
     ui->endoom_checkBox->setChecked(settings->value("endoom").toBool());
 
-#ifdef _WIN32
-        ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
-        ui->IWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">The launcher will search for IWADs on these folders.</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>");
+#ifdef Q_OS_WIN
+    ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
+                                         "text-indent:0px;\"><span style=\" font-size:8pt;\">When droping .lmp files into the launcher, it autoselects the correct IWAD, PWADs and complevel.</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">For this to work, you need to add the folders you have your PWADs in, to the following container.</span></p></body></html>");
+    ui->IWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
+                                         "text-indent:0px;\"><span style=\" font-size:8pt;\">The launcher will search for IWADs on these folders.</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>");
 #endif
 
     ui->PWADFolders_textBrowser->setVisible(false);
@@ -103,18 +105,18 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     settings->endArray();
     MainWindow::pMainWindow->setResolutionsList(ui->resolutions_listWidget);
 
-#ifdef _WIN32
-        ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
-        ui->PWADFolders_listWidget->addItem("%DOOMWADPATH%");
+#ifdef Q_OS_WIN
+    ui->PWADFolders_listWidget->addItem("Same Folder as the Launcher");
+    ui->PWADFolders_listWidget->addItem("%DOOMWADPATH%");
 
-        ui->IWADFolders_listWidget->addItem("Same Folder as the Launcher");
-        ui->IWADFolders_listWidget->addItem("%DOOMWADDIR%");
+    ui->IWADFolders_listWidget->addItem("Same Folder as the Launcher");
+    ui->IWADFolders_listWidget->addItem("%DOOMWADDIR%");
 #else
-        ui->PWADFolders_listWidget->addItem("$DOOMWADPATH");
-        ui->PWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+    ui->PWADFolders_listWidget->addItem("$DOOMWADPATH");
+    ui->PWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom");
 
-        ui->IWADFolders_listWidget->addItem("$DOOMWADDIR");
-        ui->IWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.dsda-doom");
+    ui->IWADFolders_listWidget->addItem("$DOOMWADDIR");
+    ui->IWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom");
 #endif
     ui->PWADFolders_listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
     ui->PWADFolders_listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());
@@ -167,7 +169,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
                             "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
                             );
 
-#ifdef __APPLE__
+#ifdef Q_OS_MACOS
         macSetToLightTheme();
 
         ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
@@ -186,69 +188,68 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
     }
     else
      {
-#ifdef __APPLE__
+#ifdef Q_OS_MACOS
          macSetToDarkTheme();
 
          ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                                    "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
          ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                                    "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-#elif __linux__
-QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-    qApp->setPalette(darkPalette);
-    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+#elif Q_OS_LINUX
+         QPalette darkPalette;
+         darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+         darkPalette.setColor(QPalette::WindowText, Qt::white);
+         darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
+         darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+         darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+         darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+         darkPalette.setColor(QPalette::Text, Qt::white);
+         darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
+         darkPalette.setColor(QPalette::ButtonText, Qt::white);
+         darkPalette.setColor(QPalette::BrightText, Qt::red);
+         darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+         darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+         darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+         qApp->setPalette(darkPalette);
+         qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
-#elif _WIN32
-        qApp->setStyleSheet("* {color: rgb(221, 221, 221);background: rgb(53, 53, 53);}"
-                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
-                            "QLabel::disabled {color: rgb(120, 120, 120);}"
-                            "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150); max-height: 25px;}"
-                            "QPushButton:hover {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(62, 62, 62); color: rgb(150, 150, 150)}"
-                            //"QPushButton:default {border: 1px solid rgb(4,93,244)}"
-                            "QCheckBox {spacing: 4px;border: none;}"
-                            "QRadioButton {spacing: 4px;border: none;}"
-                            "QTabWidget {background-color: rgba(50, 50, 200, 200); border: none; }"
-                            "QTabWidget::pane {top: -1px;margin: 0px;padding: 0px;border: 1px solid rgb(79, 79, 79);}"
-                            "QStackedWidget > QWidget{background: rgba(50, 50, 50, 0);}"
-                            "QTabBar {qproperty-drawBase: 0;border: none;}"
-                            "QTabBar::tab {padding-left: 0.7em;padding-right: 0.7em;padding-bottom: 4px;padding-top: 3px;min-width: 8ex;border-right: 1px solid rgb(79, 79, 79);border-left: 1px solid rgb(79, 79, 79);}"
-                            "QTabBar::tab::top:!selected:hover {background-color: rgb(50, 50, 50)}"
-                            "QTabBar::tab::selected {background: rgb(53, 53, 53); margin-left: -3px;margin-right: -3px;border-top: 1px solid rgb(79, 79, 79);border-bottom:none;}"
-                            "QTabBar::tab:!selected {margin-top: 4px;background: rgb(47, 47, 47);border-top: 1px solid rgb(79, 79, 79);border-bottom: 1px solid rgb(79, 79, 79);}"
-                            "QTabBar::tab:first:selected {margin-left: 0;}"
-                            "QTabBar::tab:last:selected {margin-right: 0;}"
-                            "QComboBox {border: 1px solid rgb(79, 79, 79);background: rgb(53, 53, 53);}"
-                            "QComboBox::disabled {border: 1px solid rgb(60, 60, 60);}"
-                            "QComboBox::arrow {border: 1px solid rgb(60, 60, 60);}"
-                            "QComboBox::drop-down {margin: 5px; padding-left: 12px; height: 12px; width: 12px; image: url(\":/pngs/pngs/combo_box_arrow.png\");}"
-                            "QGroupBox {border: 1px solid rgb(79, 79, 79);}"
-                            "QComboBox:hover {border: 1px solid rgb(4,93,244); background-color: rgb(55,63,76)}"
-                            "QComboBox:on {border: 1px solid rgb(4,93,244); background-color: rgb(43,69,94); selection-background-color:rgb(79, 79, 79)}"
-                            "QComboBox:focus {border: 1px solid rgb(79, 79, 79); background: rgb(53, 53, 53);}"
-                            "QCheckBox::indicator:unchecked:hover {background-color: rgb(240,240,240); border-radius: 3px}"
-                            "QGroupBox {padding-top: 2px;padding-left:7px;border-radius: 3px;margin:1px;}"
-                            "QGroupBox::title {subcontrol-origin: content;}"
-                            "QMenuBar::item:selected {background: rgb(43,43,43)}"
-                            "QMenuBar::item:pressed {background: rgb(43,43,43)}"
-                            "QMenu {border: 1px solid rgb(79, 79, 79)}"
-                            "QMenu::item:selected {background-color: rgb(55,63,86)}"
-                            "QListView {alternate-background-color: rgb(63, 63, 63);}"
-                            "QMessageBox QPushButton {padding: 5px 10px;}"
-                            "QToolTip {color: rgb(63, 63, 63);}"
-                            );
+#elif Q_OS_WIN
+         qApp->setStyleSheet("* {color: rgb(221, 221, 221);background: rgb(53, 53, 53);}"
+                             "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
+                             "QLabel::disabled {color: rgb(120, 120, 120);}"
+                             "QPushButton {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150); max-height: 25px;}"
+                             "QPushButton:hover {border: 1px solid rgb(120, 120, 120); text-align:center; border-radius:5px; background-color: rgb(62, 62, 62); color: rgb(150, 150, 150)}"
+                             //"QPushButton:default {border: 1px solid rgb(4,93,244)}"
+                             "QCheckBox {spacing: 4px;border: none;}"
+                             "QRadioButton {spacing: 4px;border: none;}"
+                             "QTabWidget {background-color: rgba(50, 50, 200, 200); border: none; }"
+                             "QTabWidget::pane {top: -1px;margin: 0px;padding: 0px;border: 1px solid rgb(79, 79, 79);}"
+                             "QStackedWidget > QWidget{background: rgba(50, 50, 50, 0);}"
+                             "QTabBar {qproperty-drawBase: 0;border: none;}"
+                             "QTabBar::tab {padding-left: 0.7em;padding-right: 0.7em;padding-bottom: 4px;padding-top: 3px;min-width: 8ex;border-right: 1px solid rgb(79, 79, 79);border-left: 1px solid rgb(79, 79, 79);}"
+                             "QTabBar::tab::top:!selected:hover {background-color: rgb(50, 50, 50)}"
+                             "QTabBar::tab::selected {background: rgb(53, 53, 53); margin-left: -3px;margin-right: -3px;border-top: 1px solid rgb(79, 79, 79);border-bottom:none;}"
+                             "QTabBar::tab:!selected {margin-top: 4px;background: rgb(47, 47, 47);border-top: 1px solid rgb(79, 79, 79);border-bottom: 1px solid rgb(79, 79, 79);}"
+                             "QTabBar::tab:first:selected {margin-left: 0;}"
+                             "QTabBar::tab:last:selected {margin-right: 0;}"
+                             "QComboBox {border: 1px solid rgb(79, 79, 79);background: rgb(53, 53, 53);}"
+                             "QComboBox::disabled {border: 1px solid rgb(60, 60, 60);}"
+                             "QComboBox::arrow {border: 1px solid rgb(60, 60, 60);}"
+                             "QComboBox::drop-down {margin: 5px; padding-left: 12px; height: 12px; width: 12px; image: url(\":/pngs/pngs/combo_box_arrow.png\");}"
+                             "QGroupBox {border: 1px solid rgb(79, 79, 79);}"
+                             "QComboBox:hover {border: 1px solid rgb(4,93,244); background-color: rgb(55,63,76)}"
+                             "QComboBox:on {border: 1px solid rgb(4,93,244); background-color: rgb(43,69,94); selection-background-color:rgb(79, 79, 79)}"
+                             "QComboBox:focus {border: 1px solid rgb(79, 79, 79); background: rgb(53, 53, 53);}"
+                             "QCheckBox::indicator:unchecked:hover {background-color: rgb(240,240,240); border-radius: 3px}"
+                             "QGroupBox {padding-top: 2px;padding-left:7px;border-radius: 3px;margin:1px;}"
+                             "QGroupBox::title {subcontrol-origin: content;}"
+                             "QMenuBar::item:selected {background: rgb(43,43,43)}"
+                             "QMenuBar::item:pressed {background: rgb(43,43,43)}"
+                             "QMenu {border: 1px solid rgb(79, 79, 79)}"
+                             "QMenu::item:selected {background-color: rgb(55,63,86)}"
+                             "QListView {alternate-background-color: rgb(63, 63, 63);}"
+                             "QMessageBox QPushButton {padding: 5px 10px;}"
+                             "QToolTip {color: rgb(63, 63, 63);}");
 
 #endif
         settings->setValue("theme","dark");

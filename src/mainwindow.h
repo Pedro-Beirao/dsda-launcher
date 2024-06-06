@@ -1,11 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include <QtGlobal>
 
-#ifdef _WIN32
-#include <windows.h>
+#if defined Q_OS_WIN
 #include <stdio.h>
 #include <tchar.h>
-#elif __APPLE__
+#include <windows.h>
+#elif defined Q_OS_MACOS
 #include "Mac.h"
 #endif
 

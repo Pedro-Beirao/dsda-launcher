@@ -2,9 +2,9 @@
 
 void openIWADsFolder() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
-#ifdef __APPLE__
+#ifdef Q_OS_MACOS
     QProcess::startDetached("open", {dotfolder});
-#elif __linux__
+#elif Q_OS_LINUX
     QProcess::startDetached("xdg-open", {dotfolder});
 #else
     QProcess::startDetached("explorer.exe", {execPath});
@@ -13,7 +13,7 @@ void openIWADsFolder() // CTRL+O runs this function to open the folder where the
 
 QString getFileName(QString filePath)
 {
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     return filePath.section(FOLDER_SEPARATOR, -1, -1);
 #else
     return filePath.section(FOLDER_SEPARATOR, -1, -1);
@@ -38,7 +38,7 @@ QFileInfoList getFilePath_possibleFiles()
 
     // Find file in DOOMWADPATH
     QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     QChar token = ';';
 #else
     QChar token = ':';
@@ -79,7 +79,7 @@ QString getFilePath(QString fileName)
 
     // Find file in dsda folder
     QString dsda_folder;
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     dsda_folder = execPath;
 #else
     dsda_folder = dotfolder;
@@ -97,7 +97,7 @@ QString getFilePath(QString fileName)
 
     // Find file in DOOMWADPATH
     QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     QChar token = ';';
 #else
     QChar token = ':';
@@ -163,7 +163,7 @@ QFileInfoList findIwads_possibleFiles()
     QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
 // Find the IWADs in the correct folder depending on the OS
-#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
 
     QDir directory(dotfolder);

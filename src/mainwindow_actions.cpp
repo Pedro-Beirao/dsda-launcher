@@ -89,9 +89,9 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
 
     QString path;
 
-#ifdef __APPLE__
+#ifdef Q_OS_MACOS
     path = launcherFolderPath + "/../Resources/" + gameName;
-#elif __linux__
+#elif Q_OS_LINUX
     path = execPath + "/" + gameName;
 #else
     path = execPath + "\\" + gameName + ".exe";

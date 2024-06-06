@@ -22,7 +22,7 @@ const QChar FOLDER_SEPARATOR = '\\';
 const QChar FOLDER_SEPARATOR = '/';
 #endif
 
-#if defined Q_OS_MAC || defined Q_OS_LINUX
+#if defined Q_OS_MACOS || defined Q_OS_LINUX
 const QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
 #endif
 

@@ -1,13 +1,12 @@
 #include "mainwindow.h"
-#include <QFile>
 #include <QApplication>
-#include <QStyleFactory>
-#include <QSplashScreen>
-#include <QTimer>
 #include <QDebug>
-#include <QSettings>
+#include <QFile>
 #include <QMessageBox>
-#include <QDebug>
+#include <QSettings>
+#include <QSplashScreen>
+#include <QStyleFactory>
+#include <QTimer>
 
 extern QSettings *settings;
 
