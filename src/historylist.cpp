@@ -51,24 +51,22 @@ void historyList::getHistory()
         stream.readLineInto(&buffer);
         QString iwad;
         QString level;
-        QString warp_1 = "";
-        QString warp_2 = "";
-        QString skill;
-        QString params="";
-        QString pwads="";
-        QString demo = "";
+        QString warp_1;
+        QString warp_2;
+        QString pwads;
+        bool recordDemo = false;
+        bool playbackDemo = false;
 
         while (buffer != "-" && !stream.atEnd())
         {
-            QString buffer_name = buffer;
-            QString buffer_value = "";
+            buffer = buffer.trimmed();
 
-            int pos = buffer.indexOf('=');
-            if (pos != -1)
-            {
-                buffer_name = buffer.mid(0, pos);
-                buffer_value = buffer.mid(pos + 1);
-            }
+            QString buffer_name;
+            QString buffer_value;
+
+            int pos = buffer.indexOf(' ');
+            buffer_name = buffer.mid(0, pos).trimmed();
+            buffer_value = buffer.mid(pos + 1).trimmed();
 
             if (buffer_name == "iwad") // iwad
             {
@@ -102,42 +100,6 @@ void historyList::getHistory()
                 level += " - ";
             }
 
-            if (buffer_name == "skill") // skill
-            {
-                if (!buffer_value.isEmpty())
-                {
-                    int si = buffer_value.toInt();
-                    if (0 < si && si <= 5)
-                    {
-                        skill = SKILLS_LIST.at(si);
-                    }
-                    else
-                    {
-                        skill = "skill=" + buffer_value;
-                    }
-                    if (skill != "")
-                    {
-                        skill += " - ";
-                    }
-                }
-            }
-            if (buffer_name == "box1") // box1
-            {
-                if (buffer_value == "true") params += box1 + ", ";
-            }
-            if (buffer_name == "box2") // box2
-            {
-                if (buffer_value == "true") params += box2 + ", ";
-            }
-            if (buffer_name == "box3") // box3
-            {
-                if (buffer_value == "true") params += box3 + ", ";
-            }
-            if (buffer_name == "box4") // box4
-            {
-                if (buffer_value == "true") params += box4 + ", ";
-            }
-
             if (buffer_name == "pwad")
             {
                 while (stream.readLineInto(&buffer) && !stream.atEnd())
@@ -162,34 +124,17 @@ void historyList::getHistory()
             }
             if (buffer_name == "record") // record demo
             {
-                int lastBar = 0;
-                for (qsizetype i = 0; i < buffer_value.length(); i++)
-                {
-                    if (buffer_value[i] == '/' || buffer_value[i] == '\\')
-                    {
-                        lastBar = i + 1;
-                    }
-                }
-                demo = "\n" + buffer_value.mid(lastBar);
+                recordDemo = !buffer_value.isEmpty();
             }
-            if (buffer_name == "timestamp")
+            if (buffer_name == "playback")
             {
-                ui->timestamp_label->setText(buffer_value);
+                playbackDemo = !buffer_value.isEmpty();
             }
 
             stream.readLineInto(&buffer);
         }
 
-        QString slp = skill + level + params;
-        if (!slp.isEmpty())
-        {
-            slp.resize(slp.size()-2);
-            ui->history_listWidget->insertItem(0,iwad+"\n"+slp+pwads+demo);
-        }
-        else
-        {
-            ui->history_listWidget->insertItem(0,iwad+pwads+demo);
-        }
+        ui->history_listWidget->insertItem(0, iwad + pwads);
     }
 
     file.close();
