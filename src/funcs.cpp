@@ -166,11 +166,6 @@ QFileInfoList findIwads_possibleFiles()
 #if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
 
-// Copies dsda-doom.wad to the dotfolder
-#if defined(Q_OS_MAC)
-    QProcess::startDetached("cp", {launcherFolderPath + "/../Resources/" + gameName + ".wad", dotfolder});
-#endif
-
     QDir directory(dotfolder);
 
     doomwaddirstr = doomwaddirstr.split(":")[0];
