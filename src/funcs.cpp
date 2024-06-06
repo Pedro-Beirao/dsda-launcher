@@ -7,7 +7,7 @@ void openIWADsFolder() // CTRL+O runs this function to open the folder where the
 #elif Q_OS_LINUX
     QProcess::startDetached("xdg-open", {dotfolder});
 #else
-    QProcess::startDetached("explorer.exe", {execPath});
+    QProcess::startDetached("explorer.exe", {gameName});
 #endif
 }
 
@@ -26,7 +26,7 @@ QFileInfoList getFilePath_possibleFiles()
 
     // Find file in dsda folder
 #ifdef Q_OS_WIN
-    QDir dsda_folder(execPath);
+    QDir dsda_folder(gameName);
 #else
     QDir dsda_folder(dotfolder);
 #endif
@@ -80,7 +80,7 @@ QString getFilePath(QString fileName)
     // Find file in dsda folder
     QString dsda_folder;
 #ifdef Q_OS_WIN
-    dsda_folder = execPath;
+    dsda_folder = gameName;
 #else
     dsda_folder = dotfolder;
 #endif
@@ -171,7 +171,7 @@ QFileInfoList findIwads_possibleFiles()
     doomwaddirstr = doomwaddirstr.split(":")[0];
 
 #elif defined(Q_OS_WIN)
-    QDir directory(execPath);
+    QDir directory(gameName);
 
     doomwaddirstr = doomwaddirstr.split(";")[0];
 #endif

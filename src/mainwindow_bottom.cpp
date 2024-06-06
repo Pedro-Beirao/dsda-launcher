@@ -17,9 +17,9 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 #ifdef Q_OS_MACOS
     path = launcherFolderPath + "/../Resources/" + gameName;
 #elif Q_OS_LINUX
-    path = execPath + "/" + gameName;
+    path = gameName + "/" + gameName;
 #else
-    path = execPath + "\\" + gameName + ".exe";
+    path = gameName + "\\" + gameName + ".exe";
 #endif
 
     QFile port = QFile(path);

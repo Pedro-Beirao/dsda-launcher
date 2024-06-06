@@ -591,10 +591,10 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
 #ifdef Q_OS_MACOS
             out << "\"" + launcherFolderPath + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #elif Q_OS_LINUX
-            out << "\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            out << "\"" + gameName + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #else
-            std::replace(execPath.begin(), execPath.end(), '/', '\\');
-            out << "\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            std::replace(gameName.begin(), gameName.end(), '/', '\\');
+            out << "\"" + gameName + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #endif
             file.close();
 
@@ -614,10 +614,10 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
 #ifdef Q_OS_MACOS
             clip->setText("\"" + launcherFolderPath + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #elif Q_OS_LINUX
-            clip->setText("\"" + execPath + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            clip->setText("\"" + gameName + "/" + exeName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #else
-            std::replace(execPath.begin(), execPath.end(), '/', '\\');
-            clip->setText("\"" + execPath + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            std::replace(gameName.begin(), gameName.end(), '/', '\\');
+            clip->setText("\"" + gameName + "\\" + exeName + ".exe\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #endif
         }
 
@@ -665,7 +665,7 @@ void MainWindow::Launch(QStringList arguments)
         QMessageBox::warning(this, "dsda-launcher", gameName + " was not found in dsda-launcher.app/Contents/Resources/" + gameName);
     }
 #elif Q_OS_LINUX
-    QFile port = QFile(execPath + "/" + exeName);
+    QFile port = QFile(gameName + "/" + exeName);
     QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with exeName.
     QStringList apar;
@@ -675,7 +675,7 @@ void MainWindow::Launch(QStringList arguments)
     whichProcess.waitForFinished();
     QString processPath;
     // If it finds an executable in the dsda-launcher folder, it will prioritize it over the one installed in a bin folder.
-    if (port.exists()) processPath = execPath + "/" + exeName;
+    if (port.exists()) processPath = gameName + "/" + exeName;
     else processPath = exeName;
     if (whichProcess.readAllStandardOutput() != "")
     {
@@ -688,12 +688,12 @@ void MainWindow::Launch(QStringList arguments)
     }
     else QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that " + exeName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + exeName + " exists, symlink it to dsda-launcher's folder."));
 #else
-    QFile port = QFile(execPath + "/" + exeName + ".exe");
+    QFile port = QFile(gameName + "/" + exeName + ".exe");
     if (port.exists())
     {
         QProcess *process = new QProcess;
-        process->setWorkingDirectory(execPath);
-        process->start(execPath + "/" + exeName + ".exe", arguments);
+        process->setWorkingDirectory(gameName);
+        process->start(gameName + "/" + exeName + ".exe", arguments);
         connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
