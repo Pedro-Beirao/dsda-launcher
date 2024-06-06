@@ -737,14 +737,14 @@ void MainWindow::SaveHistory(QStringList args)
             stream.setString(NULL);
         }
 
-        qint64 start = 0;
-        while (file.isOpen() && !file.atEnd())
+        while (file.isOpen() && !stream.atEnd())
         {
             stream.readLineInto(&buffer);
 
             if (buffer == '-')
             {
                 count++;
+                continue;
             }
 
             if (buffer.left(8) == "checksum" && buffer.mid(8).length() > 0)
@@ -754,8 +754,6 @@ void MainWindow::SaveHistory(QStringList args)
                     file.close();
                     return;
                 }
-                checksum = buffer.mid(8).toInt();
-                start = stream.pos();
             }
         }
         stream.seek(0);
@@ -764,25 +762,21 @@ void MainWindow::SaveHistory(QStringList args)
     int maxhistory = settings->value("maxhistory").toInt();
     if (count >= maxhistory)
     {
-        needToDelete = count - maxhistory + 1;
+        needToDelete = count - maxhistory + 2;
     }
 
     QFile file_out(historyListWindow->historyPath + "_tmp");
     file_out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
     if (!file_out.isOpen()) return;
     QTextStream out(&file_out);
-
     out << HISTORY_HEADER << "\nchecksum" << QString::number(checksum) << "\n";
 
-    while (file.isOpen() && !file.atEnd())
+    if (needToDelete <= 0) needToDelete = 1;
+    while (file.isOpen() && !stream.atEnd())
     {
         stream.readLineInto(&buffer);
         if (buffer == '-' && needToDelete > 0) needToDelete--;
-
-        if (needToDelete <= 0)
-        {
-            out << buffer << '\n';
-        }
+        if (needToDelete <= 0) out << buffer << '\n';
     }
     file.close();
     file_out.close();
