@@ -26,7 +26,7 @@ const QChar FOLDER_SEPARATOR = '/';
 const QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
 #endif
 
-static QString launcherFolderPath = "";
+static QString launcherfolder = "";
 
 const QStringList exmxIWADS = {"doom",    "doom1",    "doomu", "freedoom", "freedoom1", "bfgdoom", "bfgdoom1",
 

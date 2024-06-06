@@ -64,7 +64,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     {
         ui->executable_lineEdit->setText(settings->value("exeName").toString());
     }
-    MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
+    MainWindow::pMainWindow->changeGameName(ui->executable_lineEdit->text());
 
     ui->maxHistory_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
     
@@ -394,11 +394,11 @@ void Settings::on_save_pushButton_clicked()
 
     if (ui->executable_lineEdit->text().isEmpty())
     {
-        MainWindow::pMainWindow->changeExeName("dsda-doom");
+        MainWindow::pMainWindow->changeGameName("dsda-doom");
     }
     else
     {
-        MainWindow::pMainWindow->changeExeName(ui->executable_lineEdit->text());
+        MainWindow::pMainWindow->changeGameName(ui->executable_lineEdit->text());
     }
 
     settings->setValue("exeName", ui->executable_lineEdit->text());

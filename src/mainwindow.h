@@ -137,7 +137,7 @@ public slots:
     void setResolutionsList(QListWidget *list);
     void dropFile(QString fileName);
     void dropLmp(QString filePath);
-    void changeExeName(QString newName);
+    void changeGameName(QString newName);
     void setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4);
     void whenAnimationFinishNext();
     void whenAnimationFinishPrevious();
