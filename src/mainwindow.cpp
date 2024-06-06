@@ -190,8 +190,8 @@ void MainWindow::saveSelected()
     // Bottom
     settings->setValue("fast", ui->toggle1_checkBox->isChecked());
     settings->setValue("nomo", ui->toggle2_checkBox->isChecked());
-    settings->setValue("solonet", ui->toggle3_checkBox->isChecked());
-    settings->setValue("respawn", ui->toggle4_checkBox->isChecked());
+    settings->setValue("respawn", ui->toggle3_checkBox->isChecked());
+    settings->setValue("solonet", ui->toggle4_checkBox->isChecked());
     settings->setValue("fullscreen", ui->fullscreen_checkBox->isChecked());
     settings->setValue("geom", ui->resolution_comboBox->currentIndex());
     settings->setValue("hud", ui->hud_lineEdit->text());
