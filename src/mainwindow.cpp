@@ -713,7 +713,7 @@ void MainWindow::SaveHistory(QStringList args)
 {
     int checksum = 0;
     int count = 0;
-    int needToDelete = 0;
+    int needToDelete = 1;
 
     QString checksumString = "";
     for (qsizetype i = 0; i < args.size(); i++)
@@ -724,11 +724,11 @@ void MainWindow::SaveHistory(QStringList args)
     QFile file(historyListWindow->historyPath);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
+    QString buffer;
+
     QTextStream stream(&file);
     if (file.isOpen())
     {
-        QString buffer;
-
         stream.readLineInto(&buffer);
         if (buffer != HISTORY_HEADER)
         {
@@ -747,7 +747,7 @@ void MainWindow::SaveHistory(QStringList args)
                 count++;
             }
 
-            if (buffer.mid(0, 8) == "checksum" && buffer.mid(8).length() > 0)
+            if (buffer.left(8) == "checksum" && buffer.mid(8).length() > 0)
             {
                 if (checksum == buffer.mid(8).toInt())
                 {
@@ -758,7 +758,7 @@ void MainWindow::SaveHistory(QStringList args)
                 start = stream.pos();
             }
         }
-        stream.seek(start);
+        stream.seek(0);
     }
 
     int maxhistory = settings->value("maxhistory").toInt();
@@ -767,46 +767,22 @@ void MainWindow::SaveHistory(QStringList args)
         needToDelete = count - maxhistory + 1;
     }
 
-    QString header = HISTORY_HEADER + "\nchecksum" + QString::number(checksum) + "\n";
-    QString streamstr = stream.readAll();
-    qDebug() << streamstr;
-
     QFile file_out(historyListWindow->historyPath + "_tmp");
     file_out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
     if (!file_out.isOpen()) return;
-
     QTextStream out(&file_out);
 
-    if (!needToDelete)
+    out << HISTORY_HEADER << "\nchecksum" << QString::number(checksum) << "\n";
+
+    while (file.isOpen() && !file.atEnd())
     {
-        if (streamstr != "")
+        stream.readLineInto(&buffer);
+        if (buffer == '-' && needToDelete > 0) needToDelete--;
+
+        if (needToDelete <= 0)
         {
-            header += streamstr + "\n";
+            out << buffer << '\n';
         }
-        out << header;
-    }
-    else
-    {
-        if (streamstr != "")
-        {
-            int past = 0;
-            for (qsizetype i = 0; i < streamstr.length(); i++)
-            {
-                if (streamstr.mid(i, 2) == "-\n")
-                {
-                    if (past == needToDelete)
-                    {
-                        streamstr = streamstr.mid(i);
-                    }
-                    else
-                    {
-                        past++;
-                    }
-                }
-            }
-            header += streamstr + "\n";
-        }
-        out << header;
     }
     file.close();
     file_out.close();
