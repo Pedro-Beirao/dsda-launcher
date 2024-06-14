@@ -181,8 +181,6 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
         qApp->setPalette(lightPalette);
 #endif
 
-
-
         settings->setValue("theme","light");
         MainWindow::pMainWindow->changeButtonColor(false);
     }

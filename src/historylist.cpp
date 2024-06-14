@@ -54,9 +54,8 @@ void historyList::getHistory()
         QString warp_1;
         QString warp_2;
         QString pwads;
-        bool recordDemo = false;
-        bool playbackDemo = false;
-
+        QString recordDemo;
+        QString playbackDemo;
         while (buffer != "-" && !stream.atEnd())
         {
             buffer = buffer.trimmed();
@@ -65,8 +64,11 @@ void historyList::getHistory()
             QString buffer_value;
 
             int pos = buffer.indexOf(' ');
-            buffer_name = buffer.mid(0, pos).trimmed();
-            buffer_value = buffer.mid(pos + 1).trimmed();
+            if (pos != -1)
+            {
+                buffer_name = buffer.mid(0, pos).trimmed();
+                buffer_value = buffer.mid(pos + 1).trimmed();
+            }
 
             if (buffer_name == "iwad") // iwad
             {
@@ -80,7 +82,12 @@ void historyList::getHistory()
             {
                 warp_2 = buffer_value;
             }
-            if (warp_2 == "" && warp_1 != "")
+
+            if (!warp_1.isEmpty() && !warp_2.isEmpty())
+            {
+                level = "E" + warp_1 + "M" + warp_2;
+            }
+            else if (!warp_1.isEmpty() && warp_2.isEmpty())
             {
                 if (warp_1.size() == 1)
                 {
@@ -91,50 +98,28 @@ void historyList::getHistory()
                     level = "MAP" + warp_1;
                 }
             }
-            if (warp_2 != "")
-            {
-                level = "E" + warp_1 + "M" + warp_2;
-            }
-            if (level != "")
-            {
-                level += " - ";
-            }
 
             if (buffer_name == "pwad")
             {
-                while (stream.readLineInto(&buffer) && !stream.atEnd())
-                {
-                    if (buffer.mid(0, 7) == "endpwad") break;
-                    int lastBar = 0;
-                    for (qsizetype i = 0; i < buffer.length(); i++)
-                    {
-                        if (buffer[i] == '/' || buffer[i] == '\\')
-                        {
-                            lastBar = i + 1;
-                        }
-                    }
-                    buffer = buffer.mid(lastBar);
-                    pwads += buffer + ", ";
-                }
-                if (pwads != "")
-                {
-                    pwads.resize(pwads.size() - 2);
-                    pwads = "\n" + pwads;
-                }
+                pwads += getFileName(buffer_value) + " ";
             }
             if (buffer_name == "record") // record demo
             {
-                recordDemo = !buffer_value.isEmpty();
+                recordDemo = buffer_value;
             }
             if (buffer_name == "playback")
             {
-                playbackDemo = !buffer_value.isEmpty();
+                playbackDemo = buffer_value;
             }
 
             stream.readLineInto(&buffer);
         }
-
-        ui->history_listWidget->insertItem(0, iwad + pwads);
+        QString title = iwad;
+        if (!level.isEmpty()) title += " - " + level;
+        if (!pwads.isEmpty()) title += "\n" + pwads;
+        if (!recordDemo.isEmpty()) title += "\nRecord " + recordDemo;
+        if (!playbackDemo.isEmpty()) title += "\nPlayback " + playbackDemo;
+        ui->history_listWidget->insertItem(0, title);
     }
 
     file.close();
