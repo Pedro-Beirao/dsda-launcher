@@ -613,7 +613,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
             QClipboard *clip = QApplication::clipboard();
 #if defined Q_OS_MACOS
             clip->setText("\"" + launcherfolder + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
-#elif define Q_OS_LINUX
+#elif defined Q_OS_LINUX
             clip->setText("\"" + launcherfolder + "/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #else
             std::replace(launcherfolder.begin(), launcherfolder.end(), '/', '\\');
