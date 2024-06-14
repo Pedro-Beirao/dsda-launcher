@@ -590,7 +590,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
 
 #if defined Q_OS_MACOS
             out << "\"" + launcherfolder + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
             out << "\"" + launcherfolder + "/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
 #else
             std::replace(launcherfolder.begin(), launcherfolder.end(), '/', '\\');
@@ -613,7 +613,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
             QClipboard *clip = QApplication::clipboard();
 #if defined Q_OS_MACOS
             clip->setText("\"" + launcherfolder + "/../Resources/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
-#elif Q_OS_LINUX
+#elif define Q_OS_LINUX
             clip->setText("\"" + launcherfolder + "/" + gameName + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
 #else
             std::replace(launcherfolder.begin(), launcherfolder.end(), '/', '\\');
@@ -664,7 +664,7 @@ void MainWindow::Launch(QStringList arguments)
     {
         QMessageBox::warning(this, "dsda-launcher", gameName + " was not found in dsda-launcher.app/Contents/Resources/" + gameName);
     }
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
     QFile port = QFile(launcherfolder + "/" + gameName);
     QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     // Run "which" command to check if dsda-doom exists. if it does then no need to specify a path, just run a process with gameName.

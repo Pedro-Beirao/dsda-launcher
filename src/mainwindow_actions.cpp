@@ -91,7 +91,7 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
 
 #if defined Q_OS_MACOS
     path = launcherfolder + "/../Resources/" + gameName;
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
     path = launcherfolder + "/" + gameName;
 #else
     path = launcherfolder + "\\" + gameName + ".exe";

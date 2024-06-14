@@ -16,7 +16,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 
 #if defined Q_OS_MACOS
     path = launcherfolder + "/../Resources/" + gameName;
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
     path = launcherfolder + "/" + gameName;
 #else
     path = launcherfolder + "\\" + gameName + ".exe";
@@ -29,7 +29,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
         QProcess *process = new QProcess;
         process->startDetached("sh", {"-c", "echo \"" + path + " --help ; rm /tmp/dsda-doom-params.sh\" > /tmp/dsda-doom-params.sh ; chmod +x /tmp/dsda-doom-params.sh ; open -a Terminal /tmp/dsda-doom-params.sh"});
         process->deleteLater();
-#elif Q_OS_WIN
+#elif defined Q_OS_WIN
         system(("start cmd.exe /k \"" + path.toStdString() + "\" --help").c_str());
 #else
         // xterm is the most reliable terminal to use, but it seems a few distros do not have it

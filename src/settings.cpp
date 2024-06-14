@@ -195,7 +195,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
                                                    "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
          ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
                                                    "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
          QPalette darkPalette;
          darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
          darkPalette.setColor(QPalette::WindowText, Qt::white);
@@ -213,7 +213,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
          qApp->setPalette(darkPalette);
          qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
-#elif Q_OS_WIN
+#elif defined Q_OS_WIN
          qApp->setStyleSheet("* {color: rgb(221, 221, 221);background: rgb(53, 53, 53);}"
                              "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
                              "QLabel::disabled {color: rgb(120, 120, 120);}"
