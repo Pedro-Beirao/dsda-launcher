@@ -22,5 +22,6 @@ QFileInfoList findIwads_possibleFiles();
 QFileInfoList findIwads();
 QString bool_to_string(bool b);
 bool string_to_bool(QString s);
+QString createLevelString(QString warp_1, QString warp_2);
 
 #endif // FUNCS_H

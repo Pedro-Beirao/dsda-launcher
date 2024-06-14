@@ -221,6 +221,27 @@ QFileInfoList findIwads()
     return ret;
 }
 
+QString createLevelString(QString warp_1, QString warp_2)
+{
+    QString level;
+    if (!warp_1.isEmpty() && !warp_2.isEmpty())
+    {
+        level = "E" + warp_1 + "M" + warp_2;
+    }
+    else if (!warp_1.isEmpty() && warp_2.isEmpty())
+    {
+        if (warp_1.size() == 1)
+        {
+            level = "MAP0" + warp_1;
+        }
+        else
+        {
+            level = "MAP" + warp_1;
+        }
+    }
+    return level;
+}
+
 QStringList parseStringIntoArguments(QString line) { return QProcess::splitCommand(line); }
 
 QString bool_to_string(bool b) { return b ? "true" : "false"; }

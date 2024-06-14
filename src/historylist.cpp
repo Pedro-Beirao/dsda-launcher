@@ -34,11 +34,6 @@ void historyList::getHistory()
         return;
     }
 
-    QString box1 = settings->value("toggle1t").toString();
-    QString box2 = settings->value("toggle2t").toString();
-    QString box3 = settings->value("toggle3t").toString();
-    QString box4 = settings->value("toggle4t").toString();
-
     QTextStream stream(&file);
     QString buffer;
     while (buffer != "-" && !stream.atEnd())
@@ -50,7 +45,6 @@ void historyList::getHistory()
     {
         stream.readLineInto(&buffer);
         QString iwad;
-        QString level;
         QString warp_1;
         QString warp_2;
         QString pwads;
@@ -83,22 +77,6 @@ void historyList::getHistory()
                 warp_2 = buffer_value;
             }
 
-            if (!warp_1.isEmpty() && !warp_2.isEmpty())
-            {
-                level = "E" + warp_1 + "M" + warp_2;
-            }
-            else if (!warp_1.isEmpty() && warp_2.isEmpty())
-            {
-                if (warp_1.size() == 1)
-                {
-                    level = "MAP0" + warp_1;
-                }
-                else
-                {
-                    level = "MAP" + warp_1;
-                }
-            }
-
             if (buffer_name == "pwad")
             {
                 pwads += getFileName(buffer_value) + " ";
@@ -114,15 +92,21 @@ void historyList::getHistory()
 
             stream.readLineInto(&buffer);
         }
+
         QString title = iwad;
+
+        QString level = createLevelString(warp_1, warp_2);
         if (!level.isEmpty()) title += " - " + level;
         if (!pwads.isEmpty()) title += "\n" + pwads;
         if (!recordDemo.isEmpty()) title += "\nRecord " + recordDemo;
         if (!playbackDemo.isEmpty()) title += "\nPlayback " + playbackDemo;
+
         ui->history_listWidget->insertItem(0, title);
     }
 
     file.close();
+
+    ui->history_listWidget->setCurrentRow(0);
 }
 
 void historyList::fooo3() // CTRL+W runs this function close the active window
@@ -421,4 +405,53 @@ void historyList::on_launch_pushButton_clicked()
     file.close();
 
     MainWindow::pMainWindow->Launch(argList);
+}
+
+void historyList::on_history_listWidget_currentRowChanged(int currentRow)
+{
+    QFile file(historyPath);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        return;
+    }
+
+    QTextStream stream(&file);
+    QString buffer;
+    while (buffer != "-" && !stream.atEnd())
+    {
+        stream.readLineInto(&buffer);
+    }
+
+    int count = 0;
+    QString warp1, warp2;
+
+    while (!stream.atEnd())
+    {
+        stream.readLineInto(&buffer);
+
+        if (buffer == "-") count++;
+        if (count != currentRow) continue;
+
+        buffer = buffer.trimmed();
+
+        QString buffer_name, buffer_value;
+
+        int pos = buffer.indexOf(' ');
+        if (pos != -1)
+        {
+            buffer_name = buffer.mid(0, pos).trimmed();
+            buffer_value = buffer.mid(pos + 1).trimmed();
+        }
+
+        if (buffer_name == "iwad") ui->iwad_label->setText(buffer_value);
+        else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
+        else if (buffer_name == "warp1") warp1 = buffer_value;
+        else if (buffer_name == "warp2") warp2 = buffer_value;
+        else if (buffer_name == "skill") ui->difficulty_label->setText(buffer_value);
+        else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
+    }
+
+    ui->level_label->setText(createLevelString(warp1, warp2));
+
+    file.close();
 }

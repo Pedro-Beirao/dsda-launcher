@@ -1,11 +1,12 @@
 #ifndef HISTORYLIST_H
 #define HISTORYLIST_H
 
-#include <QWidget>
 #include "fstream"
-#include <QStandardPaths>
+#include <QListWidget>
 #include <QSettings>
 #include <QShortcut>
+#include <QStandardPaths>
+#include <QWidget>
 
 namespace Ui {
 class historyList;
@@ -30,6 +31,7 @@ public:
 private slots:
     void on_load_pushButton_clicked();
     void on_launch_pushButton_clicked();
+    void on_history_listWidget_currentRowChanged(int currentRow);
 };
 
 #endif // HISTORYLIST_H
