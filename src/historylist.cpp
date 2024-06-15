@@ -50,6 +50,7 @@ void historyList::getHistory()
         QString pwads;
         QString recordDemo;
         QString playbackDemo;
+        QString playbackDemoType;
         while (buffer != "-" && !stream.atEnd())
         {
             buffer = buffer.trimmed();
@@ -89,6 +90,12 @@ void historyList::getHistory()
             {
                 playbackDemo = buffer_value;
             }
+            if (buffer_name == "demodropdown")
+            {
+                if (buffer_value == '0') playbackDemoType = "Playdemo ";
+                else if (buffer_value == '1') playbackDemoType = "Timedemo ";
+                else if (buffer_value == '2') playbackDemoType = "Fastdemo ";
+            }
 
             stream.readLineInto(&buffer);
         }
@@ -96,10 +103,11 @@ void historyList::getHistory()
         QString title = iwad;
 
         QString level = createLevelString(warp_1, warp_2);
+
         if (!level.isEmpty()) title += " - " + level;
         if (!pwads.isEmpty()) title += "\n" + pwads;
-        if (!recordDemo.isEmpty()) title += "\nRecord " + recordDemo;
-        if (!playbackDemo.isEmpty()) title += "\nPlayback " + playbackDemo;
+        if (!recordDemo.isEmpty()) title += "\nRecord " + getFileName(recordDemo);
+        if (!playbackDemo.isEmpty()) title += "\n" + playbackDemoType + getFileName(playbackDemo);
 
         ui->history_listWidget->insertItem(0, title);
     }
@@ -430,7 +438,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
         stream.readLineInto(&buffer);
 
         if (buffer == "-") count++;
-        if (count != currentRow) continue;
+        if (count != ui->history_listWidget->count() - 1 - currentRow) continue;
 
         buffer = buffer.trimmed();
 
@@ -447,7 +455,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
         else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
         else if (buffer_name == "warp1") warp1 = buffer_value;
         else if (buffer_name == "warp2") warp2 = buffer_value;
-        else if (buffer_name == "skill") ui->difficulty_label->setText(buffer_value);
+        else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
         else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
     }
 

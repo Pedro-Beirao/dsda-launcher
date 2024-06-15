@@ -77,97 +77,175 @@
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>TIMESTAMP</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="iwad_label">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>20</y>
-     <width>151</width>
-     <height>16</height>
+     <x>225</x>
+     <y>10</y>
+     <width>181</width>
+     <height>81</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="title">
     <string/>
    </property>
+   <widget class="QLabel" name="iwad_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>IWAD</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="complevel_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>30</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>COMPLEVEL</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="level_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>55</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LEVEL</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="difficulty_label">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>55</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SKILL</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
-  <widget class="QLabel" name="complevel_label">
+  <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>50</y>
-     <width>151</width>
-     <height>16</height>
+     <x>225</x>
+     <y>100</y>
+     <width>181</width>
+     <height>111</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="title">
     <string/>
    </property>
+   <widget class="QLabel" name="pwads_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>161</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PWAD
+PWAD
+PWAD</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
   </widget>
-  <widget class="QLabel" name="level_label">
+  <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>80</y>
-     <width>61</width>
-     <height>16</height>
+     <x>225</x>
+     <y>220</y>
+     <width>181</width>
+     <height>61</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="title">
     <string/>
    </property>
+   <widget class="QLabel" name="playbackDemo_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>35</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PLAYBACK</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="recordDemo_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RECORD</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
-  <widget class="QLabel" name="difficulty_label">
+  <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>80</y>
-     <width>61</width>
-     <height>16</height>
+     <x>225</x>
+     <y>290</y>
+     <width>181</width>
+     <height>111</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="pwads_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>120</y>
-     <width>151</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="recordDemo_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>230</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="playbackDemo_label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>260</y>
-     <width>151</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
+   <property name="title">
     <string/>
    </property>
   </widget>
