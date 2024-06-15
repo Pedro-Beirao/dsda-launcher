@@ -417,6 +417,16 @@ void historyList::on_launch_pushButton_clicked()
 
 void historyList::on_history_listWidget_currentRowChanged(int currentRow)
 {
+    ui->iwad_label->clear();
+    ui->complevel_label->clear();
+    ui->difficulty_label->clear();
+    ui->level_label->clear();
+    ui->pwads_label->clear();
+    ui->recordDemo_label->clear();
+    ui->playbackDemo_label->clear();
+
+    ui->timestamp_label->clear();
+
     QFile file(historyPath);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -456,6 +466,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
         else if (buffer_name == "warp1") warp1 = buffer_value;
         else if (buffer_name == "warp2") warp2 = buffer_value;
         else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
+        else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
         else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
     }
 
