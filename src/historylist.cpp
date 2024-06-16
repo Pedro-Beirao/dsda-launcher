@@ -422,16 +422,12 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
     ui->difficulty_label->clear();
     ui->level_label->clear();
     ui->pwads_label->clear();
-    ui->recordDemo_label->clear();
-    ui->playbackDemo_label->clear();
-
+    ui->demo_label->clear();
+    ui->extra_label->clear();
     ui->timestamp_label->clear();
 
     QFile file(historyPath);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        return;
-    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
 
     QTextStream stream(&file);
     QString buffer;
@@ -441,7 +437,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
     }
 
     int count = 0;
-    QString warp1, warp2;
+    QString warp1, warp2, recordDemo_s, playbackDemo_s, playbackDemo_t;
 
     while (!stream.atEnd())
     {
@@ -467,10 +463,25 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
         else if (buffer_name == "warp2") warp2 = buffer_value;
         else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
         else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
+        else if (buffer_name == "record") recordDemo_s = "Record\n" + getFileName(buffer_value) + "\n";
+        else if (buffer_name == "playback") playbackDemo_s = getFileName(buffer_value) + "\n";
+        else if (buffer_name == "demodropdown")
+        {
+            if (buffer_value == '0') playbackDemo_t = "Playdemo\n";
+            else if (buffer_value == '1') playbackDemo_t = "Timedemo\n";
+            else if (buffer_value == '2') playbackDemo_t = "Fastdemo\n";
+        }
+        else if (buffer_name == "box1" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle1_checkBox()->toolTip());
+        else if (buffer_name == "box2" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle2_checkBox()->toolTip());
+        else if (buffer_name == "box3" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle3_checkBox()->toolTip());
+        else if (buffer_name == "box4" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle4_checkBox()->toolTip());
+        else if (buffer_name == "additional") ui->extra_label->setText(ui->extra_label->text() + " " + buffer_value);
         else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
     }
 
     ui->level_label->setText(createLevelString(warp1, warp2));
+    if (!recordDemo_s.isEmpty()) ui->demo_label->setText(recordDemo_s);
+    else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);
 
     file.close();
 }

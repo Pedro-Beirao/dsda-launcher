@@ -166,7 +166,7 @@
      <x>225</x>
      <y>100</y>
      <width>181</width>
-     <height>111</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="title">
@@ -178,7 +178,7 @@
       <x>10</x>
       <y>10</y>
       <width>161</width>
-      <height>91</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="text">
@@ -195,44 +195,29 @@ PWAD</string>
    <property name="geometry">
     <rect>
      <x>225</x>
-     <y>220</y>
+     <y>200</y>
      <width>181</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
-   <widget class="QLabel" name="playbackDemo_label">
+   <widget class="QLabel" name="demo_label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>35</y>
-      <width>181</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PLAYBACK</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="recordDemo_label">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
+      <x>10</x>
       <y>10</y>
-      <width>181</width>
-      <height>20</height>
+      <width>161</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>RECORD</string>
+     <string>RECORD
+DEMO</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
   </widget>
@@ -240,14 +225,33 @@ PWAD</string>
    <property name="geometry">
     <rect>
      <x>225</x>
-     <y>290</y>
+     <y>260</y>
      <width>181</width>
-     <height>111</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="title">
     <string/>
    </property>
+   <widget class="QLabel" name="extra_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>161</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>EXTRA</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
