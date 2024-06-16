@@ -29,13 +29,18 @@ void historyList::getHistory()
     ui->history_listWidget->clear();
 
     QFile file(historyPath);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        return;
-    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
 
     QTextStream stream(&file);
     QString buffer;
+
+    stream.readLineInto(&buffer);
+    if (buffer != HISTORY_HEADER)
+    {
+        file.close();
+        return;
+    }
+
     while (buffer != "-" && !stream.atEnd())
     {
         stream.readLineInto(&buffer);
@@ -65,32 +70,13 @@ void historyList::getHistory()
                 buffer_value = buffer.mid(pos + 1).trimmed();
             }
 
-            if (buffer_name == "iwad") // iwad
-            {
-                iwad = buffer_value;
-            }
-            if (buffer_name == "warp1") // warp 1
-            {
-                warp_1 = buffer_value;
-            }
-            if (buffer_name == "warp2") // warp 2
-            {
-                warp_2 = buffer_value;
-            }
-
-            if (buffer_name == "pwad")
-            {
-                pwads += getFileName(buffer_value) + " ";
-            }
-            if (buffer_name == "record") // record demo
-            {
-                recordDemo = buffer_value;
-            }
-            if (buffer_name == "playback")
-            {
-                playbackDemo = buffer_value;
-            }
-            if (buffer_name == "demodropdown")
+            if (buffer_name == "iwad") iwad = buffer_value;
+            else if (buffer_name == "warp1") warp_1 = buffer_value;
+            else if (buffer_name == "warp2") warp_2 = buffer_value;
+            else if (buffer_name == "pwad") pwads += getFileName(buffer_value) + " ";
+            else if (buffer_name == "record") recordDemo = buffer_value;
+            else if (buffer_name == "playback") playbackDemo = buffer_value;
+            else if (buffer_name == "demodropdown")
             {
                 if (buffer_value == '0') playbackDemoType = "Playdemo ";
                 else if (buffer_value == '1') playbackDemoType = "Timedemo ";
@@ -115,6 +101,79 @@ void historyList::getHistory()
     file.close();
 
     ui->history_listWidget->setCurrentRow(0);
+}
+
+void historyList::on_history_listWidget_currentRowChanged(int currentRow)
+{
+    ui->iwad_label->clear();
+    ui->complevel_label->clear();
+    ui->difficulty_label->clear();
+    ui->level_label->clear();
+    ui->pwads_label->clear();
+    ui->demo_label->clear();
+    ui->extra_label->clear();
+    ui->timestamp_label->clear();
+
+    QFile file(historyPath);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
+
+    QTextStream stream(&file);
+    QString buffer;
+    while (buffer != "-" && !stream.atEnd())
+    {
+        stream.readLineInto(&buffer);
+    }
+
+    int count = 0;
+    QString warp1, warp2, recordDemo_s, playbackDemo_s, playbackDemo_t;
+
+    while (!stream.atEnd())
+    {
+        stream.readLineInto(&buffer);
+
+        if (buffer == "-") count++;
+        if (count != ui->history_listWidget->count() - 1 - currentRow) continue;
+
+        buffer = buffer.trimmed();
+
+        QString buffer_name, buffer_value;
+
+        int pos = buffer.indexOf(' ');
+        if (pos != -1)
+        {
+            buffer_name = buffer.mid(0, pos).trimmed();
+            buffer_value = buffer.mid(pos + 1).trimmed();
+        }
+
+        if (buffer_name == "iwad") ui->iwad_label->setText(buffer_value);
+        else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
+        else if (buffer_name == "warp1") warp1 = buffer_value;
+        else if (buffer_name == "warp2") warp2 = buffer_value;
+        else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
+        else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
+        else if (buffer_name == "record") recordDemo_s = "Record\n" + getFileName(buffer_value) + "\n";
+        else if (buffer_name == "playback") playbackDemo_s = getFileName(buffer_value) + "\n";
+        else if (buffer_name == "demodropdown")
+        {
+            if (buffer_value == '0') playbackDemo_t = "Playdemo\n";
+            else if (buffer_value == '1') playbackDemo_t = "Timedemo\n";
+            else if (buffer_value == '2') playbackDemo_t = "Fastdemo\n";
+        }
+        else if (buffer_name == "box1" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle1_checkBox()->toolTip());
+        else if (buffer_name == "box2" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle2_checkBox()->toolTip());
+        else if (buffer_name == "box3" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle3_checkBox()->toolTip());
+        else if (buffer_name == "box4" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle4_checkBox()->toolTip());
+        else if (buffer_name == "additional") ui->extra_label->setText(ui->extra_label->text() + " " + buffer_value);
+        else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
+    }
+
+    ui->level_label->setText(createLevelString(warp1, warp2));
+    if (ui->level_label->text().isEmpty()) ui->difficulty_label->clear();
+
+    if (!recordDemo_s.isEmpty()) ui->demo_label->setText(recordDemo_s);
+    else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);
+
+    file.close();
 }
 
 void historyList::fooo3() // CTRL+W runs this function close the active window
@@ -413,77 +472,4 @@ void historyList::on_launch_pushButton_clicked()
     file.close();
 
     MainWindow::pMainWindow->Launch(argList);
-}
-
-void historyList::on_history_listWidget_currentRowChanged(int currentRow)
-{
-    ui->iwad_label->clear();
-    ui->complevel_label->clear();
-    ui->difficulty_label->clear();
-    ui->level_label->clear();
-    ui->pwads_label->clear();
-    ui->demo_label->clear();
-    ui->extra_label->clear();
-    ui->timestamp_label->clear();
-
-    QFile file(historyPath);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
-
-    QTextStream stream(&file);
-    QString buffer;
-    while (buffer != "-" && !stream.atEnd())
-    {
-        stream.readLineInto(&buffer);
-    }
-
-    int count = 0;
-    QString warp1, warp2, recordDemo_s, playbackDemo_s, playbackDemo_t;
-
-    while (!stream.atEnd())
-    {
-        stream.readLineInto(&buffer);
-
-        if (buffer == "-") count++;
-        if (count != ui->history_listWidget->count() - 1 - currentRow) continue;
-
-        buffer = buffer.trimmed();
-
-        QString buffer_name, buffer_value;
-
-        int pos = buffer.indexOf(' ');
-        if (pos != -1)
-        {
-            buffer_name = buffer.mid(0, pos).trimmed();
-            buffer_value = buffer.mid(pos + 1).trimmed();
-        }
-
-        if (buffer_name == "iwad") ui->iwad_label->setText(buffer_value);
-        else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
-        else if (buffer_name == "warp1") warp1 = buffer_value;
-        else if (buffer_name == "warp2") warp2 = buffer_value;
-        else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
-        else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
-        else if (buffer_name == "record") recordDemo_s = "Record\n" + getFileName(buffer_value) + "\n";
-        else if (buffer_name == "playback") playbackDemo_s = getFileName(buffer_value) + "\n";
-        else if (buffer_name == "demodropdown")
-        {
-            if (buffer_value == '0') playbackDemo_t = "Playdemo\n";
-            else if (buffer_value == '1') playbackDemo_t = "Timedemo\n";
-            else if (buffer_value == '2') playbackDemo_t = "Fastdemo\n";
-        }
-        else if (buffer_name == "box1" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle1_checkBox()->toolTip());
-        else if (buffer_name == "box2" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle2_checkBox()->toolTip());
-        else if (buffer_name == "box3" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle3_checkBox()->toolTip());
-        else if (buffer_name == "box4" && buffer_value == "true") ui->extra_label->setText(ui->extra_label->text() + " " + MainWindow::pMainWindow->toggle4_checkBox()->toolTip());
-        else if (buffer_name == "additional") ui->extra_label->setText(ui->extra_label->text() + " " + buffer_value);
-        else if (buffer_name == "timestamp") ui->timestamp_label->setText(buffer_value);
-    }
-
-    ui->level_label->setText(createLevelString(warp1, warp2));
-    if (ui->level_label->text().isEmpty()) ui->difficulty_label->clear();
-
-    if (!recordDemo_s.isEmpty()) ui->demo_label->setText(recordDemo_s);
-    else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);
-
-    file.close();
 }
