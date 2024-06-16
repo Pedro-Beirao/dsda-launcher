@@ -480,6 +480,8 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
     }
 
     ui->level_label->setText(createLevelString(warp1, warp2));
+    if (ui->level_label->text().isEmpty()) ui->difficulty_label->clear();
+
     if (!recordDemo_s.isEmpty()) ui->demo_label->setText(recordDemo_s);
     else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);
 
