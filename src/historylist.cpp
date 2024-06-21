@@ -185,13 +185,9 @@ void historyList::fooo3() // CTRL+W runs this function close the active window
 void historyList::on_load_pushButton_clicked()
 {
     QFile file(historyPath);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        return;
-    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
 
     int c = -1;
-    QString text = "#lol\n\n";
 
     QTextStream stream(&file);
     QString buffer;
@@ -201,20 +197,15 @@ void historyList::on_load_pushButton_clicked()
         if (buffer == "-")
         {
             c++;
-            stream.readLineInto(&buffer);
         }
         if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
-            text += buffer + "\n";
-        }
-        else if (c > ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
-        {
+            states::loadStateNew(stream);
             break;
         }
     }
 
     file.close();
-    states::loadStateFromString(text);
 }
 
 void historyList::on_launch_pushButton_clicked()
