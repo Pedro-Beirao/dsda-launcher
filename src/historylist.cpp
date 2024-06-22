@@ -208,255 +208,121 @@ void historyList::on_load_pushButton_clicked()
     file.close();
 }
 
+// Removed this feature, for now atleast
 void historyList::on_launch_pushButton_clicked()
 {
     QStringList argList;
 
     QFile file(historyPath);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        return;
-    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) return;
 
-    int c = -1;
     QTextStream stream(&file);
     QString buffer;
+
     while (!stream.atEnd())
     {
         stream.readLineInto(&buffer);
-        if (buffer == "-")
+        buffer = buffer.trimmed();
+
+        QString buffer_name;
+        QString buffer_value;
+
+        int pos = buffer.indexOf(' ');
+        if (pos != -1)
         {
-            c++;
-            stream.readLineInto(&buffer);
+            buffer_name = buffer.mid(0, pos).trimmed();
+            buffer_value = buffer.mid(pos + 1).trimmed();
         }
-        if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
+
+        if (buffer_name == "iwad") // iwad
         {
-            if (buffer.mid(0, 5) == "iwad=") // iwad
+            argList.append("-iwad");
+            argList.append(MainWindow::pMainWindow->iwad_comboBox()->itemData(MainWindow::pMainWindow->iwad_comboBox()->findText(buffer_value), Qt::ToolTip).toString());
+        }
+        else if (buffer_name == "complevel") // complevel
+        {
+            if (buffer_value == "Default") continue;
+
+            int cl_pos = buffer_value.indexOf(' ');
+            if (cl_pos != -1)
             {
                 argList.append("-complevel");
-                argList.append(buffer.mid(5));
-                stream.readLineInto(&buffer);
+                argList.append(buffer_value.mid(0, cl_pos));
             }
-            if (buffer.mid(0, 10) == "complevel=") // complevel
-            {
-                if (buffer.mid(10)[0] != 'D')
-                {
-                    argList.append("-complevel");
-                    argList.append(buffer.mid(10));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 6) == "warp1=") // warp 1
-            {
-                if (!buffer.mid(6).isEmpty())
-                {
-                    argList.append("-warp");
-                    argList.append(buffer.mid(6));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 6) == "warp2=") // warp 2
-            {
-                if (!buffer.mid(6).isEmpty())
-                {
-                    argList.append(buffer.mid(6));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 6) == "skill=") // skill
-            {
-                if (buffer.mid(6).length() > 0 && buffer.mid(6) != "0")
-                {
-                    argList.append("-skill");
-                    argList.append(buffer.mid(6));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 5) == "box1=") // box1
-            {
-                if (buffer.mid(5) == "true") argList.append(settings->value("toggle1a").toString());
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 5) == "box2=") // box2
-            {
-                if (buffer.mid(5) == "true") argList.append(settings->value("toggle2a").toString());
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 5) == "box3=") // box3
-            {
-                if (buffer.mid(5) == "true") argList.append(settings->value("toggle3a").toString());
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 5) == "box4=") // box4
-            {
-                if (buffer.mid(5) == "true") argList.append(settings->value("toggle4a").toString());
-                stream.readLineInto(&buffer);
-            }
-            QString fullscreen = "w";
-            QString resBox = "0";
-            if (buffer.mid(0, 11) == "resolution=") // resolution
-            {
-                resBox = buffer.mid(11);
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 11) == "fullscreen=") // fullscreen
-            {
-                if (buffer.mid(11) == "true") fullscreen = "f";
-                stream.readLineInto(&buffer);
-            }
-            if(resBox.size() < 2)
-            {
-                if(fullscreen=="w")
-                {
-                    argList.append("-window");
-                }
-                else
-                {
-                    argList.append("-fullscreen");
-                }
-            }
-            else
-            {
-                argList.append("-geom");
-                argList.append((resBox + fullscreen));
-            }
-
-            if (buffer.mid(0, 4) == "hud=") // hud
-            {
-                if (!buffer.mid(4).isEmpty())
-                {
-                    argList.append("-hud");
-                    argList.append(buffer.mid(4));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 7) == "config=") // config
-            {
-                if (!buffer.mid(7).isEmpty())
-                {
-                    argList.append("-config");
-                    argList.append(buffer.mid(7));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 6) == "track=") // track
-            {
-                QString tmp = buffer.mid(6);
-                if (tmp == "1") argList.append("-track_pacifist");
-                else if (tmp == "2") argList.append("-track_100k");
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 5) == "time=") // time
-            {
-                QString tmp = buffer.mid(5);
-                if (tmp == "1") argList.append("-time_use");
-                else if (tmp == "2") argList.append("-time_keys");
-                else if (tmp == "3") argList.append("-time_secrets");
-                else if (tmp == "4") argList.append("-time_all");
-                stream.readLineInto(&buffer);
-            }
-             QStringList files;
-             if (buffer.mid(0, 4) == "pwad")
-             {
-                 while (stream.readLineInto(&buffer))
-                 {
-                     if (buffer.mid(0, 7) == "endpwad") break;
-                     files.append(buffer);
-                 }
-                 stream.readLineInto(&buffer);
-             }
-            if (files.size()>0)
-            {
-                argList.append("-file");
-                argList.append(files);
-            }
-            if (buffer.mid(0, 7) == "record=") // record demo
-            {
-                if (!buffer.mid(7).isEmpty())
-                {
-                    argList.append("-record");
-                    argList.append(buffer.mid(7));
-                }
-                stream.readLineInto(&buffer);
-            }
-            QString demo="";
-            if (buffer.mid(0, 9) == "playback=") // playback demo
-            {
-                if (!buffer.mid(9).isEmpty())
-                {
-                    demo = buffer.mid(9);
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 13) == "demodropdown=") // demo drop down
-            {
-                if (buffer.mid(13) == "1")
-                {
-                    argList.append("-playdemo");
-                    argList.append(demo);
-                }
-                else if (buffer.mid(13) == "2")
-                {
-                    argList.append("-timedemo");
-                    argList.append(demo);
-                }
-                else if (buffer.mid(13) == "3")
-                {
-                    argList.append("-fastdemo");
-                    argList.append(demo);
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 8) == "viddump=") // record demo
-            {
-                if (!buffer.mid(8).isEmpty())
-                {
-                    argList.append("-viddump");
-                    argList.append(buffer.mid(8));
-                }
-                stream.readLineInto(&buffer);
-            }
-            if (buffer.mid(0, 11) == "additional=") // additional arguments
-            {
-                if (buffer.mid(11) != "")
-                {
-                    QString str = buffer.mid(11) + " ";
-
-                    QString strToAdd = "";
-                    for (qsizetype i = 0; i < str.length(); i++)
-                    {
-
-                        QChar c = str[i];
-                        if (c == ' ')
-                        {
-                            if (strToAdd != "")
-                            {
-                                argList.append(strToAdd);
-                                strToAdd = "";
-                            }
-                        }
-                        else if (c == '\"')
-                        {
-                            i++;
-                            while (str[i] != '\"')
-                            {
-                                strToAdd.push_back(str[i]);
-                                i++;
-                            }
-                        }
-                        else
-                        {
-                            strToAdd.push_back(c);
-                        }
-                    }
-                }
-            }
-
-            break;
         }
-        else if (c > ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
+        else if (buffer_name == "warp1") // warp 1
         {
-            break;
+            argList.append("-warp");
+            argList.append(buffer_value);
+        }
+        else if (buffer_name == "warp2") // warp 2
+        {
+            if (argList.at(argList.count() - 2) != "-warp") continue;
+
+            argList.append(buffer_value);
+        }
+        else if (buffer_name == "skill") // skill
+        {
+            if (buffer_value == '0') continue;
+
+            argList.append("-warp");
+            argList.append(buffer_value);
+        }
+        else if (buffer_name == "box1") // box1
+        {
+            if (string_to_bool(buffer_value)) argList.append(MainWindow::pMainWindow->toggle1_checkBox()->toolTip().split(';'));
+        }
+        else if (buffer_name == "box2") // box2
+        {
+            if (string_to_bool(buffer_value)) argList.append(MainWindow::pMainWindow->toggle2_checkBox()->toolTip().split(';'));
+        }
+        else if (buffer_name == "box3") // box3
+        {
+            if (string_to_bool(buffer_value)) argList.append(MainWindow::pMainWindow->toggle3_checkBox()->toolTip().split(';'));
+        }
+        else if (buffer_name == "box4") // box4
+        {
+            if (string_to_bool(buffer_value)) argList.append(MainWindow::pMainWindow->toggle4_checkBox()->toolTip().split(';'));
+        }
+        else if (buffer_name == "resolution") // resolution
+        {
+        }
+        else if (buffer_name == "fullscreen") // fullscreen
+        {
+        }
+        else if (buffer_name == "hud") // hud
+        {
+        }
+        else if (buffer_name == "config") // config
+        {
+        }
+        else if (buffer_name == "track") // track
+        {
+        }
+        else if (buffer_name == "time") // time
+        {
+        }
+        else if (buffer_name == "pwad") // pwad
+        {
+        }
+        else if (buffer_name == "record") // record demo
+        {
+        }
+        else if (buffer_name == "playback") // playback demo
+        {
+        }
+        else if (buffer_name == "demodropdown") // demo drop down
+        {
+        }
+        else if (buffer_name == "viddump") // demo drop down
+        {
+        }
+        else if (buffer_name == "additional") // additional arguments
+        {
+        }
+        else if (buffer_name == "-")
+        {
+            return;
         }
     }
 
