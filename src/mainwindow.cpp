@@ -321,9 +321,7 @@ void MainWindow::dropFile(QString fileName)
     }
     else if (tmp == "wad" || tmp == "bex" || tmp == "deh" || tmp == "zip")
     {
-        QStringList wadsToAdd;
-        wadsToAdd.append(fileName);
-        addPwads(wadsToAdd);
+        addPwads({fileName});
         ui->tabs->setCurrentIndex(1);
     }
     else if (tmp == "state")

@@ -227,7 +227,7 @@ DEMO</string>
      <x>225</x>
      <y>260</y>
      <width>181</width>
-     <height>141</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="title">
@@ -239,7 +239,7 @@ DEMO</string>
       <x>10</x>
       <y>10</y>
       <width>161</width>
-      <height>121</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="text">
