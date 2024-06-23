@@ -237,6 +237,28 @@ DEMO</string>
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="reload_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>407</y>
+     <width>26</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+image: url(:/pngs/pngs/reload.png);
+border-radius:10px;
+}
+QPushButton::pressed{
+	background-color: rgb(127, 129, 129);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

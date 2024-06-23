@@ -2,7 +2,7 @@
     <qresource prefix="/pngs">
         <file>pngs/minus.png</file>
         <file>pngs/plus.png</file>
-        <file>pngs/iu.png</file>
+        <file>pngs/reload.png</file>
         <file>pngs/up.png</file>
         <file>pngs/down.png</file>
         <file>pngs/combo_box_arrow.png</file>

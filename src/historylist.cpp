@@ -330,3 +330,5 @@ void historyList::on_launch_pushButton_clicked()
 
     MainWindow::pMainWindow->Launch(argList);
 }
+
+void historyList::on_reload_toolButton_clicked() { getHistory(); }
