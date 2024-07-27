@@ -2,7 +2,7 @@
 Type=Application
 Name=DSDA-Launcher
 Comment=launcher for a enhanced clone of the classic first-person shooter Doom
-Icon=dsda-doom
+Icon=dsda-launcher
 TryExec=dsda-doom
 Exec=dsda-launcher
 Categories=Game;ActionGame;
