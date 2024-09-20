@@ -22,11 +22,8 @@ const QChar FOLDER_SEPARATOR = '\\';
 const QChar FOLDER_SEPARATOR = '/';
 #endif
 
-#if defined Q_OS_MACOS || defined Q_OS_LINUX
-const QString dotfolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom";
-#endif
-
-static QString launcherfolder = "";
+extern QString datafolder;
+extern QString launcherfolder;
 
 const QStringList exmxIWADS = {"doom",    "doom1",    "doomu", "freedoom", "freedoom1", "bfgdoom", "bfgdoom1",
 

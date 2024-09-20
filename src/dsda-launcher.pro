@@ -10,6 +10,7 @@ DEFINES += "APP_NAME=dsda-launcher"
 
 SOURCES += \
     console.cpp \
+    constants.cpp \
     demodialog.cpp \
     endoom.cpp \
     funcs.cpp \

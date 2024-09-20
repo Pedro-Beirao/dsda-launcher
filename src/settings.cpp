@@ -113,10 +113,10 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     ui->IWADFolders_listWidget->addItem("%DOOMWADDIR%");
 #else
     ui->PWADFolders_listWidget->addItem("$DOOMWADPATH");
-    ui->PWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom");
+    ui->PWADFolders_listWidget->addItem(datafolder);
 
     ui->IWADFolders_listWidget->addItem("$DOOMWADDIR");
-    ui->IWADFolders_listWidget->addItem(QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom");
+    ui->IWADFolders_listWidget->addItem(datafolder);
 #endif
     ui->PWADFolders_listWidget->item(0)->setFlags(QFlags<Qt::ItemFlag>());
     ui->PWADFolders_listWidget->item(1)->setFlags(QFlags<Qt::ItemFlag>());

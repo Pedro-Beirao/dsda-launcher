@@ -176,6 +176,7 @@ public slots:
     void setStyles();
     QStringList getArguments();
 };
+
 extern QSettings *settings;
 
 #endif // MAINWINDOW_H

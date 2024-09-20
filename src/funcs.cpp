@@ -3,11 +3,11 @@
 void openIWADsFolder() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
 #if defined Q_OS_MACOS
-    QProcess::startDetached("open", {dotfolder});
+    QProcess::startDetached("open", {datafolder});
 #elif defined Q_OS_LINUX
-    QProcess::startDetached("xdg-open", {dotfolder});
+    QProcess::startDetached("xdg-open", {datafolder});
 #else
-    QProcess::startDetached("explorer.exe", {launcherfolder});
+    QProcess::startDetached("explorer.exe", {datafolder});
 #endif
 }
 
@@ -24,17 +24,12 @@ QFileInfoList getFilePath_possibleFiles()
 {
     QFileInfoList files;
 
-    // Find file in dsda folder
-#if defined Q_OS_WIN
-    QDir dsda_folder(launcherfolder);
-#else
-    QDir dsda_folder(dotfolder);
-#endif
+    QDir datafolder_dir(datafolder);
 
-    files.append(dsda_folder.entryInfoList(QStringList() << "*.WAD"
-                                                         << "*.DEH"
-                                                         << "*.BEX",
-                                           QDir::Files));
+    files.append(datafolder_dir.entryInfoList(QStringList() << "*.WAD"
+                                                            << "*.DEH"
+                                                            << "*.BEX",
+                                              QDir::Files));
 
     // Find file in DOOMWADPATH
     QString doomwadpath = QString(qgetenv("DOOMWADPATH"));
@@ -77,21 +72,14 @@ QString getFilePath(QString fileName)
     getFilePath_possibleFiles();
     fileName = fileName.toLower();
 
-    // Find file in dsda folder
-    QString dsda_folder;
-#if defined Q_OS_WIN
-    dsda_folder = launcherfolder;
-#else
-    dsda_folder = dotfolder;
-#endif
-    QDir dsda_folder_path(dsda_folder);
+    QDir dsda_folder_path(datafolder);
     QStringList dsda_folder_files_list = dsda_folder_path.entryList(QDir::Files);
 
     foreach (QString file_in_dsda_folder, dsda_folder_files_list)
     {
         if (fileName == file_in_dsda_folder.toLower())
         {
-            return (dsda_folder + FOLDER_SEPARATOR + file_in_dsda_folder);
+            return (datafolder + FOLDER_SEPARATOR + file_in_dsda_folder);
         }
     }
 
@@ -160,19 +148,14 @@ QString getExtension(QString fileName)
 QFileInfoList findIwads_possibleFiles()
 {
     QFileInfoList possible_files;
+
+    QDir directory(datafolder);
     QString doomwaddirstr = QString(qgetenv("DOOMWADDIR"));
 
 // Find the IWADs in the correct folder depending on the OS
 #if defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
-    if (!QDir(dotfolder).exists()) QDir().mkdir(dotfolder);
-
-    QDir directory(dotfolder);
-
     doomwaddirstr = doomwaddirstr.split(":")[0];
-
 #elif defined(Q_OS_WIN)
-    QDir directory(launcherfolder);
-
     doomwaddirstr = doomwaddirstr.split(";")[0];
 #endif
 
