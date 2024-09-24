@@ -1,4 +1,5 @@
 #include "funcs.h"
+#include <mainwindow.h>
 
 void openIWADsFolder() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
@@ -24,8 +25,15 @@ QFileInfoList getFilePath_possibleFiles()
 {
     QFileInfoList files;
 
-    QDir datafolder_dir(datafolder);
+    // Find file in pwad tab
+    QStringList pwads_in_tab;
+    for (int i = 0; MainWindow::pMainWindow->wads_listWidget()->count(); i++)
+    {
+        files.append(QFileInfo(MainWindow::pMainWindow->wads_listWidget()[i].toolTip()));
+    }
 
+    // Find file in datafolder
+    QDir datafolder_dir(datafolder);
     files.append(datafolder_dir.entryInfoList(QStringList() << "*.WAD"
                                                             << "*.DEH"
                                                             << "*.BEX",

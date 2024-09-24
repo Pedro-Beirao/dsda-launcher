@@ -310,8 +310,9 @@ void MainWindow::dropLmp(QString filePath)
         {
             QStringList args = QProcess::splitCommand(buffer);
             bool searching_files = false;
-            for (int i = 0; i < args.count() - 1; i++)
+            for (int i = 0; i < args.count(); i++)
             {
+                if (args[i].isEmpty()) continue;
                 if (args[i][0] == '-') searching_files = false;
 
                 if (searching_files)
@@ -323,7 +324,7 @@ void MainWindow::dropLmp(QString filePath)
                     footer_files.append(args[i]);
                 }
 
-                if (args[i] == "-iwad")
+                if (args[i] == "-iwad" && i < args.count() - 1)
                 {
                     footer_iwad = args[i + 1];
                 }
