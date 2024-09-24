@@ -52,8 +52,10 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     std::sort(files.begin(), files.end(), [](QFileInfo p1, QFileInfo p2) { return p1.baseName().toLower() < p2.baseName().toLower(); });
     files.erase(std::unique(files.begin(), files.end()), files.end());
 
+    int height = files.size() / 2 + files.size() % 2;
+
     files_listWidget->setColumnCount(2);
-    files_listWidget->setRowCount(files.size() / 2 + 1);
+    files_listWidget->setRowCount(height);
     files_listWidget->horizontalHeader()->setVisible(false);
     files_listWidget->verticalHeader()->setVisible(false);
     files_listWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -65,14 +67,14 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     {
         QTableWidgetItem *newItemTemp = new QTableWidgetItem("");
         newItemTemp->setFlags(newItemTemp->flags() & ~Qt::ItemIsEditable);
-        files_listWidget->setItem(files.size() / 2, j, newItemTemp);
+        files_listWidget->setItem(height, j, newItemTemp);
 
-        for (int i = 0; i < files.size() / 2 + j; i++)
+        for (int i = 0; i < height + j; i++)
         {
-            if (i + j * (files.size() / 2) >= files.size()) continue;
+            if (i + j * height >= files.size()) continue;
 
-            QTableWidgetItem *newItem = new QTableWidgetItem(files[i + j * (files.size() / 2)].fileName());
-            newItem->setToolTip(files[i + j * (files.size() / 2)].absoluteFilePath());
+            QTableWidgetItem *newItem = new QTableWidgetItem(files[i + j * height].fileName());
+            newItem->setToolTip(files[i + j * height].absoluteFilePath());
             newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable);
             files_listWidget->setItem(i, j, newItem);
 
