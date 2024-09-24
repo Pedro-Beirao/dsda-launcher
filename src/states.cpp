@@ -190,13 +190,14 @@ void states::loadStateNew(QTextStream &stream)
                 MainWindow::pMainWindow->complevel_comboBox()->setCurrentIndex(MainWindow::pMainWindow->complevel_comboBox()->count() - 1);
             }
         }
-        else if (buffer_name == "warp1") // warp 1
+        else if (buffer_name == "warp") // warp
         {
-            MainWindow::pMainWindow->episode_lineEdit()->setText(buffer_value);
-        }
-        else if (buffer_name == "warp2") // warp 2
-        {
-            MainWindow::pMainWindow->level_lineEdit()->setText(buffer_value);
+            int pos = buffer_value.indexOf(' ');
+            if (pos != -1)
+            {
+                MainWindow::pMainWindow->episode_lineEdit()->setText(buffer_value.mid(0, pos).trimmed());
+                MainWindow::pMainWindow->level_lineEdit()->setText(buffer_value.mid(pos + 1).trimmed());
+            }
         }
         else if (buffer_name == "skill") // skill
         {
@@ -293,8 +294,7 @@ void states::saveStateToFile(QString filePath)
 
     out << "iwad " + ui->iwad_comboBox()->currentText() + "\n";
     out << "complevel " + ui->complevel_comboBox()->currentText() + "\n";
-    out << "warp1 " + ui->episode_lineEdit()->text() + "\n";
-    out << "warp2 " + ui->level_lineEdit()->text() + "\n";
+    out << "warp " + ui->episode_lineEdit()->text() + " " + ui->level_lineEdit()->text() + "\n";
     out << "skill " + QString::number(ui->difficulty_comboBox()->currentIndex()) + "\n";
     out << "box1 " + bool_to_string(ui->toggle1_checkBox()->isChecked()) + "\n";
     out << "box2 " + bool_to_string(ui->toggle2_checkBox()->isChecked()) + "\n";
