@@ -169,6 +169,8 @@ void MainWindow::loadSelected()
     {
         // Top
         ui->iwad_comboBox->setCurrentIndex(settings->value("iwad").toInt());
+        if (ui->iwad_comboBox->currentIndex() == -1 && ui->iwad_comboBox->count() > 0) ui->iwad_comboBox->setCurrentIndex(0);
+
         ui->complevel_comboBox->setCurrentIndex(settings->value("complevel").toInt());
         ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
         ui->episode_lineEdit->setText(settings->value("warp1").toString());
