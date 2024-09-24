@@ -172,7 +172,7 @@ void MainWindow::loadSelected()
         if (ui->iwad_comboBox->currentIndex() == -1 && ui->iwad_comboBox->count() > 0) ui->iwad_comboBox->setCurrentIndex(0);
 
         ui->complevel_comboBox->setCurrentIndex(settings->value("complevel").toInt());
-        ui->difficulty_comboBox->setCurrentIndex(settings->value("skill").toInt());
+        ui->skill_comboBox->setCurrentIndex(settings->value("skill").toInt());
         ui->episode_lineEdit->setText(settings->value("warp1").toString());
         ui->level_lineEdit->setText(settings->value("warp2").toString());
 
@@ -216,7 +216,7 @@ void MainWindow::saveSelected()
     // Top
     settings->setValue("iwad", ui->iwad_comboBox->currentIndex());
     settings->setValue("complevel", ui->complevel_comboBox->currentIndex());
-    settings->setValue("skill", ui->difficulty_comboBox->currentIndex());
+    settings->setValue("skill", ui->skill_comboBox->currentIndex());
     settings->setValue("warp1", ui->episode_lineEdit->text());
     settings->setValue("warp2", ui->level_lineEdit->text());
 
@@ -450,10 +450,10 @@ QStringList MainWindow::getArguments()
         arguments.append(complevel_string.left(2));
     }
 
-    if (ui->difficulty_comboBox->isEnabled() && ui->difficulty_comboBox->currentIndex() != 0)
+    if (ui->skill_comboBox->isEnabled() && ui->skill_comboBox->currentIndex() != 0)
     {
         arguments.append("-skill");
-        arguments.append(QString::number(ui->difficulty_comboBox->currentIndex()));
+        arguments.append(QString::number(ui->skill_comboBox->currentIndex()));
     }
 
     // Warping in Doom takes 2 boxes. 1 for the episode, 1 for the mission
@@ -874,7 +874,7 @@ QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }
 QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }
 QLineEdit *MainWindow::episode_lineEdit() { return ui->episode_lineEdit; }
 QLineEdit *MainWindow::level_lineEdit() { return ui->level_lineEdit; }
-QComboBox *MainWindow::difficulty_comboBox() { return ui->difficulty_comboBox; }
+QComboBox *MainWindow::skill_comboBox() { return ui->skill_comboBox; }
 QCheckBox *MainWindow::toggle1_checkBox() { return ui->toggle1_checkBox; }
 QCheckBox *MainWindow::toggle2_checkBox() { return ui->toggle2_checkBox; }
 QCheckBox *MainWindow::toggle3_checkBox() { return ui->toggle3_checkBox; }

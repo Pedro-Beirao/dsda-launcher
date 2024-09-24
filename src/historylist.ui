@@ -127,7 +127,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="difficulty_label">
+   <widget class="QLabel" name="skill_label">
     <property name="geometry">
      <rect>
       <x>100</x>

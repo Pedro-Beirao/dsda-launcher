@@ -85,7 +85,7 @@ class MainWindow : public QMainWindow
     QComboBox *complevel_comboBox();
     QLineEdit *episode_lineEdit();
     QLineEdit *level_lineEdit();
-    QComboBox *difficulty_comboBox();
+    QComboBox *skill_comboBox();
     QCheckBox *toggle1_checkBox();
     QCheckBox *toggle2_checkBox();
     QCheckBox *toggle3_checkBox();

@@ -38,23 +38,23 @@ void MainWindow::enable_disable_skill_comboBox()
 {
     if (ui->episode_lineEdit->text().isEmpty())
     {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a Skill level\n"
+        ui->skill_comboBox->setEnabled(false);
+        ui->skill_label->setEnabled(false);
+        ui->skill_comboBox->setToolTip("Cannot select a Skill level\n"
                                             "without choosing a Map");
     }
     else if (!ui->playback_lineEdit->text().isEmpty())
     {
-        ui->difficulty_comboBox->setEnabled(false);
-        ui->difficulty_label->setEnabled(false);
-        ui->difficulty_comboBox->setToolTip("Cannot select a Skill level\n"
+        ui->skill_comboBox->setEnabled(false);
+        ui->skill_label->setEnabled(false);
+        ui->skill_comboBox->setToolTip("Cannot select a Skill level\n"
                                             "during Demo playback");
     }
     else
     {
-        ui->difficulty_comboBox->setEnabled(true);
-        ui->difficulty_label->setEnabled(true);
-        ui->difficulty_comboBox->setToolTip("");
+        ui->skill_comboBox->setEnabled(true);
+        ui->skill_label->setEnabled(true);
+        ui->skill_comboBox->setToolTip("");
     }
 }
 

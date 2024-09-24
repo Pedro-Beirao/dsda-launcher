@@ -107,7 +107,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
 {
     ui->iwad_label->clear();
     ui->complevel_label->clear();
-    ui->difficulty_label->clear();
+    ui->skill_label->clear();
     ui->level_label->clear();
     ui->pwads_label->clear();
     ui->demo_label->clear();
@@ -149,7 +149,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
         else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
         else if (buffer_name == "warp1") warp1 = buffer_value;
         else if (buffer_name == "warp2") warp2 = buffer_value;
-        else if (buffer_name == "skill") ui->difficulty_label->setText("Skill " + buffer_value);
+        else if (buffer_name == "skill") ui->skill_label->setText("Skill " + buffer_value);
         else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
         else if (buffer_name == "record") recordDemo_s = "Record\n" + getFileName(buffer_value) + "\n";
         else if (buffer_name == "playback") playbackDemo_s = getFileName(buffer_value) + "\n";
@@ -168,7 +168,7 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
     }
 
     ui->level_label->setText(createLevelString(warp1, warp2));
-    if (ui->level_label->text().isEmpty()) ui->difficulty_label->clear();
+    if (ui->level_label->text().isEmpty()) ui->skill_label->clear();
 
     if (!recordDemo_s.isEmpty()) ui->demo_label->setText(recordDemo_s);
     else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);

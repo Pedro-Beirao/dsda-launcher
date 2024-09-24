@@ -232,7 +232,7 @@ border-radius:3px</string>
      <string>Episode</string>
     </property>
    </widget>
-   <widget class="QLabel" name="difficulty_label">
+   <widget class="QLabel" name="skill_label">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -245,7 +245,7 @@ border-radius:3px</string>
      <string>Difficulty</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="difficulty_comboBox">
+   <widget class="QComboBox" name="skill_comboBox">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -1283,8 +1283,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <zorder>iwad_comboBox</zorder>
    <zorder>complevel_label</zorder>
    <zorder>episode_label</zorder>
-   <zorder>difficulty_label</zorder>
-   <zorder>difficulty_comboBox</zorder>
+   <zorder>skill_label</zorder>
+   <zorder>skill_comboBox</zorder>
    <zorder>episode_lineEdit</zorder>
    <zorder>level_lineEdit</zorder>
    <zorder>level_label</zorder>
