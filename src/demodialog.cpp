@@ -67,11 +67,17 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     {
         QTableWidgetItem *newItemTemp = new QTableWidgetItem("");
         newItemTemp->setFlags(newItemTemp->flags() & ~Qt::ItemIsEditable);
-        files_listWidget->setItem(height, j, newItemTemp);
+        files_listWidget->setItem(height + j, j, newItemTemp);
 
         for (int i = 0; i < height + j; i++)
         {
-            if (i + j * height >= files.size()) continue;
+            if (i + j * height >= files.size())
+            {
+                QTableWidgetItem *newItem = new QTableWidgetItem("");
+                newItem->setFlags(newItem->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
+                files_listWidget->setItem(i, j, newItem);
+                continue;
+            }
 
             QTableWidgetItem *newItem = new QTableWidgetItem(files[i + j * height].fileName());
             newItem->setToolTip(files[i + j * height].absoluteFilePath());
