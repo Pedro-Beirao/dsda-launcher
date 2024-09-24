@@ -72,7 +72,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
 
     // Closes the active window
-    QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
+    QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
     if(settings->value("maxhistory").toString()!="")
@@ -148,12 +148,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 
     ui->saved_label->hide();
     ui->notsaved_label->hide();
-}
-
-void Settings::fooo3() // CTRL+W runs this function close the active window
-{
-    QWidget *currentWindow = QApplication::activeWindow();
-    currentWindow->close();
 }
 
 Settings::~Settings()

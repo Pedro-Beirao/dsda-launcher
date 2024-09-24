@@ -11,7 +11,7 @@ endoom::endoom(QWidget *parent) :
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
 
     // Closes the active window
-    QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
+    QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
     ui->endoom_textEdit->setReadOnly(true);
@@ -21,14 +21,6 @@ endoom::~endoom()
 {
     delete ui;
 }
-
-
-void endoom::fooo3() // CTRL+W runs this function close the active window
-{
-    QWidget *currentWindow = QApplication::activeWindow();
-    currentWindow->close();
-}
-
 void endoom::showEndoom(QString consoleOutput)
 {
     ui->endoom_textEdit->setText("");

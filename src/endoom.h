@@ -45,14 +45,13 @@ public:
     explicit endoom(QWidget *parent = nullptr);
     ~endoom();
 
-public slots:
-  void fooo3();
-  void showEndoom(QString consoleOutput);
+  public slots:
+    void showEndoom(QString consoleOutput);
 
-private slots:
-  void on_endoom_textEdit_textChanged();
+  private slots:
+    void on_endoom_textEdit_textChanged();
 
-private:
+  private:
     Ui::endoom *ui;
 };
 

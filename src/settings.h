@@ -29,50 +29,48 @@ public:
 public slots:
 
 private slots:
-    void fooo3();
-    void on_darkTheme_checkBox_clicked(bool checked);
+  void on_darkTheme_checkBox_clicked(bool checked);
 
-    void on_minimalComplevels_radioButton_toggled(bool checked);
-    void on_fullComplevels_radioButton_toggled(bool checked);
+  void on_minimalComplevels_radioButton_toggled(bool checked);
+  void on_fullComplevels_radioButton_toggled(bool checked);
 
+  void on_resolutions_listWidget_itemChanged(QListWidgetItem *item);
 
-    void on_resolutions_listWidget_itemChanged(QListWidgetItem *item);
+  void closeEvent(QCloseEvent *event);
 
-    void closeEvent(QCloseEvent *event);
+  void on_downResolutions_toolButton_clicked();
+  void on_upResolutions_toolButton_clicked();
+  void on_minusResolutions_toolButton_clicked();
+  void on_plusResolutions_toolButton_clicked();
 
-    void on_downResolutions_toolButton_clicked();
-    void on_upResolutions_toolButton_clicked();
-    void on_minusResolutions_toolButton_clicked();
-    void on_plusResolutions_toolButton_clicked();
+  void on_executable_lineEdit_textChanged(const QString &arg1);
 
-    void on_executable_lineEdit_textChanged(const QString &arg1);
+  void on_save_pushButton_clicked();
 
-    void on_save_pushButton_clicked();
+  void on_fastText_lineEdit_textChanged(const QString &arg1);
+  void on_fastParam_lineEdit_textChanged(const QString &arg1);
+  void on_nomoText_lineEdit_textChanged(const QString &arg1);
+  void on_nomoParam_lineEdit_textChanged(const QString &arg1);
+  void on_respawnText_lineEdit_textChanged(const QString &arg1);
+  void on_respawnParam_lineEdit_textChanged(const QString &arg1);
+  void on_solonetText_lineEdit_textChanged(const QString &arg1);
+  void on_solonetParam_lineEdit_textChanged(const QString &arg1);
 
-    void on_fastText_lineEdit_textChanged(const QString &arg1);
-    void on_fastParam_lineEdit_textChanged(const QString &arg1);
-    void on_nomoText_lineEdit_textChanged(const QString &arg1);
-    void on_nomoParam_lineEdit_textChanged(const QString &arg1);
-    void on_respawnText_lineEdit_textChanged(const QString &arg1);
-    void on_respawnParam_lineEdit_textChanged(const QString &arg1);
-    void on_solonetText_lineEdit_textChanged(const QString &arg1);
-    void on_solonetParam_lineEdit_textChanged(const QString &arg1);
+  void settingsChanged();
 
-    void settingsChanged();
+  void on_maxHistory_lineEdit_textChanged(const QString &arg1);
 
-    void on_maxHistory_lineEdit_textChanged(const QString &arg1);
+  void on_IWADFolders_pushButton_clicked();
+  void on_minusIWADFolders_toolButton_clicked();
+  void on_plusIWADFolders_toolButton_clicked();
 
-    void on_IWADFolders_pushButton_clicked();
-    void on_minusIWADFolders_toolButton_clicked();
-    void on_plusIWADFolders_toolButton_clicked();
+  void on_PWADFolders_pushButton_clicked();
+  void on_minusPWADFolders_toolButton_clicked();
+  void on_plusPWADFolders_toolButton_clicked();
 
-    void on_PWADFolders_pushButton_clicked();
-    void on_minusPWADFolders_toolButton_clicked();
-    void on_plusPWADFolders_toolButton_clicked();
+  void on_endoom_checkBox_clicked(bool checked);
 
-    void on_endoom_checkBox_clicked(bool checked);
-
-    void on_remember_checkBox_toggled(bool checked);
+  void on_remember_checkBox_toggled(bool checked);
 
 private:
     Ui::Settings *ui;

@@ -7,7 +7,7 @@ historyList::historyList(QWidget *parent) : QWidget(parent), ui(new Ui::historyL
 {
     ui->setupUi(this);
 
-    QShortcut * shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL),this,SLOT(fooo3()));
+    QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
 
     init_historyPath();
@@ -174,12 +174,6 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
     else if (!playbackDemo_s.isEmpty()) ui->demo_label->setText(playbackDemo_t + playbackDemo_s);
 
     file.close();
-}
-
-void historyList::fooo3() // CTRL+W runs this function close the active window
-{
-    QWidget *currentWindow = QApplication::activeWindow();
-    currentWindow->close();
 }
 
 void historyList::on_load_pushButton_clicked()
