@@ -27,9 +27,9 @@ QFileInfoList getFilePath_possibleFiles()
 
     // Find file in pwad tab
     QStringList pwads_in_tab;
-    for (int i = 0; MainWindow::pMainWindow->wads_listWidget()->count(); i++)
+    for (int i = 0; i < MainWindow::pMainWindow->wads_listWidget()->count(); i++)
     {
-        files.append(QFileInfo(MainWindow::pMainWindow->wads_listWidget()[i].toolTip()));
+        files.append(QFileInfo(MainWindow::pMainWindow->wads_listWidget()->item(i)->toolTip()));
     }
 
     // Find file in datafolder
