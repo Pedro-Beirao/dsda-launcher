@@ -561,6 +561,11 @@ QStringList MainWindow::getArguments()
         }
     }
 
+    if (settings->value("endoom").toBool())
+    {
+        arguments.append({"-assign", "ansi_endoom=2"});
+    }
+
     if (!ui->additionalArguments_textEdit->toPlainText().isEmpty())
     {
         QStringList parsed = parseStringIntoArguments(ui->additionalArguments_textEdit->toPlainText());
@@ -677,11 +682,6 @@ void MainWindow::Launch(QStringList arguments)
 
     consoleWindow->clearText();
     endoomString = "";
-
-    if (settings->value("endoom").toBool())
-    {
-        arguments.append({"-assign", "ansi_endoom=2"});
-    }
 
 #if defined Q_OS_MACOS
     QString gamePath = getGamePath();

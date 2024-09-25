@@ -25,27 +25,26 @@ void endoom::showEndoom(QString consoleOutput)
 {
     ui->endoom_textEdit->setText("");
 
-    QRegularExpression regex("\033");
-    QStringList qsl = consoleOutput.split(regex);
+    QStringList qsl = consoleOutput.split("\033[0m");
 
     QString ret;
 
     int col = 0;
 
-    for (int i = 0; i < qsl.size() - 3; i++)
+    for (int i = 0; i < qsl.size(); i++)
     {
-        if (qsl[i].size() < 4 || qsl[i][1] != '3') continue;
-        QString foreground = colors[qsl[i].mid(2,2)];
+        QStringList cs = qsl[i].split("\033");
 
-        i++;
-        if (qsl[i].size() < 4 || qsl[i][1] != '4') continue;
-        QString background = colors[qsl[i].mid(2,2)];
+        QString character = cs.last()[cs.last().size() - 1];
 
-        i++;
-        if (qsl[i].size() < 3) continue;
-        QString character = qsl[i][qsl[i].size()-1];
+        QString foreground, background;
+        for (int j = 0; j < cs.size() - 1; j++)
+        {
+            if (cs[j].size() < 4) continue;
+            if (cs[j][1] == '3') foreground = colors[cs[j].mid(2, 2)];
+            if (cs[j][1] == '4') background = colors[cs[j].mid(2, 2)];
+        }
 
-        i++;
         if (character == " ") character = "&nbsp;";
 
         ret.append("<span style='color: " + foreground + ";background-color: " + background + ";'>" + character + "</span>");
@@ -57,7 +56,6 @@ void endoom::showEndoom(QString consoleOutput)
             col = 0;
         }
     }
-
     ui->endoom_textEdit->append(ret);
 }
 
