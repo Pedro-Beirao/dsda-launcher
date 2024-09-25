@@ -56,7 +56,7 @@ jobs:
           windeployqt.exe release\dsda-launcher.exe
           Compress-Archive -path .\release\* -destination .\windows.zip
           dir
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: windows
           path: dsda-launcher\build\windows.zip
