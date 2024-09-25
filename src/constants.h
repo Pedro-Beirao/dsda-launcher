@@ -6,8 +6,6 @@
 
 const QString version = "v1.3.1";
 
-static QString gameName = "";
-
 const QString DSDALAUNCHER_URL = "https://github.com/Pedro-Beirao/dsda-launcher";
 const QString DSDALAUNCHER_API_URL = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
 const QString DSDALAUNCHER_DOWNLOAD_URL = "https://github.com/Pedro-Beirao/dsda-launcher/releases/latest";
@@ -22,6 +20,7 @@ const QChar FOLDER_SEPARATOR = '\\';
 const QChar FOLDER_SEPARATOR = '/';
 #endif
 
+extern QString gameName;
 extern QString datafolder;
 extern QString launcherfolder;
 

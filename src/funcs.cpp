@@ -1,6 +1,27 @@
 #include "funcs.h"
 #include <mainwindow.h>
 
+QString getGamePath()
+{
+#if defined(Q_OS_WIN)
+    return launcherfolder + "\\" + gameName + ".exe";
+#elif defined(Q_OS_LINUX)
+    QProcess whichProcess;
+    whichProcess.start("which", QStringList(gameName));
+    whichProcess.waitForFinished();
+    if (whichProcess.readAllStandardOutput() != "")
+    {
+        return gameName;
+    }
+    else
+    {
+        return launcherfolder + "/" + gameName;
+    }
+#elif defined(Q_OS_MACOS)
+    return launcherfolder + "/../Resources/" + gameName;
+#endif
+}
+
 void openIWADsFolder() // CTRL+O runs this function to open the folder where the IWADs should be placed in
 {
 #if defined Q_OS_MACOS

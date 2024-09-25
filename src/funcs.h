@@ -11,6 +11,7 @@
 
 extern QSettings *settings;
 
+QString getGamePath();
 void openIWADsFolder();
 QString getFileName(QString filePath);
 QFileInfoList getFilePath_possibleFiles();

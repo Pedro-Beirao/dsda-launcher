@@ -87,15 +87,8 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
 
     QString portversion;
 
-    QString path;
+    QString path = getGamePath();
 
-#if defined Q_OS_MACOS
-    path = launcherfolder + "/../Resources/" + gameName;
-#elif defined Q_OS_LINUX
-    path = launcherfolder + "/" + gameName;
-#else
-    path = launcherfolder + "\\" + gameName + ".exe";
-#endif
     QFile port = QFile(path);
     if (port.exists())
     {

@@ -12,15 +12,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 {
     if (!canLaunch) return;
 
-    QString path;
-
-#if defined Q_OS_MACOS
-    path = launcherfolder + "/../Resources/" + gameName;
-#elif defined Q_OS_LINUX
-    path = launcherfolder + "/" + gameName;
-#else
-    path = launcherfolder + "\\" + gameName + ".exe";
-#endif
+    QString path = getGamePath();
 
     QFile port = QFile(path);
     if (port.exists())
