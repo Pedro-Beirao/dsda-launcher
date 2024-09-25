@@ -588,10 +588,15 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
     {
         QString argStr;
         QString argStrComplete;
+
         foreach (QString p, arguments)
         {
-            argStrComplete.append((p + " "));
+            if (p.trimmed().contains(' ')) p = "\"" + p + "\"";
+            argStrComplete.append((" " + p));
+        }
 
+        foreach (QString p, arguments)
+        {
             int lastBar = 0;
             for (qsizetype i = 0; i < p.length(); i++)
             {
@@ -620,12 +625,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
             QTextStream out(&file);
 
 #if defined Q_OS_MACOS
-            out << "\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            out << "\"" + getGamePath() + "\"" + argStrComplete;
 #elif defined Q_OS_LINUX
-            out << "\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            out << "\"" + getGamePath() + "\"" + argStrComplete;
 #else
             std::replace(launcherfolder.begin(), launcherfolder.end(), '/', '\\');
-            out << "\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete;
+            out << "\"" + getGamePath() + "\"" + argStrComplete;
 #endif
             file.close();
 
@@ -643,12 +648,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         {
             QClipboard *clip = QApplication::clipboard();
 #if defined Q_OS_MACOS
-            clip->setText("\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            clip->setText("\"" + getGamePath() + "\"" + argStrComplete);
 #elif defined Q_OS_LINUX
-            clip->setText("\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            clip->setText("\"" + getGamePath() + "\"" + argStrComplete);
 #else
             std::replace(launcherfolder.begin(), launcherfolder.end(), '/', '\\');
-            clip->setText("\"" + getGamePath() + "\" -iwad \"" + ui->iwad_comboBox->itemData(ui->iwad_comboBox->currentIndex(), Qt::ToolTipRole).toString() + "\" " + argStrComplete);
+            clip->setText("\"" + getGamePath() + "\"" + argStrComplete);
 #endif
         }
 
