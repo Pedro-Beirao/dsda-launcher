@@ -30,6 +30,7 @@ void endoom::showEndoom(QString consoleOutput)
     QString ret;
 
     int col = 0;
+    ret.append("<table cellspacing='0' cellpadding='0'><tr>");
 
     for (int i = 0; i < qsl.size(); i++)
     {
@@ -47,15 +48,17 @@ void endoom::showEndoom(QString consoleOutput)
 
         if (character == " ") character = "&nbsp;";
 
-        ret.append("<span style='color: " + foreground + ";background-color: " + background + ";'>" + character + "</span>");
+        ret.append("<td style='color: " + foreground + ";background-color: " + background + "; padding: 0px;'>" + character + "</td>");
 
         col++;
         if (col >= 80)
         {
-            ret.append("<span><br/></span>");
+            ret.append("</tr><tr>");
             col = 0;
         }
     }
+    ret.append("</tr></table>");
+
     ui->endoom_textEdit->append(ret);
 }
 
@@ -63,8 +66,8 @@ void endoom::on_endoom_textEdit_textChanged()
 {
     QSize size = ui->endoom_textEdit->document()->size().toSize();
 
-    ui->endoom_textEdit->setFixedHeight( size.height() + 10);
-    ui->endoom_textEdit->setFixedWidth( size.width() + 10);
+    ui->endoom_textEdit->setFixedHeight(size.height() + 10);
+    ui->endoom_textEdit->setFixedWidth(size.width() + 10);
 
     setFixedSize(size);
 }
