@@ -19,6 +19,7 @@
 #include "historylist.h"
 #include "settings.h"
 #include "states.h"
+#include "styles.h"
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
@@ -134,7 +135,6 @@ class MainWindow : public QMainWindow
     void on_actionOpenIWADsFolder_triggered();
     void on_actionOpenConsole_triggered();
 
-    void changeButtonColor(bool isDark);
     void setComplevelsList(QStringList list);
     void setResolutionsList(QListWidget *list);
     void dropFile(QString fileName);
@@ -176,6 +176,8 @@ class MainWindow : public QMainWindow
     void loadSelected();
     void saveSelected();
     void setStyles();
+    void setLightStyle();
+    void setDarkStyle();
     QStringList getArguments();
 };
 

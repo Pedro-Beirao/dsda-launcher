@@ -1,18 +1,19 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QWidget>
-#include <QListWidget>
-#include <QFileDialog>
-#include <qsettings.h>
 #include "Mac.h"
+#include "styles.h"
+#include <QActionGroup>
+#include <QFileDialog>
+#include <QItemDelegate>
+#include <QListWidget>
+#include <QProcess>
+#include <QScreen>
+#include <QStyleFactory>
+#include <QWidget>
+#include <qsettings.h>
 #include <qshortcut.h>
 #include <qstandardpaths.h>
-#include <QProcess>
-#include <QStyleFactory>
-#include <QActionGroup>
-#include <QItemDelegate>
-#include <QScreen>
 
 namespace Ui {
 class Settings;

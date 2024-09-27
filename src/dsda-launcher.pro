@@ -21,6 +21,7 @@ SOURCES += \
     mainwindow_bottom.cpp \
     mainwindow_demos.cpp \
     mainwindow_options.cpp \
+    mainwindow_styles.cpp \
     mainwindow_top.cpp \
     mainwindow_wads.cpp \
     settings.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     mainwindow.h \
     settings.h \
     states.h \
+    styles.h \
     theme.h
 
 FORMS += \

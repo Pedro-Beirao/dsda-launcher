@@ -160,33 +160,27 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
     if(!checked)
     {
         qApp->setStyleSheet("QLabel::disabled {color: rgb(200, 200, 200);}"
-                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}"
-                            );
+                            "QLabel {border: none; margin: 0px;background-color: rgba(50, 50, 50, 0);font: 13px}");
 
 #if defined Q_OS_MACOS
         macSetToLightTheme();
 
-        ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
-        ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(240,240,240); color: rgb(13,13,13)}"
-                                        "QPushButton:pressed{border: 1px solid rgb(180, 180, 180); border-radius:7px; background-color: rgb(223,223,223); color: rgb(13,13,13)}");
+        ui->PWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
+        ui->IWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
 #else
         QPalette lightPalette;
         qApp->setPalette(lightPalette);
 #endif
 
-        settings->setValue("theme","light");
-        MainWindow::pMainWindow->changeButtonColor(false);
+        settings->setValue("theme", "light");
     }
     else
-     {
+    {
 #if defined Q_OS_MACOS
-         macSetToDarkTheme();
+        macSetToDarkTheme();
 
-         ui->PWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                                   "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
-         ui->IWADFolders_pushButton->setStyleSheet("QPushButton{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)}"
-                                                   "QPushButton:pressed{border: 1px solid rgb(120, 120, 120); border-radius:7px; background-color: rgb(75, 75, 75); color: rgb(150, 150, 150)}");
+        ui->PWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
+        ui->IWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
 #elif defined Q_OS_LINUX
          QPalette darkPalette;
          darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
@@ -244,8 +238,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
                              "QToolTip {color: rgb(63, 63, 63);}");
 
 #endif
-        settings->setValue("theme","dark");
-        MainWindow::pMainWindow->changeButtonColor(true);
+        settings->setValue("theme", "dark");
     }
 }
 
@@ -364,7 +357,7 @@ void Settings::on_PWADFolders_pushButton_clicked()
 void Settings::on_executable_lineEdit_textChanged(const QString &arg1)
 {
     settingsChanged();
-    if(arg1=="")
+    if (arg1.isEmpty())
     {
         ui->executable_lineEdit->setStyleSheet(STYLE_TEXT_PLACEHOLDER);
     }
