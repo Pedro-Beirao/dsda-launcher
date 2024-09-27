@@ -38,6 +38,7 @@
 #include <QRegularExpression>
 #include <QSettings>
 #include <QShortcut>
+#include <QSimpleUpdater.h>
 #include <QStandardPaths>
 #include <QTextEdit>
 #include <QtConcurrent>
@@ -102,8 +103,9 @@ class MainWindow : public QMainWindow
     QLineEdit *viddump_lineEdit();
     QComboBox *playback_comboBox();
     QTextEdit *additionalArguments_textEdit();
+    void CheckForUpdates(bool manualReq);
 
-public slots:
+  public slots:
     void delayLaunch();
     void closeEvent(QCloseEvent *event);
     void on_launchGame_pushButton_clicked(bool returnTooltip, QString exportCmd);

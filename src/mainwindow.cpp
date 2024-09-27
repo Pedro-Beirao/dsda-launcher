@@ -14,6 +14,14 @@ void MainWindow::showSSLDialog()
     msgBox.exec();
 }
 
+void MainWindow::CheckForUpdates(bool manualReq)
+{
+    QSimpleUpdater::getInstance()->setModuleVersion(UPDATER_URL, version);
+    QSimpleUpdater::getInstance()->setNotifyOnUpdate(UPDATER_URL, true);
+    QSimpleUpdater::getInstance()->setNotifyOnFinish(UPDATER_URL, manualReq);
+    QSimpleUpdater::getInstance()->checkForUpdates(UPDATER_URL);
+}
+
 void MainWindow::changeButtonColor(bool isDark)
 {
 #if defined Q_OS_MACOS

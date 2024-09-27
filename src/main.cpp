@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     w.ensurePolished();
     w.show();
 
+    w.CheckForUpdates(false);
+
     if(settings->value("version").toString()!=version)
     {
         QMessageBox msgBox;

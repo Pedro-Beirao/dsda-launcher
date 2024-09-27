@@ -46,6 +46,8 @@ FORMS += \
     mainwindow.ui \
     settings.ui
 
+include ($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
+
 win32 {
     CONFIG += c++11
     RC_ICONS = icons/dsda-launcher.ico

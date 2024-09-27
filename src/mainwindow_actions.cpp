@@ -32,49 +32,7 @@ void MainWindow::on_actionCheckForUpdatesDsdalauncher_triggered()
         return;
     }
 
-    QNetworkRequest req((QUrl(DSDALAUNCHER_API_URL)));
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QJsonObject json;
-    QNetworkAccessManager nam;
-    QNetworkReply *reply = nam.get(req);
-    while (!reply->isFinished())
-    {
-        qApp->processEvents();
-    }
-    QByteArray response_data = reply->readAll();
-    QJsonDocument jsondoc = QJsonDocument::fromJson(response_data);
-    QJsonObject jsonobj = jsondoc.object();
-    foreach (const QString &key, jsonobj.keys())
-    {
-        QJsonValue value = jsonobj.value(key);
-        if (key == "name")
-        {
-            if (version != value.toString())
-            {
-                QMessageBox msgBox;
-                msgBox.setText("DSDA-Launcher " + version);
-                msgBox.setInformativeText("Available: " + value.toString());
-                QPushButton *pButtonYes = msgBox.addButton(tr("Update"), QMessageBox::YesRole);
-                msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
-                msgBox.setDefaultButton(pButtonYes);
-                msgBox.exec();
-                if (msgBox.clickedButton() == pButtonYes)
-                {
-                    QDesktopServices::openUrl(QUrl(DSDALAUNCHER_DOWNLOAD_URL));
-                }
-            }
-            else
-            {
-                QMessageBox msgBox;
-                msgBox.setText("DSDA-Launcher " + version);
-                msgBox.setInformativeText("Up to Date");
-                msgBox.addButton(tr("Ignore"), QMessageBox::NoRole);
-                msgBox.exec();
-            }
-        }
-    }
-
-    reply->deleteLater();
+    CheckForUpdates(true);
 }
 
 void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
