@@ -653,7 +653,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, "dsda-launcher", gameName + " was not found in dsda-launcher.app/Contents/Resources/" + gameName);
+        QMessageBox::warning(this, APP_NAME, gameName + " was not found in " + APP_NAME + ".app/Contents/Resources/" + gameName);
     }
 #elif defined Q_OS_LINUX
     QString gamePath = getGamePath();
@@ -671,7 +671,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, "dsda-launcher", ("Failed to launch the application executable.\nMake sure that " + gameName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + gameName + " exists, symlink it to dsda-launcher's folder."));
+        QMessageBox::warning(this, APP_NAME, ("Failed to launch the application executable.\nMake sure that " + gameName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + gameName + " exists, symlink it to " + APP_NAME + "'s folder."));
     }
 #else
     QString gamePath = getGamePath();
@@ -688,7 +688,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, "dsda-launcher", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
+        QMessageBox::warning(this, APP_NAME, "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
     }
 #endif
 

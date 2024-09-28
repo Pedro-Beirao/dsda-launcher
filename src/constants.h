@@ -9,8 +9,6 @@ const QString version = "v1.3.1";
 const QString UPDATER_URL = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater.json";
 
 const QString DSDALAUNCHER_URL = "https://github.com/Pedro-Beirao/dsda-launcher";
-const QString DSDALAUNCHER_API_URL = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
-const QString DSDALAUNCHER_DOWNLOAD_URL = "https://github.com/Pedro-Beirao/dsda-launcher/releases/latest";
 
 const QString DSDADOOM_URL = "https://github.com/kraflab/dsda-doom";
 const QString DSDADOOM_API_URL = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";

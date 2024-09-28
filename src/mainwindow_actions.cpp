@@ -1,5 +1,17 @@
 #include "mainwindow.h"
 
+// Main
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox msgBox;
+    // msgBox.setOption(QMessageBox::Option::DontUseNativeDialog);
+    msgBox.setText(APP_NAME " " + version);
+    msgBox.setInformativeText("<a href='" + DSDALAUNCHER_URL + "'>" + DSDALAUNCHER_URL + "</a>");
+    msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
+    msgBox.exec();
+}
+
 void MainWindow::on_actionLoadState_triggered()
 {
     QString fileNames = QFileDialog::getOpenFileName(this, tr("Load State"), settings->value("statefile").toString(), tr("state files (*.state)"));

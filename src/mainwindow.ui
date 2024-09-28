@@ -1311,21 +1311,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <addaction name="actionLoadState"/>
     <addaction name="actionWhatIsThisState"/>
    </widget>
-   <widget class="QMenu" name="menuAbout">
+   <widget class="QMenu" name="menuMain">
     <property name="title">
-     <string>About</string>
+     <string>Main</string>
     </property>
     <addaction name="actionOpenSettings"/>
-    <addaction name="actionCheckForUpdatesDsdalauncher"/>
+    <addaction name="actionAbout"/>
     <addaction name="actionGithubDsdalauncher"/>
+    <addaction name="actionCheckForUpdatesDsdalauncher"/>
     <addaction name="actionTips"/>
    </widget>
    <widget class="QMenu" name="menudsda_doom">
     <property name="title">
      <string>dsda-doom</string>
     </property>
-    <addaction name="actionCheckForUpdatesDsdadoom"/>
     <addaction name="actionGithubDsdadoom"/>
+    <addaction name="actionCheckForUpdatesDsdadoom"/>
    </widget>
    <widget class="QMenu" name="menuAdvanced">
     <property name="title">
@@ -1336,7 +1337,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <addaction name="actionOpenHistory"/>
     <addaction name="actionExportCommand"/>
    </widget>
-   <addaction name="menuAbout"/>
+   <addaction name="menuMain"/>
    <addaction name="menudsda_doom"/>
    <addaction name="menuAdvanced"/>
    <addaction name="menuState"/>
@@ -1442,6 +1443,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

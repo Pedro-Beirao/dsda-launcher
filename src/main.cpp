@@ -16,19 +16,19 @@ int main(int argc, char *argv[])
 
     // Settings to be stored
 #if defined Q_OS_WIN
-    settings = new QSettings(QCoreApplication::applicationDirPath() + "/dsda-launcher.ini", QSettings::IniFormat);
+    settings = new QSettings(QCoreApplication::applicationDirPath() + "/" + APP_NAME + ".ini", QSettings::IniFormat);
 
     // Check for previous registry settings and copy it to the new one if needed
     if (settings->value("version").toString()=="")
     {
-        QSettings prev_reg_settings("pedrobeirao", "dsda-launcher");
+        QSettings prev_reg_settings("pedrobeirao", APP_NAME); // Legacy path
         Q_FOREACH(QString key, prev_reg_settings.allKeys())
         {
             settings->setValue(key, prev_reg_settings.value(key));
         }
     }
 #else
-    settings = new QSettings("pedrobeirao", "dsda-launcher");
+    settings = new QSettings("pedrobeirao", APP_NAME);
 #endif
 
     MainWindow w;

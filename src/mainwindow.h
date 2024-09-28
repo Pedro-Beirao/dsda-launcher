@@ -121,6 +121,7 @@ class MainWindow : public QMainWindow
     void on_additionalArguments_pushButton_clicked();
 
     // Actions
+    void on_actionAbout_triggered();
     void on_actionLoadState_triggered();
     void on_actionSaveState_triggered();
     void on_actionWhatIsThisState_triggered();
