@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QDir>
 #include <QStandardPaths>
 #include <QStringList>
 
@@ -57,5 +58,7 @@ const QString DEFAULT_TOGGLE4ARG = "-solo-net";
 
 const QString STATE_HEADER = "dsdalauncherstatev1.4";
 const QString HISTORY_HEADER = "dsdalauncherhistoryv1.4";
+
+void findDataFolder();
 
 #endif // CONSTANTS_H
