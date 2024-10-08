@@ -77,6 +77,7 @@ private slots:
 
 private:
   Ui::Settings *ui;
+  void ReadSettings();
 };
 
 #endif // SETTINGS_H

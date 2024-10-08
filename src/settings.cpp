@@ -6,10 +6,9 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 {
     ui->setupUi(this);
 
-    ui->darkTheme_checkBox->setChecked(settings->value("theme")=="dark");
-    on_darkTheme_checkBox_clicked(settings->value("theme")=="dark");
+    ReadSettings();
 
-    ui->endoom_checkBox->setChecked(settings->value("endoom").toBool());
+    on_darkTheme_checkBox_clicked(settings->value("theme") == "dark");
 
 #if defined Q_OS_WIN
     ui->PWADFolders_textBrowser->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'.AppleSystemUIFont'; font-size:8pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
@@ -20,42 +19,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 
     ui->PWADFolders_textBrowser->setVisible(false);
     ui->IWADFolders_textBrowser->setVisible(false);
-
-    if (!settings->value("toggle1t").isNull()) ui->fastText_lineEdit->setText(settings->value("toggle1t").toString());
-    else settings->setValue("toggle1t", ui->fastText_lineEdit->text());
-    if (!settings->value("toggle2t").isNull()) ui->nomoText_lineEdit->setText(settings->value("toggle2t").toString());
-    else settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
-    if (!settings->value("toggle3t").isNull()) ui->respawnText_lineEdit->setText(settings->value("toggle3t").toString());
-    else settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
-    if (!settings->value("toggle4t").isNull()) ui->solonetText_lineEdit->setText(settings->value("toggle4t").toString());
-    else settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
-
-    if (!settings->value("toggle1a").isNull()) ui->fastParam_lineEdit->setText(settings->value("toggle1a").toString());
-    else settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
-    if (!settings->value("toggle2a").isNull()) ui->nomoParam_lineEdit->setText(settings->value("toggle2a").toString());
-    else settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
-    if (!settings->value("toggle3a").isNull()) ui->respawnParam_lineEdit->setText(settings->value("toggle3a").toString());
-    else settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
-    if (!settings->value("toggle4a").isNull()) ui->solonetParam_lineEdit->setText(settings->value("toggle4a").toString());
-    else settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
-
-    if (!settings->value("complevels").isNull())
-    {
-        if (settings->value("complevels").toInt() == 0) ui->minimalComplevels_radioButton->setChecked(true);
-        else if (settings->value("complevels").toInt() == 1) ui->fullComplevels_radioButton->setChecked(true);
-    }
-    else settings->setValue("complevels", 0);
-
-    if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
-    else settings->setValue("remember", true);
-
-    if (!settings->value("checkforupdates").isNull()) ui->updates_checkBox->setChecked(settings->value("checkforupdates").toBool());
-    else settings->setValue("checkforupdates", true);
-
-    if (!settings->value("exeName").isNull()) ui->executable_lineEdit->setText(settings->value("exeName").toString());
-    else ui->executable_lineEdit->setText("dsda-doom");
-
-    if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 
     MainWindow::pMainWindow->changeGameName(ui->executable_lineEdit->text());
 
@@ -143,6 +106,51 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
 Settings::~Settings()
 {
     delete ui;
+}
+
+void Settings::ReadSettings()
+{
+    if (!settings->value("theme").isNull()) ui->darkTheme_checkBox->setChecked(settings->value("theme") == "dark");
+    else settings->setValue("theme", "light");
+
+    if (!settings->value("endoom").isNull()) ui->endoom_checkBox->setChecked(settings->value("endoom").toBool());
+    else settings->setValue("endoom", false);
+
+    if (!settings->value("toggle1t").isNull()) ui->fastText_lineEdit->setText(settings->value("toggle1t").toString());
+    else settings->setValue("toggle1t", ui->fastText_lineEdit->text());
+    if (!settings->value("toggle2t").isNull()) ui->nomoText_lineEdit->setText(settings->value("toggle2t").toString());
+    else settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
+    if (!settings->value("toggle3t").isNull()) ui->respawnText_lineEdit->setText(settings->value("toggle3t").toString());
+    else settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
+    if (!settings->value("toggle4t").isNull()) ui->solonetText_lineEdit->setText(settings->value("toggle4t").toString());
+    else settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
+
+    if (!settings->value("toggle1a").isNull()) ui->fastParam_lineEdit->setText(settings->value("toggle1a").toString());
+    else settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
+    if (!settings->value("toggle2a").isNull()) ui->nomoParam_lineEdit->setText(settings->value("toggle2a").toString());
+    else settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
+    if (!settings->value("toggle3a").isNull()) ui->respawnParam_lineEdit->setText(settings->value("toggle3a").toString());
+    else settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
+    if (!settings->value("toggle4a").isNull()) ui->solonetParam_lineEdit->setText(settings->value("toggle4a").toString());
+    else settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
+
+    if (!settings->value("complevels").isNull())
+    {
+        if (settings->value("complevels").toInt() == 0) ui->minimalComplevels_radioButton->setChecked(true);
+        else if (settings->value("complevels").toInt() == 1) ui->fullComplevels_radioButton->setChecked(true);
+    }
+    else settings->setValue("complevels", 0);
+
+    if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
+    else settings->setValue("remember", true);
+
+    if (!settings->value("checkforupdates").isNull()) ui->updates_checkBox->setChecked(settings->value("checkforupdates").toBool());
+    else settings->setValue("checkforupdates", true);
+
+    if (!settings->value("exeName").isNull()) ui->executable_lineEdit->setText(settings->value("exeName").toString());
+    else ui->executable_lineEdit->setText("dsda-doom");
+
+    if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 }
 
 void Settings::on_darkTheme_checkBox_clicked(bool checked)
