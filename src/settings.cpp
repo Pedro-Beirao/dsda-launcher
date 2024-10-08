@@ -21,49 +21,42 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     ui->PWADFolders_textBrowser->setVisible(false);
     ui->IWADFolders_textBrowser->setVisible(false);
 
-    if (settings->value("complevels").isNull())
-    {
-        ui->minimalComplevels_radioButton->setChecked(true);
-        ui->remember_checkBox->setChecked(true);
-        settings->setValue("toggle1t", ui->fastText_lineEdit->text());
-        settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
-        settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
-        settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
-        settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
-        settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
-        settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
-        settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
-        settings->setValue("remember", true);
-    }
-    else
-    {
-        ui->fastText_lineEdit->setText(settings->value("toggle1t").toString());
-        ui->fastParam_lineEdit->setText(settings->value("toggle1a").toString());
-        ui->nomoText_lineEdit->setText(settings->value("toggle2t").toString());
-        ui->nomoParam_lineEdit->setText(settings->value("toggle2a").toString());
-        ui->respawnText_lineEdit->setText(settings->value("toggle3t").toString());
-        ui->respawnParam_lineEdit->setText(settings->value("toggle3a").toString());
-        ui->solonetText_lineEdit->setText(settings->value("toggle4t").toString());
-        ui->solonetParam_lineEdit->setText(settings->value("toggle4a").toString());
-        ui->remember_checkBox->setChecked(settings->value("remember").toBool());
-        if(settings->value("complevels").toInt()==0)
-        {
-            ui->minimalComplevels_radioButton->setChecked(true);
-        }
-        else if(settings->value("complevels").toInt()==1)
-        {
-            ui->fullComplevels_radioButton->setChecked(true);
-        }
-    }
+    if (!settings->value("toggle1t").isNull()) ui->fastText_lineEdit->setText(settings->value("toggle1t").toString());
+    else settings->setValue("toggle1t", ui->fastText_lineEdit->text());
+    if (!settings->value("toggle2t").isNull()) ui->nomoText_lineEdit->setText(settings->value("toggle2t").toString());
+    else settings->setValue("toggle2t", ui->nomoText_lineEdit->text());
+    if (!settings->value("toggle3t").isNull()) ui->respawnText_lineEdit->setText(settings->value("toggle3t").toString());
+    else settings->setValue("toggle3t", ui->respawnText_lineEdit->text());
+    if (!settings->value("toggle4t").isNull()) ui->solonetText_lineEdit->setText(settings->value("toggle4t").toString());
+    else settings->setValue("toggle4t", ui->solonetText_lineEdit->text());
 
-    if (settings->value("exeName").isNull())
+    if (!settings->value("toggle1a").isNull()) ui->fastParam_lineEdit->setText(settings->value("toggle1a").toString());
+    else settings->setValue("toggle1a", ui->fastParam_lineEdit->text());
+    if (!settings->value("toggle2a").isNull()) ui->nomoParam_lineEdit->setText(settings->value("toggle2a").toString());
+    else settings->setValue("toggle2a", ui->nomoParam_lineEdit->text());
+    if (!settings->value("toggle3a").isNull()) ui->respawnParam_lineEdit->setText(settings->value("toggle3a").toString());
+    else settings->setValue("toggle3a", ui->respawnParam_lineEdit->text());
+    if (!settings->value("toggle4a").isNull()) ui->solonetParam_lineEdit->setText(settings->value("toggle4a").toString());
+    else settings->setValue("toggle4a", ui->solonetParam_lineEdit->text());
+
+    if (!settings->value("complevels").isNull())
     {
-        ui->executable_lineEdit->setText("dsda-doom");
+        if (settings->value("complevels").toInt() == 0) ui->minimalComplevels_radioButton->setChecked(true);
+        else if (settings->value("complevels").toInt() == 1) ui->fullComplevels_radioButton->setChecked(true);
     }
-    else
-    {
-        ui->executable_lineEdit->setText(settings->value("exeName").toString());
-    }
+    else settings->setValue("complevels", 0);
+
+    if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
+    else settings->setValue("remember", true);
+
+    if (!settings->value("checkforupdates").isNull()) ui->updates_checkBox->setChecked(settings->value("checkforupdates").toBool());
+    else settings->setValue("checkforupdates", true);
+
+    if (!settings->value("exeName").isNull()) ui->executable_lineEdit->setText(settings->value("exeName").toString());
+    else ui->executable_lineEdit->setText("dsda-doom");
+
+    if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
+
     MainWindow::pMainWindow->changeGameName(ui->executable_lineEdit->text());
 
     ui->maxHistory_lineEdit->setValidator(new QRegularExpressionValidator (QRegularExpression("[0-9]{2}"), this));
@@ -74,9 +67,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent), ui(new Ui::Settings)
     // Closes the active window
     QShortcut *shortcut3 = new QShortcut(QKeySequence(Qt::Key_W | Qt::CTRL), this, SLOT(close()));
     shortcut3->setAutoRepeat(false);
-
-    if(settings->value("maxhistory").toString()!="")
-        ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 
     int size = settings->beginReadArray("resolutions");
     if(size!=0)
@@ -524,15 +514,8 @@ void Settings::on_minusIWADFolders_toolButton_clicked()
     settings->endArray();
 }
 
+void Settings::on_endoom_checkBox_clicked(bool checked) { settings->setValue("endoom", checked); }
 
-void Settings::on_endoom_checkBox_clicked(bool checked)
-{
-    settings->setValue("endoom", checked);
-}
+void Settings::on_remember_checkBox_toggled(bool checked) { settings->setValue("remember", checked); }
 
-
-void Settings::on_remember_checkBox_toggled(bool checked)
-{
-    settings->setValue("remember", checked);
-}
-
+void Settings::on_updates_checkBox_toggled(bool checked) { settings->setValue("checkforupdates", checked); }

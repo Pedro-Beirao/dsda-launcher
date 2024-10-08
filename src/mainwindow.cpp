@@ -28,6 +28,8 @@ void MainWindow::delayLaunch() { canLaunch = true; }
 // MainWindow
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    if (settings->value("checkforupdates").toBool()) CheckForUpdates(false);
+
     ui->setupUi(this);
     MainWindow::pMainWindow = this;
 

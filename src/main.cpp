@@ -35,8 +35,6 @@ int main(int argc, char *argv[])
     w.ensurePolished();
     w.show();
 
-    w.CheckForUpdates(false);
-
     a.setQuitOnLastWindowClosed(false);
     return a.exec();
 }
