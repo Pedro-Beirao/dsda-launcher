@@ -314,7 +314,7 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         return;
     }
 
-    if (settings->value("endoom").toBool())
+    if (settings->value("endoom").toBool() && !endoomString.isEmpty())
     {
         endoomWindow->showEndoom(endoomString);
 
