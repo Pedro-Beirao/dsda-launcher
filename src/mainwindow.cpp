@@ -799,6 +799,10 @@ void MainWindow::closeEvent(QCloseEvent *event) // When closing the launcher, sa
 
 void MainWindow::on_showCommandLine_pushButton_clicked() { on_launchGame_pushButton_clicked(true, ""); }
 
+void MainWindow::on_wadsSelected_indicator_clicked() { ui->tabs->setCurrentIndex(1); }
+void MainWindow::on_recordingDemo_indicator_clicked() { ui->tabs->setCurrentIndex(2); }
+void MainWindow::on_playingDemo_indicator_clicked() { ui->tabs->setCurrentIndex(2); }
+
 QComboBox *MainWindow::iwad_comboBox() { return ui->iwad_comboBox; }
 QComboBox *MainWindow::complevel_comboBox() { return ui->complevel_comboBox; }
 QLineEdit *MainWindow::episode_lineEdit() { return ui->episode_lineEdit; }

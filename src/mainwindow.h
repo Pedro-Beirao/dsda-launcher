@@ -180,6 +180,9 @@ class MainWindow : public QMainWindow
     void setLightStyle();
     void setDarkStyle();
     QStringList getArguments();
+    void on_playingDemo_indicator_clicked();
+    void on_recordingDemo_indicator_clicked();
+    void on_wadsSelected_indicator_clicked();
 };
 
 extern QSettings *settings;
