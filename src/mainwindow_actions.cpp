@@ -113,6 +113,10 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
                                                         "open -a Terminal --args /tmp/dsda-updater-macos.sh"});
                     // clang-format on
                     process->deleteLater();
+#elif defined(Q_OS_WIN)
+                    QDesktopServices::openUrl(QUrl(GAME_REPO));
+#elif defined(Q_OS_LINUX)
+                    QDesktopServices::openUrl(QUrl(GAME_REPO));
 #endif
                 }
             }
