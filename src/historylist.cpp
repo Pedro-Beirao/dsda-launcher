@@ -71,8 +71,15 @@ void historyList::getHistory()
             }
 
             if (buffer_name == "iwad") iwad = buffer_value;
-            else if (buffer_name == "warp1") warp_1 = buffer_value;
-            else if (buffer_name == "warp2") warp_2 = buffer_value;
+            else if (buffer_name == "warp")
+            {
+                int pos = buffer_value.indexOf(' ');
+                if (pos != -1)
+                {
+                    warp_1 = buffer_value.mid(0, pos).trimmed();
+                    warp_2 = buffer_value.mid(pos + 1).trimmed();
+                }
+            }
             else if (buffer_name == "pwad") pwads += getFileName(buffer_value) + " ";
             else if (buffer_name == "record") recordDemo = buffer_value;
             else if (buffer_name == "playback") playbackDemo = buffer_value;

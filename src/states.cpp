@@ -198,6 +198,11 @@ void states::loadStateNew(QTextStream &stream)
                 MainWindow::pMainWindow->episode_lineEdit()->setText(buffer_value.mid(0, pos).trimmed());
                 MainWindow::pMainWindow->level_lineEdit()->setText(buffer_value.mid(pos + 1).trimmed());
             }
+            else
+            {
+                MainWindow::pMainWindow->episode_lineEdit()->setText("");
+                MainWindow::pMainWindow->level_lineEdit()->setText("");
+            }
         }
         else if (buffer_name == "skill") // skill
         {
