@@ -16,10 +16,10 @@ void MainWindow::showSSLDialog()
 
 void MainWindow::CheckForUpdates(bool manualReq)
 {
-    QSimpleUpdater::getInstance()->setModuleVersion(UPDATER_URL, version);
-    QSimpleUpdater::getInstance()->setNotifyOnUpdate(UPDATER_URL, true);
-    QSimpleUpdater::getInstance()->setNotifyOnFinish(UPDATER_URL, manualReq);
-    QSimpleUpdater::getInstance()->checkForUpdates(UPDATER_URL);
+    QSimpleUpdater::getInstance()->setModuleVersion(LAUNCHER_UPDATER, version);
+    QSimpleUpdater::getInstance()->setNotifyOnUpdate(LAUNCHER_UPDATER, true);
+    QSimpleUpdater::getInstance()->setNotifyOnFinish(LAUNCHER_UPDATER, manualReq);
+    QSimpleUpdater::getInstance()->checkForUpdates(LAUNCHER_UPDATER);
 }
 
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly

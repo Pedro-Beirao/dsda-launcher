@@ -7,7 +7,7 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox msgBox;
     // msgBox.setOption(QMessageBox::Option::DontUseNativeDialog);
     msgBox.setText(APP_NAME " " + version);
-    msgBox.setInformativeText("<a href='" + DSDALAUNCHER_URL + "'>" + DSDALAUNCHER_URL + "</a>");
+    msgBox.setInformativeText("<a href='" + LAUNCHER_REPO + "'>" + LAUNCHER_REPO + "</a>");
     msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
     msgBox.exec();
 }
@@ -32,9 +32,9 @@ void MainWindow::on_actionSaveState_triggered()
     }
 }
 
-void MainWindow::on_actionGithubDsdalauncher_triggered() { QDesktopServices::openUrl(QUrl(DSDALAUNCHER_URL)); }
+void MainWindow::on_actionGithubDsdalauncher_triggered() { QDesktopServices::openUrl(QUrl(LAUNCHER_REPO)); }
 
-void MainWindow::on_actionGithubDsdadoom_triggered() { QDesktopServices::openUrl(QUrl(DSDADOOM_URL)); }
+void MainWindow::on_actionGithubDsdadoom_triggered() { QDesktopServices::openUrl(QUrl(GAME_REPO)); }
 
 void MainWindow::on_actionCheckForUpdatesDsdalauncher_triggered()
 {
@@ -72,7 +72,7 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
         if (output.size() >= 2) portversion = output[1];
     }
 
-    QNetworkRequest req0((QUrl(DSDADOOM_API_URL)));
+    QNetworkRequest req0((QUrl(GAME_API)));
     req0.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject json0;
     QNetworkAccessManager nam0;
@@ -101,7 +101,19 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
                 msgBox.exec();
                 if (msgBox.clickedButton() == pButtonYes)
                 {
-                    QDesktopServices::openUrl(QUrl(DSDADOOM_DOWNLOAD_URL));
+#if defined(Q_OS_MAC)
+                    QProcess *process = new QProcess;
+                    // clang-format off
+                    process->startDetached("sh", {"-c", "rm /tmp/dsda-updater-macos.sh;"
+                                                        "curl -L -o /tmp/dsda-updater-macos.sh " + GAME_UPDATER_MACOS + ";"
+                                                        "p2=" + launcherfolder + "/../Resources;"
+                                                        "p2=${p2//\\//\\\\/};"
+                                                        "sed -i -e s/'$1'/$p2/g /tmp/dsda-updater-macos.sh;"
+                                                        "chmod +x /tmp/dsda-updater-macos.sh;"
+                                                        "open -a Terminal --args /tmp/dsda-updater-macos.sh"});
+                    // clang-format on
+                    process->deleteLater();
+#endif
                 }
             }
             else

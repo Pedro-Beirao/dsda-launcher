@@ -7,13 +7,12 @@
 
 const QString version = "v1.3.1";
 
-const QString UPDATER_URL = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater.json";
+const QString LAUNCHER_REPO = "https://github.com/Pedro-Beirao/dsda-launcher";
+const QString LAUNCHER_UPDATER = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/updater.json";
 
-const QString DSDALAUNCHER_URL = "https://github.com/Pedro-Beirao/dsda-launcher";
-
-const QString DSDADOOM_URL = "https://github.com/kraflab/dsda-doom";
-const QString DSDADOOM_API_URL = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";
-const QString DSDADOOM_DOWNLOAD_URL = "https://github.com/kraflab/dsda-doom/";
+const QString GAME_REPO = "https://github.com/kraflab/dsda-doom";
+const QString GAME_API = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";
+const QString GAME_UPDATER_MACOS = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/dsda-updater-macos.sh";
 
 #if defined Q_OS_WIN
 const QChar FOLDER_SEPARATOR = '\\';
