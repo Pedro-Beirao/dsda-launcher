@@ -94,8 +94,11 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::CheckUpdates()
 {
-    if (settings->value("autoUpdLauncher").toBool() || true) updateLauncherDialog(false);
-    if (settings->value("autoUpdGame").toBool() || true) updateGameDialog(false);
+    if (settings->value("updaterStartLauncher").toBool())
+    {
+        if (updateLauncherDialog(false)) return;
+    }
+    if (settings->value("updaterStartGame").toBool()) updateGameDialog(false);
 }
 
 void MainWindow::loadSelected()

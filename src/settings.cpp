@@ -144,19 +144,21 @@ void Settings::ReadSettings()
     if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
     else settings->setValue("remember", true);
 
-    if (!settings->value("autoUpdLauncher").isNull()) ui->on_autoUpdLauncher_checkBox_toggled->setChecked(settings->value("autoUpdLauncher").toBool());
-    else settings->setValue("autoUpdLauncher", true);
+    if (!settings->value("updaterStartLauncher").isNull()) ui->on_updaterStartLauncher_checkBox_toggled->setChecked(settings->value("updaterStartLauncher").toBool());
+    else settings->setValue("updaterStartLauncher", true);
 
     if (!settings->value("exeName").isNull()) ui->executable_lineEdit->setText(settings->value("exeName").toString());
     else ui->executable_lineEdit->setText("dsda-doom");
 
     if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 
-    if (!settings->value("autoUpdLauncher").isNull()) ui->on_autoUpdLauncher_checkBox_toggled->setChecked(settings->value("autoUpdLauncher").toBool());
-    else settings->value("autoUpdLauncher").setValue(true);
+    if (!settings->value("updaterStartLauncher").isNull()) ui->on_updaterStartLauncher_checkBox_toggled->setChecked(settings->value("updaterStartLauncher").toBool());
+    else settings->setValue("updaterStartLauncher", true);
 
-    if (!settings->value("autoUpdGame").isNull()) ui->on_autoUpdGame_checkBox_toggled->setChecked(settings->value("autoUpdGame").toBool());
-    else settings->value("autoUpdGame").setValue(true);
+    if (!settings->value("updaterStartGame").isNull()) ui->on_updaterStartGame_checkBox_toggled->setChecked(settings->value("updaterStartGame").toBool());
+    else settings->setValue("updaterStartGame", true);
+
+    settings->sync();
 }
 
 void Settings::on_darkTheme_checkBox_clicked(bool checked)
@@ -532,6 +534,6 @@ void Settings::on_endoom_checkBox_clicked(bool checked) { settings->setValue("en
 
 void Settings::on_remember_checkBox_toggled(bool checked) { settings->setValue("remember", checked); }
 
-void Settings::on_autoUpdLauncher_checkBox_toggled(bool checked) { settings->setValue("autoUpdLauncher", checked); }
+void Settings::on_updaterStartLauncher_checkBox_toggled(bool checked) { settings->setValue("updaterStartLauncher", checked); }
 
-void Settings::on_autoUpdGame_checkBox_toggled(bool checked) { settings->setValue("autoUpdGame", checked); }
+void Settings::on_updaterStartGame_checkBox_toggled(bool checked) { settings->setValue("updaterStartGame", checked); }

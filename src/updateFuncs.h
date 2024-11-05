@@ -11,10 +11,13 @@
 #include <QSettings>
 #include <QSimpleUpdater.h>
 
+QString getLatestLauncherVersion();
+bool updateLauncherDialog(bool manualReq);
+void updateLauncher();
+
 QString getGameVersion();
 QString getLatestGameVersion();
-void updateGameDialog(bool ManualReq);
+bool updateGameDialog(bool ManualReq);
 void updateGame();
-void updateLauncherDialog(bool manualReq);
 
 #endif // UPDATEFUNCS_H

@@ -1,12 +1,80 @@
 #include "updateFuncs.h"
 #include <mainwindow.h>
 
-void updateLauncherDialog(bool manualReq)
+QString getLatestLauncherVersion()
 {
-    QSimpleUpdater::getInstance()->setModuleVersion(LAUNCHER_UPDATER, version);
-    QSimpleUpdater::getInstance()->setNotifyOnUpdate(LAUNCHER_UPDATER, true);
-    QSimpleUpdater::getInstance()->setNotifyOnFinish(LAUNCHER_UPDATER, manualReq);
-    QSimpleUpdater::getInstance()->checkForUpdates(LAUNCHER_UPDATER);
+    QString portversion = getGameVersion();
+
+    QNetworkRequest request((QUrl(LAUNCHER_API)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setTransferTimeout(10000);
+    QNetworkAccessManager nam;
+    QNetworkReply *reply = nam.get(request);
+    while (!reply->isFinished())
+    {
+        qApp->processEvents();
+    }
+
+    QJsonObject jsonobj = QJsonDocument::fromJson(reply->readAll()).object();
+    foreach (const QString &key, jsonobj.keys())
+    {
+        QJsonValue value = jsonobj.value(key);
+        if (key == "name")
+        {
+            return value.toString();
+        }
+    }
+
+    reply->deleteLater();
+    return "";
+}
+
+bool updateLauncherDialog(bool manualReq)
+{
+
+    QString current = version;
+    QString latest = getLatestLauncherVersion();
+
+    QMessageBox msgBox;
+    msgBox.setText("DSDA-Launcher " + current);
+
+    if (latest == "" && manualReq)
+    {
+        msgBox.setInformativeText("Failed to get information about the latest dsda-launcher version. Try again later.");
+        msgBox.addButton("Close", QMessageBox::NoRole);
+        msgBox.exec();
+    }
+    else if (current != latest && latest != "")
+    {
+        msgBox.setInformativeText("Available: " + latest);
+        QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
+        msgBox.addButton("Close", QMessageBox::NoRole);
+        msgBox.setDefaultButton(buttonYes);
+        msgBox.exec();
+        if (msgBox.clickedButton() == buttonYes)
+        {
+            updateLauncher();
+            return true;
+        }
+    }
+    else if (manualReq)
+    {
+        msgBox.setInformativeText("Up to Date");
+        msgBox.addButton("Close", QMessageBox::NoRole);
+        msgBox.exec();
+    }
+    return false;
+}
+
+void updateLauncher()
+{
+#if defined(Q_OS_MAC)
+    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
+#elif defined(Q_OS_WIN)
+    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
+#elif defined(Q_OS_LINUX)
+    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
+#endif
 }
 
 QString getGameVersion()
@@ -31,7 +99,6 @@ QString getGameVersion()
 
 QString getLatestGameVersion()
 {
-
     QString portversion = getGameVersion();
 
     QNetworkRequest request((QUrl(GAME_API)));
@@ -58,7 +125,7 @@ QString getLatestGameVersion()
     return "";
 }
 
-void updateGameDialog(bool manualReq)
+bool updateGameDialog(bool manualReq)
 {
     QString current = getGameVersion();
     QString latest = getLatestGameVersion();
@@ -85,7 +152,11 @@ void updateGameDialog(bool manualReq)
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
         msgBox.exec();
-        if (msgBox.clickedButton() == buttonYes) updateGame();
+        if (msgBox.clickedButton() == buttonYes)
+        {
+            updateGame();
+            return true;
+        }
     }
     else if (latest == "" && manualReq)
     {
@@ -100,7 +171,11 @@ void updateGameDialog(bool manualReq)
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
         msgBox.exec();
-        if (msgBox.clickedButton() == buttonYes) updateGame();
+        if (msgBox.clickedButton() == buttonYes)
+        {
+            updateGame();
+            return true;
+        }
     }
     else if (manualReq)
     {
@@ -108,6 +183,7 @@ void updateGameDialog(bool manualReq)
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.exec();
     }
+    return false;
 }
 
 void updateGame()

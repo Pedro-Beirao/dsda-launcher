@@ -5,9 +5,10 @@
 #include <QStandardPaths>
 #include <QStringList>
 
-const QString version = "v1.3.1";
+const QString version = "v1.3";
 
 const QString LAUNCHER_REPO = "https://github.com/Pedro-Beirao/dsda-launcher";
+const QString LAUNCHER_API = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
 const QString LAUNCHER_UPDATER = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/updater.json";
 
 const QString GAME_REPO = "https://github.com/kraflab/dsda-doom";
