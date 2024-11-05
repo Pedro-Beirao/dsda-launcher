@@ -56,7 +56,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -69,7 +69,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>15</y>
+       <y>20</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -90,7 +90,7 @@ Launcher should fix them.</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>125</y>
+       <y>115</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -103,7 +103,7 @@ Launcher should fix them.</string>
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>145</y>
+       <y>135</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -116,7 +116,7 @@ Launcher should fix them.</string>
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>165</y>
+       <y>155</y>
        <width>99</width>
        <height>22</height>
       </rect>
@@ -243,7 +243,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>200</y>
+       <y>190</y>
        <width>31</width>
        <height>24</height>
       </rect>
@@ -272,7 +272,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>205</y>
+       <y>195</y>
        <width>91</width>
        <height>16</height>
       </rect>
@@ -406,7 +406,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>65</y>
+       <y>70</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -425,7 +425,7 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>40</y>
+       <y>45</y>
        <width>181</width>
        <height>22</height>
       </rect>
@@ -436,25 +436,6 @@ when the Launcher exits</string>
      </property>
      <property name="text">
       <string>Remember selected</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="updates_checkBox">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>90</y>
-       <width>191</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>Show Endoom screen on game exit</string>
-     </property>
-     <property name="text">
-      <string>Check for Updates on Start</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -480,9 +461,8 @@ when the Launcher exits</string>
     <zorder>IWADFolders_textBrowser</zorder>
     <zorder>endoom_checkBox</zorder>
     <zorder>remember_checkBox</zorder>
-    <zorder>updates_checkBox</zorder>
    </widget>
-   <widget class="QWidget" name="tab_3">
+   <widget class="QWidget" name="tab_2">
     <attribute name="title">
      <string>Customization</string>
     </attribute>
@@ -1012,6 +992,62 @@ border-radius:3px</string>
      </property>
      <property name="text">
       <string>Saved!</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Updates</string>
+    </attribute>
+    <widget class="QCheckBox" name="on_autoUpdLauncher_checkBox_toggled">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>45</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Show Endoom screen on game exit</string>
+     </property>
+     <property name="text">
+      <string>Launcher</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Check for Updates on Start:</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="on_autoUpdGame_checkBox_toggled">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>70</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Show Endoom screen on game exit</string>
+     </property>
+     <property name="text">
+      <string>dsda-doom</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

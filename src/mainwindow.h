@@ -20,6 +20,7 @@
 #include "settings.h"
 #include "states.h"
 #include "styles.h"
+#include "updateFuncs.h"
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
@@ -104,7 +105,6 @@ class MainWindow : public QMainWindow
     QLineEdit *viddump_lineEdit();
     QComboBox *playback_comboBox();
     QTextEdit *additionalArguments_textEdit();
-    void CheckForUpdates(bool manualReq);
 
   public slots:
     void delayLaunch();
@@ -183,6 +183,7 @@ class MainWindow : public QMainWindow
     void on_playingDemo_indicator_clicked();
     void on_recordingDemo_indicator_clicked();
     void on_wadsSelected_indicator_clicked();
+    void CheckUpdates();
 };
 
 extern QSettings *settings;

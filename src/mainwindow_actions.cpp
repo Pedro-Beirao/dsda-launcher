@@ -44,7 +44,7 @@ void MainWindow::on_actionCheckForUpdatesDsdalauncher_triggered()
         return;
     }
 
-    CheckForUpdates(true);
+    updateLauncherDialog(true);
 }
 
 void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
@@ -55,10 +55,7 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
         return;
     }
 
-    QString current = getGameVersion();
-    QString latest = getLatestGameVersion();
-
-    updateGameDialog(current, latest);
+    updateGameDialog(true);
 }
 
 void MainWindow::on_actionOpenSettings_triggered()

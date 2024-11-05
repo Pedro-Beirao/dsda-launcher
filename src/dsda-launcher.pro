@@ -26,7 +26,8 @@ SOURCES += \
     mainwindow_wads.cpp \
     settings.cpp \
     states.cpp \
-    theme.cpp
+    theme.cpp \
+    updateFuncs.cpp
 
 HEADERS += \
     console.h \
@@ -39,7 +40,8 @@ HEADERS += \
     settings.h \
     states.h \
     styles.h \
-    theme.h
+    theme.h \
+    updateFuncs.h
 
 FORMS += \
     console.ui \

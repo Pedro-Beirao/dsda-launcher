@@ -14,22 +14,12 @@ void MainWindow::showSSLDialog()
     msgBox.exec();
 }
 
-void MainWindow::CheckForUpdates(bool manualReq)
-{
-    QSimpleUpdater::getInstance()->setModuleVersion(LAUNCHER_UPDATER, version);
-    QSimpleUpdater::getInstance()->setNotifyOnUpdate(LAUNCHER_UPDATER, true);
-    QSimpleUpdater::getInstance()->setNotifyOnFinish(LAUNCHER_UPDATER, manualReq);
-    QSimpleUpdater::getInstance()->checkForUpdates(LAUNCHER_UPDATER);
-}
-
 // Prevents launching the game twice if the button "Launch" is pressed twice quickly
 void MainWindow::delayLaunch() { canLaunch = true; }
 
 // MainWindow
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    if (settings->value("checkforupdates").toBool()) CheckForUpdates(false);
-
     ui->setupUi(this);
     MainWindow::pMainWindow = this;
 
@@ -91,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     initializeIndicators();
 
+    QTimer::singleShot(0, this, SLOT(CheckUpdates()));
+
     QStringList arguments = qApp->arguments();
     for (int i = 1; i < arguments.count(); i++)
     {
@@ -99,6 +91,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::CheckUpdates()
+{
+    if (settings->value("autoUpdLauncher").toBool() || true) updateLauncherDialog(false);
+    if (settings->value("autoUpdGame").toBool() || true) updateGameDialog(false);
+}
 
 void MainWindow::loadSelected()
 {

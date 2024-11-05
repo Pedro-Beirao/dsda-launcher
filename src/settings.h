@@ -73,7 +73,8 @@ private slots:
 
   void on_remember_checkBox_toggled(bool checked);
 
-  void on_updates_checkBox_toggled(bool checked);
+  void on_autoUpdLauncher_checkBox_toggled(bool checked);
+  void on_autoUpdGame_checkBox_toggled(bool checked);
 
 private:
   Ui::Settings *ui;

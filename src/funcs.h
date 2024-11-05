@@ -24,9 +24,4 @@ QFileInfoList findIwads();
 QString bool_to_string(bool b);
 bool string_to_bool(QString s);
 QString createLevelString(QString warp_1, QString warp_2);
-QString getGameVersion();
-QString getLatestGameVersion();
-void updateGameDialog(QString current, QString latest);
-void updateGame();
-
 #endif // FUNCS_H
