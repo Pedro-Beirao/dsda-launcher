@@ -64,7 +64,7 @@ then
         CopyUpdate
         CleanUp
 
-        echo "Success"
+        echo "\ndsda-doom $VERSION has been installed succesfully!"
         exit
     else
         echo "Destination folder does not exist"
