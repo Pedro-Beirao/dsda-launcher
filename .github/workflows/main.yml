@@ -27,15 +27,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4.2.2
     
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3.3.0
+      - name: Install Qt Static
+      # You may pin to the exact commit or the version.
+      # uses: orestonce/install-qt-static@291bbc9e06c49a197d03164fdf18866fe6d136da
+        uses: orestonce/install-qt-static@v0.4.3
         with:
-          version: '6.6.0'
-          aqtversion: '==3.1.*'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_mingw'
-          setup-python: 'false'
+          # Directory to install Qt
+          dir: # optional, default is qt_static_install
+          # Version of Qt to install
+          version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
+              
 
         
       - name: tree
