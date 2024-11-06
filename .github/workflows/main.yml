@@ -25,7 +25,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v4.2.2
     
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
@@ -56,14 +56,14 @@ jobs:
           windeployqt.exe release\dsda-launcher.exe
           Compress-Archive -path .\release\* -destination .\windows.zip
           dir
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: windows
           path: src\build\windows.zip
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v4.2.2
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
@@ -87,7 +87,7 @@ jobs:
           # wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           # chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           # ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -unsupported-allow-new-glibc
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux
           path: src/build
@@ -95,7 +95,7 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v4.2.2
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
@@ -116,7 +116,7 @@ jobs:
           make clean
           ls
           macdeployqt ./dsda-launcher.app
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: mac
           path: src/build
