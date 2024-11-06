@@ -1,5 +1,5 @@
-#ifndef UPDATEFUNCS_H
-#define UPDATEFUNCS_H
+#ifndef UPDATER_H
+#define UPDATER_H
 
 #include "constants.h"
 #include "funcs.h"
@@ -9,7 +9,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatchIterator>
 #include <QSettings>
-#include <QSimpleUpdater.h>
+#include <QtNetwork>
 
 QString getLatestLauncherVersion();
 bool updateLauncherDialog(bool manualReq);
@@ -20,4 +20,4 @@ QString getLatestGameVersion();
 bool updateGameDialog(bool ManualReq);
 void updateGame();
 
-#endif // UPDATEFUNCS_H
+#endif // UPDATER_H

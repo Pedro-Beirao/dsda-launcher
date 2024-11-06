@@ -20,7 +20,7 @@
 #include "settings.h"
 #include "states.h"
 #include "styles.h"
-#include "updateFuncs.h"
+#include "updater.h"
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
@@ -40,7 +40,6 @@
 #include <QRegularExpression>
 #include <QSettings>
 #include <QShortcut>
-#include <QSimpleUpdater.h>
 #include <QStandardPaths>
 #include <QTextEdit>
 #include <QtConcurrent>

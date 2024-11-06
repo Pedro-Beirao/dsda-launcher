@@ -144,18 +144,15 @@ void Settings::ReadSettings()
     if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
     else settings->setValue("remember", true);
 
-    if (!settings->value("updaterStartLauncher").isNull()) ui->on_updaterStartLauncher_checkBox_toggled->setChecked(settings->value("updaterStartLauncher").toBool());
-    else settings->setValue("updaterStartLauncher", true);
-
     if (!settings->value("exeName").isNull()) ui->executable_lineEdit->setText(settings->value("exeName").toString());
     else ui->executable_lineEdit->setText("dsda-doom");
 
     if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
 
-    if (!settings->value("updaterStartLauncher").isNull()) ui->on_updaterStartLauncher_checkBox_toggled->setChecked(settings->value("updaterStartLauncher").toBool());
+    if (!settings->value("updaterStartLauncher").isNull()) ui->updaterStartLauncher_checkBox->setChecked(settings->value("updaterStartLauncher").toBool());
     else settings->setValue("updaterStartLauncher", true);
 
-    if (!settings->value("updaterStartGame").isNull()) ui->on_updaterStartGame_checkBox_toggled->setChecked(settings->value("updaterStartGame").toBool());
+    if (!settings->value("updaterStartGame").isNull()) ui->updaterStartGame_checkBox->setChecked(settings->value("updaterStartGame").toBool());
     else settings->setValue("updaterStartGame", true);
 
     settings->sync();

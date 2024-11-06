@@ -1,4 +1,4 @@
-#include "updateFuncs.h"
+#include "updater.h"
 #include <mainwindow.h>
 
 QString getLatestLauncherVersion()

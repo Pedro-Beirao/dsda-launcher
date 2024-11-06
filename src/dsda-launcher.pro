@@ -27,7 +27,7 @@ SOURCES += \
     settings.cpp \
     states.cpp \
     theme.cpp \
-    updateFuncs.cpp
+    updater.cpp
 
 HEADERS += \
     console.h \
@@ -41,7 +41,7 @@ HEADERS += \
     states.h \
     styles.h \
     theme.h \
-    updateFuncs.h
+    updater.h
 
 FORMS += \
     console.ui \
@@ -49,8 +49,6 @@ FORMS += \
     historylist.ui \
     mainwindow.ui \
     settings.ui
-
-include ($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 
 win32 {
     CONFIG += c++11

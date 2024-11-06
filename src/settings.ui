@@ -999,12 +999,12 @@ border-radius:3px</string>
     <attribute name="title">
      <string>Updates</string>
     </attribute>
-    <widget class="QCheckBox" name="on_autoUpdLauncher_checkBox_toggled">
+    <widget class="QCheckBox" name="updaterStartLauncher_checkBox">
      <property name="geometry">
       <rect>
        <x>220</x>
        <y>45</y>
-       <width>111</width>
+       <width>121</width>
        <height>22</height>
       </rect>
      </property>
@@ -1012,7 +1012,7 @@ border-radius:3px</string>
       <string>Show Endoom screen on game exit</string>
      </property>
      <property name="text">
-      <string>Launcher</string>
+      <string>dsda-launcher</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -1031,7 +1031,7 @@ border-radius:3px</string>
       <string>Check for Updates on Start:</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="on_autoUpdGame_checkBox_toggled">
+    <widget class="QCheckBox" name="updaterStartGame_checkBox">
      <property name="geometry">
       <rect>
        <x>220</x>
