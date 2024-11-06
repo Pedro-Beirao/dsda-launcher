@@ -46,7 +46,22 @@ bool updateLauncherDialog(bool manualReq)
     }
     else if (current != latest && latest != "")
     {
-        msgBox.setInformativeText("Available: " + latest);
+#if defined(Q_OS_MAC)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download and open the latest .dmg, you will need to drag-n-drop it to the Applications folder.\n"
+                                  "A Terminal window will appear to perform this action, and this Launcher will quit.");
+#elif defined(Q_OS_WINDOWS)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download and extract the latest version to the current folder.\n"
+                                  "A CMD window will appear to perform this action, and this Launcher will quit.");
+#elif defined(Q_OS_LINUX)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download the latest version\n"
+                                  "A Terminal window will appear to perform this action, and this Launcher will quit.");
+#endif
         QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
@@ -137,16 +152,22 @@ bool updateGameDialog(bool manualReq)
     {
 #if defined(Q_OS_WIN)
         msgBox.setInformativeText("It seems you do not have dsda-doom installed.\n"
-                                  "Make sure that the Launcher and dsda-doom are in the same folder  OR  click 'Install' and dsda-doom " +
-                                  latest + " will be installed in the current folder.");
+                                  "Make sure that the Launcher and dsda-doom are in the same folder  OR  click 'Install'"
+                                  "\n\n"
+                                  "This will download and extract the latest version to the current folder.\n"
+                                  "A CMD window will appear to perform this action.");
 #elif defined(Q_OS_MACOS)
         msgBox.setInformativeText("It seems you do not have dsda-doom installed.\n"
-                                  "Click 'Install' and dsda-doom " +
-                                  latest + " will be installed inside the Launcher's App Bundle");
+                                  "Click 'Install'"
+                                  "\n\n"
+                                  "This will download and install the latest version, inside the Launcher's App Bundle.\n"
+                                  "A Terminal window will appear to perform this action.");
 #elif defined(Q_OS_LINUX)
         msgBox.setInformativeText("It seems you do not have dsda-doom installed.\n"
-                                  "Install dsda-doom using your prefered package manager (if available)  OR  Click 'Install' and dsda-doom " +
-                                  latest + " will be installed");
+                                  "Install dsda-doom using your prefered package manager (if available)  OR  Click 'Install'"
+                                  "\n\n"
+                                  "This will download and extract the latest version to the current folder.\n"
+                                  "A Terminal window will appear to perform this action.");
 #endif
         QPushButton *buttonYes = msgBox.addButton("Install", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
