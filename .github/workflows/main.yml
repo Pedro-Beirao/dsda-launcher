@@ -32,8 +32,6 @@ jobs:
       # uses: orestonce/install-qt-static@291bbc9e06c49a197d03164fdf18866fe6d136da
         uses: orestonce/install-qt-static@v0.4.3
         with:
-          # Directory to install Qt
-          dir: # optional, default is qt_static_install
           # Version of Qt to install
           version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
               
