@@ -59,11 +59,11 @@ win32 {
 mac {
     CONFIG += c++11 appbundle
     ICON = icons/dsda-launcher.icns
-    !noport {
+    include_port {
         APP_FILES.files = ./dsda-doom
         APP_FILES.files += ./dsda-doom.wad
     }
-    deploy {
+    macdeploy {
         QMAKE_APPLE_DEVICE_ARCHS=arm64 x86_64
         message("Compiling for both archs")
     }
