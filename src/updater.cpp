@@ -49,7 +49,7 @@ bool updateLauncherDialog(bool manualReq)
 #if defined(Q_OS_MAC)
         msgBox.setInformativeText("Available: " + latest +
                                   "\n\n"
-                                  "This will download and open the latest .dmg, you will need to drag-n-drop it to the Applications folder.\n"
+                                  "This will download and open the latest .dmg, you need to drag-n-drop it to the Applications folder.\n"
                                   "A Terminal window will appear to perform this action, and this Launcher will quit.");
 #elif defined(Q_OS_WINDOWS)
         msgBox.setInformativeText("Available: " + latest +
@@ -187,7 +187,22 @@ bool updateGameDialog(bool manualReq)
     }
     else if (current != latest && latest != "")
     {
-        msgBox.setInformativeText("Available: " + latest);
+#if defined(Q_OS_WIN)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download and extract the latest version to the current folder.\n"
+                                  "A CMD window will appear to perform this action.");
+#elif defined(Q_OS_MACOS)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download and install the latest version, inside the Launcher's App Bundle.\n"
+                                  "A Terminal window will appear to perform this action.");
+#elif defined(Q_OS_LINUX)
+        msgBox.setInformativeText("Available: " + latest +
+                                  "\n\n"
+                                  "This will download and extract the latest version to the current folder.\n"
+                                  "A Terminal window will appear to perform this action.");
+#endif
         QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
