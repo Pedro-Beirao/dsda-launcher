@@ -59,7 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: dsda-launcher\build\windows.zip
+          path: src\build\windows.zip
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -90,7 +90,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: linux
-          path: dsda-launcher/build
+          path: src/build
           
   build-macos:
     runs-on: macos-latest
@@ -119,7 +119,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: mac
-          path: dsda-launcher/build
+          path: src/build
     
 
 
