@@ -53,7 +53,10 @@ FORMS += \
 win32 {
     CONFIG += c++11
     RC_ICONS = icons/dsda-launcher.ico
-    QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
+
+    static {
+        QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
+    }
 }
 
 mac {

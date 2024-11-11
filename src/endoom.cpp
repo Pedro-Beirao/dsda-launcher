@@ -36,7 +36,7 @@ void endoom::showEndoom(QString consoleOutput)
     {
         QStringList cs = qsl[i].split("\033");
 
-        QString character = cs.last()[cs.last().size() - 1];
+        QString character = QString(cs.last()[cs.last().size() - 1]);
 
         QString foreground, background;
         for (int j = 0; j < cs.size() - 1; j++)

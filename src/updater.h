@@ -5,6 +5,7 @@
 #include "funcs.h"
 #include <QCommandLineParser>
 #include <QDir>
+#include <QList>
 #include <QProcess>
 #include <QRegularExpression>
 #include <QRegularExpressionMatchIterator>

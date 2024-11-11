@@ -104,7 +104,7 @@ QString getGameVersion()
         process->waitForFinished();
         process->deleteLater();
 
-        QList output = process->readAll().split(' ');
+        QList<QByteArray> output = process->readAll().split(' ');
 
         if (output.size() >= 2) return output[1];
         else return "";

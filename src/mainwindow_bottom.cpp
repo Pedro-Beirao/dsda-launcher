@@ -14,7 +14,7 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
 
     QString path = getGamePath();
 
-    QFile port = QFile(path);
+    QFile port(path);
     if (port.exists())
     {
 #if defined Q_OS_MACOS

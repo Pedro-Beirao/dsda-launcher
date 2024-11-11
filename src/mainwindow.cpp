@@ -530,7 +530,7 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         foreach (QString p, arguments)
         {
             int lastBar = 0;
-            for (qsizetype i = 0; i < p.length(); i++)
+            for (int i = 0; i < p.length(); i++)
             {
                 if (p[i] == QDir::separator())
                 {
@@ -612,7 +612,7 @@ void MainWindow::Launch(QStringList arguments)
 
 #if defined Q_OS_MACOS
     QString gamePath = getGamePath();
-    QFile port = QFile(getGamePath());
+    QFile port(getGamePath());
     qDebug() << gamePath;
     if (port.exists())
     {
@@ -684,7 +684,7 @@ void MainWindow::SaveHistory(QStringList args)
     for (qsizetype i = 0; i < args.size(); i++)
         checksumString += args.at(i);
     QByteArray checksumByteArray = checksumString.toLatin1();
-    checksum = qChecksum(checksumByteArray.data());
+    checksum = qChecksum(checksumByteArray.data(), checksumByteArray.length());
 
     QFile file(historyListWindow->historyPath);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
