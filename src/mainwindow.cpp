@@ -651,7 +651,7 @@ void MainWindow::Launch(QStringList arguments)
     }
 #else
     QString gamePath = getGamePath();
-    QFile port = QFile(getGamePath());
+    QFile port = QFile(getGamePath();
     if (port.exists())
     {
         QProcess *process = new QProcess;
