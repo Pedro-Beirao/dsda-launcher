@@ -632,7 +632,7 @@ void MainWindow::Launch(QStringList arguments)
     }
 #elif defined Q_OS_LINUX
     QString gamePath = getGamePath();
-    QFile port = QFile(getGamePath());
+    QFile port(getGamePath());
     if (port.exists())
     {
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -651,7 +651,7 @@ void MainWindow::Launch(QStringList arguments)
     }
 #else
     QString gamePath = getGamePath();
-    QFile port = QFile(getGamePath();
+    QFile port(getGamePath());
     if (port.exists())
     {
         QProcess *process = new QProcess;
