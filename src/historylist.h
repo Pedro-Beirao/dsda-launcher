@@ -29,7 +29,6 @@ public:
     void getHistory();
   private slots:
     void on_load_pushButton_clicked();
-    void on_launch_pushButton_clicked();
     void on_history_listWidget_currentRowChanged(int currentRow);
     void on_reload_toolButton_clicked();
 };
