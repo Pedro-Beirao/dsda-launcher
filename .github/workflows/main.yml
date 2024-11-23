@@ -27,31 +27,24 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4.2.2
     
-      - name: install qt static
-        uses: orestonce/install-qt-static@v0.4.3
+      - uses: msys2/setup-msys2@v2
         with:
-          version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
-              
-
-        
-      - name: tree
+          msystem: MINGW64
+          path-type: minimal
+      - shell: msys2 {0}
         run: |
-          where make.exe
-          cd \
-          tree /F
-      - name: build
-        run: |
+          pacman --noconfirm -S mingw-w64-x86_64-qt5-static mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+          export PATH="/mingw64/bin:$PATH"
+          export PATH="/mingw64/qt5-static/bin:$PATH
+          
           cd src
           mkdir build
           cd build
-          qmake.exe ..
-          make.exe
-          make.exe clean
-          tree /F
+          qmake ..
+          make
+          make clean
           mkdir lib
-          windeployqt.exe release\dsda-launcher.exe
-          Compress-Archive -path .\release\* -destination .\windows.zip
-          dir
+          
       - uses: actions/upload-artifact@v4
         with:
           name: windows
