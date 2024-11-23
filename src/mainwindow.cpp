@@ -327,7 +327,6 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void MainWindow::readyReadStandardError()
 {
-
     QProcess *p = (QProcess *)sender();
     QByteArray buf = p->readAllStandardError();
 
@@ -611,10 +610,10 @@ void MainWindow::Launch(QStringList arguments)
     consoleWindow->clearText();
     endoomString = "";
 
+    // clang-format off
 #if defined Q_OS_MACOS
     QString gamePath = getGamePath();
     QFile port(getGamePath());
-    qDebug() << gamePath;
     if (port.exists())
     {
         QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -622,7 +621,7 @@ void MainWindow::Launch(QStringList arguments)
         process->setWorkingDirectory(homePath);
         process->start(gamePath, arguments);
         process->deleteLater();
-        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -641,7 +640,7 @@ void MainWindow::Launch(QStringList arguments)
         process->setWorkingDirectory(homePath);
         process->start(gamePath, arguments);
         process->deleteLater();
-        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -659,7 +658,7 @@ void MainWindow::Launch(QStringList arguments)
         process->setWorkingDirectory(launcherfolder);
         process->start(gamePath, arguments);
         process->deleteLater();
-        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
         connect(process, SIGNAL(started()), this, SLOT(started()));
@@ -669,6 +668,7 @@ void MainWindow::Launch(QStringList arguments)
         QMessageBox::warning(this, APP_NAME, "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
     }
 #endif
+    // clang-format on
 
     // Again, don't allow the launch button to work twice in the space of 2 secs
     canLaunch = false;
