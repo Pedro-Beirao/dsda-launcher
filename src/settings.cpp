@@ -139,7 +139,11 @@ void Settings::ReadSettings()
         if (settings->value("complevels").toInt() == 0) ui->minimalComplevels_radioButton->setChecked(true);
         else if (settings->value("complevels").toInt() == 1) ui->fullComplevels_radioButton->setChecked(true);
     }
-    else settings->setValue("complevels", 0);
+    else
+    {
+        settings->setValue("complevels", 0);
+        ui->minimalComplevels_radioButton->setChecked(true);
+    }
 
     if (!settings->value("remember").isNull()) ui->remember_checkBox->setChecked(settings->value("remember").toBool());
     else settings->setValue("remember", true);
