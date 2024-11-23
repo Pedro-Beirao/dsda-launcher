@@ -42,6 +42,8 @@ jobs:
           export PATH="/mingw64/qt5-static/bin:$PATH"
 
           pwd
+          which qmake
+          ls /mingw64/bin
           
           cd src
           mkdir build
