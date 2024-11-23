@@ -432,6 +432,7 @@ QStringList MainWindow::getArguments()
 
     if (ui->track_comboBox->currentIndex() == 1) arguments.append("-track_pacifist");
     else if (ui->track_comboBox->currentIndex() == 2) arguments.append("-track_100k");
+    else if (ui->track_comboBox->currentIndex() == 3) arguments.append("-track_reality");
 
     if (ui->time_comboBox->currentIndex() == 1) arguments.append("-time_use");
     else if (ui->time_comboBox->currentIndex() == 2) arguments.append("-time_keys");

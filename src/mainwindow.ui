@@ -776,6 +776,11 @@ border-radius:3px</string>
           <string>100% Kills</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Reality</string>
+         </property>
+        </item>
        </widget>
        <widget class="QComboBox" name="time_comboBox">
         <property name="geometry">
