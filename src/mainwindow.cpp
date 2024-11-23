@@ -685,7 +685,12 @@ void MainWindow::SaveHistory(QStringList args)
     for (qsizetype i = 0; i < args.size(); i++)
         checksumString += args.at(i);
     QByteArray checksumByteArray = checksumString.toLatin1();
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+    checksum = qChecksum(checksumByteArray.data());
+#else
     checksum = qChecksum(checksumByteArray.data(), checksumByteArray.length());
+#endif
 
     QFile file(historyListWindow->historyPath);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
