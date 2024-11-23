@@ -36,14 +36,11 @@ jobs:
             mingw-w64-x86_64-qt5-static
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-make
+            make
       - shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           export PATH="/mingw64/qt5-static/bin:$PATH"
-
-          pwd
-          which qmake
-          ls /mingw64/bin
           
           cd src
           mkdir build
