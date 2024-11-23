@@ -39,7 +39,9 @@ jobs:
       - shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          export PATH="/mingw64/qt5-static/bin:$PATH
+          export PATH="/mingw64/qt5-static/bin:$PATH"
+
+          pwd
           
           cd src
           mkdir build
