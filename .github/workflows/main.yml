@@ -31,9 +31,13 @@ jobs:
         with:
           msystem: MINGW64
           path-type: minimal
+          update: true
+          install: >-
+            mingw-w64-x86_64-qt5-static
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-make
       - shell: msys2 {0}
         run: |
-          pacman --noconfirm -S mingw-w64-x86_64-qt5-static mingw-w64-x86_64-gcc mingw-w64-x86_64-make
           export PATH="/mingw64/bin:$PATH"
           export PATH="/mingw64/qt5-static/bin:$PATH
           
