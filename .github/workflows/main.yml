@@ -50,7 +50,7 @@ jobs:
           qmake ..
           make
           make clean
-          zip dsda-launcher-win64-dev.zip dsda-launcher.exe
+          zip dsda-launcher-win64-dev.zip release/dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
         with:
