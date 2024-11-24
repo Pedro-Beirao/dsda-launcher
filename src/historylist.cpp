@@ -87,6 +87,7 @@ void historyList::getHistory()
                     warp_1 = buffer_value.mid(0, pos).trimmed();
                     warp_2 = buffer_value.mid(pos + 1).trimmed();
                 }
+                else warp_1 = buffer_value;
             }
             else if (buffer_name == "pwad") pwads += getFileName(buffer_value) + " ";
             else if (buffer_name == "record") recordDemo = buffer_value;
@@ -162,8 +163,16 @@ void historyList::on_history_listWidget_currentRowChanged(int currentRow)
 
         if (buffer_name == "iwad") ui->iwad_label->setText(buffer_value);
         else if (buffer_name == "complevel") ui->complevel_label->setText(buffer_value);
-        else if (buffer_name == "warp1") warp1 = buffer_value;
-        else if (buffer_name == "warp2") warp2 = buffer_value;
+        else if (buffer_name == "warp")
+        {
+            int pos = buffer_value.indexOf(' ');
+            if (pos != -1)
+            {
+                warp1 = buffer_value.mid(0, pos).trimmed();
+                warp2 = buffer_value.mid(pos + 1).trimmed();
+            }
+            else warp1 = buffer_value;
+        }
         else if (buffer_name == "skill") ui->skill_label->setText("Skill " + buffer_value);
         else if (buffer_name == "pwad") ui->pwads_label->setText(ui->pwads_label->text() + getFileName(buffer_value) + "\n");
         else if (buffer_name == "record") recordDemo_s = "Record\n" + getFileName(buffer_value) + "\n";
