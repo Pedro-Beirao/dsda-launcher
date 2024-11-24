@@ -50,12 +50,12 @@ jobs:
           qmake ..
           make
           make clean
-          zip -j dsda-launcher-win64-dev.zip release/dsda-launcher.exe
+          zip -j dsda-launcher-dev-win64.zip release/dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
         with:
-          name: dsda-launcher-win64-dev
-          path: src\build\dsda-launcher-win64-dev.zip
+          name: dsda-launcher-dev-win64.zip
+          path: src\build\dsda-launcher-dev-win64.zip
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -97,7 +97,7 @@ jobs:
         uses: jurplel/install-qt-action@v3.3.0
         with:
           aqtversion: '==3.1.*'
-          version: '6.6.0'
+          version: '6.2.0'
           host: 'mac'
           target: 'desktop'
           arch: 'clang_64'
@@ -107,15 +107,19 @@ jobs:
           cd src
           mkdir build
           cd build
-          qmake .. "CONFIG+=macdeploy"
+          qmake .. "macdeploy"
           make
           make clean
           ls
           macdeployqt ./dsda-launcher.app
+
+          brew install create-dmg
+          create-dmg--app-drop-link 10 10 ./dsda-launcher-dev-mac.dmg ./dsda-launcher.app
+          
       - uses: actions/upload-artifact@v4
         with:
-          name: mac
-          path: src/build/
+          name: dsda-launcher-dev-mac.dmg
+          path: src/build/dsda-launcher-dev-mac.dmg
     
 
 
