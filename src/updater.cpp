@@ -98,13 +98,12 @@ QString getGameVersion()
 
     if (QFile(path).exists())
     {
-        QProcess *process = new QProcess;
-        process->setWorkingDirectory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-        process->start(path, {"-v"});
-        process->waitForFinished();
-        process->deleteLater();
+        QProcess process;
+        process.setWorkingDirectory(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+        process.start(path, {"-v"});
+        process.waitForFinished();
 
-        QList<QByteArray> output = process->readAll().split(' ');
+        QList<QByteArray> output = process.readAll().split(' ');
 
         if (output.size() >= 2) return output[1];
         else return "";
@@ -225,17 +224,16 @@ bool updateGameDialog(bool manualReq)
 void updateGame()
 {
 #if defined(Q_OS_MAC)
-    QProcess *process = new QProcess;
+    QProcess process;
     // clang-format off
-    process->startDetached("sh", {"-c", "rm /tmp/dsda-updater-macos.sh;"
-                                        "curl -L -o /tmp/dsda-updater-macos.sh " + GAME_UPDATER_MACOS + ";"
-                                        "p2=" + launcherfolder + "/../Resources;"
-                                        "p2=${p2//\\//\\\\/};"
-                                        "sed -i -e s/'$1'/$p2/g /tmp/dsda-updater-macos.sh;"
-                                        "chmod +x /tmp/dsda-updater-macos.sh;"
-                                        "open -na Terminal --args /tmp/dsda-updater-macos.sh"});
+    process.startDetached("sh", {"-c", "rm /tmp/dsda-updater-macos.sh;"
+                                       "curl -L -o /tmp/dsda-updater-macos.sh " + GAME_UPDATER_MACOS + ";"
+                                       "p2=" + launcherfolder + "/../Resources;"
+                                       "p2=${p2//\\//\\\\/};"
+                                       "sed -i -e s/'$1'/$p2/g /tmp/dsda-updater-macos.sh;"
+                                       "chmod +x /tmp/dsda-updater-macos.sh;"
+                                       "open -na Terminal --args /tmp/dsda-updater-macos.sh"});
     // clang-format on
-    process->deleteLater();
 #elif defined(Q_OS_WIN)
     QDesktopServices::openUrl(QUrl(GAME_REPO));
 #elif defined(Q_OS_LINUX)

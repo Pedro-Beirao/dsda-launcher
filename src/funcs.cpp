@@ -17,7 +17,6 @@ QString getGamePath()
     {
         return launcherfolder + "/" + gameName;
     }
-    whichProcess.deleteLater();
 #elif defined(Q_OS_MACOS)
     return launcherfolder + "/../Resources/" + gameName;
 #endif

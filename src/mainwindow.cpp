@@ -620,7 +620,6 @@ void MainWindow::Launch(QStringList arguments)
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
         process->start(gamePath, arguments);
-        process->deleteLater();
         connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
@@ -639,7 +638,6 @@ void MainWindow::Launch(QStringList arguments)
         QProcess *process = new QProcess;
         process->setWorkingDirectory(homePath);
         process->start(gamePath, arguments);
-        process->deleteLater();
         connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
@@ -657,7 +655,6 @@ void MainWindow::Launch(QStringList arguments)
         QProcess *process = new QProcess;
         process->setWorkingDirectory(launcherfolder);
         process->start(gamePath, arguments);
-        process->deleteLater();
         connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
         connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
         connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
