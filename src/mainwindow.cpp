@@ -8,8 +8,8 @@ void MainWindow::changeGameName(QString newName) { gameName = newName; }
 void MainWindow::showSSLDialog()
 {
     QMessageBox msgBox;
-    msgBox.setText("SSL library not found. Network features not available.");
-    msgBox.setInformativeText("It should have been packaged with the Launcher.\nIf reinstalling does not fix this, try manually installing OpenSSL.\n\nlibssl-1_1-x64.dll + libcrypto-1_1-x64.dll");
+    msgBox.setText("SSL library not found");
+    msgBox.setInformativeText("Network features not available.");
     msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
     msgBox.exec();
 }
