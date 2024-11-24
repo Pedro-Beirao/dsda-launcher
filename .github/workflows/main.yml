@@ -107,7 +107,7 @@ jobs:
           cd src
           mkdir build
           cd build
-          qmake .. "macdeploy"
+          qmake .. "CONFIG+=macdeploy"
           make
           make clean
           ls
