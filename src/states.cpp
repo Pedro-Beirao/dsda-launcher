@@ -200,7 +200,7 @@ void states::loadStateNew(QTextStream &stream)
             }
             else
             {
-                MainWindow::pMainWindow->episode_lineEdit()->setText("");
+                MainWindow::pMainWindow->episode_lineEdit()->setText(buffer_value);
                 MainWindow::pMainWindow->level_lineEdit()->setText("");
             }
         }
@@ -299,7 +299,7 @@ void states::saveStateToFile(QString filePath)
 
     out << "iwad " + ui->iwad_comboBox()->currentText() + "\n";
     out << "complevel " + ui->complevel_comboBox()->currentText() + "\n";
-    out << "warp " + ui->episode_lineEdit()->text() + " " + ui->level_lineEdit()->text() + "\n";
+    out << "warp " + ui->episode_lineEdit()->text() + " " + (ui->level_lineEdit()->isVisible() ? ui->level_lineEdit()->text() : "") + "\n";
     out << "skill " + QString::number(ui->skill_comboBox()->currentIndex()) + "\n";
     out << "box1 " + bool_to_string(ui->toggle1_checkBox()->isChecked()) + "\n";
     out << "box2 " + bool_to_string(ui->toggle2_checkBox()->isChecked()) + "\n";

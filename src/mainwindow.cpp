@@ -700,6 +700,7 @@ void MainWindow::SaveHistory(QStringList args)
         stream.readLineInto(&buffer);
         if (buffer != HISTORY_HEADER)
         {
+            // Outdated history.states file. Remove it
             file.close();
             QFile::remove(historyListWindow->historyPath);
             stream.setString(NULL);
@@ -719,6 +720,7 @@ void MainWindow::SaveHistory(QStringList args)
             {
                 if (checksum == buffer.mid(8).toInt())
                 {
+                    // Same exact parameters where launched, ignore
                     file.close();
                     return;
                 }
