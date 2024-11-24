@@ -94,7 +94,6 @@ QFileInfoList getFilePath_possibleFiles()
 
 QString getFilePath(QString fileName)
 {
-    getFilePath_possibleFiles();
     fileName = fileName.toLower();
 
     QDir dsda_folder_path(datafolder);
