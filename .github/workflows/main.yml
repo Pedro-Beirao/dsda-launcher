@@ -38,6 +38,7 @@ jobs:
             mingw-w64-x86_64-make
             mingw-w64-x86_64-openssl
             make
+            zip
       - shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
@@ -49,12 +50,12 @@ jobs:
           qmake ..
           make
           make clean
-          mkdir lib
+          zip dsda-launcher-win64-dev.zip dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: src\build\windows.zip
+          path: src\build\dsda-launcher-win64-dev.zip
   build-linux:
     runs-on: ubuntu-latest
     steps:
