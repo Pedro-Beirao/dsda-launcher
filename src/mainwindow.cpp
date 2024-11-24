@@ -404,7 +404,7 @@ QStringList MainWindow::getArguments()
 
     if (ui->toggle4_checkBox->isChecked()) arguments.append(ui->toggle4_checkBox->toolTip().split(';'));
 
-    if (ui->resolution_comboBox->currentIndex() == 0)
+    if (ui->resolution_comboBox->currentIndex() <= 0)
     {
         if (ui->fullscreen_checkBox->isChecked()) arguments.append("-fullscreen");
         else arguments.append("-window");
