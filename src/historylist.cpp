@@ -27,6 +27,14 @@ void historyList::init_historyPath()
 void historyList::getHistory()
 {
     ui->history_listWidget->clear();
+    ui->iwad_label->clear();
+    ui->complevel_label->clear();
+    ui->skill_label->clear();
+    ui->level_label->clear();
+    ui->pwads_label->clear();
+    ui->demo_label->clear();
+    ui->extra_label->clear();
+    ui->timestamp_label->clear();
 
     QFile file(historyPath);
     if (!file.open(QFile::ReadOnly | QFile::Text)) return;
