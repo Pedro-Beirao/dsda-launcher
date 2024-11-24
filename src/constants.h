@@ -5,7 +5,7 @@
 #include <QStandardPaths>
 #include <QStringList>
 
-const QString version = "v1.3";
+const QString version = "v1.3.1-hotfix";
 
 const QString LAUNCHER_REPO = "https://github.com/Pedro-Beirao/dsda-launcher";
 const QString LAUNCHER_API = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
@@ -56,8 +56,8 @@ const QString DEFAULT_TOGGLE3ARG = "-respawn";
 const QString DEFAULT_TOGGLE4TEXT = "Solo-Net";
 const QString DEFAULT_TOGGLE4ARG = "-solo-net";
 
-const QString STATE_HEADER = "dsdalauncherstatev1.4";
-const QString HISTORY_HEADER = "dsdalauncherhistoryv1.4";
+const QString STATE_HEADER = "dsdalauncherstatev2";
+const QString HISTORY_HEADER = "dsdalauncherhistoryv2";
 
 void findDataFolder();
 
