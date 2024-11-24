@@ -53,7 +53,7 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: dsda-launcher-dev-win64.zip
+          name: wind64
           path: src\build\dsda-launcher-dev-win64.zip
   build-linux:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: dsda-launcher-dev-mac.dmg
+          name: mac
           path: src/build/dsda-launcher-dev-mac.dmg
     
 
