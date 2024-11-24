@@ -35,11 +35,7 @@ void openIWADsFolder() // CTRL+O runs this function to open the folder where the
 
 QString getFileName(QString filePath)
 {
-#if defined Q_OS_WIN
-    return filePath.section(FOLDER_SEPARATOR, -1, -1);
-#else
-    return filePath.section(FOLDER_SEPARATOR, -1, -1);
-#endif
+    return filePath.section('/', -1, -1); // We dont use FOLDER_SEPARATOR here since, even on windows, Qt uses /
 }
 
 QFileInfoList getFilePath_possibleFiles()
