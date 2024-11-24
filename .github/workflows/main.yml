@@ -53,7 +53,7 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: wind64
+          name: win64
           path: src\build\dsda-launcher-dev-win64.zip
   build-linux:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
         uses: jurplel/install-qt-action@v4.1.1
         with:
           aqtversion: '==3.1.*'
-          version: '6.6.0'
+          version: '6.2.0'
           host: 'linux'
           target: 'desktop'
           arch: 'gcc_64'
@@ -78,10 +78,9 @@ jobs:
           qmake ..
           make
 
-          # make clean
-          # wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-          # chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-          # ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -unsupported-allow-new-glibc
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod a+x ./linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage ./dsda-launcher -unsupported-allow-new-glibc
       - uses: actions/upload-artifact@v4
         with:
           name: linux
