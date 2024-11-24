@@ -49,7 +49,6 @@ jobs:
           cd build
           qmake ..
           make
-          make clean
           zip -j dsda-launcher-dev-win64.zip release/dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
@@ -109,12 +108,10 @@ jobs:
           cd build
           qmake .. "CONFIG+=macdeploy"
           make
-          make clean
-          ls
           macdeployqt ./dsda-launcher.app
 
           brew install create-dmg
-          create-dmg--app-drop-link 10 10 ./dsda-launcher-dev-mac.dmg ./dsda-launcher.app
+          create-dmg --app-drop-link 10 10 ./dsda-launcher-dev-mac.dmg ./dsda-launcher.app
           
       - uses: actions/upload-artifact@v4
         with:
