@@ -15,14 +15,7 @@ historyList::historyList(QWidget *parent) : QWidget(parent), ui(new Ui::historyL
 
 historyList::~historyList() { delete ui; }
 
-void historyList::init_historyPath()
-{
-#if defined Q_OS_WIN
-    historyPath = QCoreApplication::applicationDirPath() + "\\history.states";
-#else
-    historyPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.dsda-doom/history.states";
-#endif
-}
+void historyList::init_historyPath() { historyPath = datafolder + FOLDER_SEPARATOR + "history.states"; }
 
 void historyList::getHistory()
 {
