@@ -46,22 +46,10 @@ bool updateLauncherDialog(bool manualReq)
     }
     else if (current != latest && latest != "")
     {
-#if defined(Q_OS_MAC)
         msgBox.setInformativeText("Available: " + latest +
                                   "\n\n"
-                                  "This will download and open the latest .dmg, you need to drag-n-drop it to the Applications folder.\n"
-                                  "A Terminal window will appear to perform this action, and this Launcher will quit.");
-#elif defined(Q_OS_WINDOWS)
-        msgBox.setInformativeText("Available: " + latest +
-                                  "\n\n"
-                                  "This will download and extract the latest version to the current folder.\n"
-                                  "A CMD window will appear to perform this action, and this Launcher will quit.");
-#elif defined(Q_OS_LINUX)
-        msgBox.setInformativeText("Available: " + latest +
-                                  "\n\n"
-                                  "This will download the latest version\n"
-                                  "A Terminal window will appear to perform this action, and this Launcher will quit.");
-#endif
+                                  "This will open the website where you can download the latest version.");
+
         QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
@@ -81,16 +69,7 @@ bool updateLauncherDialog(bool manualReq)
     return false;
 }
 
-void updateLauncher()
-{
-#if defined(Q_OS_MAC)
-    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
-#elif defined(Q_OS_WIN)
-    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
-#elif defined(Q_OS_LINUX)
-    QDesktopServices::openUrl(QUrl(LAUNCHER_REPO));
-#endif
-}
+void updateLauncher() { QDesktopServices::openUrl(QUrl(LAUNCHER_REPO + "/releases/latest")); }
 
 QString getGameVersion()
 {
