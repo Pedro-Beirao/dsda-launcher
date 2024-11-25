@@ -152,6 +152,11 @@ void Settings::ReadSettings()
     else ui->executable_lineEdit->setText("dsda-doom");
 
     if (settings->value("maxhistory").toString() != "") ui->maxHistory_lineEdit->setText(settings->value("maxhistory").toString());
+    else
+    {
+        settings->setValue("maxhistory", "20");
+        ui->maxHistory_lineEdit->setText("20");
+    }
 
     if (!settings->value("updaterStartLauncher").isNull()) ui->updaterStartLauncher_checkBox->setChecked(settings->value("updaterStartLauncher").toBool());
     else settings->setValue("updaterStartLauncher", true);
