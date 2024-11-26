@@ -1,7 +1,13 @@
 # dsda-launcher
-This is a launcher for the dsda-doom source port
+This is a launcher GUI for the dsda-doom source port.
 
-Downloads are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
+### Downloads
+
+Available for Windows, MacOS and Linux
+
+Stable releases ![Static Badge](https://img.shields.io/badge/Downloads-blue?link=https%3A%2F%2Fgithub.com%2FPedro-Beirao%2Fdsda-launcher%2Freleases%2Flatest)
+
+Dev builds
 
 ___
 
