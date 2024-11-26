@@ -1,13 +1,35 @@
 # dsda-launcher
 This is a launcher GUI for the dsda-doom source port.
 
-### Downloads
+For both casual players and experienced speedrunners, this launcher is everything you need to organize and launch the game. It has a very simple and intuitive graphical interface with the more advanced features working under the hood and in organized menus. dsda-launcher fits in your dsda-doom's installation with minimal footprint, and can even auto-update it.
 
-Available for Windows, MacOS and Linux
+## Downloads
 
-Stable releases ![Static Badge](https://img.shields.io/badge/Downloads-blue?link=https%3A%2F%2Fgithub.com%2FPedro-Beirao%2Fdsda-launcher%2Freleases%2Flatest)
+Available for Windows, MacOS and Linux in [Releases](https://github.com/Pedro-Beirao/dsda-launcher/releases/latest)
 
-Dev builds
+<details>
+  <summary>Dev builds</summary>
+  
+  https://github.com/Pedro-Beirao/dsda-launcher/actions
+
+  Requires a github account to download and are only available for a 90 days after creation.
+  
+  > May be completely broken and unusable
+</details>
+
+## Key Features
+
+- Basic launcher operations
+- Special support for dsda-doom specific features
+- Customizable toggles for quick switching parameters
+- Auto-updating dsda-doom
+- Ability to read the footer of demos and auto-loading the needed pwads
+- Built in console, removing the need of showing an ugly CMD/Terminal window
+- Endoom support
+- Ease of running -help to see all supported parameters
+- History list of past launched parameters, and loading them back in
+- Saving the current state of the launcher to a file, and loading it back later
+- Exporting the current state to a .bat/.sh script
 
 ___
 
