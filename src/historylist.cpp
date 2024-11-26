@@ -219,4 +219,4 @@ void historyList::on_load_pushButton_clicked()
     file.close();
 }
 
-void historyList::on_reload_toolButton_clicked() { getHistory(); }
+void historyList::on_reload_pushButton_clicked() { getHistory(); }
