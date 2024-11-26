@@ -4,7 +4,6 @@ REPO="kraflab/dsda-doom"
 
 TEMP=`mktemp --directory`
 DEST=$1
-echo $DEST
 
 TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.tag_name')
 VERSION=${TAG:1}
