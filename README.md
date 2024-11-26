@@ -1,17 +1,11 @@
 # dsda-launcher
 This is a launcher for the dsda-doom source port
 
-The binaries for a Windows and MacOS version are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
-
-^ This includes the dsda-doom executable (For macOS only)
+Downloads are available in [**Releases**](https://github.com/Pedro-Beirao/dsda-launcher/releases)
 
 ___
 
-Doomworld thread: https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/
-
-Github repo: https://github.com/Pedro-Beirao/dsda-launcher/
-
-TODO list https://github.com/Pedro-Beirao/dsda-launcher/projects/1
+[Doomworld thread](https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/)
 ___
 
 ### Screenshots:
@@ -28,3 +22,7 @@ ___
 **compileLinux.md** - Instructions for compiling for Linux
 
 This app is crossplatform thanks to the Qt framework
+
+___
+
+https://github.com/Pedro-Beirao/dsda-launcher/
