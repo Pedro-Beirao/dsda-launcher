@@ -5,7 +5,7 @@
 ```
 All commits tested using the latest qt5 version available
 
-If you want to build statically, I reccoment using msys2 and the mingw-w64-x86_64-qt5-static package
+If you want to build statically, I recommend using msys2 and the mingw-w64-x86_64-qt5-static package
 Take a look at .github/workflows/main.yml in this repo
 ```
 
@@ -32,7 +32,6 @@ qmake ..
 ```
 make
 ```
-Now copy the launcher to the same folder as dsda-doom
 
 ## Distributing
 
