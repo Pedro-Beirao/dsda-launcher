@@ -2,7 +2,7 @@
 This is a launcher GUI for the dsda-doom source port.
 
 ![Static Badge](https://img.shields.io/badge/Windows-grey)
-![Static Badge](https://img.shields.io/badge/macOS-grey?logo=macOS)
+![Static Badge](https://img.shields.io/badge/macOS-grey?logo=apple)
 ![Static Badge](https://img.shields.io/badge/Linux-grey?logo=linux)
 <br>
 ![GitHub Release](https://img.shields.io/github/v/release/Pedro-Beirao/dsda-launcher)
@@ -11,6 +11,8 @@ This is a launcher GUI for the dsda-doom source port.
 ![Static Badge](https://img.shields.io/badge/Qt-grey?logo=qt)
 
 For both casual players and experienced speedrunners, this launcher is everything you need to organize and launch the game. It has a very simple and intuitive graphical interface with the more advanced features working under the hood and in organized menus. dsda-launcher fits in your dsda-doom's installation with minimal footprint, and can even auto-update it.
+
+[Doomworld thread](https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/)
 
 ## Downloads
 
@@ -40,11 +42,6 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 - Saving the current state of the launcher to a file, and loading it back later
 - Exporting the current state to a .bat/.sh script
 
-___
-
-[Doomworld thread](https://www.doomworld.com/forum/topic/121953-dsda-doom-source-port-on-mac-a-guide/)
-___
-
 ### Screenshots:
 
 ![Screenshot 2021-09-10 at 22 22 56](https://user-images.githubusercontent.com/82064173/132919240-a6e51ac9-3863-4114-bee5-410d60f17ab7.jpg)
@@ -52,14 +49,6 @@ ___
 
 ### Compiling:
 
-**compileMacOS.md** - Instructions for compiling for MacOS
+Code available at [https://github.com/Pedro-Beirao/dsda-launcher/](https://github.com/Pedro-Beirao/dsda-launcher/)
 
-**compileWindows.md** - Instructions for compiling for Windows
-
-**compileLinux.md** - Instructions for compiling for Linux
-
-This app is crossplatform thanks to the Qt framework
-
-___
-
-https://github.com/Pedro-Beirao/dsda-launcher/
+Instructions in [guides](./guides/)
