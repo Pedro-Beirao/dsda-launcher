@@ -53,4 +53,4 @@ A basic build+install script would be
 
 ## Distributing
 
-For distribution of the binary, you can use `linuxdeployqt` which makes an appimage with everything the users will need to run in the system.
+For distribution of the binary, you can use `linuxdeployqt` which makes an appimage with everything the users will need to run in their system.
