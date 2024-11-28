@@ -3,7 +3,7 @@
 
 ## Qt - https://www.qt.io/download
 ```
-All commits tested using the qt6.2.0
+All commits tested using qt6.2.0
 
 You could also install qt using 'brew'
 ```
