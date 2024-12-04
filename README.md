@@ -1,10 +1,10 @@
-<div id="vscodium-logo" align="center">
+<div align="center">
     <img src="./src/icons/dsda-launcher.png" alt="dsda-doom logo" width="200"/>
     <h1>dsda-launcher</h1>
     <h3>This is a launcher GUI for the <a href="https://github.com/kraflab/dsda-doom">dsda-doom</a> source port</h3>
 </div>
 
-<div id="badges" align="center">
+<div align="center" markdown="1">
 
 [![Static Badge](https://img.shields.io/badge/Windows-grey)]()
 [![Static Badge](https://img.shields.io/badge/macOS-grey?logo=apple)]()
@@ -25,7 +25,7 @@ For both casual players and experienced speedrunners, this launcher is everythin
 
 Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Beirao/dsda-launcher/releases/latest)
 
-<details>
+<details markdown="1">
   <summary>Dev builds</summary>
   
   https://github.com/Pedro-Beirao/dsda-launcher/actions
