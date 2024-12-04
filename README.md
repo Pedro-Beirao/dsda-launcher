@@ -1,4 +1,5 @@
 <div id="vscodium-logo" align="center">
+    <img src="./src/icons/dsda-launcher.png" alt="dsda-doom logo" width="200"/>
     <h1>dsda-launcher</h1>
     <h3>This is a launcher GUI for the <a href="https://github.com/kraflab/dsda-doom">dsda-doom</a> source port</h3>
 </div>
@@ -31,7 +32,7 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 
   Requires a github account to download and are only available for a 90 days after creation.
   
-  > WARNING May be completely broken and unusable
+  > May be completely broken and unusable
 </details>
 
 ## Key Features
