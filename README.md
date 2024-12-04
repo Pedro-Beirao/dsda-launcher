@@ -28,7 +28,7 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 <details markdown="1">
   <summary>Dev builds</summary>
   
-  https://github.com/Pedro-Beirao/dsda-launcher/actions
+  <a href="https://github.com/Pedro-Beirao/dsda-launcher/actions">https://github.com/Pedro-Beirao/dsda-launcher/actions</a>
 
   Requires a github account to download and are only available for a 90 days after creation.
   
