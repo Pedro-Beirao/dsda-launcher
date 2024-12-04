@@ -6,14 +6,14 @@
 
 <div id="badges" align="center">
 
-![Static Badge](https://img.shields.io/badge/Windows-grey)
-![Static Badge](https://img.shields.io/badge/macOS-grey?logo=apple)
-![Static Badge](https://img.shields.io/badge/Linux-grey?logo=linux)
+[![Static Badge](https://img.shields.io/badge/Windows-grey)]()
+[![Static Badge](https://img.shields.io/badge/macOS-grey?logo=apple)]()
+[![Static Badge](https://img.shields.io/badge/Linux-grey?logo=linux)]()
 <br>
-![GitHub Release](https://img.shields.io/github/v/release/Pedro-Beirao/dsda-launcher)
-![GitHub branch check runs](https://img.shields.io/github/check-runs/Pedro-Beirao/dsda-launcher/master?logo=github&label=Continuous%20Integration)
-![GitHub top language](https://img.shields.io/github/languages/top/Pedro-Beirao/dsda-launcher)
-![Static Badge](https://img.shields.io/badge/Qt-grey?logo=qt)
+[![GitHub Release](https://img.shields.io/github/v/release/Pedro-Beirao/dsda-launcher)](https://github.com/Pedro-Beirao/dsda-launcher/releases/latest)
+[![GitHub branch check runs](https://img.shields.io/github/check-runs/Pedro-Beirao/dsda-launcher/master?logo=github&label=Continuous%20Integration)](https://github.com/Pedro-Beirao/dsda-launcher/actions)
+[![GitHub top language](https://img.shields.io/github/languages/top/Pedro-Beirao/dsda-launcher)]()
+[![Static Badge](https://img.shields.io/badge/Qt-grey?logo=qt)](https://www.qt.io)
 
 </div>
 
