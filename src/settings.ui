@@ -83,7 +83,7 @@ Launcher should fix them.</string>
       <string>Dark Theme</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QLabel" name="cpmplevels_label">
@@ -403,6 +403,9 @@ border-radius:3px</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="endoom_checkBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -418,7 +421,7 @@ border-radius:3px</string>
       <string>Endoom</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QCheckBox" name="remember_checkBox">
