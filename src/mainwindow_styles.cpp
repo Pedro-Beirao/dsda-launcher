@@ -36,15 +36,15 @@ void MainWindow::setStyles()
         BOOL useDarkMode = BOOL(settings->value("theme") == "dark");
         DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useDarkMode, sizeof(useDarkMode));
         SetFocus(hWnd);
-        ShowWindow(hwnd, SW_MINIMIZE);
-        ShowWindow(hwnd, SW_RESTORE);
+        ShowWindow(hWnd, SW_MINIMIZE);
+        ShowWindow(hWnd, SW_RESTORE);
     }
     if (focusWindow)
     {
         HWND hWnd = reinterpret_cast<HWND>(focusWindow->winId());
         SetFocus(hWnd);
-        ShowWindow(hwnd, SW_MINIMIZE);
-        ShowWindow(hwnd, SW_RESTORE);
+        ShowWindow(hWnd, SW_MINIMIZE);
+        ShowWindow(hWnd, SW_RESTORE);
     }
 #endif
 }
