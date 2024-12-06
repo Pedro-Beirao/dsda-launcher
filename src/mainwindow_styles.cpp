@@ -24,6 +24,29 @@ void MainWindow::setStyles()
 
     if (settings->value("theme") == "light") setLightStyle();
     else setDarkStyle();
+
+#if defined Q_OS_WIN
+    // From DoomRunner
+    QWindow *focusWindow = qApp->focusWindow();
+    QWindowList topLevelWindows = qApp->topLevelWindows();
+    for (const QWindow *window : topLevelWindows)
+    {
+        HWND hWnd = reinterpret_cast<HWND>(window->winId());
+        DWORD DWMWA_USE_IMMERSIVE_DARK_MODE = 20; // until Windows SDK 10.0.22000.0 (first Windows 11 SDK) this value is not defined
+        BOOL useDarkMode = BOOL(settings->value("theme") == "dark");
+        DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useDarkMode, sizeof(useDarkMode));
+        SetFocus(hWnd);
+        ShowWindow(hwnd, SW_MINIMIZE);
+        ShowWindow(hwnd, SW_RESTORE);
+    }
+    if (focusWindow)
+    {
+        HWND hWnd = reinterpret_cast<HWND>(focusWindow->winId());
+        SetFocus(hWnd);
+        ShowWindow(hwnd, SW_MINIMIZE);
+        ShowWindow(hwnd, SW_RESTORE);
+    }
+#endif
 }
 
 void MainWindow::setLightStyle()
@@ -34,13 +57,6 @@ void MainWindow::setLightStyle()
     ui->additionalArguments_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
     ui->nextPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
     ui->previousPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
-#elif defined Q_OS_WIN
-    COLORREF DARK_COLOR = 0x00505050;
-    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
-    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
-
-    ShowWindow(hwnd, SW_MINIMIZE);
-    ShowWindow(hwnd, SW_RESTORE);
 #endif
 }
 

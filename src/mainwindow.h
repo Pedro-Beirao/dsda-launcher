@@ -43,6 +43,7 @@
 #include <QShortcut>
 #include <QStandardPaths>
 #include <QTextEdit>
+#include <QWindow>
 #include <QtConcurrent>
 #include <QtNetwork>
 #include <qgraphicseffect.h>
