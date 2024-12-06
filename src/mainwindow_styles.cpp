@@ -34,6 +34,13 @@ void MainWindow::setLightStyle()
     ui->additionalArguments_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
     ui->nextPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
     ui->previousPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
+#elif defined Q_OS_WIN
+    COLORREF DARK_COLOR = 0x00505050;
+    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
+    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
+
+    ShowWindow(hwnd, SW_MINIMIZE);
+    ShowWindow(hwnd, SW_RESTORE);
 #endif
 }
 
@@ -45,5 +52,12 @@ void MainWindow::setDarkStyle()
     ui->additionalArguments_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
     ui->nextPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
     ui->previousPage_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
+#elif defined Q_OS_WIN
+    COLORREF DARK_COLOR = 0x00FFFFFF;
+    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
+    BOOL SET_CAPTION_COLOR = SUCCEEDED(DwmSetWindowAttribute(WINhWnd, DWMWINDOWATTRIBUTE::DWMWA_BORDER_COLOR, &DARK_COLOR, sizeof(DARK_COLOR)));
+
+    ShowWindow(hwnd, SW_MINIMIZE);
+    ShowWindow(hwnd, SW_RESTORE);
 #endif
 }

@@ -3,6 +3,7 @@
 #include <QtGlobal>
 
 #if defined Q_OS_WIN
+#include <dwmapi.h>
 #include <stdio.h>
 #include <tchar.h>
 #include <windows.h>
