@@ -80,7 +80,7 @@ jobs:
 
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
           chmod a+x ./linuxdeploy-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage --executable=./dsda-launcher --output=appimage
+          ./linuxdeploy-x86_64.AppImage --executable=./dsda-launcher --output=appimage --appdir=./
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-linux
