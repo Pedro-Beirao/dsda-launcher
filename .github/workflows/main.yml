@@ -78,9 +78,9 @@ jobs:
           qmake ..
           make
 
-          wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
-          chmod a+x ./linuxdeploy-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage ../icons/dsda-Launcher.desktop --executable=./dsda-launcher -appimage -bundle-non-qt-libs
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod a+x ./linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage ../icons/dsda-Launcher.desktop -unsupported-allow-new-glibc --executable=./dsda-launcher -appimage -bundle-non-qt-libs
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-linux
