@@ -134,20 +134,19 @@ bool updateGameDialog(bool manualReq)
                                   "\n\n"
                                   "This will download and extract the latest version to the current folder.\n"
                                   "A CMD window will appear to perform this action.");
+        QPushButton *buttonYes = msgBox.addButton("Install", QMessageBox::YesRole);
 #elif defined(Q_OS_MACOS)
         msgBox.setInformativeText("It seems you do not have dsda-doom installed.\n"
                                   "Click 'Install'"
                                   "\n\n"
                                   "This will download and install the latest version, inside the Launcher's App Bundle.\n"
                                   "A Terminal window will appear to perform this action.");
+        QPushButton *buttonYes = msgBox.addButton("Install", QMessageBox::YesRole);
 #elif defined(Q_OS_LINUX)
         msgBox.setInformativeText("It seems you do not have dsda-doom installed.\n"
-                                  "Install dsda-doom using your prefered package manager (if available)  OR  Click 'Install'"
-                                  "\n\n"
-                                  "This will download and extract the latest version to the current folder.\n"
-                                  "A Terminal window will appear to perform this action.");
+                                  "Install dsda-doom using your prefered package manager  OR  Download the official AppImage and put it in your $PATH");
+        QPushButton *buttonYes = msgBox.addButton("Go to Downloads", QMessageBox::YesRole);
 #endif
-        QPushButton *buttonYes = msgBox.addButton("Install", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
         msgBox.exec();
@@ -170,18 +169,19 @@ bool updateGameDialog(bool manualReq)
                                   "\n\n"
                                   "This will download and extract the latest version to the current folder.\n"
                                   "A CMD window will appear to perform this action.");
+        QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
 #elif defined(Q_OS_MACOS)
         msgBox.setInformativeText("Available: " + latest +
                                   "\n\n"
                                   "This will download and install the latest version, inside the Launcher's App Bundle.\n"
                                   "A Terminal window will appear to perform this action.");
+        QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
 #elif defined(Q_OS_LINUX)
         msgBox.setInformativeText("Available: " + latest +
                                   "\n\n"
-                                  "This will download and extract the latest version to the current folder.\n"
-                                  "A Terminal window will appear to perform this action.");
+                                  "You can get the latest version by using your prefered package manager  OR  Downloading the official AppImage and putting it in your $PATH");
+        QPushButton *buttonYes = msgBox.addButton("Go to Downloads", QMessageBox::YesRole);
 #endif
-        QPushButton *buttonYes = msgBox.addButton("Update", QMessageBox::YesRole);
         msgBox.addButton("Close", QMessageBox::NoRole);
         msgBox.setDefaultButton(buttonYes);
         msgBox.exec();
@@ -214,8 +214,8 @@ void updateGame()
                                        "open -na Terminal --args /tmp/dsda-updater-macos.sh"});
     // clang-format on
 #elif defined(Q_OS_WIN)
-    QDesktopServices::openUrl(QUrl(GAME_REPO));
+    QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
 #elif defined(Q_OS_LINUX)
-    QDesktopServices::openUrl(QUrl(GAME_REPO));
+    QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
 #endif
 }
