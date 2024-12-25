@@ -78,9 +78,10 @@ jobs:
           qmake ..
           make
 
-          wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
-          chmod a+x ./linuxdeploy-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage --executable=./dsda-launcher --output=appimage --appdir=./ --desktop-file=../icons/dsda-Launcher.desktop --icon-file=../icons/dsda-launcher.svg
+          wget -c https://github.com/$(wget -q https://github.com/probonopd/go-appimage/releases/expanded_assets/continuous -O - | grep "appimagetool-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2)
+          chmod +x appimagetool-*.AppImage
+          ./appimagetool-*.AppImage -s deploy ./usr/share/applications/*.desktop
+          VERSION=1.0 ./appimagetool-*.AppImage ./
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-linux
