@@ -214,7 +214,7 @@ void updateGame()
                                        "open -na Terminal --args /tmp/dsda-updater-macos.sh"});
     // clang-format on
 #elif defined(Q_OS_WIN)
-    QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
+    system(("start cmd.exe /k powershell -command Invoke-WebRequest -OutFile \"%temp%\dsda-updater-windows.bat\" -Uri " + GAME_UPDATER_WINDOWS + " && \"%temp%\dsda-updater-windows.bat\"").c_str());
 #elif defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
 #endif

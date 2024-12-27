@@ -14,6 +14,7 @@ const QString LAUNCHER_UPDATER = "https://raw.githubusercontent.com/Pedro-Beirao
 const QString GAME_REPO = "https://github.com/kraflab/dsda-doom";
 const QString GAME_API = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";
 const QString GAME_UPDATER_MACOS = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/dsda-updater-macos.sh";
+const QString GAME_UPDATER_WINDOWS = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/dsda-updater-windows.bat";
 
 #if defined Q_OS_WIN
 const QChar FOLDER_SEPARATOR = '\\';
