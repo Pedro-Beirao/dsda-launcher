@@ -202,9 +202,9 @@ bool updateGameDialog(bool manualReq)
 
 void updateGame()
 {
+    // clang-format off
 #if defined(Q_OS_MAC)
     QProcess process;
-    // clang-format off
     process.startDetached("sh", {"-c", "rm /tmp/dsda-updater-macos.sh;"
                                        "curl -L -o /tmp/dsda-updater-macos.sh " + GAME_UPDATER_MACOS + ";"
                                        "p2=" + launcherfolder + "/../Resources;"
@@ -212,10 +212,22 @@ void updateGame()
                                        "sed -i -e s/'$1'/$p2/g /tmp/dsda-updater-macos.sh;"
                                        "chmod +x /tmp/dsda-updater-macos.sh;"
                                        "open -na Terminal --args /tmp/dsda-updater-macos.sh"});
-    // clang-format on
 #elif defined(Q_OS_WIN)
-    system(("start cmd.exe /k powershell -command Invoke-WebRequest -OutFile \"%temp%\dsda-updater-windows.bat\" -Uri " + GAME_UPDATER_WINDOWS.toStdString() + " && \"%temp%\dsda-updater-windows.bat\"").c_str());
+    QProcess process;
+    process.setCreateProcessArgumentsModifier([] (QProcess::CreateProcessArguments *args)
+                                              {
+                                                  args->flags |= CREATE_NEW_CONSOLE;
+                                                  args->startupInfo->dwFlags &= ~STARTF_USESTDHANDLES;
+                                                  args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
+                                                  args->startupInfo->dwFillAttribute = BACKGROUND_BLUE | FOREGROUND_RED
+                                                                                       | FOREGROUND_INTENSITY;
+                                              });
+    process.setProgram("cmd.exe");
+    process.setArguments({"/k", "powershell -command (Invoke-WebRequest -OutFile \"%temp%\\dsda-doom-temp\\dsda-updater-windows.bat\" -Uri " + GAME_UPDATER_WINDOWS + ") && " +
+                                    "powershell -command start \"%temp%\\dsda-doom-temp\\dsda-updater-windows.bat\" \"" + launcherfolder + "\""});
+    process.startDetached();
 #elif defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
 #endif
+    // clang-format on
 }
