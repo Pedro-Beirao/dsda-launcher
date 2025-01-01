@@ -223,8 +223,8 @@ void updateGame()
                                                                                        | FOREGROUND_INTENSITY;
                                               });
     process.setProgram("cmd.exe");
-    process.setArguments({"/k", "powershell -command (Invoke-WebRequest -OutFile \"%temp%\\dsda-doom-temp\\dsda-updater-windows.bat\" -Uri " + GAME_UPDATER_WINDOWS + ") && " +
-                                    "powershell -command start \"%temp%\\dsda-doom-temp\\dsda-updater-windows.bat\" \"" + launcherfolder + "\""});
+    process.setArguments({"/k", "powershell -command (Invoke-WebRequest -OutFile '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -Uri " + GAME_UPDATER_WINDOWS + ") && " +
+                                "powershell -command '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' '" + launcherfolder + "'"});
     process.startDetached();
 #elif defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
