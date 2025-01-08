@@ -26,9 +26,10 @@ if exist "%temp%\dsda-doom-temp\%v_win64%.zip" (
   powershell -command "Expand-Archive -Force \"%temp%\dsda-doom-temp\%v_win64%.zip\" \"%temp%\dsda-doom-temp\""
 ) else (
   echo "Error downloading update"
-  del "%temp%\dsda-doom-temp\*"
+  del /q "%temp%\dsda-doom-temp\%v_win64%.zip"
+  rmdir /s /q "%temp%\dsda-doom-temp\%v_win64%"
   pause
-  goto :eof
+  exit
 )
 
 :: Copy to destination folder
@@ -36,8 +37,10 @@ echo Copying files to destination
 robocopy "%temp%\dsda-doom-temp\%v_win64%" "%DEST%" * /nfl /ndl /njh /njs /nc /ns /np
 
 :: Delete temp files
-del /y "%temp%\dsda-doom-temp\*"
+del /q "%temp%\dsda-doom-temp\%v_win64%.zip"
+rmdir /s /q "%temp%\dsda-doom-temp\%v_win64%"
 
 echo dsda-doom %VERSION% has been installed succesfully!
 
 pause
+exit
