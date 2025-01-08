@@ -33,7 +33,7 @@ if exist "%temp%\dsda-doom-temp\%v_win64%.zip" (
 
 :: Copy to destination folder
 echo Copying files to destination
-xcopy /y /q "%temp%\dsda-doom-temp\%v_win64%\*" "%DEST%"
+robocopy "%temp%\dsda-doom-temp\%v_win64%" "%DEST%" * /nfl /ndl /njh /njs /nc /ns /np
 
 :: Delete temp files
 del /y "%temp%\dsda-doom-temp\*"
