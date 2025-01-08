@@ -39,6 +39,7 @@ jobs:
             mingw-w64-x86_64-openssl
             make
             zip
+            
       - shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
@@ -49,12 +50,21 @@ jobs:
           cd build
           qmake ..
           make
-          zip -j dsda-launcher-dev-win64.zip release/dsda-launcher.exe
+          zip -j dsda-launcher-${{ github.ref_name }}-win64.zip release/dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-win64
-          path: src\build\dsda-launcher-dev-win64.zip
+          path: src\build\dsda-launcher-${{ github.ref_name }}-win64.zip
+
+      - name: Release
+        if: ${{ contains(github.ref, 'tags') }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ github.ref_name }}
+          allowUpdates: true
+          artifacts: src/build/dsda-launcher-${{ github.ref_name }}-win64.dmg
+          
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -69,6 +79,7 @@ jobs:
           target: 'desktop'
           arch: 'gcc_64'
           tools: 'tools_opensslv3_src'
+          
       - name: build
         run: |
           sudo apt install libfuse2
@@ -83,6 +94,7 @@ jobs:
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/2.0.0-alpha-1-20241106/linuxdeploy-plugin-qt-x86_64.AppImage"
           chmod a+x ./linuxdeploy-plugin-qt-x86_64.AppImage
           ./linuxdeploy-x86_64.AppImage --plugin=qt --executable=./dsda-launcher --output=appimage --appdir=./ --desktop-file=../icons/dsda-Launcher.desktop --icon-file=../icons/dsda-launcher.svg
+      
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-linux
@@ -112,12 +124,17 @@ jobs:
           macdeployqt ./dsda-launcher.app
 
           brew install create-dmg
-          create-dmg --app-drop-link 10 10 ./dsda-launcher-dev-mac.dmg ./dsda-launcher.app
+          create-dmg --app-drop-link 10 10 ./dsda-launcher-${{ github.ref_name }}-mac.dmg ./dsda-launcher.app
           
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-mac
-          path: src/build/dsda-launcher-dev-mac.dmg
+          path: src/build/dsda-launcher-${{ github.ref_name }}-mac.dmg
     
-
-
+      - name: Release
+        if: ${{ contains(github.ref, 'tags') }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ github.ref_name }}
+          allowUpdates: true
+          artifacts: src/build/dsda-launcher-${{ github.ref_name }}-mac.dmg
