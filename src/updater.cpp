@@ -219,8 +219,6 @@ void updateGame()
                                                   args->flags |= CREATE_NEW_CONSOLE;
                                                   args->startupInfo->dwFlags &= ~STARTF_USESTDHANDLES;
                                                   args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
-                                                  args->startupInfo->dwFillAttribute = BACKGROUND_BLUE | FOREGROUND_RED
-                                                                                       | FOREGROUND_INTENSITY;
                                               });
     process.setProgram("cmd.exe");
     process.setArguments({"/k", "powershell -command (Invoke-WebRequest -OutFile '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -Uri " + GAME_UPDATER_WINDOWS + ") && " +
