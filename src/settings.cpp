@@ -252,6 +252,8 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
 #endif
         settings->setValue("theme", "dark");
     }
+
+    setAllWindowsTitleBar();
 }
 
 

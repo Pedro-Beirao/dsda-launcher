@@ -6,6 +6,7 @@ void MainWindow::on_console_pushButton_clicked()
     consoleWindow->show();
     consoleWindow->activateWindow();
     consoleWindow->raise();
+    setWindowTitleBar(consoleWindow->winId());
 }
 
 void MainWindow::on_additionalArguments_pushButton_clicked()

@@ -63,6 +63,7 @@ void MainWindow::on_actionOpenSettings_triggered()
     settingsWindow->show();
     settingsWindow->activateWindow();
     settingsWindow->raise();
+    setWindowTitleBar(settingsWindow->winId());
 }
 
 void MainWindow::on_actionTips_triggered()
@@ -111,4 +112,5 @@ void MainWindow::on_actionOpenHistory_triggered()
     historyListWindow->show();
     historyListWindow->activateWindow();
     historyListWindow->raise();
+    setWindowTitleBar(historyListWindow->winId());
 }

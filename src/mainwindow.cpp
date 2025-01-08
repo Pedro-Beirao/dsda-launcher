@@ -312,6 +312,7 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         consoleWindow->show();
         consoleWindow->activateWindow();
         consoleWindow->raise();
+        setWindowTitleBar(consoleWindow->winId());
         return;
     }
 
@@ -322,6 +323,7 @@ void MainWindow::finished(int exitCode, QProcess::ExitStatus exitStatus)
         endoomWindow->show();
         endoomWindow->activateWindow();
         endoomWindow->raise();
+        setWindowTitleBar(endoomWindow->winId());
     }
 }
 

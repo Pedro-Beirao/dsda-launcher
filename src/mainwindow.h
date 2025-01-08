@@ -47,6 +47,7 @@
 #include <QtConcurrent>
 #include <QtNetwork>
 #include <qgraphicseffect.h>
+#include "theme.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

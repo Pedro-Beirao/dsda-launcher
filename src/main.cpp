@@ -7,6 +7,7 @@
 #include <QSplashScreen>
 #include <QStyleFactory>
 #include <QTimer>
+#include "theme.h"
 
 extern QSettings *settings;
 
@@ -34,6 +35,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.ensurePolished();
     w.show();
+
+    setWindowTitleBar(w.winId()); // This should be called after every window.show()
 
     a.setQuitOnLastWindowClosed(false);
     return a.exec();
