@@ -37,8 +37,6 @@ private slots:
 
   void on_resolutions_listWidget_itemChanged(QListWidgetItem *item);
 
-  void closeEvent(QCloseEvent *event);
-
   void on_downResolutions_toolButton_clicked();
   void on_upResolutions_toolButton_clicked();
   void on_minusResolutions_toolButton_clicked();

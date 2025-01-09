@@ -76,17 +76,25 @@ void MainWindow::whenAnimationFinishPrevious()
 
 void MainWindow::setToggles(QString t1, QString a1, QString t2, QString a2, QString t3, QString a3, QString t4, QString a4)
 {
-    ui->toggle1_checkBox->setText(t1);
-    ui->toggle1_checkBox->setToolTip(a1);
+    if (t1 != "") ui->toggle1_checkBox->setText(t1);
+    else ui->toggle1_checkBox->setText(DEFAULT_TOGGLE1TEXT);
+    if (a1 != "") ui->toggle1_checkBox->setToolTip(a1);
+    else ui->toggle1_checkBox->setToolTip(DEFAULT_TOGGLE1ARG);
 
-    ui->toggle2_checkBox->setText(t2);
-    ui->toggle2_checkBox->setToolTip(a2);
+    if (t2 != "") ui->toggle2_checkBox->setText(t2);
+    else ui->toggle2_checkBox->setText(DEFAULT_TOGGLE2TEXT);
+    if (a2 != "") ui->toggle2_checkBox->setToolTip(a2);
+    else ui->toggle2_checkBox->setToolTip(DEFAULT_TOGGLE2ARG);
 
-    ui->toggle3_checkBox->setText(t3);
-    ui->toggle3_checkBox->setToolTip(a3);
+    if (t3 != "") ui->toggle3_checkBox->setText(t3);
+    else ui->toggle3_checkBox->setText(DEFAULT_TOGGLE3TEXT);
+    if (a3 != "") ui->toggle3_checkBox->setToolTip(a3);
+    else ui->toggle3_checkBox->setToolTip(DEFAULT_TOGGLE3ARG);
 
-    ui->toggle4_checkBox->setText(t4);
-    ui->toggle4_checkBox->setToolTip(a4);
+    if (t4 != "") ui->toggle4_checkBox->setText(t4);
+    else ui->toggle4_checkBox->setText(DEFAULT_TOGGLE4TEXT);
+    if (a4 != "") ui->toggle4_checkBox->setToolTip(a4);
+    else ui->toggle4_checkBox->setToolTip(DEFAULT_TOGGLE4ARG);
 }
 
 void MainWindow::setResolutionsList(QListWidget *list)

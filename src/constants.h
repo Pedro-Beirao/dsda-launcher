@@ -45,7 +45,7 @@ const QStringList FULL_COMPLEVELS = {"Default", "0 - Doom v1.2", "1 - Doom v1.66
 
 const QStringList SKILLS_LIST = {"", "ITYTD", "HNTR", "HMP", "UV", "Nightmare!"};
 
-const QString DEFAULT_TOGGLE1TEXT = "Fast";
+const QString DEFAULT_TOGGLE1TEXT = "Fast Monsters";
 const QString DEFAULT_TOGGLE1ARG = "-fast";
 
 const QString DEFAULT_TOGGLE2TEXT = "No Monsters";
