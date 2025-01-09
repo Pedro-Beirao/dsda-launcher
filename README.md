@@ -51,8 +51,10 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 
 ## Screenshots
 
-![Screenshot 2021-09-10 at 22 22 56](https://user-images.githubusercontent.com/82064173/132919240-a6e51ac9-3863-4114-bee5-410d60f17ab7.jpg)
-
+<div display="flex" flex-direction="row">
+    <img src="./screenshots/mac-dark.png" width="200">
+    <img src="./screenshots/mac-light.png" width="200">
+</div>
 
 ## Compiling
 
