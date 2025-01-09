@@ -176,6 +176,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
 
 #if defined Q_OS_MACOS
         macSetToLightTheme();
+        MainWindow::pMainWindow->setLightStyle();
 
         ui->PWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
         ui->IWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_LIGHT);
@@ -190,6 +191,7 @@ void Settings::on_darkTheme_checkBox_clicked(bool checked)
     {
 #if defined Q_OS_MACOS
         macSetToDarkTheme();
+        MainWindow::pMainWindow->setDarkStyle();
 
         ui->PWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);
         ui->IWADFolders_pushButton->setStyleSheet(STYLE_MAC_BUTTON_DARK);

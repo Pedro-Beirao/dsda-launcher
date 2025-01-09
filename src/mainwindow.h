@@ -152,6 +152,8 @@ class MainWindow : public QMainWindow
     void Launch(QStringList arguments);
     void showSSLDialog();
     void on_tooltip_pushButton_clicked();
+    void setLightStyle();
+    void setDarkStyle();
 
   public Q_SLOTS:
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -179,8 +181,6 @@ class MainWindow : public QMainWindow
     void loadSelected();
     void saveSelected();
     void setStyles();
-    void setLightStyle();
-    void setDarkStyle();
     QStringList getArguments();
     void on_playingDemo_indicator_clicked();
     void on_recordingDemo_indicator_clicked();
