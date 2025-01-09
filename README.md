@@ -52,8 +52,8 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 ## Screenshots
 
 <div display="flex" flex-direction="row">
-    <img src="./screenshots/mac-dark.png" width="200">
-    <img src="./screenshots/mac-light.png" width="200">
+    <img src="./screenshots/mac-dark.png" width="300">
+    <img src="./screenshots/mac-light.png" width="300">
 </div>
 
 ## Compiling
