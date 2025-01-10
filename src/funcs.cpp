@@ -19,7 +19,7 @@ QString getGamePath()
         return launcherfolder + "/" + gameName;
     }
 #elif defined(Q_OS_MACOS)
-    if (gameName.left(2) == "\n") return launcherfolder + "/../Resources/" + gameName;
+    return launcherfolder + "/../Resources/" + gameName;
 #endif
 }
 
