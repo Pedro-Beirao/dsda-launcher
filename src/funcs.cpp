@@ -7,18 +7,19 @@ QString getGamePath()
     return launcherfolder + "\\" + gameName + ".exe";
 #elif defined(Q_OS_LINUX)
     QProcess whichProcess;
-    whichProcess.start("which", QStringList(gameName));
+    whichProcess.start("which", {gameName});
     whichProcess.waitForFinished();
-    if (whichProcess.readAllStandardOutput() != "")
+    QString whichOutput = whichProcess.readAllStandardOutput().trimmed();
+    if (whichOutput != "")
     {
-        return gameName;
+        return whichOutput;
     }
     else
     {
         return launcherfolder + "/" + gameName;
     }
 #elif defined(Q_OS_MACOS)
-    return launcherfolder + "/../Resources/" + gameName;
+    if (gameName.left(2) == "\n") return launcherfolder + "/../Resources/" + gameName;
 #endif
 }
 
