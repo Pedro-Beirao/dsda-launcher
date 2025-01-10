@@ -56,6 +56,11 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
     <img src="./screenshots/mac-light.png" width="300">
 </div>
 
+<div display="flex" flex-direction="row">
+    <img src="./screenshots/linux-dark.png" width="300">
+    <img src="./screenshots/linux-light.png" width="300">
+</div>
+
 ## Compiling
 
 Code available at [https://github.com/Pedro-Beirao/dsda-launcher/](https://github.com/Pedro-Beirao/dsda-launcher/)
