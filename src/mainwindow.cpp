@@ -50,30 +50,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->stackedWidget->setAttribute(Qt::WA_TranslucentBackground);
 
-#if defined Q_OS_MACOS
-    ui->tooltip_textBrowser->setFontPointSize(9);
-    ui->tooltip_textBrowser->setText("Don't see any IWAD?     ^\n\n"
-                                     "Put your IWADs in " +
-                                     datafolder +
-                                     "\n"
-                                     "CMD + o will open this folder in Finder\n\n"
-                                     "Then restart the Launcher");
-#elif defined Q_OS_WIN
-    ui->tooltip_textBrowser->setFontPointSize(8);
-    ui->tooltip_textBrowser->setText("Don't see any IWAD?     ^\n\n"
-                                     "Put your IWADs in the same folder as the Launcher\n"
-                                     "CTRL + o will show you this folder\n\n"
-                                     "Then restart the Launcher");
-#else
-    ui->tooltip_textBrowser->setFontPointSize(9);
-    ui->tooltip_textBrowser->setText("Don't see any IWAD?     ^\n\n"
-                                     "Put your IWADs in " +
-                                     datafolder +
-                                     "\n"
-                                     "CTRL + o will show you this folder\n\n"
-                                     "Then restart the Launcher");
-#endif
-
     // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
 
