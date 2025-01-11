@@ -30,7 +30,7 @@ void openIWADsFolder() // CTRL+O runs this function to open the folder where the
 #elif defined Q_OS_LINUX
     QProcess::startDetached("xdg-open", {datafolder});
 #else
-    QProcess::startDetached("explorer.exe", {datafolder});
+    QProcess::startDetached("explorer.exe", {QDir::toNativeSeparators(datafolder)});
 #endif
 }
 
