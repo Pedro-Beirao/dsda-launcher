@@ -51,15 +51,29 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 
 ## Screenshots
 
-<div display="flex" flex-direction="row">
-    <img src="./screenshots/mac-dark.png" width="300">
-    <img src="./screenshots/mac-light.png" width="300">
-</div>
+<details open>
+    <summary>macOS</summary>
+    <div display="flex" flex-direction="row">
+        <img src="./screenshots/mac-dark.png" width="300">
+        <img src="./screenshots/mac-light.png" width="300">
+    </div>
+</details>
 
-<div display="flex" flex-direction="row">
-    <img src="./screenshots/linux-dark.png" width="300">
-    <img src="./screenshots/linux-light.png" width="300">
-</div>
+<details>
+    <summary>Windows</summary>
+    <div display="flex" flex-direction="row">
+        <img src="./screenshots/windows-dark.png" width="300">
+        <img src="./screenshots/windows-light.png" width="300">
+    </div>
+</details>
+
+<details>
+    <summary>Linux</summary>
+    <div display="flex" flex-direction="row">
+        <img src="./screenshots/linux-dark.png" width="300">
+        <img src="./screenshots/linux-light.png" width="300">
+    </div>
+</details>
 
 ## Compiling
 
