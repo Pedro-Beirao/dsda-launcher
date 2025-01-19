@@ -221,7 +221,8 @@ void updateGame()
                                                   args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
                                               });
     process.setProgram("cmd.exe");
-    process.setArguments({"/k", "powershell -command (Invoke-WebRequest -OutFile '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -Uri " + GAME_UPDATER_WINDOWS + ") && " +
+    process.setArguments({"/k", "powershell -command mkdir \"%temp%\\dsda-doom-temp\" && "
+                                "powershell -command (Invoke-WebRequest -OutFile '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -Uri " + GAME_UPDATER_WINDOWS + ") && " +
                                 "powershell -command Start-Process -FilePath '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -ArgumentList '" + launcherfolder + "' -Wait -NoNewWindow"});
     process.startDetached();
 #elif defined(Q_OS_LINUX)
