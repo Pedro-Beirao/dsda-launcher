@@ -23,7 +23,7 @@ void findDataFolder()
         QString xdg_data_home = QString(qgetenv("XDG_DATA_HOME"));
         if (!xdg_data_home.isEmpty())
         {
-            datafolder = xdg_data_home;
+            datafolder = xdg_data_home + "/dsda-doom";
         }
         else
         {
