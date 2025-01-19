@@ -14,8 +14,8 @@ class states : public QObject
     static void loadStateFromFile(QString filePath);
     static void loadStateFromString(QString string);
     static void saveStateToFile(QString filePath);
-    static void loadStateOld(QTextStream &stream);
-    static void loadStateNew(QTextStream &stream);
+    static void loadStateV1(QTextStream &stream);
+    static void loadStateV2(QTextStream &stream);
 
   signals:
 };

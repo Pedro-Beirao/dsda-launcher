@@ -19,8 +19,8 @@ void states::loadStateFromFile(QString filePath)
     QString header;
     stream.readLineInto(&header);
 
-    if (header == "dsdalauncherstatev1.4") loadStateNew(stream);
-    else loadStateOld(stream);
+    if (header == "dsdalauncherstatev2") loadStateV2(stream);
+    else loadStateV1(stream);
 
     file.close();
 }
@@ -32,10 +32,10 @@ void states::loadStateFromString(QString string)
     QString header;
     stream.readLineInto(&header);
 
-    loadStateNew(stream);
+    loadStateV2(stream);
 }
 
-void states::loadStateOld(QTextStream &stream)
+void states::loadStateV1(QTextStream &stream)
 {
     MainWindow::pMainWindow->wads_listWidget()->clear();
 
@@ -71,7 +71,7 @@ void states::loadStateOld(QTextStream &stream)
             {
                 for (int i = 0; i < MainWindow::pMainWindow->complevel_comboBox()->count(); i++)
                 {
-                    QString content = MainWindow::pMainWindow->complevel_comboBox()->itemText(i).mid(0, 2);
+                    QString content = MainWindow::pMainWindow->complevel_comboBox()->itemText(i).mid(0, 2).trimmed();
                     if (content == buffer_value) MainWindow::pMainWindow->complevel_comboBox()->setCurrentIndex(i);
                 }
             }
@@ -146,7 +146,7 @@ void states::loadStateOld(QTextStream &stream)
     }
 }
 
-void states::loadStateNew(QTextStream &stream)
+void states::loadStateV2(QTextStream &stream)
 {
     MainWindow::pMainWindow->wads_listWidget()->clear();
 

@@ -211,7 +211,7 @@ void historyList::on_load_pushButton_clicked()
         }
         if (c == ui->history_listWidget->count()-1-ui->history_listWidget->currentRow())
         {
-            states::loadStateNew(stream);
+            states::loadStateV2(stream);
             break;
         }
     }
