@@ -2,7 +2,7 @@
 
 REPO="kraflab/dsda-doom"
 
-TEMP=`mktemp --directory`
+TEMP=`mktemp -d`
 DEST=$1
 
 TAG=$(curl -s https://api.github.com/repos/$REPO/releases/latest | sed -Ene '/^ *"tag_name": *"(v.+)",$/s//\1/p')
