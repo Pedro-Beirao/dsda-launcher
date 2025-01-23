@@ -5,7 +5,7 @@ REPO="kraflab/dsda-doom"
 TEMP=`mktemp --directory`
 DEST=$1
 
-TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.tag_name')
+TAG=$(curl -s https://api.github.com/repos/$REPO/releases/latest | sed -Ene '/^ *"tag_name": *"(v.+)",$/s//\1/p')
 VERSION=${TAG:1}
 
 v_arm64="dsda-doom-$VERSION-mac-arm64"
