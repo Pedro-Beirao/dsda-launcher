@@ -363,11 +363,10 @@ QStringList MainWindow::getArguments()
     arguments.append("-iwad");
     arguments.append(ui->iwad_comboBox->currentData(Qt::ToolTipRole).toString());
 
-    QString complevel_string = ui->complevel_comboBox->currentText();
-    if (complevel_string != "Default")
+    if (ui->complevel_comboBox->isEnabled() && ui->complevel_comboBox->currentText() != "Default")
     {
         arguments.append("-complevel");
-        arguments.append(complevel_string.left(2));
+        arguments.append(ui->complevel_comboBox->currentText().left(2));
     }
 
     if (ui->skill_comboBox->isEnabled() && ui->skill_comboBox->currentIndex() != 0)
