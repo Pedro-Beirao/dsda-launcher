@@ -2,21 +2,21 @@
 
 void MainWindow::on_record_pushButton_clicked() // Record demo
 {
-    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getSaveFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("Demo files (*.lmp);;All files(*)"));
     settings->setValue("demofolder", demoName);
     ui->record_lineEdit->setText(demoName);
 }
 
 void MainWindow::on_playback_pushButton_clicked() // Play demo
 {
-    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("lmp files (*.lmp)"));
+    QString demoName = QFileDialog::getOpenFileName(this, tr("Demo file"), settings->value("demofolder").toString(), tr("Demo files (*.lmp);;All files(*)"));
     settings->setValue("demofolder", demoName);
     ui->playback_lineEdit->setText(demoName);
 }
 
 void MainWindow::on_viddump_pushButton_clicked()
 {
-    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"), settings->value("viddumpfolder").toString(), tr("video files(*.mp4 *.mkv)"));
+    QString vidName = QFileDialog::getSaveFileName(this, tr("mp4 / mkv"), settings->value("viddumpfolder").toString(), tr("Video files(*.mp4 *.mkv);;All files(*)"));
     settings->setValue("viddumpfolder", vidName);
     ui->viddump_lineEdit->setText(vidName);
 }

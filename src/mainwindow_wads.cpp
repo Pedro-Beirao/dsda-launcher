@@ -12,7 +12,7 @@ void MainWindow::addPwads(QStringList files_list) // Click the + button to add a
 // Add pwads to be loaded
 void MainWindow::on_addPwads_toolButton_clicked()
 {
-    QStringList files_list = QFileDialog::getOpenFileNames(this, tr("Select WAD file"), settings->value("primaryPWADFolder").toString(), tr("WAD files (*.wad *.deh *.bex *.zip)"));
+    QStringList files_list = QFileDialog::getOpenFileNames(this, tr("Select WAD file"), settings->value("primaryPWADFolder").toString(), tr("WAD files (*.wad *.deh *.bex *.zip *.lmp);;All files(*)"));
     if (!files_list.isEmpty())
     {
         addPwads(files_list);

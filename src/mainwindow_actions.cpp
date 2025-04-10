@@ -14,7 +14,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionLoadState_triggered()
 {
-    QString fileNames = QFileDialog::getOpenFileName(this, tr("Load State"), settings->value("statefile").toString(), tr("state files (*.state)"));
+    QString fileNames = QFileDialog::getOpenFileName(this, tr("Load State"), settings->value("statefile").toString(), tr("State files (*.state);;All files(*)"));
     if (!fileNames.isEmpty())
     {
         settings->setValue("statefile", fileNames);
@@ -24,7 +24,7 @@ void MainWindow::on_actionLoadState_triggered()
 
 void MainWindow::on_actionSaveState_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"), settings->value("statefile").toString(), tr("state files (*.state)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save State"), settings->value("statefile").toString(), tr("State files (*.state);;All files(*)"));
     if (!fileName.isEmpty())
     {
         settings->setValue("statefile", fileName);
