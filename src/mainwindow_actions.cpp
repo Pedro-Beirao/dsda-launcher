@@ -2,16 +2,6 @@
 
 // Main
 
-void MainWindow::on_actionAbout_triggered()
-{
-    QMessageBox msgBox;
-    // msgBox.setOption(QMessageBox::Option::DontUseNativeDialog);
-    msgBox.setText(APP_NAME " " + version);
-    msgBox.setInformativeText("<a href='" + LAUNCHER_REPO + "'>" + LAUNCHER_REPO + "</a>");
-    msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
-    msgBox.exec();
-}
-
 void MainWindow::on_actionLoadState_triggered()
 {
     QString fileNames = QFileDialog::getOpenFileName(this, tr("Load State"), settings->value("statefile").toString(), tr("State files (*.state);;All files(*)"));
@@ -58,6 +48,14 @@ void MainWindow::on_actionCheckForUpdatesDsdadoom_triggered()
     updateGameDialog(true);
 }
 
+void MainWindow::on_actionOpenAbout_triggered()
+{
+    aboutWindow->show();
+    aboutWindow->activateWindow();
+    aboutWindow->raise();
+    setWindowTitleBar(aboutWindow->winId());
+}
+
 void MainWindow::on_actionOpenSettings_triggered()
 {
     settingsWindow->show();
@@ -69,6 +67,7 @@ void MainWindow::on_actionOpenSettings_triggered()
 void MainWindow::on_actionTips_triggered()
 {
     QMessageBox msgBox;
+    msgBox.setWindowTitle("Tips");
     msgBox.setText("A few tips you should know (Some features may require the latest dsda-doom version):");
     msgBox.setInformativeText("- Drag .wad / .deh files on top of the launcher to add them to the loaded files"
                               "\n\n"
@@ -77,15 +76,18 @@ void MainWindow::on_actionTips_triggered()
                               "- For the mentioned autoselect to work correctly, go to the settings and set the PWADs folders");
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.adjustSize();
     msgBox.exec();
 }
 void MainWindow::on_actionWhatIsThisState_triggered()
 {
     QMessageBox msgBox;
+    msgBox.setWindowTitle("What Is This?");
     msgBox.setText("State files");
     msgBox.setInformativeText("These .state files save all the parameters selected on the launcher, and lets you load them again whenever you need");
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.adjustSize();
     msgBox.exec();
 }
 

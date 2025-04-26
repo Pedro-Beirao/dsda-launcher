@@ -6,6 +6,7 @@ endoom::endoom(QWidget *parent) :
     ui(new Ui::endoom)
 {
     ui->setupUi(this);
+    this->setStyleSheet("background: black;");
 
     // Keyboard shortcut
     // Qt::CTRL is the CTRL key for Windows/Linux and is the CMD key for MacOS
@@ -66,8 +67,8 @@ void endoom::on_endoom_textEdit_textChanged()
 {
     QSize size = ui->endoom_textEdit->document()->size().toSize();
 
-    ui->endoom_textEdit->setFixedHeight(size.height() + 10);
-    ui->endoom_textEdit->setFixedWidth(size.width() + 10);
+    ui->endoom_textEdit->setFixedHeight(size.height() + 2);
+    ui->endoom_textEdit->setFixedWidth(size.width() + 2);
 
     setFixedSize(size);
 }

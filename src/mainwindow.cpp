@@ -8,9 +8,11 @@ void MainWindow::changeGameName(QString newName) { gameName = newName; }
 void MainWindow::showSSLDialog()
 {
     QMessageBox msgBox;
+    msgBox.setWindowTitle("Warning");
     msgBox.setText("SSL library not found");
     msgBox.setInformativeText("Network features not available.");
     msgBox.addButton(tr("Ok"), QMessageBox::NoRole);
+    msgBox.adjustSize();
     msgBox.exec();
 }
 
@@ -36,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->launchGame_pushButton->installEventFilter(this);
 
     // set the settings and console windows
+    aboutWindow = new About;
     settingsWindow = new Settings;
     consoleWindow = new Console;
     historyListWindow = new historyList;
@@ -350,8 +353,10 @@ void MainWindow::started() { running = true; }
 void MainWindow::gameIsRunningDialog()
 {
     QMessageBox msgBox;
+    msgBox.setWindowTitle("DSDA-Launcher");
     msgBox.setText("dsda-doom is still running.");
     msgBox.addButton("Ok", QMessageBox::YesRole);
+    msgBox.adjustSize();
     msgBox.exec();
 }
 
@@ -564,10 +569,12 @@ void MainWindow::on_launchGame_pushButton_clicked(bool returnTooltip, QString ex
         }
 
         QMessageBox msgBox;
+        msgBox.setWindowTitle("Parameters");
         msgBox.setText("Executable: " + gameName + "\nIWAD: " + ui->iwad_comboBox->currentText() + "\nParameters: " + argStr);
         msgBox.addButton(tr("Copy"), QMessageBox::NoRole);
         QPushButton *pButtonYes = msgBox.addButton(tr("Ok"), QMessageBox::YesRole);
         msgBox.setDefaultButton(pButtonYes);
+        msgBox.adjustSize();
         msgBox.exec();
 
         if (msgBox.clickedButton() != pButtonYes)
@@ -621,7 +628,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, APP_NAME, gameName + " was not found in " + APP_NAME + ".app/Contents/Resources/" + gameName);
+        QMessageBox::warning(this, "Error", gameName + " was not found in " + APP_NAME + ".app/Contents/Resources/" + gameName);
     }
 #elif defined Q_OS_LINUX
     QString gamePath = getGamePath();
@@ -639,7 +646,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, APP_NAME, ("Failed to launch the application executable.\nMake sure that " + gameName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + gameName + " exists, symlink it to " + APP_NAME + "'s folder."));
+        QMessageBox::warning(this, "Error", ("Failed to launch the application executable.\nMake sure that " + gameName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + gameName + " exists, symlink it to " + APP_NAME + "'s folder."));
     }
 #else
     QString gamePath = getGamePath();
@@ -656,7 +663,7 @@ void MainWindow::Launch(QStringList arguments)
     }
     else
     {
-        QMessageBox::warning(this, APP_NAME, "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
+        QMessageBox::warning(this, "Error", "Failed to launch the application executable.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
     }
 #endif
     // clang-format on

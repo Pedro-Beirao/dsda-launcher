@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Endoom</string>
+   <string>ENDOOM</string>
   </property>
   <widget class="QTextEdit" name="endoom_textEdit">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
+     <x>-1</x>
+     <y>-1</y>
      <width>741</width>
      <height>471</height>
     </rect>

@@ -6,5 +6,6 @@
         <file>pngs/up.png</file>
         <file>pngs/down.png</file>
         <file>pngs/combo_box_arrow.png</file>
+        <file>pngs/logo.png</file>
     </qresource>
 </RCC>
