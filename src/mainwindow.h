@@ -19,6 +19,7 @@
 #include "funcs.h"
 #include "historylist.h"
 #include "settings.h"
+#include "about.h"
 #include "states.h"
 #include "styles.h"
 #include "updater.h"
@@ -72,6 +73,7 @@ class MainWindow : public QMainWindow
     bool canLaunch = true;
 
     // Create an instance of the windows
+    About *aboutWindow;
     Settings *settingsWindow;
     Console *consoleWindow;
     historyList *historyListWindow;
@@ -123,7 +125,6 @@ class MainWindow : public QMainWindow
     void on_additionalArguments_pushButton_clicked();
 
     // Actions
-    void on_actionAbout_triggered();
     void on_actionLoadState_triggered();
     void on_actionSaveState_triggered();
     void on_actionWhatIsThisState_triggered();
@@ -132,6 +133,7 @@ class MainWindow : public QMainWindow
     void on_actionGithubDsdadoom_triggered();
     void on_actionCheckForUpdatesDsdadoom_triggered();
     void on_actionOpenSettings_triggered();
+    void on_actionOpenAbout_triggered();
     void on_actionTips_triggered();
     void on_actionOpenHistory_triggered();
     void on_actionExportCommand_triggered();

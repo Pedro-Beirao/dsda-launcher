@@ -37,6 +37,8 @@ bool updateLauncherDialog(bool manualReq)
 
     QMessageBox msgBox;
     msgBox.setText("DSDA-Launcher " + current);
+    msgBox.setWindowTitle("Update");
+    msgBox.adjustSize();
 
     if (latest == "" && manualReq)
     {
@@ -125,6 +127,8 @@ bool updateGameDialog(bool manualReq)
 
     QMessageBox msgBox;
     msgBox.setText("DSDA-Doom " + current);
+    msgBox.setWindowTitle("Update");
+    msgBox.adjustSize();
 
     if (current == "")
     {

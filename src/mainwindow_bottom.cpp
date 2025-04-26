@@ -16,18 +16,35 @@ void MainWindow::on_additionalArguments_pushButton_clicked()
     QString path = getGamePath();
 
     QFile port(path);
+
+#if defined Q_OS_MACOS
     if (port.exists())
     {
-#if defined Q_OS_MACOS
         QProcess process;
         process.startDetached("sh", {"-c", "rm /tmp/dsda-doom-params.sh; echo \"" + path + " --help\" > /tmp/dsda-doom-params.sh ; chmod +x /tmp/dsda-doom-params.sh ; open -a Terminal /tmp/dsda-doom-params.sh"});
-#elif defined Q_OS_WIN
-        system(("start cmd.exe /k \"" + path.toStdString() + "\" --help").c_str());
-#else
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error", "Failed to get additional arguments.\n" + gameName + " was not found in " + APP_NAME + ".app/Contents/Resources/" + gameName);
+    }
+#elif defined Q_OS_LINUX
+    if (port.exists())
+    {
         // xterm is the most reliable terminal to use, but it seems a few distros do not have it
         system(("xterm -e 'bash -c \"" + path.toStdString() + " --help ;bash\"'").c_str());
-#endif
     }
+    else
+    {
+        QMessageBox::warning(this, "Error", ("Failed to get additional arguments.\nMake sure that " + gameName + " is installed correctly through your package manager or installed with the original build instructions.\n\nIf you are sure " + gameName + " exists, symlink it to " + APP_NAME + "'s folder."));
+    }
+#else
+    if (port.exists())
+        system(("start cmd.exe /k \"" + path.toStdString() + "\" --help").c_str());
+    else
+    {
+        QMessageBox::warning(this, "Error", "Failed to get additional arguments.\nMake sure that the launcher is in the same folder as " + gameName + ".exe");
+    }
+#endif
 
     canLaunch = false;
     QTimer::singleShot(2000, this, SLOT(delayLaunch()));

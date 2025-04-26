@@ -142,9 +142,9 @@ Launcher should fix them.</string>
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>135</y>
-       <width>201</width>
-       <height>101</height>
+       <y>130</y>
+       <width>235</width>
+       <height>105</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -152,8 +152,8 @@ Launcher should fix them.</string>
 padding-left: 6px;
 color: #000;
 height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px;
+background-color:rgb(247, 253, 179);
+border-radius:6px;
 font: 7px;</string>
      </property>
      <property name="html">
@@ -304,9 +304,9 @@ border-radius:3px</string>
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>35</y>
-       <width>171</width>
-       <height>35</height>
+       <y>30</y>
+       <width>180</width>
+       <height>60</height>
       </rect>
      </property>
      <property name="font">
@@ -319,8 +319,8 @@ border-radius:3px</string>
 padding-left: 6px;
 color: #000;
 height: 20px;
-background-color:rgb(255, 255, 255);
-border-radius:3px</string>
+background-color:rgb(247, 253, 179);
+border-radius:6px</string>
      </property>
      <property name="html">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -473,7 +473,7 @@ when the Launcher exits</string>
      <property name="geometry">
       <rect>
        <x>450</x>
-       <y>205</y>
+       <y>207</y>
        <width>71</width>
        <height>32</height>
       </rect>
@@ -1002,56 +1002,69 @@ border-radius:3px</string>
     <attribute name="title">
      <string>Updates</string>
     </attribute>
-    <widget class="QCheckBox" name="updaterStartLauncher_checkBox">
+    <widget class="QGroupBox" name="toggles_groupBox_4">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>45</y>
-       <width>121</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>Show Endoom screen on game exit</string>
-     </property>
-     <property name="text">
-      <string>dsda-launcher</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
+       <x>100</x>
        <y>20</y>
-       <width>201</width>
-       <height>16</height>
+       <width>322</width>
+       <height>81</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Check for Updates on Start:</string>
+     <property name="title">
+       <string/>
      </property>
-    </widget>
-    <widget class="QCheckBox" name="updaterStartGame_checkBox">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>70</y>
-       <width>111</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>Show Endoom screen on game exit</string>
-     </property>
-     <property name="text">
-      <string>dsda-doom</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
+     <widget class="QCheckBox" name="updaterStartGame_checkBox">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>40</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Check for DSDA-Doom updates</string>
+       </property>
+       <property name="text">
+        <string>DSDA-Doom</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="updaterStartLauncher_checkBox">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>40</y>
+         <width>121</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Check for DSDA-Launcher updates</string>
+       </property>
+       <property name="text">
+        <string>DSDA-Launcher</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>18</y>
+         <width>201</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Check for Updates on Start:</string>
+       </property>
+      </widget>
     </widget>
    </widget>
   </widget>
