@@ -21,6 +21,7 @@ QString removeExtension(QString fileName);
 QString getExtension(QString fileName);
 QFileInfoList findIwads_possibleFiles();
 QFileInfoList findIwads();
+QStringList findIwads_NiceNames();
 QString bool_to_string(bool b);
 bool string_to_bool(QString s);
 QString createLevelString(QString warp_1, QString warp_2);

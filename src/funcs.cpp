@@ -229,6 +229,32 @@ QFileInfoList findIwads()
     return ret;
 }
 
+QStringList findIwads_NiceNames()
+{
+    QStringList ret;
+    QFileInfoList possible_files = findIwads_possibleFiles();
+
+    // This makes sure that a logical order to display the IWADs is followed
+    // I think doing this is better than having random orders like: Doom 2 -> TNT -> Doom
+    QStringList IWADS = exmxIWADS + mapxxIWADS;
+    QStringList IWAD_NICENAMES = exmxIWAD_NICENAMES + mapxxIWAD_NICENAMES;
+
+    for (int i = 0; i < IWADS.size(); i++)
+    {
+        for (QFileInfo &fileInfo : possible_files)
+        {
+            QString file_name = fileInfo.baseName().toLower();
+            if (IWADS[i] == file_name)
+            {
+                ret.append(IWAD_NICENAMES[i]);
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
+
 QString createLevelString(QString warp_1, QString warp_2)
 {
     QString level;
