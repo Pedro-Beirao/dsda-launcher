@@ -12,7 +12,7 @@ echo Latest dsda-doom version is %TAG%
 set VERSION=%TAG:~1%
 
 :: File name
-set v_win64=dsda-doom-%VERSION%-win64
+set v_win64=dsda-doom-%VERSION%-win-x64
 
 mkdir "%temp%\dsda-doom-temp"
 
