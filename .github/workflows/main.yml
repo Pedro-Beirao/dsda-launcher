@@ -69,11 +69,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
       
       # Mirror commits to Codeberg
       - uses: yesolutions/mirror-action@v0.7.0
         with:
-          REMOTE: 'https://codeberg.org/dsda/dsda-launcher.git'
+          REMOTE: 'ssh://git@codeberg.org/dsda/dsda-launcher.git'
           GIT_SSH_PRIVATE_KEY: ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
           GIT_SSH_KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
       
