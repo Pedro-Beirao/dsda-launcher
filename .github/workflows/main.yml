@@ -26,6 +26,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4.2.2
+
+      # Mirror commits to Codeberg
+      - uses: yesolutions/mirror-action@master
+        with:
+          REMOTE: 'https://codeberg.org/dsda/dsda-launcher.git'
+          GIT_SSH_PRIVATE_KEY: ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
+          GIT_SSH_KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
     
       - uses: msys2/setup-msys2@v2
         with:
