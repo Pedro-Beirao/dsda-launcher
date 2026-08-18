@@ -1,13 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
       - master
@@ -15,21 +11,21 @@ on:
     branches:
       - master
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build-windows:
-    # The type of runner that the job will run on
+    name: Windows
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4.2.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Set reference slug
+        run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
     
-      - uses: msys2/setup-msys2@v2
+      - uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c
         with:
           msystem: MINGW64
           path-type: minimal
@@ -41,11 +37,9 @@ jobs:
             mingw-w64-x86_64-openssl
             make
             zip
-
-      - name: Set reference slug
-        run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
-
-      - shell: msys2 {0}
+            
+      - name: Build
+        shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           export PATH="/mingw64/qt5-static/bin:$PATH"
@@ -58,23 +52,26 @@ jobs:
           find . -name "*.exe"
           zip -j dsda-launcher-${{ env.REF_SLUG }}-win64.zip release/dsda-launcher.exe
           
-      - uses: actions/upload-artifact@v4
+      - name: Store build as artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dsda-launcher-dev-${{ env.REF_SLUG }}-win64
           path: src\build\dsda-launcher-${{ env.REF_SLUG }}-win64.zip
 
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
-          name: ${{ github.ref_name }}
+          name: ${{ env.REF_SLUG }}
           allowUpdates: true
           artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-win64.zip
           
   build-linux:
+    name: Linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           fetch-depth: 0
       
@@ -87,15 +84,15 @@ jobs:
             ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
       
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4.1.1
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
         with:
           version: '6.8.*'
           host: 'linux'
           target: 'desktop'
           arch: 'linux_gcc_64'
           tools: 'tools_opensslv3_src'
-
-      - name: build
+          
+      - name: Build
         run: |
           sudo apt install libfuse2
           cd src
@@ -117,7 +114,8 @@ jobs:
               --desktop-file=../../dist/linux/eu.pedro_beirao.dsda-launcher.desktop \
               --icon-file=../../dist/icons/eu.pedro_beirao.dsda-launcher.svg
       
-      - uses: actions/upload-artifact@v4
+      - name: Store build as artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dsda-launcher-dev-linux
           path: src/build/DSDA-Launcher-x86_64.AppImage
@@ -131,12 +129,14 @@ jobs:
           artifacts: src/build/DSDA-Launcher-x86_64.AppImage
           
   build-macos:
+    name: MacOS
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v4.2.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4.1.1
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
         with:
           aqtversion: '==3.1.*'
           version: '6.2.0'
@@ -147,7 +147,7 @@ jobs:
       - name: Set reference slug
         run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
 
-      - name: build
+      - name: Build
         run: |
           cd src
           mkdir build
@@ -162,14 +162,15 @@ jobs:
             ./dsda-launcher-${{ env.REF_SLUG }}-mac.dmg \
             ./dsda-launcher.app
           
-      - uses: actions/upload-artifact@v4
+      - name: Store build as artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dsda-launcher-dev-mac
           path: src/build/dsda-launcher-${{ env.REF_SLUG }}-mac.dmg
     
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
           name: ${{ github.ref_name }}
           allowUpdates: true
