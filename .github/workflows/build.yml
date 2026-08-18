@@ -1,4 +1,4 @@
-name: CI
+name: Build
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
@@ -24,7 +24,7 @@ jobs:
 
       - name: Set reference slug
         run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
-    
+
       - uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c
         with:
           msystem: MINGW64
@@ -37,13 +37,13 @@ jobs:
             mingw-w64-x86_64-openssl
             make
             zip
-            
+
       - name: Build
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           export PATH="/mingw64/qt5-static/bin:$PATH"
-          
+
           cd src
           mkdir build
           cd build
@@ -51,7 +51,7 @@ jobs:
           make
           find . -name "*.exe"
           zip -j dsda-launcher-${{ env.REF_SLUG }}-win64.zip release/dsda-launcher.exe
-          
+
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -65,24 +65,14 @@ jobs:
           name: ${{ env.REF_SLUG }}
           allowUpdates: true
           artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-win64.zip
-          
+
   build-linux:
     name: Linux
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-        with:
-          fetch-depth: 0
-      
-      # Mirror commits to Codeberg
-      - uses: pixta-dev/repository-mirroring-action@v1.1.1
-        with:
-          target_repo_url:
-            ssh://git@codeberg.org/dsda/dsda-launcher.git
-          ssh_private_key:
-            ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
-      
+
       - name: Install Qt
         uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
         with:
@@ -91,7 +81,7 @@ jobs:
           target: 'desktop'
           arch: 'linux_gcc_64'
           tools: 'tools_opensslv3_src'
-          
+
       - name: Build
         run: |
           sudo apt install libfuse2
@@ -113,7 +103,7 @@ jobs:
               --appdir=./ \
               --desktop-file=../../dist/linux/eu.pedro_beirao.dsda-launcher.desktop \
               --icon-file=../../dist/icons/eu.pedro_beirao.dsda-launcher.svg
-      
+
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -122,19 +112,19 @@ jobs:
 
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd
         with:
           name: ${{ github.ref_name }}
           allowUpdates: true
           artifacts: src/build/DSDA-Launcher-x86_64.AppImage
-          
+
   build-macos:
     name: MacOS
     runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      
+
       - name: Install Qt
         uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
         with:
@@ -161,13 +151,13 @@ jobs:
             --app-drop-link 10 10 \
             ./dsda-launcher-${{ env.REF_SLUG }}-mac.dmg \
             ./dsda-launcher.app
-          
+
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dsda-launcher-dev-mac
           path: src/build/dsda-launcher-${{ env.REF_SLUG }}-mac.dmg
-    
+
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd

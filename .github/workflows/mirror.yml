@@ -1,0 +1,23 @@
+name: Mirror
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  mirror:
+    name: Mirror to Codeberg
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+
+      - uses: pixta-dev/repository-mirroring-action@674e65a7d483ca28dafaacba0d07351bdcc8bd75
+        with:
+          target_repo_url:
+            ssh://git@codeberg.org/dsda/dsda-launcher.git
+          ssh_private_key:
+            ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
