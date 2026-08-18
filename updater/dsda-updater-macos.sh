@@ -8,8 +8,7 @@ DEST=$1
 TAG=$(curl -s https://api.github.com/repos/$REPO/releases/latest | sed -Ene '/^ *"tag_name": *"(v.+)",$/s//\1/p')
 VERSION=${TAG:1}
 
-v_arm64="dsda-doom-$VERSION-mac-arm64"
-v_x64="dsda-doom-$VERSION-mac-x86_64"
+pkg_name="dsda-doom-$VERSION-mac-uni"
 
 CleanUp()
 {
@@ -18,19 +17,9 @@ CleanUp()
 
 Download()
 {
-  if curl -L -o $TEMP/$v_arm64.zip "https://github.com/$REPO/releases/download/$TAG/$v_arm64.zip"
+  if curl -L -o $TEMP/$pkg_name.zip "https://github.com/$REPO/releases/download/$TAG/$pkg_name.zip"
   then
-    unzip $TEMP/$v_arm64.zip -d $TEMP
-  else
-    echo "Error downloading update"
-    CleanUp
-    exit 1
-  fi
-
-
-  if curl -L -o $TEMP/$v_x64.zip "https://github.com/$REPO/releases/download/$TAG/$v_x64.zip"
-  then
-    unzip $TEMP/$v_x64.zip -d $TEMP
+    unzip $TEMP/$pkg_name.zip -d $TEMP
   else
     echo "Error downloading update"
     CleanUp
@@ -50,11 +39,9 @@ RemoveOld()
 
 CopyUpdate()
 {
-  lipo -create $TEMP/$v_arm64/dsda-doom $TEMP/$v_x64/dsda-doom -output $DEST/dsda-doom
-  cp $TEMP/$v_arm64/dsda-doom.wad $DEST/dsda-doom.wad
-  cp $TEMP/$v_arm64/COPYING.txt $DEST/COPYING.txt
-  cp -r $TEMP/$v_arm64/libs_arm64 $DEST/libs_arm64
-  cp -r $TEMP/$v_x64/libs_x86_64 $DEST/libs_x86_64
+  cp $TEMP/$pkg_name/dsda-doom $DEST/dsda-doom
+  cp $TEMP/$pkg_name/dsda-doom.wad $DEST/dsda-doom.wad
+  cp $TEMP/$pkg_name/COPYING.txt $DEST/COPYING.txt
 }
 
 if [ $DEST ]
