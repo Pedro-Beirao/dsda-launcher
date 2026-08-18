@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./src/icons/dsda-launcher.png" alt="dsda-doom logo" width="200"/>
+    <img src="./dist/icons/dsda-launcher.png" alt="dsda-doom logo" width="200"/>
     <h1>dsda-launcher</h1>
     <h3>This is a launcher GUI for the <a href="https://github.com/kraflab/dsda-doom">dsda-doom</a> source port</h3>
 </div>
