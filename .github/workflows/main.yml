@@ -110,7 +110,7 @@ jobs:
           path: src/build
           
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4.2.2
       
