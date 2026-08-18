@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=DSDA-Launcher
-Comment=This is a launcher GUI for the dsda-doom source port
-Icon=dsda-launcher
+Comment=GUI launcher for dsda-doom
+Icon=eu.pedro_beirao.dsda-launcher
 TryExec=dsda-doom
 Exec=dsda-launcher
 Categories=Game;ActionGame;

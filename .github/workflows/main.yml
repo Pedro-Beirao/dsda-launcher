@@ -9,9 +9,11 @@ env:
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ main ]
+    branches:
+      - master
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,7 +41,10 @@ jobs:
             mingw-w64-x86_64-openssl
             make
             zip
-            
+
+      - name: Set reference slug
+        run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
+
       - shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
@@ -50,12 +55,13 @@ jobs:
           cd build
           qmake ..
           make
-          zip -j dsda-launcher-${{ github.ref_name }}-win64.zip release/dsda-launcher.exe
+          find . -name "*.exe"
+          zip -j dsda-launcher-${{ env.REF_SLUG }}-win64.zip release/dsda-launcher.exe
           
       - uses: actions/upload-artifact@v4
         with:
-          name: dsda-launcher-dev-win64
-          path: src\build\dsda-launcher-${{ github.ref_name }}-win64.zip
+          name: dsda-launcher-dev-${{ env.REF_SLUG }}-win64
+          path: src\build\dsda-launcher-${{ env.REF_SLUG }}-win64.zip
 
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
@@ -63,7 +69,7 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           allowUpdates: true
-          artifacts: src/build/dsda-launcher-${{ github.ref_name }}-win64.dmg
+          artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-win64.zip
           
   build-linux:
     runs-on: ubuntu-latest
@@ -88,7 +94,7 @@ jobs:
           target: 'desktop'
           arch: 'linux_gcc_64'
           tools: 'tools_opensslv3_src'
-          
+
       - name: build
         run: |
           sudo apt install libfuse2
@@ -98,16 +104,31 @@ jobs:
           qmake ..
           make
 
+          export EXTRA_QT_PLUGINS="waylandcompositor"
+          export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so"
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
           chmod a+x ./linuxdeploy-x86_64.AppImage
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/latest/download/linuxdeploy-plugin-qt-x86_64.AppImage"
           chmod a+x ./linuxdeploy-plugin-qt-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage --plugin=qt --executable=./dsda-launcher --output=appimage --appdir=./ --desktop-file=../icons/dsda-Launcher.desktop --icon-file=../icons/dsda-launcher.svg
+          ./linuxdeploy-x86_64.AppImage --plugin=qt \
+              --executable=./dsda-launcher \
+              --output=appimage \
+              --appdir=./ \
+              --desktop-file=../../dist/linux/eu.pedro_beirao.dsda-launcher.desktop \
+              --icon-file=../../dist/icons/eu.pedro_beirao.dsda-launcher.svg
       
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-linux
-          path: src/build
+          path: src/build/DSDA-Launcher-x86_64.AppImage
+
+      - name: Release
+        if: ${{ contains(github.ref, 'tags') }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ github.ref_name }}
+          allowUpdates: true
+          artifacts: src/build/DSDA-Launcher-x86_64.AppImage
           
   build-macos:
     runs-on: macos-14
@@ -122,7 +143,10 @@ jobs:
           host: 'mac'
           target: 'desktop'
           arch: 'clang_64'
-          
+
+      - name: Set reference slug
+        run: echo "REF_SLUG=${GITHUB_REF////_}" >> $GITHUB_ENV
+
       - name: build
         run: |
           cd src
@@ -133,12 +157,15 @@ jobs:
           macdeployqt ./dsda-launcher.app
 
           brew install create-dmg
-          create-dmg --app-drop-link 10 10 ./dsda-launcher-${{ github.ref_name }}-mac.dmg ./dsda-launcher.app
+          create-dmg \
+            --app-drop-link 10 10 \
+            ./dsda-launcher-${{ env.REF_SLUG }}-mac.dmg \
+            ./dsda-launcher.app
           
       - uses: actions/upload-artifact@v4
         with:
           name: dsda-launcher-dev-mac
-          path: src/build/dsda-launcher-${{ github.ref_name }}-mac.dmg
+          path: src/build/dsda-launcher-${{ env.REF_SLUG }}-mac.dmg
     
       - name: Release
         if: ${{ contains(github.ref, 'tags') }}
@@ -146,4 +173,4 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           allowUpdates: true
-          artifacts: src/build/dsda-launcher-${{ github.ref_name }}-mac.dmg
+          artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-mac.dmg
