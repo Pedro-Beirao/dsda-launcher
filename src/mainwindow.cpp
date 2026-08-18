@@ -61,9 +61,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     shortcut3->setAutoRepeat(false);
 
     QFileInfoList IWADs = findIwads();
+    QStringList IWADnames = findIwads_NiceNames();
     for (int i = 0; i < IWADs.count(); i++)
     {
-        ui->iwad_comboBox->addItem(IWADs[i].baseName().toLower());
+        ui->iwad_comboBox->addItem(IWADnames[i]);
         ui->iwad_comboBox->setItemData(ui->iwad_comboBox->count() - 1, IWADs[i].absoluteFilePath(), Qt::ToolTipRole);
     }
 

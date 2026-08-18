@@ -6,7 +6,7 @@ void MainWindow::on_iwad_comboBox_currentIndexChanged(int index)
     QString selection = ui->iwad_comboBox->currentText();
 
     // These are episode/mission based. They need both warp boxes
-    if (exmxIWADS.contains(selection))
+    if (exmxIWAD_NICENAMES.contains(selection))
     {
         ui->level_label->show();
         ui->level_lineEdit->show();
