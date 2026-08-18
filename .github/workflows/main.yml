@@ -5,9 +5,11 @@ env:
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
   workflow_dispatch:
 
@@ -47,12 +49,13 @@ jobs:
           cd build
           qmake ..
           make
+          find . -name "*.exe"
           zip -j dsda-launcher-${{ env.REF_SLUG }}-win64.zip release/dsda-launcher.exe
           
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: dsda-launcher-dev-win64
+          name: dsda-launcher-dev-${{ env.REF_SLUG }}-win64
           path: src\build\dsda-launcher-${{ env.REF_SLUG }}-win64.zip
 
       - name: Release
@@ -61,7 +64,7 @@ jobs:
         with:
           name: ${{ env.REF_SLUG }}
           allowUpdates: true
-          artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-win64.dmg
+          artifacts: src/build/dsda-launcher-${{ env.REF_SLUG }}-win64.zip
           
   build-linux:
     name: Linux
@@ -69,15 +72,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
+        with:
+          fetch-depth: 0
+      
+      # Mirror commits to Codeberg
+      - uses: pixta-dev/repository-mirroring-action@v1.1.1
+        with:
+          target_repo_url:
+            ssh://git@codeberg.org/dsda/dsda-launcher.git
+          ssh_private_key:
+            ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
+      
       - name: Install Qt
         uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
         with:
-          aqtversion: '==3.1.*'
-          version: '6.2.0'
+          version: '6.8.*'
           host: 'linux'
           target: 'desktop'
-          arch: 'gcc_64'
+          arch: 'linux_gcc_64'
           tools: 'tools_opensslv3_src'
           
       - name: Build
@@ -89,21 +101,36 @@ jobs:
           qmake ..
           make
 
+          export EXTRA_QT_PLUGINS="waylandcompositor"
+          export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so"
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
           chmod a+x ./linuxdeploy-x86_64.AppImage
           wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/latest/download/linuxdeploy-plugin-qt-x86_64.AppImage"
           chmod a+x ./linuxdeploy-plugin-qt-x86_64.AppImage
-          ./linuxdeploy-x86_64.AppImage --plugin=qt --executable=./dsda-launcher --output=appimage --appdir=./ --desktop-file=../icons/dsda-Launcher.desktop --icon-file=../icons/dsda-launcher.svg
+          ./linuxdeploy-x86_64.AppImage --plugin=qt \
+              --executable=./dsda-launcher \
+              --output=appimage \
+              --appdir=./ \
+              --desktop-file=../../dist/linux/eu.pedro_beirao.dsda-launcher.desktop \
+              --icon-file=../../dist/icons/eu.pedro_beirao.dsda-launcher.svg
       
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dsda-launcher-dev-linux
-          path: src/build
+          path: src/build/DSDA-Launcher-x86_64.AppImage
+
+      - name: Release
+        if: ${{ contains(github.ref, 'tags') }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ github.ref_name }}
+          allowUpdates: true
+          artifacts: src/build/DSDA-Launcher-x86_64.AppImage
           
   build-macos:
     name: MacOS
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -130,7 +157,10 @@ jobs:
           macdeployqt ./dsda-launcher.app
 
           brew install create-dmg
-          create-dmg --app-drop-link 10 10 ./dsda-launcher-${{ env.REF_SLUG }}-mac.dmg ./dsda-launcher.app
+          create-dmg \
+            --app-drop-link 10 10 \
+            ./dsda-launcher-${{ env.REF_SLUG }}-mac.dmg \
+            ./dsda-launcher.app
           
       - name: Store build as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

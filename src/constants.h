@@ -37,6 +37,17 @@ const QStringList mapxxIWADS = {"doom2",     "doom2f",    "bfgdoom2",
                                 "hexen",
                                 "chex3d2",   "hacx"};
 
+const QStringList exmxIWAD_NICENAMES = {"Doom",     "Doom (Shareware)",   "Ultimate Doom",  "Doom (BFG)",
+                                        "Freedoom",
+                                        "Heretic",  "Heretic (Shareware)",
+                                        "Chex",     "Chex 3",    "REKKR"};
+
+const QStringList mapxxIWAD_NICENAMES = {"Doom 2",     "Doom 2 (French)",    "Doom 2 (BFG)",
+                                         "Freedoom 2", "FreeDM",
+                                         "TNT",        "Plutonia",
+                                         "Hexen",
+                                         "Chex 3 (Modding)", "HACX"};
+
 const QStringList MINIMAL_COMPLEVELS = {"Default", "2 - Doom / Doom 2", "3 - Ultimate Doom", "4 - Final Doom", "9 - Boom", "11 - MBF", "21 - MBF 21"};
 const QStringList FULL_COMPLEVELS = {"Default", "0 - Doom v1.2", "1 - Doom v1.666", "2 - Doom / Doom 2", "3 - Ultimate Doom", "4 - Final Doom", "5 - DOSDoom", "6 - TASDoom", "7 - Boom's comp mode", "8 - Boom v2.01", "9 - Boom", "10 - LxDoom", "11 - MBF", "12 - PrBoom v2.03beta", "13 - PrBoom v2.1.0", "14 - PrBoom v2.1.1 - 2.2.6", "15 - PrBoom v2.3.x", "16 - PrBoom v2.4.0", "17 - Current PrBoom", "21 - MBF 21"};
 

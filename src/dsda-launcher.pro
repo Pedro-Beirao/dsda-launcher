@@ -55,7 +55,7 @@ FORMS += \
 
 win32 {
     CONFIG += c++11
-    RC_ICONS = icons/dsda-launcher.ico
+    RC_ICONS = ../dist/icons/dsda-launcher.ico
 
     static {
         QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -static
@@ -64,7 +64,7 @@ win32 {
 
 mac {
     CONFIG += c++11 appbundle
-    ICON = icons/dsda-launcher.icns
+    ICON = ../dist/icons/dsda-launcher.icns
     include_port {
         APP_FILES.files = ./dsda-doom
         APP_FILES.files += ./dsda-doom.wad
@@ -75,7 +75,7 @@ mac {
     }
     APP_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += APP_FILES
-    QMAKE_INFO_PLIST =./Info.plist
+    QMAKE_INFO_PLIST =../dist/mac/Info.plist
     HEADERS += Mac.h
     OBJECTIVE_SOURCES += Mac.mm
 }
@@ -86,7 +86,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    icons.qrc
+    icons.qrc \
     build
 
 DISTFILES += \

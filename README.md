@@ -77,6 +77,6 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 
 ## Compiling
 
-Code available at [https://github.com/Pedro-Beirao/dsda-launcher/](https://github.com/Pedro-Beirao/dsda-launcher/)
+Code available on [GitHub](https://github.com/Pedro-Beirao/dsda-launcher/) and [Codeberg](https://codeberg.org/dsda/dsda-launcher)
 
 Instructions in [guides](./guides/)
