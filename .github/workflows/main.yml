@@ -73,11 +73,12 @@ jobs:
           fetch-depth: 0
       
       # Mirror commits to Codeberg
-      - uses: yesolutions/mirror-action@v0.7.0
+      - uses: pixta-dev/repository-mirroring-action@v1.1.1
         with:
-          REMOTE: 'ssh://git@codeberg.org/dsda/dsda-launcher.git'
-          GIT_SSH_PRIVATE_KEY: ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
-          GIT_SSH_KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+          target_repo_url:
+            ssh://git@codeberg.org/dsda/dsda-launcher.git
+          ssh_private_key:
+            ${{ secrets.CODEBERG_DSDA_MIRROR_KEY }}
       
       - name: Install Qt
         uses: jurplel/install-qt-action@v4.1.1
