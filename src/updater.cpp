@@ -225,9 +225,9 @@ void updateGame()
                                                   args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
                                               });
     process.setProgram("cmd.exe");
-    process.setArguments({"/k", "powershell -command New-Item \"%temp%\\dsda-doom-temp\" -type directory -force && "
+    process.setArguments({"/c", "powershell -command New-Item \"%temp%\\dsda-doom-temp\" -type directory -force && "
                                 "powershell -command (Invoke-WebRequest -OutFile '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -Uri " + GAME_UPDATER_WINDOWS + ") && " +
-                                "powershell -command Start-Process -FilePath '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -WorkingDirectory '" + launcherfolder + "' -ArgumentList . -Wait -NoNewWindow"});
+                                "powershell -command Start-Process -FilePath '%temp%\\dsda-doom-temp\\dsda-updater-windows.bat' -WorkingDirectory '" + launcherfolder + "' -ArgumentList . -Wait -NoNewWindow && exit"});
     process.startDetached();
 #elif defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(GAME_REPO + "/releases/latest"));
