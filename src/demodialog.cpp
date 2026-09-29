@@ -37,10 +37,13 @@ demodialog::demodialog(QString footer_iwad, QStringList footer_files, QWidget *p
     iwad_comboBox = new QComboBox();
     for (int i = 0; i < MainWindow::pMainWindow->iwad_comboBox()->count(); i++)
     {
+        qDebug() << MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::UserRole);
         iwad_comboBox->addItem(MainWindow::pMainWindow->iwad_comboBox()->itemText(i));
+        iwad_comboBox->setItemData(iwad_comboBox->count() - 1, MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::UserRole), Qt::UserRole);
         iwad_comboBox->setItemData(iwad_comboBox->count() - 1, MainWindow::pMainWindow->iwad_comboBox()->itemData(i, Qt::ToolTipRole), Qt::ToolTipRole);
     }
-    iwad_comboBox->setCurrentIndex(iwad_comboBox->findText(removeExtension(footer_iwad).toLower()));
+    iwad_comboBox->setCurrentIndex(iwad_comboBox->findData(removeExtension(footer_iwad).toLower(), Qt::UserRole));
+
     mainLayout->addWidget(iwad_comboBox, 2, 1, 1, 2);
 
     QLabel *files_label = new QLabel("Files:");

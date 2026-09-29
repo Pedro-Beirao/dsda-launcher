@@ -53,13 +53,7 @@ void states::loadStateV1(QTextStream &stream)
 
         if (buffer_name == "iwad") // iwad
         {
-            for (int i = 0; i < MainWindow::pMainWindow->iwad_comboBox()->count(); i++)
-            {
-                if (MainWindow::pMainWindow->iwad_comboBox()->itemText(i) == buffer_value)
-                {
-                    MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(i);
-                }
-            }
+            MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->findData(buffer_value, Qt::UserRole));
         }
         else if (buffer_name == "complevel") // complevel
         {
@@ -173,7 +167,7 @@ void states::loadStateV2(QTextStream &stream)
 
         if (buffer_name == "iwad") // iwad
         {
-            MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->findText(buffer_value));
+            MainWindow::pMainWindow->iwad_comboBox()->setCurrentIndex(MainWindow::pMainWindow->iwad_comboBox()->findData(buffer_value, Qt::UserRole));
         }
         else if (buffer_name == "complevel") // complevel
         {

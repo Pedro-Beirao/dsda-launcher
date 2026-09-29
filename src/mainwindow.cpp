@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     for (int i = 0; i < IWADs.count(); i++)
     {
         ui->iwad_comboBox->addItem(IWADnames[i]);
+        ui->iwad_comboBox->setItemData(ui->iwad_comboBox->count() - 1, IWADs[i].baseName().toLower(), Qt::UserRole);
         ui->iwad_comboBox->setItemData(ui->iwad_comboBox->count() - 1, IWADs[i].absoluteFilePath(), Qt::ToolTipRole);
     }
 
