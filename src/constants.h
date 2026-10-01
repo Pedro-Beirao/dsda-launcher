@@ -5,7 +5,7 @@
 #include <QStandardPaths>
 #include <QStringList>
 
-const QString version = "v1.5.1";
+const QString version = "v1.5.2";
 
 const QString LAUNCHER_REPO = "https://github.com/Pedro-Beirao/dsda-launcher";
 const QString LAUNCHER_API = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
