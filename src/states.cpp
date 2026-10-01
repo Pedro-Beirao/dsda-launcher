@@ -291,7 +291,7 @@ void states::saveStateToFile(QString filePath)
         out << STATE_HEADER + "\n\n";
     }
 
-    out << "iwad " + ui->iwad_comboBox()->currentText() + "\n";
+    out << "iwad " + ui->iwad_comboBox()->currentData(Qt::UserRole).toString() + "\n";
     out << "complevel " + ui->complevel_comboBox()->currentText() + "\n";
     out << "warp " + ui->episode_lineEdit()->text() + " " + (ui->level_lineEdit()->isVisible() ? ui->level_lineEdit()->text() : "") + "\n";
     out << "skill " + QString::number(ui->skill_comboBox()->currentIndex()) + "\n";
