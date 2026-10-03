@@ -12,7 +12,7 @@ You could also install qt using 'brew'
 
 1. Clone this repo
 ```
-git clone https://github.com/Pedro-Beirao/dsda-launcher.git
+git clone https://github.com/dsda-org/dsda-launcher.git
 ```
 
 2. Create a "build" folder inside src/

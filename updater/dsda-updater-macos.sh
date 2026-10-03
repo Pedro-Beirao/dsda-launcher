@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO="kraflab/dsda-doom"
+REPO="dsda-org/dsda-doom"
 
 TEMP=`mktemp -d`
 DEST=$1

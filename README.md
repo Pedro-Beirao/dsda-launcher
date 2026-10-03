@@ -1,7 +1,7 @@
 <div align="center">
     <img src="./dist/icons/dsda-launcher.png" alt="dsda-doom logo" width="200"/>
     <h1>dsda-launcher</h1>
-    <h3>This is a launcher GUI for the <a href="https://github.com/kraflab/dsda-doom">dsda-doom</a> source port</h3>
+    <h3>This is a launcher GUI for the <a href="https://github.com/dsda-org/dsda-doom">dsda-doom</a> source port</h3>
 </div>
 
 <div align="center" markdown="1">
@@ -10,9 +10,9 @@
 [![Static Badge](https://img.shields.io/badge/macOS-grey?logo=apple)]()
 [![Static Badge](https://img.shields.io/badge/Linux-grey?logo=linux)]()
 <br>
-[![GitHub Release](https://img.shields.io/github/v/release/Pedro-Beirao/dsda-launcher)](https://github.com/Pedro-Beirao/dsda-launcher/releases/latest)
-[![GitHub branch check runs](https://img.shields.io/github/check-runs/Pedro-Beirao/dsda-launcher/master?logo=github&label=Continuous%20Integration)](https://github.com/Pedro-Beirao/dsda-launcher/actions)
-[![GitHub top language](https://img.shields.io/github/languages/top/Pedro-Beirao/dsda-launcher)]()
+[![GitHub Release](https://img.shields.io/github/v/release/dsda-org/dsda-launcher)](https://github.com/dsda-org/dsda-launcher/releases/latest)
+[![GitHub branch check runs](https://img.shields.io/github/check-runs/dsda-org/dsda-launcher/master?logo=github&label=Continuous%20Integration)](https://github.com/dsda-org/dsda-launcher/actions)
+[![GitHub top language](https://img.shields.io/github/languages/top/dsda-org/dsda-launcher)]()
 [![Static Badge](https://img.shields.io/badge/Qt-grey?logo=qt)](https://www.qt.io)
 
 </div>
@@ -23,12 +23,12 @@ For both casual players and experienced speedrunners, this launcher is everythin
 
 ## Downloads
 
-Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Beirao/dsda-launcher/releases/latest)
+Available for Windows, macOS and Linux in [Releases](https://github.com/dsda-org/dsda-launcher/releases/latest)
 
 <details markdown="1">
   <summary>Dev builds</summary>
   
-  <a href="https://github.com/Pedro-Beirao/dsda-launcher/actions">https://github.com/Pedro-Beirao/dsda-launcher/actions</a>
+  <a href="https://github.com/dsda-org/dsda-launcher/actions">https://github.com/dsda-org/dsda-launcher/actions</a>
 
   Requires a github account to download and are only available for a 90 days after creation.
   
@@ -77,6 +77,6 @@ Available for Windows, macOS and Linux in [Releases](https://github.com/Pedro-Be
 
 ## Compiling
 
-Code available on [GitHub](https://github.com/Pedro-Beirao/dsda-launcher/) and [Codeberg](https://codeberg.org/dsda/dsda-launcher)
+Code available on [GitHub](https://github.com/dsda-org/dsda-launcher/) and [Codeberg](https://codeberg.org/dsda/dsda-launcher)
 
 Instructions in [guides](./guides/)

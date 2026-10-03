@@ -4,7 +4,7 @@
   <name>dsda-launcher</name>
   <developer id="eu.pedro_beirao.dsda-launcher">
     <name>dsda-launcher contributors</name>
-    <url>https://github.com/Pedro-Beirao/dsda-launcher/graphs/contributors</url>
+    <url>https://github.com/dsda-org/dsda-launcher/graphs/contributors</url>
   </developer>
   <branding>
     <color type="primary" scheme_preference="light">#eaeaec</color>
@@ -13,8 +13,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <launchable type="desktop-id">eu.pedro_beirao.dsda-launcher.desktop</launchable>
-  <url type="homepage">https://github.com/Pedro-Beirao/dsda-launcher</url>
-  <url type="vcs-browser">https://github.com/Pedro-Beirao/dsda-launcher</url>
+  <url type="homepage">https://github.com/dsda-org/dsda-launcher</url>
+  <url type="vcs-browser">https://github.com/dsda-org/dsda-launcher</url>
   <summary>GUI launcher for dsda-doom</summary>
   <description>
     <p>For both casual players and experienced speedrunners, this launcher is everything
@@ -39,11 +39,11 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://cdn.jsdelivr.net/gh/Pedro-Beirao/dsda-launcher@master/screenshots/linux-dark.png</image>
+      <image type="source">https://cdn.jsdelivr.net/gh/dsda-org/dsda-launcher@master/screenshots/linux-dark.png</image>
       <caption>Dark mode</caption>
     </screenshot>
     <screenshot>
-      <image type="source">https://cdn.jsdelivr.net/gh/Pedro-Beirao/dsda-launcher@master/screenshots/linux-light.png?raw=true</image>
+      <image type="source">https://cdn.jsdelivr.net/gh/dsda-org/dsda-launcher@master/screenshots/linux-light.png?raw=true</image>
       <caption>Light mode</caption>
     </screenshot>
   </screenshots>
@@ -64,34 +64,34 @@
     <keyword>speedrunning</keyword>
   </keywords>
   <releases>
-    <release version="1.5.2" date="2026-10-01" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.5.2">
+    <release version="1.5.2" date="2026-10-01" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.5.2">
       <description/>
     </release>
-    <release version="1.5.1" date="2026-09-29" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.5.1">
+    <release version="1.5.1" date="2026-09-29" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.5.1">
       <description/>
     </release>
-    <release version="1.5" date="2026-09-29" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.5">
+    <release version="1.5" date="2026-09-29" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.5">
       <description/>
     </release>
-    <release version="1.4" date="2025-01-19" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.4">
+    <release version="1.4" date="2025-01-19" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.4">
       <description/>
     </release>
-    <release version="v1.3.1-hotfix" date="2024-01-09" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.3.1-hotfix">
+    <release version="v1.3.1-hotfix" date="2024-01-09" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.3.1-hotfix">
       <description/>
     </release>
-    <release version="v1.3.1" date="2023-12-25" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.3.1">
+    <release version="v1.3.1" date="2023-12-25" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.3.1">
       <description/>
     </release>
-    <release version="v1.3" date="2023-06-10" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.3">
+    <release version="v1.3" date="2023-06-10" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.3">
       <description/>
     </release>
-    <release version="v1.2" date="2022-12-29" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.2">
+    <release version="v1.2" date="2022-12-29" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.2">
       <description/>
     </release>
-    <release version="v1.1" date="2022-04-05" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.1">
+    <release version="v1.1" date="2022-04-05" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.1">
       <description/>
     </release>
-    <release version="v1.0" date="2022-01-08" url="https://github.com/Pedro-Beirao/dsda-launcher/releases/tag/v1.0">
+    <release version="v1.0" date="2022-01-08" url="https://github.com/dsda-org/dsda-launcher/releases/tag/v1.0">
       <description/>
     </release>
   </releases>

@@ -7,14 +7,14 @@
 
 const QString version = "v1.5.2";
 
-const QString LAUNCHER_REPO = "https://github.com/Pedro-Beirao/dsda-launcher";
-const QString LAUNCHER_API = "https://api.github.com/repos/Pedro-Beirao/dsda-launcher/releases/latest";
-const QString LAUNCHER_UPDATER = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/updater.json";
+const QString LAUNCHER_REPO = "https://github.com/dsda-org/dsda-launcher";
+const QString LAUNCHER_API = "https://api.github.com/repos/dsda-org/dsda-launcher/releases/latest";
+const QString LAUNCHER_UPDATER = "https://raw.githubusercontent.com/dsda-org/dsda-launcher/refs/heads/master/updater/updater.json";
 
-const QString GAME_REPO = "https://github.com/kraflab/dsda-doom";
-const QString GAME_API = "https://api.github.com/repos/kraflab/dsda-doom/releases/latest";
-const QString GAME_UPDATER_MACOS = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/dsda-updater-macos.sh";
-const QString GAME_UPDATER_WINDOWS = "https://raw.githubusercontent.com/Pedro-Beirao/dsda-launcher/refs/heads/master/updater/dsda-updater-windows.bat";
+const QString GAME_REPO = "https://github.com/dsda-org/dsda-doom";
+const QString GAME_API = "https://api.github.com/repos/dsda-org/dsda-doom/releases/latest";
+const QString GAME_UPDATER_MACOS = "https://raw.githubusercontent.com/dsda-org/dsda-launcher/refs/heads/master/updater/dsda-updater-macos.sh";
+const QString GAME_UPDATER_WINDOWS = "https://raw.githubusercontent.com/dsda-org/dsda-launcher/refs/heads/master/updater/dsda-updater-windows.bat";
 
 #if defined Q_OS_WIN
 const QChar FOLDER_SEPARATOR = '\\';

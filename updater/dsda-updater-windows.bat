@@ -1,7 +1,7 @@
 @ECHO OFF
 setlocal
 
-set REPO=kraflab/dsda-doom
+set REPO=dsda-org/dsda-doom
 
 set "DEST=%~dp0"
 if not "%~1"=="" (
